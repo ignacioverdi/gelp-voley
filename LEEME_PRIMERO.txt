@@ -1,0 +1,137 @@
+===============================================================================
+   CLUB GIMNASIA Y ESGRIMA DE LA PLATA  ·  CÓMO USAR TU SISTEMA
+===============================================================================
+
+   Tu app ya está online:   https://gelp-voley.vercel.app
+
+   Entrá con el mail y la clave que te pasamos. Se entra una sola vez por
+   dispositivo: después queda abierta.
+
+
+-------------------------------------------------------------------------------
+   LO ÚNICO QUE TENÉS QUE HACER DESPUÉS DE CADA PARTIDO
+-------------------------------------------------------------------------------
+
+   1)  Entrá a la app y tocá   SUBIR PARTIDO
+
+   2)  Arrastrá el archivo del partido (el .dvw)
+
+   3)  Listo. Podés cerrar la pantalla.
+
+
+   >> ¿De dónde sale ese .dvw?  De cualquiera de los dos caminos:
+
+      · Lo scouteás vos en el PANEL EN VIVO y al terminar tocás
+        "Exportar .dvw". No necesitás ningún otro programa.
+
+      · O lo trae ya hecho quien scoutea con DataVolley.
+
+      Los dos terminan en el mismo lugar.
+
+
+   Eso es todo. El sistema hace el resto solo: procesa el partido, actualiza
+   las estadísticas, los mapas de calor, el plan de partido y los perfiles de
+   cada jugador.
+
+   Tarda unos minutos. Cuando vuelvas ya va a estar, y tu equipo lo va a ver
+   en la app sin que tengas que avisarles.
+
+   >> Lo mismo para los entrenamientos: arriba elegís si lo que subís es un
+      partido o una práctica.
+
+
+   >> Si querés los cortes de video, scouteá en DataVolley CON el video
+      cargado. De ahí salen los segundos de cada jugada. Después, en la app,
+      entrá a "Cargar Videos" y pegá el link de YouTube del partido.
+
+
+-------------------------------------------------------------------------------
+   LO QUE CARGÁS UNA SOLA VEZ, DESDE LA APP
+-------------------------------------------------------------------------------
+
+   No hace falta tocar ningún archivo: todo esto se hace desde el navegador.
+
+   ESCUDOS        Subí el tuyo y el de cada rival. Al que le falte, se le
+                  muestran sus iniciales.
+
+   CALENDARIO     Cargá los partidos de la temporada, con fecha, hora y lugar.
+
+   HORARIOS       Los entrenamientos de la semana.
+
+   TEAM PLAYBOOK  Cómo juega tu equipo. Cada sección trae una pista de qué
+                  escribir. Lo completa el cuerpo técnico, lo lee todo el
+                  plantel.
+
+   JUGADORES      Abrí   alta_jugadores.html   y cargá el mail de cada uno.
+                  Después entran con ese mail y ven lo suyo: sus números, sus
+                  videos, su rutina y el playbook.
+
+   >> El plantel NO hay que cargarlo a mano: se arma solo con el primer
+      partido que subas. Y si scouteás en el panel, antes de empezar te muestra
+      la lista para que la revises y corrijas lo que haga falta.
+
+
+-------------------------------------------------------------------------------
+   DURANTE EL PARTIDO
+-------------------------------------------------------------------------------
+
+   PANEL EN VIVO   Se scoutea desde una computadora con teclado, igual que en
+                   DataVolley. El plan de partido se va llenando solo mientras
+                   cargás.
+
+                   >> La primera vez, tocá "Cómo se usa" adentro del panel:
+                      está la guía completa con las teclas, las zonas y las
+                      direcciones.
+
+   PANEL VOLEY     Lo que ve el banco en la tablet: estadísticas al instante.
+
+   CÁMARA          Un celular transmite a la tablet con el retardo que quieras,
+                   para ver la jugada que acaba de pasar. Todo por el WiFi del
+                   club.
+
+   INFORME         Al terminar, un clic y tenés el informe del partido en PDF,
+                   listo para mandar.
+
+
+-------------------------------------------------------------------------------
+   SI ALGO NO SALE
+-------------------------------------------------------------------------------
+
+   *  Después de actualizar, esperá 2 minutos y refrescá con  Ctrl + Shift + R
+      (no con F5).
+
+   *  Si el sistema muestra un aviso mientras procesa, no lo ignores: te está
+      diciendo qué revisar del archivo del partido.
+
+   *  Si un partido queda mucho tiempo en "En la fila", avisanos: puede ser
+      que el archivo tenga algo raro y lo miramos nosotros.
+
+
+-------------------------------------------------------------------------------
+   AL TERMINAR LA TEMPORADA
+-------------------------------------------------------------------------------
+
+   DOBLE CLIC en  ARCHIVAR_TEMPORADA.bat
+
+   Guarda la temporada completa —con todos sus datos y videos— y deja el
+   sistema en cero para empezar la siguiente. Lo archivado se sigue
+   consultando desde el menú "Temporadas".
+
+
+-------------------------------------------------------------------------------
+   SEGURIDAD DE TUS DATOS
+-------------------------------------------------------------------------------
+
+   *  Los datos de tu club son tuyos y viajan cifrados.
+
+   *  Ningún otro club puede verlos.
+
+   *  Desde "Sesiones y dispositivos" ves quién entró y con qué dispositivo,
+      y podés cerrarle el acceso a cualquiera sin pedirle el equipo. Si un
+      entrenador se va o se pierde una tablet, se corta con un clic.
+
+
+===============================================================================
+   Cualquier duda, escribinos. Estamos para que lo uses, no para que
+   pelees con la computadora.
+===============================================================================
