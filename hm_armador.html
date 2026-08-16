@@ -150,9 +150,9 @@ var POS_COLOR={2:'#818CF8',3:'#9292b5',4:'#F97316',8:'#22C55E',5:'#06B6D4',9:'#E
 var SPOS_LABEL={1:'Zag. Der. (1)',2:'Del. Der. (2)',3:'Del. Centro (3)',4:'Del. Izq. (4)',5:'Zag. Izq. (5)',6:'Zag. Centro (6)'};
 var SPOS_COLOR={1:'#9292b5',2:'#818CF8',3:'#22C55E',4:'#F97316',5:'#06B6D4',6:'#EC4899'};
 var REC_LABEL={'#':'Perfecta','+':'Positiva','!':'Exclamativa','-':'Negativa','/':'Vendida','=':'Error','?':'N/A'};
-var REC_COLOR={'#':'#22c55e','+':'#86efac','!':'#fbbf24','-':'#9292b5','/':'#ef4444','=':'#dc2626','?':'#475569'};
+var REC_COLOR={'#':'#22c55e','+':'#86efac','!':'#fbbf24','-':'#9292b5','/':'#ef4444','=':'#0d0d5b','?':'#475569'};
 var ATK_RES_LABEL={'#':'Kill','+':'Positivo','-':'Negativo','/':'Bloqueado','=':'Error'};
-var ATK_RES_COLOR={'#':'#22c55e','+':'#86efac','-':'#9292b5','/':'#ef4444','=':'#dc2626'};
+var ATK_RES_COLOR={'#':'#22c55e','+':'#86efac','-':'#9292b5','/':'#ef4444','=':'#0d0d5b'};
 
 var COMBO_POS={X5:4,V5:4,G4:4,W4:4,XT:4,X9:4,X1:3,X2:3,X7:3,XM:3,XG:3,XC:3,XD:3,J1:3,J2:3,J3:3,J4:3,J5:3,X6:2,V6:2,G2:2,W2:2,X3:2,X4:2,C6:2,XB:8,XP:8,XR:8,VB:8,VP:8,VR:8,Y8:8,G8:8,X0:5,V0:5,X8:9,V8:9,C8:9,Y9:9,G9:9};
 
@@ -694,7 +694,7 @@ function render(){
       if(d.p) html+="<div style='flex:"+d.p+";background:#86efac'></div>";
       var neg=d.tot-d.k-d.p-d.b-d.e; if(neg>0) html+="<div style='flex:"+neg+";background:#9292b5'></div>";
       if(d.b) html+="<div style='flex:"+d.b+";background:#ef4444'></div>";
-      if(d.e) html+="<div style='flex:"+d.e+";background:#dc2626'></div>";
+      if(d.e) html+="<div style='flex:"+d.e+";background:#0d0d5b'></div>";
       html+="</div></div>";
     });
     html+="</div>";

@@ -233,7 +233,7 @@ var COMBO_POS = {"X5": 4, "V5": 4, "G4": 4, "W4": 4, "XT": 4, "X9": 4, "X1": 3, 
 var POS_LABEL = {2:"Pos 2 (Banda Der.)",3:"Pos 3 (Central)",4:"Pos 4 (Banda Izq.)",8:"Pos 8 (Pipe/Zag.)",5:"Pos 5 (Zag. Izq.)",9:"Pos 9 (Zag. Der.)"};
 var POS_COLOR = {2:"#818CF8",3:"#9292b5",4:"#F97316",8:"#22C55E",5:"#06B6D4",9:"#EC4899"};
 var RES_LABEL = {"#":"Kill","+":"Positivo","-":"Negativo","/":"Bloqueado","=":"Error","!":"Exclamativo"};
-var RES_COLOR = {"#":"#22c55e","+":"#86efac","-":"#9292b5","/":"#ef4444","=":"#dc2626"};
+var RES_COLOR = {"#":"#22c55e","+":"#86efac","-":"#9292b5","/":"#ef4444","=":"#0d0d5b"};
 var MOMENT_LABEL = {early:"0-8 pts",mid:"9-16 pts",late:"17+ pts"};
 var F = {player:"",atype:"all",rival:"all",set:"all",moment:"all",result:"all",combo:"all",rec_quality:"all",rec_player:"all",origin:"all"};
 
@@ -607,7 +607,7 @@ function render(){
     html+="<div style='text-align:center'><div style='font-family:Bebas Neue,sans-serif;font-size:22px;color:"+RES_COLOR[r[0]]+"'>"+r[2]+"</div><div style='font-size:11px;color:var(--muted)'>"+r[1]+" ("+Math.round(r[2]/total*100)+"%)</div></div>";
   });
   html+="</div><div style='display:flex;height:8px;border-radius:4px;overflow:hidden'>";
-  [[kills,"#22c55e"],[pos,"#86efac"],[neg,"#9292b5"],[bloq,"#ef4444"],[err,"#dc2626"]].forEach(function(r){
+  [[kills,"#22c55e"],[pos,"#86efac"],[neg,"#9292b5"],[bloq,"#ef4444"],[err,"#0d0d5b"]].forEach(function(r){
     if(r[0]>0) html+="<div style='flex:"+r[0]+";background:"+r[1]+"'></div>";
   });
   html+="</div></div>";

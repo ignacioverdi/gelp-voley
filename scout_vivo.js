@@ -446,7 +446,7 @@
             '<span class="vchip"><b style="color:#9292b5">p</b> ! neutral</span>'+
             '<span class="vchip"><b style="color:#fb923c">o</b> - negativo</span>'+
             '<span class="vchip"><b style="color:#f87171">j</b> / vendida o bloqueada</span>'+
-            '<span class="vchip"><b style="color:#dc2626">k</b> = error</span>'+
+            '<span class="vchip"><b style="color:#0d0d5b">k</b> = error</span>'+
           '</div></div>'+
         '<div class="sec"><h3>Saque</h3>'+
           '<p><code>s + tipo + camiseta + zona-origen + zona-destino</code></p>'+
