@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Escudos — CLUB GIMNASIA Y ESGRIMA DE LA PLATA</title>
+<title>Escudos — GELP</title>
 <style>
 :root{--bg:#0d1017;--sur:#141922;--card:#1a2029;--card2:#212936;--b:#2a3441;--b2:#38445a;
-      --txt:#e8edf5;--mut:#8b97ab;--dim:#5f6b7f;--ok:#3ddc84;--bad:#ff5f6d;--warn:#9292b5}
+      --txt:#e8edf5;--mut:#8b97ab;--dim:#5f6b7f;--ok:#3ddc84;--bad:#ff5f6d;--warn:#e6a743}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
 .top{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--sur);border-bottom:1px solid var(--b)}
@@ -44,7 +44,7 @@ input[type=file]{display:none}
 
 <div class="top">
   <h1>Escudos</h1>
-  <span style="color:var(--mut);font-size:12px">CLUB GIMNASIA Y ESGRIMA DE LA PLATA</span>
+  <span style="color:var(--mut);font-size:12px">GELP</span>
   <div class="crece"></div>
   <span id="estado"></span>
 </div>
@@ -84,14 +84,14 @@ input[type=file]{display:none}
    ══════════════════════════════════════════════════════════════════════════ */
 var LADO = 128;
 var EQUIPOS = [
-  { id:'gelp',   nombre:'CLUB GIMNASIA Y ESGRIMA DE LA PLATA', propio:true },
+  { id:'gelp',   nombre:'GELP', propio:true },
+  { id:'gelp', nombre:'gelp' },
   { id:'Banco Provincia', nombre:'Banco Provincia' },
   { id:'Rival2', nombre:'Rival2' },
   { id:'Rival3', nombre:'Rival3' },
   { id:'Rival4', nombre:'Rival4' },
   { id:'Rival5', nombre:'Rival5' },
-  { id:'Rival6', nombre:'Rival6' },
-  { id:'Rival7', nombre:'Rival7' }
+  { id:'Rival6', nombre:'Rival6' }
 ];
 var NUBE = {}, DESTINO = null;
 

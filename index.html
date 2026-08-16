@@ -18,10 +18,10 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0a0c16;
+  --bg:#07080f;
   --card:#0d0e1a;
   --border:rgba(255,255,255,.06);
-  --red:#0d0d5b;
+  --red:#e8192c;
   --blue:#1a2f5e;
   --mut:#475569;
   --txt:#e2e8f0;
@@ -64,7 +64,7 @@ header::before{
 .club-name{
   font-family:'Bebas Neue',sans-serif;
   font-size:32px;letter-spacing:6px;
-  background:linear-gradient(90deg,#0d0d5b,#fff 40%,#1a2f5e);
+  background:linear-gradient(90deg,#e8192c,#fff 40%,#1a2f5e);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .club-sub{
@@ -198,14 +198,14 @@ footer{
 }
 .gp-item:hover{border-color:rgba(245,158,11,.3);transform:translateX(4px);background:rgba(245,158,11,.03);}
 .gp-fecha{
-  font-family:'Bebas Neue',sans-serif;font-size:22px;color:#9292b5;
+  font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f59e0b;
   min-width:32px;text-align:center;line-height:1;
 }
 .gp-info{flex:1;}
 .gp-rival{font-size:14px;font-weight:700;letter-spacing:.5px;}
 .gp-torneo{font-size:10px;color:var(--mut);letter-spacing:1px;margin-top:2px;}
 .gp-arrow{font-size:16px;color:var(--mut);transition:all .2s;opacity:.4;}
-.gp-item:hover .gp-arrow{transform:translateX(4px);opacity:.8;color:#9292b5;}
+.gp-item:hover .gp-arrow{transform:translateX(4px);opacity:.8;color:#f59e0b;}
 
 /* ── CALENDARIO ──────────────────────────────────── */
 .cal-section { margin-top: 32px; }
@@ -231,7 +231,7 @@ footer{
 .cd-sep{font-family:'Bebas Neue',sans-serif;font-size:24px;color:rgba(232,25,44,.3);margin-bottom:14px;}
 .cd-cond{font-size:9px;padding:3px 9px;border-radius:4px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
 .cd-local{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
-.cd-visita{background:rgba(245,158,11,.1);color:#9292b5;border:1px solid rgba(245,158,11,.2);}
+.cd-visita{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2);}
 
 /* ── BAGGERONE TOP3 en card ──────────────────────────── */
 .bag-top3{display:flex;gap:6px;margin-top:8px;}
@@ -269,15 +269,15 @@ select, select option {
   #fx .sweep{position:absolute;top:-20%;left:-10%;width:60%;height:140%;transform:rotate(8deg);background:linear-gradient(90deg,transparent,rgba(255,220,150,.045),transparent);animation:sweepx 15s ease-in-out infinite}
   @keyframes sweepx{0%,100%{transform:translateX(-30%) rotate(8deg)}50%{transform:translateX(160%) rotate(8deg)}}
   .orb{position:absolute;border-radius:50%;filter:blur(80px);mix-blend-mode:screen;opacity:.44}
-  .o1{width:540px;height:540px;background:#0d0d5b;left:-7%;top:-10%;animation:dd1 30s ease-in-out infinite}
-  .o2{width:480px;height:480px;background:#9292b5;right:-5%;bottom:-8%;animation:dd2 36s ease-in-out infinite}
+  .o1{width:540px;height:540px;background:#e8192c;left:-7%;top:-10%;animation:dd1 30s ease-in-out infinite}
+  .o2{width:480px;height:480px;background:#e6a743;right:-5%;bottom:-8%;animation:dd2 36s ease-in-out infinite}
   .o3{width:400px;height:400px;background:#b81f2b;left:44%;top:58%;animation:dd3 42s ease-in-out infinite}
   @keyframes dd1{0%,100%{transform:translate(0,0)}50%{transform:translate(80px,54px)}}
   @keyframes dd2{0%,100%{transform:translate(0,0)}50%{transform:translate(-70px,-64px)}}
   @keyframes dd3{0%,100%{transform:translate(0,0)}50%{transform:translate(-54px,44px)}}
   header,main{position:relative;z-index:2}
   header{margin:16px 30px 4px!important;padding:26px 30px!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:24px!important;overflow:hidden;background:linear-gradient(120deg,rgba(220,50,66,.14),rgba(240,180,80,.09) 72%),rgba(14,10,12,.55)!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-  header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#0d0d5b,#9292b5 60%,#f9ec1f)}
+  header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#e8192c,#e6a743 60%,#f9ec1f)}
   .club-name{font-family:'Rajdhani'!important;font-weight:700!important;font-size:44px!important;color:#f3ede4!important;letter-spacing:.5px}
   .club-sub{color:#cabfb2!important;font-family:'Rajdhani'!important;font-weight:500}
   main{max-width:none!important;width:auto!important;margin:0!important;padding:6px 30px 60px!important;gap:0!important}
@@ -287,17 +287,17 @@ select, select option {
   .sec-title{font-family:'Rajdhani';font-weight:700;font-size:26px;letter-spacing:.5px;color:#f3ede4;display:flex;align-items:center;gap:10px}
   .sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(230,167,67,.3),transparent);margin-left:6px}
   .sec-sub{font-family:'Rajdhani';font-weight:500;font-size:13.5px;color:#a99e92}
-  .dt-pill{font-family:'Rajdhani';font-weight:600;font-size:10px;letter-spacing:1px;color:#9292b5;border:1px solid rgba(230,167,67,.4);background:rgba(230,167,67,.1);border-radius:20px;padding:2px 9px}
+  .dt-pill{font-family:'Rajdhani';font-weight:600;font-size:10px;letter-spacing:1px;color:#e6a743;border:1px solid rgba(230,167,67,.4);background:rgba(230,167,67,.1);border-radius:20px;padding:2px 9px}
   .dt-sec{margin-top:28px!important;padding:26px 24px 12px!important;border:1px dashed rgba(230,167,67,.28)!important;border-radius:24px!important;background:rgba(230,167,67,.03)!important}
   .cards-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))!important;gap:16px!important}
   .card{position:relative;border:1px solid rgba(255,255,255,.08)!important;background:rgba(18,13,15,.62)!important;-webkit-backdrop-filter:blur(16px) saturate(130%);backdrop-filter:blur(16px) saturate(130%);overflow:hidden;transition:transform .18s,box-shadow .26s,border-color .26s}
-  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-color,#9292b5);opacity:.75;z-index:1}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-color,#e6a743);opacity:.75;z-index:1}
   .card:hover{transform:translateY(-5px);border-color:var(--card-color,rgba(230,167,67,.5))!important;box-shadow:0 18px 50px rgba(0,0,0,.55),0 0 30px -10px var(--card-color,rgba(230,167,67,.6))}
   .card-icon{filter:grayscale(.12)}
   .card-title{font-family:'Rajdhani'!important;font-weight:700!important;letter-spacing:.3px;color:#f3ede4!important}
   .card-desc{font-family:'Rajdhani'!important;font-weight:500;color:#a89e91!important}
   .card-badge{font-family:'Rajdhani'!important;font-weight:600;color:#b9ae9e!important;background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.1)!important}
-  .card-arrow{color:#9292b5!important;opacity:.55}
+  .card-arrow{color:#e6a743!important;opacity:.55}
   .section-lbl{display:none!important}
 </style>
 <style id="celular-encabezado">
@@ -357,7 +357,7 @@ select, select option {
 
 <header>
   <div class="logo-wrap">
-    <img src="escudo.png" alt="Volley Gelp" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:Bebas Neue,sans-serif;font-size:20px;color:#0d0d5b;letter-spacing:1px\'>CA<br>SL</div>'">
+    <img src="escudo.png" alt="Volley Gelp" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:Bebas Neue,sans-serif;font-size:20px;color:#e8192c;letter-spacing:1px\'>CA<br>SL</div>'">
   </div>
   <div class="header-text">
     <div class="club-name">GELP VOLEY</div>
@@ -372,7 +372,7 @@ select, select option {
 
 <main>
 
-  <div class="section"><div class="sec-head"><span class="sec-ic">🎯</span><div><div class="sec-title">El próximo rival</div><div class="sec-sub">Todo para llegar preparado al partido</div></div></div><div class="cards-grid"><a href="Team_Playbook_Gelp.html" class="card" style="--card-color:#9292b5;grid-column:1/-1"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📖</div><div class="card-badge">Equipo</div></div><div class="card-body"><div class="card-title">Team Playbook</div><div class="card-desc">Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo.</div></div><div class="card-arrow">→</div></a><a href="plan_partido.html" class="card" style="--card-color:#9292b5">
+  <div class="section"><div class="sec-head"><span class="sec-ic">🎯</span><div><div class="sec-title">El próximo rival</div><div class="sec-sub">Todo para llegar preparado al partido</div></div></div><div class="cards-grid"><a href="Team_Playbook_Gelp.html" class="card" style="--card-color:#e6a743;grid-column:1/-1"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📖</div><div class="card-badge">Equipo</div></div><div class="card-body"><div class="card-title">Team Playbook</div><div class="card-desc">Nuestra identidad, principios y sistemas de juego. Cómo jugamos — para todo el equipo.</div></div><div class="card-arrow">→</div></a><a href="plan_partido.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)">📋</div>
@@ -384,18 +384,18 @@ select, select option {
         </div>
         <div class="card-arrow">→</div>
       </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">📊</span><div><div class="sec-title">Mi rendimiento</div><div class="sec-sub">Tus números y los del equipo</div></div></div><div class="cards-grid"><a href="plan_desarrollo.html" class="card" style="--card-color:#a78bfa"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2)">🚀</div><div class="card-badge" style="background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">Por jugador</div></div><div class="card-body"><div class="card-title" style="color:#a78bfa">Plan de Desarrollo</div><div class="card-desc">Objetivos técnico-tácticos a mejorar por jugador, con seguimiento del progreso. Elegí tu nombre para ver el tuyo.</div></div><div class="card-arrow" style="color:#a78bfa">→</div></a><a href="equipo.html" class="card" style="--card-color:#9292b5">
+  <div class="section"><div class="sec-head"><span class="sec-ic">📊</span><div><div class="sec-title">Mi rendimiento</div><div class="sec-sub">Tus números y los del equipo</div></div></div><div class="cards-grid"><a href="plan_desarrollo.html" class="card" style="--card-color:#a78bfa"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2)">🚀</div><div class="card-badge" style="background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">Por jugador</div></div><div class="card-body"><div class="card-title" style="color:#a78bfa">Plan de Desarrollo</div><div class="card-desc">Objetivos técnico-tácticos a mejorar por jugador, con seguimiento del progreso. Elegí tu nombre para ver el tuyo.</div></div><div class="card-arrow" style="color:#a78bfa">→</div></a><a href="equipo.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.2)">🏐</div>
-          <div class="card-badge" style="background:rgba(232,25,44,.1);color:#0d0d5b;border:1px solid rgba(232,25,44,.2)" data-t="equipo">Equipo</div>
+          <div class="card-badge" style="background:rgba(232,25,44,.1);color:#e8192c;border:1px solid rgba(232,25,44,.2)" data-t="equipo">Equipo</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#0d0d5b" data-t="equipo">Equipo</div>
+          <div class="card-title" style="color:#e8192c" data-t="equipo">Equipo</div>
           <div class="card-desc"><span data-t="d_equipo">Plantel completo con fotos, posiciones y acceso al perfil individual de cada jugador.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="#" onclick="showHeatmapMenu();return false;" class="card" style="--card-color:#9292b5">
+      </a><a href="#" onclick="showHeatmapMenu();return false;" class="card" style="--card-color:#e6a743">
           <div class="card-glow"></div>
           <div class="card-top">
             <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🔥</div>
@@ -404,7 +404,7 @@ select, select option {
           <div class="card-title">Heat Maps</div>
           <div class="card-desc"><span data-t="d_heatmaps">Análisis visual por jugador. Ataque, saque, recepción y armado con heatmaps de zonas, EFF y tendencias.</span></div>
           <div class="card-arrow">→</div>
-        </a><a href="nla_stats_table.html" class="card" style="--card-color:#9292b5">
+        </a><a href="nla_stats_table.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.2)">🏆</div>
@@ -415,7 +415,7 @@ select, select option {
           <div class="card-desc"><span data-t="d_stats_liga">Base de datos completa NLA 2026/27. Ranking por equipo y stats individuales de toda la liga. Ataque, saque, recepción y bloqueo.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="dashboard.html" class="card" style="--card-color:#9292b5">
+      </a><a href="dashboard.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2)">📋</div>
@@ -426,18 +426,18 @@ select, select option {
           <div class="card-desc"><span data-t="d_dashboard">Progreso de todos los jugadores en tiempo real. Quién cargó los pesos, quién no, y comparativa del equipo.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="analisis.html" class="card" style="--card-color:#9292b5">
+      </a><a href="analisis.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">📊</div>
-          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#9292b5;border:1px solid rgba(245,158,11,.2)"><span data-t="b_detallado">Detallado</span></div>
+          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)"><span data-t="b_detallado">Detallado</span></div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#9292b5"><span data-t="g_analisis">Análisis</span></div>
+          <div class="card-title" style="color:#f59e0b"><span data-t="g_analisis">Análisis</span></div>
           <div class="card-desc"><span data-t="d_analisis">Stats detalladas por partido o acumulado. Saque, recepción, ataque y bloqueo con todos los valores.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="informe_equipo.html" class="card" style="--card-color:#9292b5">
+      </a><a href="informe_equipo.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(27,175,122,.1);border-color:rgba(27,175,122,.2)">📈</div>
@@ -449,21 +449,21 @@ select, select option {
         </div>
         <div class="card-arrow">→</div>
       </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">💪</span><div><div class="sec-title">Físico y bienestar</div><div class="sec-sub">Tu cuerpo, día a día</div></div></div><div class="cards-grid"><a href="prep_fisica.html" class="card" style="--card-color:#9292b5">
+  <div class="section"><div class="sec-head"><span class="sec-ic">💪</span><div><div class="sec-title">Físico y bienestar</div><div class="sec-sub">Tu cuerpo, día a día</div></div></div><div class="cards-grid"><a href="prep_fisica.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.2)">💪</div>
           <div style="display:flex;flex-direction:column;gap:4px;">
-            <div class="card-badge" style="background:rgba(232,25,44,.1);color:#0d0d5b;border:1px solid rgba(232,25,44,.2)"><span data-t="b_individual">Individual</span></div>
-            <div style="font-size:8px;padding:2px 7px;border-radius:4px;background:rgba(245,158,11,.08);color:#9292b5;border:1px solid rgba(245,158,11,.15);letter-spacing:.8px;font-weight:700;text-transform:uppercase;">🚧 <span data-t="en_desarrollo">En desarrollo</span></div>
+            <div class="card-badge" style="background:rgba(232,25,44,.1);color:#e8192c;border:1px solid rgba(232,25,44,.2)"><span data-t="b_individual">Individual</span></div>
+            <div style="font-size:8px;padding:2px 7px;border-radius:4px;background:rgba(245,158,11,.08);color:#f59e0b;border:1px solid rgba(245,158,11,.15);letter-spacing:.8px;font-weight:700;text-transform:uppercase;">🚧 <span data-t="en_desarrollo">En desarrollo</span></div>
           </div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#0d0d5b"><span data-t="prep_fisica">Preparación Física</span></div>
+          <div class="card-title" style="color:#e8192c"><span data-t="prep_fisica">Preparación Física</span></div>
           <div class="card-desc"><span data-t="prep_fisica_sub">Rutinas personalizadas por jugador</span>. <span data-t="d_prep_tail">Registrá tus pesos por serie, seguí tu progresión y calculá cargas de entrenamiento.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="wellness.html" class="card" style="--card-color:#9292b5">
+      </a><a href="wellness.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.22)">🩺</div>
@@ -477,7 +477,7 @@ select, select option {
         </div>
         <div class="card-arrow">→</div>
       </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">📅</span><div><div class="sec-title">Agenda</div><div class="sec-sub">Cuándo y dónde</div></div></div><div class="cards-grid"><a href="calendario.html" class="card" style="--card-color:#9292b5">
+  <div class="section"><div class="sec-head"><span class="sec-ic">📅</span><div><div class="sec-title">Agenda</div><div class="sec-sub">Cuándo y dónde</div></div></div><div class="cards-grid"><a href="calendario.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.2)">📅</div>
@@ -488,19 +488,19 @@ select, select option {
           <div class="card-desc">Partidos y entrenamientos del equipo. Fecha, hora, lugar y tipo — editable en la misma página.</div>
         </div>
         <div class="card-arrow" style="color:#2dd4bf">→</div>
-      </a><a href="horarios.html" class="card" style="--card-color:#9292b5">
+      </a><a href="horarios.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">🗓️</div>
-          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#9292b5;border:1px solid rgba(245,158,11,.2)">Editable</div>
+          <div class="card-badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)">Editable</div>
         </div>
         <div class="card-body">
-          <div class="card-title" style="color:#9292b5">Horarios</div>
+          <div class="card-title" style="color:#f59e0b">Horarios</div>
           <div class="card-desc">Horarios de entrenamiento de la semana. Pesas y vóley, día por día — sincronizado y editable.</div>
         </div>
-        <div class="card-arrow" style="color:#9292b5">→</div>
+        <div class="card-arrow" style="color:#f59e0b">→</div>
       </a></div></div>
-  <div class="section"><div class="sec-head"><span class="sec-ic">🎥</span><div><div class="sec-title">Video y juego</div><div class="sec-sub">Clips y un poco de joda</div></div></div><div class="cards-grid"><a href="cortes.html" class="card" style="--card-color:#9292b5">
+  <div class="section"><div class="sec-head"><span class="sec-ic">🎥</span><div><div class="sec-title">Video y juego</div><div class="sec-sub">Clips y un poco de joda</div></div></div><div class="cards-grid"><a href="cortes.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🎬</div>
@@ -511,7 +511,7 @@ select, select option {
           <div class="card-desc">Filtrá acciones como en los heatmaps y mirá los clips de video sincronizados. Armá recortes para mostrarles a los jugadores.</div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="baggerone.html" class="card" style="--card-color:#9292b5">
+      </a><a href="baggerone.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(55,138,221,.1);border-color:rgba(55,138,221,.2)">🏐</div>
@@ -524,7 +524,7 @@ select, select option {
         </div>
         <div class="card-arrow">→</div>
       </a></div></div>
-  <div class="section dt-sec"><div class="sec-head"><span class="sec-ic">🛠️</span><div><div class="sec-title">Herramientas del entrenador<span class="dt-pill">🔒 Solo DT</span></div><div class="sec-sub">Solo lo ve el cuerpo técnico</div></div></div><div class="cards-grid"><a href="game_plan.html" id="card-gameplan" class="card" style="--card-color:#9292b5;grid-column:1/-1">
+  <div class="section dt-sec"><div class="sec-head"><span class="sec-ic">🛠️</span><div><div class="sec-title">Herramientas del entrenador<span class="dt-pill">🔒 Solo DT</span></div><div class="sec-sub">Solo lo ve el cuerpo técnico</div></div></div><div class="cards-grid"><a href="game_plan.html" id="card-gameplan" class="card" style="--card-color:#e6a743;grid-column:1/-1">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)">📋</div>
@@ -535,7 +535,7 @@ select, select option {
           <div class="card-desc" id="gp-desc">Plan del próximo rival: defensa, armadores, recepción y videos.</div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="rotaciones.html" class="card" style="--card-color:#9292b5">
+      </a><a href="rotaciones.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.2)">🔄</div>
@@ -546,7 +546,7 @@ select, select option {
           <div class="card-desc"><span data-t="d_rotaciones">Las seis rotaciones enfrentadas al rival, en una hoja. Para preparar el saque, el bloqueo y la defensa antes del partido.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="panel_vivo.html" class="card" style="--card-color:#9292b5"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">🎯</div><div class="card-badge">Cargar</div></div><div class="card-body"><div class="card-title">Scout en Vivo</div><div class="card-desc">Cargá el partido punto por punto con el código de DataVolley.</div></div><div class="card-arrow">→</div></a><a href="panel_voley.html" class="card" style="--card-color:#9292b5"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📡</div><div class="card-badge">En vivo</div></div><div class="card-body"><div class="card-title">Panel en Vivo</div><div class="card-desc">Fichas, tablas y gráficos que se actualizan solos mientras scouteás.</div></div><div class="card-arrow">→</div></a><a href="camara.html" class="card" style="--card-color:#9292b5"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📹</div><div class="card-badge">Cámara</div></div><div class="card-body"><div class="card-title">Cámara del partido</div><div class="card-desc">Transmití desde el celular al scout con delay. Te da un código de sala.</div></div><div class="card-arrow">→</div></a><a href="scouting_rival.html" class="card" style="--card-color:#9292b5">
+      </a><a href="panel_vivo.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">🎯</div><div class="card-badge">Cargar</div></div><div class="card-body"><div class="card-title">Scout en Vivo</div><div class="card-desc">Cargá el partido punto por punto con el código de DataVolley.</div></div><div class="card-arrow">→</div></a><a href="panel_voley.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📡</div><div class="card-badge">En vivo</div></div><div class="card-body"><div class="card-title">Panel en Vivo</div><div class="card-desc">Fichas, tablas y gráficos que se actualizan solos mientras scouteás.</div></div><div class="card-arrow">→</div></a><a href="camara.html" class="card" style="--card-color:#e6a743"><div class="card-glow"></div><div class="card-top"><div class="card-icon" style="background:rgba(230,167,67,.1);border-color:rgba(230,167,67,.25)">📹</div><div class="card-badge">Cámara</div></div><div class="card-body"><div class="card-title">Cámara del partido</div><div class="card-desc">Transmití desde el celular al scout con delay. Te da un código de sala.</div></div><div class="card-arrow">→</div></a><a href="scouting_rival.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">🔍</div>
@@ -557,7 +557,7 @@ select, select option {
           <div class="card-desc">Dossier completo de cada rival de la liga: saque, ataque por rematador con direcciones, armador, recepción, rotaciones y en sistema vs fuera de sistema.</div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="comparador.html" class="card" style="--card-color:#9292b5">
+      </a><a href="comparador.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(6,182,212,.1);border-color:rgba(6,182,212,.2)">⚖️</div>
@@ -579,7 +579,7 @@ select, select option {
           <div class="card-desc">Arrastrá el archivo del partido y listo. El sistema lo procesa solo y actualiza las estadísticas, los mapas de calor, el plan de partido y los perfiles de cada jugador.</div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="importar_video.html" class="card" style="--card-color:#9292b5">
+      </a><a href="importar_video.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.2)">📹</div>
@@ -590,7 +590,7 @@ select, select option {
           <div class="card-desc">Pegá el link de YouTube de cada partido de la temporada y generá el archivo. Sin que participe nadie más.</div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="sesiones.html" class="card" style="--card-color:#9292b5">
+      </a><a href="sesiones.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2)">🔐</div>
@@ -601,7 +601,7 @@ select, select option {
           <div class="card-desc"><span data-t="d_sesiones">Quién tiene acceso, desde qué dispositivo y cuándo entró. Podés cerrarle la sesión a uno o a todos.</span></div>
         </div>
         <div class="card-arrow">→</div>
-      </a><a href="pizarron.html" class="card" style="--card-color:#9292b5">
+      </a><a href="pizarron.html" class="card" style="--card-color:#e6a743">
         <div class="card-glow"></div>
         <div class="card-top">
           <div class="card-icon" style="background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.2)">📺</div>
@@ -637,7 +637,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">25</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">25</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">OCT</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -667,7 +667,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">05</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">05</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -697,7 +697,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">15</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">15</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -727,7 +727,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">29</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">29</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -757,7 +757,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">13</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">13</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">DIC</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -787,7 +787,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">03</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">03</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -817,7 +817,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">17</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">17</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -847,7 +847,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">08</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">08</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -877,7 +877,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">21</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">21</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -907,7 +907,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">07</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">07</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -937,7 +937,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">17</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">17</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -967,7 +967,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">04</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">04</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ABR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -997,7 +997,7 @@ select, select option {
       <div style="position:relative;opacity:1;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;">
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#0d0d5b;line-height:1;">12</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">12</div>
             <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ABR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
@@ -1256,7 +1256,7 @@ function highlightNextMatch(){
       card.style.boxShadow = '0 0 20px rgba(232,25,44,.15)';
       var badge = document.createElement('div');
       badge.textContent = 'PRÓXIMO';
-      badge.style.cssText = 'position:absolute;top:-1px;right:12px;background:#0d0d5b;color:#fff;font-size:8px;font-family:Bebas Neue,sans-serif;letter-spacing:2px;padding:2px 8px;border-radius:0 0 6px 6px';
+      badge.style.cssText = 'position:absolute;top:-1px;right:12px;background:#e8192c;color:#fff;font-size:8px;font-family:Bebas Neue,sans-serif;letter-spacing:2px;padding:2px 8px;border-radius:0 0 6px 6px';
       card.appendChild(badge);
     }
   });
@@ -1284,7 +1284,7 @@ function highlightNextMatch(){
       <a class="hm-card" href="hm_ataque.html?equipo=gelp"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas<br>Combos · Calidad rec.</span></a>
       <a class="hm-card" href="hm_saque.html?equipo=gelp"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=gelp" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#9292b5">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
       <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
     </div>
     <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">LIGA FEMENINA 2026/27 · temporada en curso</div>
@@ -1346,7 +1346,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
       bar.style.cssText = 'display:flex;align-items:center;gap:10px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:10px 14px;margin:14px 16px 0;';
       bar.innerHTML = '<span style="font-size:18px">👤</span>'+
         '<span style="flex:1;color:#22c55e;font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:14px">Estás viendo la app como JUGADOR</span>'+
-        '<button id="vbSalirJug" style="background:rgba(232,25,44,.15);border:1px solid rgba(232,25,44,.35);color:#0d0d5b;border-radius:8px;padding:6px 14px;font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:13px;cursor:pointer">SALIR</button>';
+        '<button id="vbSalirJug" style="background:rgba(232,25,44,.15);border:1px solid rgba(232,25,44,.35);color:#e8192c;border-radius:8px;padding:6px 14px;font-family:Bebas Neue,sans-serif;letter-spacing:1px;font-size:13px;cursor:pointer">SALIR</button>';
       host.insertBefore(bar, host.firstChild);
       var b = document.getElementById('vbSalirJug');
       if(b) b.onclick = function(){

@@ -21,20 +21,20 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- datos_historial.js: lo carga el selector de modo (arriba) -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0a0c16;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#9292b5;--indigo:#818cf8;--green:#22c55e;--red:#0d0d5b;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;}
+:root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#f59e0b;--indigo:#818cf8;--green:#22c55e;--red:#ef4444;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;}
 body{background:#07080f;color:#e2e8f0;font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding:0;margin:0}
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 .hdr{padding:12px 240px 12px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;background:rgba(7,8,15,.9);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);flex-wrap:wrap}
 .back-btn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;flex-shrink:0}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
 .fbtn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s}
-.fbtn.active-partido{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#0d0d5b}
+.fbtn.active-partido{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#e8192c}
 .fbtn.active-entrenamiento{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
 .subfiltro-row{width:100%;display:none;gap:5px;flex-wrap:wrap;padding:6px 0 0}
-.subfiltro-select{padding:5px 12px;border-radius:7px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.08);color:#0d0d5b;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;min-width:220px}
+.subfiltro-select{padding:5px 12px;border-radius:7px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.08);color:#e8192c;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;min-width:220px}
 .subfiltro-select option{color:#111;background:#fff}
 .sfbtn{padding:4px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
-.sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#0d0d5b}
+.sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
 .main{max-width:1280px;margin:0 auto;padding:20px 16px}
 .empty{text-align:center;padding:60px;color:#475569;font-size:13px;letter-spacing:1px}
 .info-note{font-size:10px;color:#475569;letter-spacing:1px;padding:10px 16px;background:rgba(255,255,255,.02);border-radius:6px;margin-bottom:14px;border:1px solid rgba(255,255,255,.04)}
@@ -62,7 +62,7 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 </div>
 <div class="main"><div id="content"><div class="empty">Cargando...</div></div></div>
 <script>
-var POS_COLOR={'ARMADOR':'#9292b5','OPUESTO':'#f97316','PUNTA':'#818cf8','CENTRAL':'#22c55e','LIBERO':'#06b6d4'};
+var POS_COLOR={'ARMADOR':'#f59e0b','OPUESTO':'#f97316','PUNTA':'#818cf8','CENTRAL':'#22c55e','LIBERO':'#06b6d4'};
 
 function buildRecepcionFromHistorial(num){
   if(typeof window.HISTORIAL_DATA==='undefined') return null;
@@ -373,7 +373,7 @@ function renderComparativaRecepcion(j, cont, num){
         return '<td style="padding:8px;text-align:center"><span style="font-family:Bebas Neue,sans-serif;font-size:18px;color:'+colorEff(e)+(isCur?';font-weight:800':'')+'">'+(e!==null?e+'%':'—')+'</span></td>';
       }).join('');
       return '<tr style="border-bottom:1px solid rgba(255,255,255,.04);'+(isCur?'background:rgba(232,25,44,.06);':'')+'">'
-        +'<td style="padding:8px;font-size:12px;font-weight:'+(isCur?'800':'600')+';color:'+(isCur?'#0d0d5b':'#94a3b8')+'">'+nm+(isCur?' ←':'')+'</td>'
+        +'<td style="padding:8px;font-size:12px;font-weight:'+(isCur?'800':'600')+';color:'+(isCur?'#e8192c':'#94a3b8')+'">'+nm+(isCur?' ←':'')+'</td>'
         +celdas+'</tr>';
     }).join('');
     var s2=document.createElement('div');

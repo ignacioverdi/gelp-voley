@@ -41,7 +41,7 @@ def normalize_combo(combo):
 # ═══════════════════════════════════════════════════════════════════
 # Solo el equipo propio. Los rivales salen de los .dvw al procesarlos, asi que
 # no hace falta escribirlos: cualquier liga funciona sin configurar nada.
-NLA_TEAMS = ['{{Club}}']
+NLA_TEAMS = ['Gelp']
 
 TEAM_NORM = {
     # Los nombres largos tal como vienen en el .dvw. Solo hace falta cargar
@@ -96,14 +96,14 @@ def equipos_de_los_datos(teams_data, actuales, propio):
     return juntos
 # ══ EL EQUIPO PROPIO ══════════════════════════════════════════════════════
 # Esta linea PISABA el valor que se lee de config_club veinte lineas mas
-# arriba. Con el marcador literal '{{Club}}' no coincide con ningun equipo
+# arriba. Con el marcador literal 'Gelp' no coincide con ningun equipo
 # del .dvw, asi que se descartaban TODOS los partidos y datos_partidos.js
 # salia vacio: sin dashboard, sin analisis y sin plan de partido, aunque el
 # proceso dijera "LISTO".
 #
 # Ahora solo se usa si config_club no dijo nada.
 if 'MAIN_TEAM' not in dir() or not MAIN_TEAM or MAIN_TEAM.startswith('{{'):
-    MAIN_TEAM = '{{Club}}'   # el equipo propio
+    MAIN_TEAM = 'Gelp'   # el equipo propio
 
 # Posiciones oficiales del plantel CASLA (por número de camiseta).
 # Fuente única de verdad — coincide con EQUIPO_DEMO de jugador.html.
@@ -115,7 +115,7 @@ CASLA_POS_OFICIAL = {
 
 
 TEAM_COLORS = {
-    '{{Club}}':'#22c55e'   # el propio; los rivales reciben un color automatico
+    'Gelp':'#22c55e'   # el propio; los rivales reciben un color automatico
 }
 
 ATK_COMBOS = ['X5','V5','X6','V6','X8','V8','X1','X7','XM','X2','XB','XP','XR',
@@ -985,14 +985,14 @@ def build_heatmaps(teams_data, template_dir='.', output_dir='.', temporada_filte
 
         display = team.upper()
         cap = team  # nombre tal cual (ej. 'Chenois', 'St Gallen')
-        SUBS=[('{{CLUB}} VOLEY',f'{display} VOLEY'),('{{CLUB}} Voley',f'{display} Voley'),
+        SUBS=[('GELP VOLEY',f'{display} VOLEY'),('GELP Voley',f'{display} Voley'),
               ('San Lorenzo',display),('SAN LORENZO',display),
-              # La plantilla es de {{CLUB}}: reemplazar también esas menciones por el club destino
-              ('{{CLUB}} — ANALISIS', f'{display} — ANALISIS'),
-              ('{{CLUB}} — ANALISIS', f'{display} — ANALISIS'),
-              ('— {{CLUB}} 2026', f'— {cap} 2026'),('— {{Club}} 2026', f'— {cap} 2026'),
-              ('{{CLUB}} VOLEY', f'{display} VOLEY'),
-              ('División de Honor 2026','{{LIGA}}'),('División de Honor','{{LIGA}}'),
+              # La plantilla es de GELP: reemplazar también esas menciones por el club destino
+              ('GELP — ANALISIS', f'{display} — ANALISIS'),
+              ('GELP — ANALISIS', f'{display} — ANALISIS'),
+              ('— GELP 2026', f'— {cap} 2026'),('— Gelp 2026', f'— {cap} 2026'),
+              ('GELP VOLEY', f'{display} VOLEY'),
+              ('División de Honor 2026','LIGA FEMENINA'),('División de Honor','LIGA FEMENINA'),
               ('DHM 2026','NLA 2025/26'),('<script src="chat.js"></script>',''),
               ('ataque_casla.html',f'ataque_{slug}.html'),
               ('saque_casla.html',f'saque_{slug}.html'),
@@ -1720,7 +1720,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
                 'aSo':_blk(aso),'aTr':_blk(atr),
                 'bT':bT,'bPt':bk,'bPtPos':bp,'bEff':bEff,'bAdm':bExc,'bVend':bSl,'bNeg':bNeg,'bErr':bErr})
         historial.append({'fecha':'/'.join(reversed(g['date'].split('-'))),'tipo':'P','rival':g['rival'],
-            'resultado':{'{{CLUB_SLUG}}':g['tsets'],'rival':g['rsets'],'sets':g['set_strings']},'jugadores':jugs})
+            'resultado':{'gelp':g['tsets'],'rival':g['rsets'],'sets':g['set_strings']},'jugadores':jugs})
 
     now = datetime.now().strftime('%d/%m/%Y, %H:%M:%S')
     hist_js = 'window.HISTORIAL_DATA = ' + json.dumps({'generado':now,'entrenamientos':historial}, ensure_ascii=False, indent=2) + ';\n'
@@ -1748,7 +1748,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         if kind=='r': return round((k+0.5*pp-0.5*sl-e)/t*100)
         return 0
 
-    partidos_meta=[{'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),'torneo':f'{{LIGA}} {temporada}','resultado':g['result'],'sets_club':str(g['tsets']),'sets_rival':str(g['rsets'])} for g in sorted(games,key=lambda x:x['date']) if g['date']]
+    partidos_meta=[{'id':g['rival']+'__'+g['date'],'nombre':g['rival'],'rival':g['rival'],'fecha':'/'.join(reversed(g['date'].split('-'))),'torneo':f'LIGA FEMENINA {temporada}','resultado':g['result'],'sets_club':str(g['tsets']),'sets_rival':str(g['rsets'])} for g in sorted(games,key=lambda x:x['date']) if g['date']]
 
     # ═══ BATERÍAS (objetivos) por partido, jugador y acumulado ═══
     def _bat_name_map(content, side):
@@ -2039,4 +2039,4 @@ if __name__ == '__main__':
     print(f"  Subir a GitHub: liga_data.js, nla_stats_table.html, datos_partidos.js")
     print(f"{'='*60}\n")
 
-# © 2025-2026 Ignacio Verdi · {{CLUB}} VOLEY · Software propietario - Todos los derechos reservados
+# © 2025-2026 Ignacio Verdi · GELP VOLEY · Software propietario - Todos los derechos reservados

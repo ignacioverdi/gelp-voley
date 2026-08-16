@@ -9,3 +9,7 @@ _gen_gelp.b64
 LLAVE.txt
 # copias de respaldo que dejan los scripts
 *.antes
+
+# Herramientas de la fabrica: no son parte de la app
+_ANTES-*/
+_CONFIG.txt

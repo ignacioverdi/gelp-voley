@@ -10,8 +10,8 @@
 <script src="datos_seguros.js"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <style>
-  :root{--bg:#0a0c16;--surface:#111827;--card:#0f1020;--card2:#151b2e;--border:rgba(255,255,255,.08);--b2:rgba(255,255,255,.13);
-    --text:#e2e8f0;--muted:#64748b;--mut2:#94a3b8;--green:#22c55e;--amber:#9292b5;--orange:#f97316;--red:#0d0d5b;--acc:#2dd4bf;--accd:#14b8a6}
+  :root{--bg:#0a0f1a;--surface:#111827;--card:#0f1020;--card2:#151b2e;--border:rgba(255,255,255,.08);--b2:rgba(255,255,255,.13);
+    --text:#e2e8f0;--muted:#64748b;--mut2:#94a3b8;--green:#22c55e;--amber:#f59e0b;--orange:#f97316;--red:#ef4444;--acc:#2dd4bf;--accd:#14b8a6}
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:radial-gradient(1200px 600px at 50% -200px,rgba(45,212,191,.07),transparent),var(--bg);color:var(--text);
     font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding-bottom:90px}
@@ -77,7 +77,7 @@
     border-radius:13px;padding:8px 12px;margin-bottom:8px;transition:transform .12s,border-color .12s,box-shadow .12s}
   #list .fx:hover{transform:translateY(-1px);border-color:#33475e;box-shadow:0 6px 16px rgba(0,0,0,.32)}
   #list .fx[data-cond="Local"]{border-left-color:var(--acc)}
-  #list .fx[data-cond="Visitante"]{border-left-color:#9292b5}
+  #list .fx[data-cond="Visitante"]{border-left-color:#f59e0b}
   .fx-date{display:flex;flex-direction:column;align-items:center;line-height:1;border-right:1px solid var(--line,#243040);padding-right:7px}
   .fx-date .d{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text)}
   .fx-date .mo{font-size:9px;font-weight:700;letter-spacing:1.3px;color:var(--acc)}

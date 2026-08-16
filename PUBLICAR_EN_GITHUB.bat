@@ -53,7 +53,7 @@ goto FIN
 
 :NOREPO
 echo  [ATENCION] Esta carpeta no esta conectada a GitHub.
-echo  Tenes que correr esto DENTRO de la carpeta gelp-voley
+echo  Tenes que correr esto DENTRO de la carpeta GELP
 echo  (la que bajaste con DESCARGAR_PROYECTO.bat).
 echo.
 pause

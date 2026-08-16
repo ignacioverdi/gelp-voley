@@ -6,7 +6,7 @@
 <title>ANALISIS DE SAQUE — GELP 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0a0c16;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#0d0d5b;--amber:#9292b5;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
+:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#E8192C;--amber:#F59E0B;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
 html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",sans-serif;min-height:100vh}
 .hdr{background:rgba(7,8,15,.97);border-bottom:1px solid var(--border);padding:11px 20px;position:sticky;top:0;z-index:100}
 .hdr-t{font-family:"Bebas Neue",sans-serif;font-size:18px;letter-spacing:3px}
@@ -78,7 +78,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 <div class="sidebar">
   <div class="flabel" style="margin-top:0">Origen de datos</div>
   <div style="display:flex;gap:4px;margin-bottom:10px" id="modo-toggle">
-    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#0d0d5b);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
+    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#e8192c);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
     <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid var(--border2,rgba(255,255,255,.15));color:#94a3b8;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">ENTRENAMIENTO</button>
   </div>
   <div class="flabel" data-i18n="Jugador"><span data-t="g_jugador">Jugador</span></div>
@@ -141,7 +141,7 @@ var T1K='SM',T2K='SQ';
 var TKEY='s',TYPESKEY='stypes';
 var ORIG_SIDE='own',DEST_SIDE='rival';
 var RES_LABEL={"#": "Punto", "+": "Positivo", "-": "Negativo", "/": "Vendido", "=": "Error", "!": "Exclamativo"};
-var RES_COLOR={"#": "#22c55e", "+": "#a3e635", "-": "#9292b5", "/": "#86efac", "=": "#ef4444", "!": "#fbbf24"};
+var RES_COLOR={"#": "#22c55e", "+": "#a3e635", "-": "#f59e0b", "/": "#86efac", "=": "#ef4444", "!": "#fbbf24"};
 var F={player:'',stype:'all',rival:'all',gi:'all',set:'all',moment:'all',result:'all',origin:'all'};
 var PLAYERS={};
 Object.keys(RAW.players).forEach(function(num){
@@ -444,7 +444,7 @@ function _initModoBtns(){
   var m=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
   var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
   if(!bp||!be) return;
-  function on(b){b.style.background='var(--accent,#0d0d5b)';b.style.color='#fff';b.style.border='none';}
+  function on(b){b.style.background='var(--accent,#e8192c)';b.style.color='#fff';b.style.border='none';}
   function off(b){b.style.background='transparent';b.style.color='#94a3b8';b.style.border='1px solid var(--border2,rgba(255,255,255,.15))';}
   if(m==='entrenamiento'){on(be);off(bp);} else {on(bp);off(be);}
   // Si no hay datos de entrenamiento, deshabilitar ese botón

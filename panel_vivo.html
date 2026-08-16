@@ -78,7 +78,7 @@
 
 /* El extendido, al final de cada linea y en otro color: se distingue del
    codigo base sin tener que leerlo entero. */
-.crow .lc-ex { width:34px; color:#9292b5; font-weight:700; text-align:left; padding-left:4px; }
+.crow .lc-ex { width:34px; color:#f59e0b; font-weight:700; text-align:left; padding-left:4px; }
 
 /* Los separadores del formato interno, apagados: estan pero no distraen. */
 #code-espejo .sep{ color:rgba(148,163,184,.22); }
@@ -722,7 +722,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
     <div style="display:flex;align-items:center;font-size:22px;color:var(--mut)">→</div>
     <div style="flex:1"><div class="lutitle" style="margin-bottom:6px">Entra (banco)</div><div id="subs-entra" class="subcol"></div></div>
   </div>
-  <div id="subs-resumen" style="margin-top:12px;text-align:center;font-weight:700;color:#9292b5">Elegí quién sale y quién entra</div>
+  <div id="subs-resumen" style="margin-top:12px;text-align:center;font-weight:700;color:#e6a743">Elegí quién sale y quién entra</div>
   <div class="brow" style="margin-top:12px;gap:8px;flex-wrap:wrap">
     <button class="tbtn" onclick="cerrarSubs()">Cerrar</button>
     <div style="flex:1"></div>
@@ -1517,7 +1517,7 @@ function renderTablaPartidos(){
     const etiqueta = (autor ? ' <span style="font-size:10px;font-weight:700;color:'+(deOtro?'var(--ok)':'var(--mut)')
         +';border:1px solid '+(deOtro?'var(--ok)':'var(--b2)')+';border-radius:5px;padding:1px 5px;margin-left:5px;letter-spacing:.5px">'
         +(deOtro?'☁ ':'')+autor+'</span>' : '');
-    html+='<tr style="border-top:1px solid var(--b)'+(actual?';background:rgba(230,167,67,.06)':'')+'"><td style="padding:8px 6px"><input type="checkbox" class="pcheck" value="'+p.id+'" onchange="pintarTrash()"></td><td style="padding:8px 6px;color:var(--mut)">'+(r.fecha||'—')+(r.competencia?'<br><span style="font-size:11px">'+r.competencia+'</span>':'')+'</td><td style="padding:8px 6px;font-weight:700">'+r.home+' <span style="color:var(--mut)">vs</span> '+r.away+(actual?' <span style="font-size:10px;color:#9292b5">● actual</span>':'')+etiqueta+'</td><td style="padding:8px 6px;text-align:center;font-weight:800">'+r.res+'</td><td style="padding:8px 6px;text-align:center;color:var(--mut)">'+r.acciones+'</td><td style="padding:8px 6px"><button class="tbtn" onclick="abrirPartido(\''+p.id+'\')" style="padding:5px 12px">Abrir</button></td></tr>';
+    html+='<tr style="border-top:1px solid var(--b)'+(actual?';background:rgba(230,167,67,.06)':'')+'"><td style="padding:8px 6px"><input type="checkbox" class="pcheck" value="'+p.id+'" onchange="pintarTrash()"></td><td style="padding:8px 6px;color:var(--mut)">'+(r.fecha||'—')+(r.competencia?'<br><span style="font-size:11px">'+r.competencia+'</span>':'')+'</td><td style="padding:8px 6px;font-weight:700">'+r.home+' <span style="color:var(--mut)">vs</span> '+r.away+(actual?' <span style="font-size:10px;color:#e6a743">● actual</span>':'')+etiqueta+'</td><td style="padding:8px 6px;text-align:center;font-weight:800">'+r.res+'</td><td style="padding:8px 6px;text-align:center;color:var(--mut)">'+r.acciones+'</td><td style="padding:8px 6px"><button class="tbtn" onclick="abrirPartido(\''+p.id+'\')" style="padding:5px 12px">Abrir</button></td></tr>';
   });
   html+='</tbody></table>'; cont.innerHTML=html; pintarTrash();
 }
@@ -3995,7 +3995,7 @@ function partirCodigo(cod){
 function colorEval(ev){
   if(ev === '#') return '#22c55e';   /* punto      */
   if(ev === '=') return '#ef4444';   /* error      */
-  if(ev === '/') return '#9292b5';   /* bloqueado  */
+  if(ev === '/') return '#f59e0b';   /* bloqueado  */
   if(ev === '+') return '#60a5fa';   /* positiva   */
   if(ev === '!') return '#a78bfa';   /* dudosa     */
   return 'var(--mut)';               /* el resto   */
@@ -6405,7 +6405,7 @@ function renderInicio(){
         var f=(r.fecha||'').split('-'); var fec=(f.length===3)?(f[2]+'/'+f[1]+'/'+f[0]):(r.fecha||'—');
         return '<div class="ini-row'+(act?' act':'')+'" onclick="iniAbrir(\''+p.id+'\')">'
           + '<div class="f">'+iniEsc(fec)+'</div>'
-          + '<div class="eq">'+iniEsc(r.home)+(act?' <span style="font-size:10px;color:#9292b5">● abierto</span>':'')+'</div>'
+          + '<div class="eq">'+iniEsc(r.home)+(act?' <span style="font-size:10px;color:#e6a743">● abierto</span>':'')+'</div>'
           + '<div class="rs">'+iniEsc(r.res||'')+'</div>'
           + '<div class="eq">'+iniEsc(r.away)+'</div>'
           + '<div class="cp">'+iniEsc(r.competencia||'')+'</div>'
@@ -6616,7 +6616,7 @@ if(M.home.lineup.every(x=>!x)) openSetup();
     </div>
     <div id="vdv-conectar" style="padding:20px;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;flex:1">
       <div style="font-size:13px;color:#8a8ba0;text-align:center;max-width:340px;line-height:1.6">Abrí <b style="color:#e2e8f0">camara.html</b> en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala.</div>
-      <input id="vd-sala" inputmode="numeric" maxlength="4" placeholder="0000" style="width:180px;text-align:center;font-family:Barlow Condensed,monospace;font-size:40px;font-weight:800;letter-spacing:8px;background:#1a1b2b;border:1px solid rgba(255,255,255,.1);color:#9292b5;border-radius:12px;padding:12px;outline:none">
+      <input id="vd-sala" inputmode="numeric" maxlength="4" placeholder="0000" style="width:180px;text-align:center;font-family:Barlow Condensed,monospace;font-size:40px;font-weight:800;letter-spacing:8px;background:#1a1b2b;border:1px solid rgba(255,255,255,.1);color:#e6a743;border-radius:12px;padding:12px;outline:none">
       <button onclick="vdConectar()" style="background:#22d3ee;color:#04212a;border:0;border-radius:12px;padding:14px 30px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit">Conectar</button>
       <div id="vd-estado" class="vd-estado" style="font-size:13px;color:#8a8ba0;min-height:20px"></div>
     </div>
@@ -6628,7 +6628,7 @@ if(M.home.lineup.every(x=>!x)) openSetup();
         <div style="position:absolute;top:12px;right:12px;padding:6px 14px;border-radius:20px;background:rgba(0,0,0,.6);color:#22d3ee;font-weight:800;font-size:12px;letter-spacing:1px;backdrop-filter:blur(6px)">DELAY <span id="vd-delay-lbl">0 s</span></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <button onclick="vdReplay()" style="width:100%;background:#9292b5;color:#1a1200;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:inherit">Ver ultimo punto</button>
+        <button onclick="vdReplay()" style="width:100%;background:#e6a743;color:#1a1200;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:inherit">Ver ultimo punto</button>
         <div style="display:flex;align-items:center;gap:12px;background:#12131f;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px">
           <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a8ba0;white-space:nowrap">Delay</span>
           <input type="range" id="vd-slider" min="0" max="25" step="1" value="0" oninput="vdSlider(this.value)" style="flex:1;accent-color:#22d3ee">
@@ -6691,7 +6691,7 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
       var i=document.createElement('img');
       i.src='escudo.png'; i.alt='GELP';
       i.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';
-      i.onerror=function(){ this.style.display='none'; a.innerHTML='<div style="font-family:Bebas Neue,Barlow Condensed,sans-serif;font-size:15px;line-height:.9;color:#0d0d5b;letter-spacing:1px;text-align:center;font-weight:800">CA<br>SL</div>'; };
+      i.onerror=function(){ this.style.display='none'; a.innerHTML='<div style="font-family:Bebas Neue,Barlow Condensed,sans-serif;font-size:15px;line-height:.9;color:#e8192c;letter-spacing:1px;text-align:center;font-weight:800">CA<br>SL</div>'; };
       a.appendChild(i); document.body.appendChild(a);
     }catch(e){}
   }
@@ -6919,12 +6919,12 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
     </div>
 
     <div style="background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:13px">
-      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#9292b5;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px">
         2 &middot; En el partido</div>
       <div style="font-size:12px;line-height:1.65;color:var(--txt)">
         Abr&iacute; la misma direcci&oacute;n de siempre. El panel abre normal.<br><br>
         Arriba aparece un cartel amarillo que dice
-        <b style="color:#9292b5">Sin se&ntilde;al &middot; se guarda igual</b>.<br><br>
+        <b style="color:#f59e0b">Sin se&ntilde;al &middot; se guarda igual</b>.<br><br>
         Scoute&aacute; como siempre: no cambia nada.
       </div>
     </div>
@@ -6960,7 +6960,7 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   </div>
 
   <div style="margin-top:14px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:13px">
-    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#9292b5;margin-bottom:8px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px">
       Lo que conviene saber</div>
     <div style="font-size:12px;line-height:1.75;color:var(--txt)">
       <b>La primera vez s&iacute; hace falta se&ntilde;al.</b> Es cuando se guarda.
@@ -7014,7 +7014,7 @@ var MODO_SIN_SENAL = false;
       d.id = 'sin-senal';
       d.style.cssText = 'position:fixed;top:8px;left:50%;transform:translateX(-50%);'+
         'z-index:9999;background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.45);'+
-        'color:#9292b5;border-radius:20px;padding:5px 16px;font-family:inherit;'+
+        'color:#f59e0b;border-radius:20px;padding:5px 16px;font-family:inherit;'+
         'font-size:11px;font-weight:700;letter-spacing:.5px;pointer-events:none;'+
         'backdrop-filter:blur(6px)';
       d.textContent = 'Sin se\u00f1al \u00b7 se guarda igual';

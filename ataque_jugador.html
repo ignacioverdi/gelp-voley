@@ -21,7 +21,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- datos_historial.js: lo carga el selector de modo (arriba) -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0a0c16;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#9292b5;--indigo:#818cf8;--green:#22c55e;--red:#0d0d5b;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;}
+:root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#f59e0b;--indigo:#818cf8;--green:#22c55e;--red:#ef4444;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;}
 body{background:#07080f;color:#e2e8f0;font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding:0;margin:0}
 canvas { image-rendering: -webkit-optimize-contrast; }
 .canchitas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;}
@@ -41,13 +41,13 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 .back-btn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;flex-shrink:0}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
 .fbtn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s}
-.fbtn.active-partido{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#0d0d5b}
+.fbtn.active-partido{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#e8192c}
 .fbtn.active-entrenamiento{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
 .subfiltro-row{width:100%;display:none;gap:5px;flex-wrap:wrap;padding:6px 0 0}
-.subfiltro-select{padding:5px 12px;border-radius:7px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.08);color:#0d0d5b;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;min-width:220px}
+.subfiltro-select{padding:5px 12px;border-radius:7px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.08);color:#e8192c;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;min-width:220px}
 .subfiltro-select option{color:#111;background:#fff}
 .sfbtn{padding:4px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
-.sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#0d0d5b}
+.sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
 .main{max-width:1100px;margin:0 auto;padding:20px 16px}
 .empty{text-align:center;padding:60px;color:#475569;font-size:13px;letter-spacing:1px}
 </style>
@@ -81,7 +81,7 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
   <div id="content"><div class="empty">Cargando...</div></div>
 </div>
 <script>
-var POS_COLOR={'ARMADOR':'#9292b5','OPUESTO':'#f97316','PUNTA':'#818cf8','CENTRAL':'#22c55e','LIBERO':'#06b6d4'};
+var POS_COLOR={'ARMADOR':'#f59e0b','OPUESTO':'#f97316','PUNTA':'#818cf8','CENTRAL':'#22c55e','LIBERO':'#06b6d4'};
 function effColor(v){ if(v===null||v===undefined||isNaN(v)) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':v>=-20?'#f97316':'#ef4444'; }
 
 function drawWood(ctx,x,y,w,h,c1,c2){
@@ -413,7 +413,7 @@ function renderComparativaPosicion(cont, currentNum, type){
   if(!pjugs.length) return;
   var pd = getJugadoresPosicion(currentNum);
   if(!pd.pos || !pd.same.length) return;
-  var POS_COLOR2 = {ARMADOR:'#9292b5',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
+  var POS_COLOR2 = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
   var posCol = POS_COLOR2[pd.pos] || '#64748b';
   var allNums = [currentNum].concat(pd.same.map(function(j){return j.num;}));
   var rows = allNums.map(function(num){
@@ -437,12 +437,12 @@ function renderComparativaPosicion(cont, currentNum, type){
   section.innerHTML = '<div style="font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:'+posCol+';margin-bottom:12px">VS '+pd.pos+'S</div>';
   var table = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-family:Barlow Condensed,sans-serif">';
   table += '<thead><tr><th style="padding:6px 8px;font-size:9px;color:#64748b;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:left">Jugador</th>';
-  allCodes.forEach(function(cod){table += '<th style="padding:6px 8px;font-size:9px;color:'+(type==='ataque'?'#F97316':'#9292b5')+';letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">'+cod+'</th>';});
+  allCodes.forEach(function(cod){table += '<th style="padding:6px 8px;font-size:9px;color:'+(type==='ataque'?'#F97316':'#F59E0B')+';letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">'+cod+'</th>';});
   if(type==='saque') table += '<th style="padding:6px 8px;font-size:9px;color:#22c55e;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">Pts</th><th style="padding:6px 8px;font-size:9px;color:#ef4444;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">Err</th>';
   table += '</tr></thead><tbody>';
   rows.forEach(function(r){
     var bg = r.isCur ? 'background:rgba(232,25,44,.06);' : '';
-    var nameCol = r.isCur ? '#0d0d5b' : '#94a3b8';
+    var nameCol = r.isCur ? '#e8192c' : '#94a3b8';
     table += '<tr style="border-bottom:1px solid rgba(255,255,255,.04);'+bg+'">';
     table += '<td style="padding:8px;font-size:12px;font-weight:700;color:'+nameCol+'">'+r.nm+(r.isCur?' ←':'')+'</td>';
     allCodes.forEach(function(cod){

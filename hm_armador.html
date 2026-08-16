@@ -6,7 +6,7 @@
 <title>Analisis de Armado — GELP 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0a0c16;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#0d0d5b;--amber:#9292b5;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--orange:#F97316;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
+:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#E8192C;--amber:#F59E0B;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--orange:#F97316;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
 html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",sans-serif;min-height:100vh}
 .hdr{background:rgba(7,8,15,.97);border-bottom:1px solid var(--border);padding:11px 20px;position:sticky;top:0;z-index:100}
 .hdr-t{font-family:"Bebas Neue",sans-serif;font-size:18px;letter-spacing:3px}
@@ -76,7 +76,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 <div class="sidebar">
   <div class="flabel" style="margin-top:0">Origen de datos</div>
   <div style="display:flex;gap:4px;margin-bottom:10px" id="modo-toggle">
-    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#0d0d5b);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
+    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#e8192c);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
     <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid var(--border2,rgba(255,255,255,.15));color:#94a3b8;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">ENTRENAMIENTO</button>
   </div>
   <div class="flabel" data-i18n="Jugador"><span data-t="g_jugador">Jugador</span></div>
@@ -144,15 +144,15 @@ var RES_D=['#','+','-','/','=','!'],MOM_D=['early','mid','late'],ATYPE_D=['SO','
 var REC_D=['#','+','!','-','/','=','?'];
 
 var CALL_LABEL={'K1':'Front Quick','K7':'Seven','KM':'Shifted','K2':'Back Quick','KC':'Quick in 3','KP':'Shifted 4','KE':'No 1st Tempo','KB':'Back'};
-var CALL_COLOR={'K1':'#22C55E','K7':'#F97316','KM':'#818CF8','K2':'#9292b5','KC':'#06B6D4','KP':'#EC4899','KE':'#94a3b8','KB':'#a3e635'};
+var CALL_COLOR={'K1':'#22C55E','K7':'#F97316','KM':'#818CF8','K2':'#F59E0B','KC':'#06B6D4','KP':'#EC4899','KE':'#94a3b8','KB':'#a3e635'};
 var POS_LABEL={2:'Pos 2 (Der.)',3:'Pos 3 (Centro)',4:'Pos 4 (Izq.)',8:'Pipe',5:'Pos 5 (Zag.Izq.)',9:'Pos 9 (Zag.Der.)',0:'Otra'};
-var POS_COLOR={2:'#818CF8',3:'#9292b5',4:'#F97316',8:'#22C55E',5:'#06B6D4',9:'#EC4899',0:'#475569'};
+var POS_COLOR={2:'#818CF8',3:'#F59E0B',4:'#F97316',8:'#22C55E',5:'#06B6D4',9:'#EC4899',0:'#475569'};
 var SPOS_LABEL={1:'Zag. Der. (1)',2:'Del. Der. (2)',3:'Del. Centro (3)',4:'Del. Izq. (4)',5:'Zag. Izq. (5)',6:'Zag. Centro (6)'};
-var SPOS_COLOR={1:'#9292b5',2:'#818CF8',3:'#22C55E',4:'#F97316',5:'#06B6D4',6:'#EC4899'};
+var SPOS_COLOR={1:'#F59E0B',2:'#818CF8',3:'#22C55E',4:'#F97316',5:'#06B6D4',6:'#EC4899'};
 var REC_LABEL={'#':'Perfecta','+':'Positiva','!':'Exclamativa','-':'Negativa','/':'Vendida','=':'Error','?':'N/A'};
-var REC_COLOR={'#':'#22c55e','+':'#86efac','!':'#fbbf24','-':'#9292b5','/':'#ef4444','=':'#dc2626','?':'#475569'};
+var REC_COLOR={'#':'#22c55e','+':'#86efac','!':'#fbbf24','-':'#f59e0b','/':'#ef4444','=':'#dc2626','?':'#475569'};
 var ATK_RES_LABEL={'#':'Kill','+':'Positivo','-':'Negativo','/':'Bloqueado','=':'Error'};
-var ATK_RES_COLOR={'#':'#22c55e','+':'#86efac','-':'#9292b5','/':'#ef4444','=':'#dc2626'};
+var ATK_RES_COLOR={'#':'#22c55e','+':'#86efac','-':'#f59e0b','/':'#ef4444','=':'#dc2626'};
 
 var COMBO_POS={X5:4,V5:4,G4:4,W4:4,XT:4,X9:4,X1:3,X2:3,X7:3,XM:3,XG:3,XC:3,XD:3,J1:3,J2:3,J3:3,J4:3,J5:3,X6:2,V6:2,G2:2,W2:2,X3:2,X4:2,C6:2,XB:8,XP:8,XR:8,VB:8,VP:8,VR:8,Y8:8,G8:8,X0:5,V0:5,X8:9,V8:9,C8:9,Y9:9,G9:9};
 
@@ -692,7 +692,7 @@ function render(){
       html+="<div style='display:flex;height:4px;border-radius:2px;overflow:hidden;margin-top:4px'>";
       if(d.k) html+="<div style='flex:"+d.k+";background:#22c55e'></div>";
       if(d.p) html+="<div style='flex:"+d.p+";background:#86efac'></div>";
-      var neg=d.tot-d.k-d.p-d.b-d.e; if(neg>0) html+="<div style='flex:"+neg+";background:#9292b5'></div>";
+      var neg=d.tot-d.k-d.p-d.b-d.e; if(neg>0) html+="<div style='flex:"+neg+";background:#f59e0b'></div>";
       if(d.b) html+="<div style='flex:"+d.b+";background:#ef4444'></div>";
       if(d.e) html+="<div style='flex:"+d.e+";background:#dc2626'></div>";
       html+="</div></div>";
@@ -795,7 +795,7 @@ function _initModoBtns(){
   var m=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
   var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
   if(!bp||!be) return;
-  function on(b){b.style.background='var(--accent,#0d0d5b)';b.style.color='#fff';b.style.border='none';}
+  function on(b){b.style.background='var(--accent,#e8192c)';b.style.color='#fff';b.style.border='none';}
   function off(b){b.style.background='transparent';b.style.color='#94a3b8';b.style.border='1px solid var(--border2,rgba(255,255,255,.15))';}
   if(m==='entrenamiento'){on(be);off(bp);} else {on(bp);off(be);}
   // Si no hay datos de entrenamiento, deshabilitar ese botón

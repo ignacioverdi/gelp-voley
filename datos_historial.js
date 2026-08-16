@@ -1,12 +1,12 @@
 window.HISTORIAL_DATA = {
-  "generado": "15/08/2026, 22:49:43",
+  "generado": "15/08/2026, 22:56:44",
   "entrenamientos": [
     {
       "fecha": "07/08/2026",
       "tipo": "P",
       "rival": "Banco Provincia",
       "resultado": {
-        "{{CLUB_SLUG}}": 3,
+        "gelp": 3,
         "rival": 1,
         "sets": [
           "25-22",

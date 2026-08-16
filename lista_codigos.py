@@ -102,7 +102,7 @@ function partirCodigo(cod){
 function colorEval(ev){
   if(ev === '#') return '#22c55e';   /* punto      */
   if(ev === '=') return '#ef4444';   /* error      */
-  if(ev === '/') return '#9292b5';   /* bloqueado  */
+  if(ev === '/') return '#f59e0b';   /* bloqueado  */
   if(ev === '+') return '#60a5fa';   /* positiva   */
   if(ev === '!') return '#a78bfa';   /* dudosa     */
   return 'var(--mut)';               /* el resto   */

@@ -92,7 +92,7 @@ var MODO_SIN_SENAL = false;
       d.id = 'sin-senal';
       d.style.cssText = 'position:fixed;top:8px;left:50%;transform:translateX(-50%);'+
         'z-index:9999;background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.45);'+
-        'color:#9292b5;border-radius:20px;padding:5px 16px;font-family:inherit;'+
+        'color:#f59e0b;border-radius:20px;padding:5px 16px;font-family:inherit;'+
         'font-size:11px;font-weight:700;letter-spacing:.5px;pointer-events:none;'+
         'backdrop-filter:blur(6px)';
       d.textContent = 'Sin se\\u00f1al \\u00b7 se guarda igual';

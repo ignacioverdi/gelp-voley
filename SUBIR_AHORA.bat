@@ -20,7 +20,7 @@ goto FIN
 echo  [ERROR] No tenes Git instalado.
 goto FIN
 :NOREPO
-echo  [ATENCION] Corré esto DENTRO de la carpeta gelp-voley.
+echo  [ATENCION] Corré esto DENTRO de la carpeta GELP.
 goto FIN
 :FIN
 echo.

@@ -28,7 +28,7 @@ DESDE = {"desde_z1": [1,9], "desde_z6": [6], "desde_z5": [5,7]}
 # p5 = ball lands in sector 5 (zones 4,5,7 = left)
 DEST_S = {"p1": [1,2,9], "p6": [3,6,8], "p5": [4,5,7]}
 
-POS_COLOR = {"OH":"#F97316","OPP":"#22C55E","MB":"#818CF8","S":"#9292b5","L":"#06B6D4","?":"#64748B"}
+POS_COLOR = {"OH":"#F97316","OPP":"#22C55E","MB":"#818CF8","S":"#F59E0B","L":"#06B6D4","?":"#64748B"}
 POS_ES    = {"OH":"PUNTA","OPP":"OPUESTO","MB":"CENTRAL","S":"ARMADOR","L":"LIBERO","?":"?"}
 COMBOS_POS = {
     "PUNTA":   ["X5","V5","X6","V6","XP"],

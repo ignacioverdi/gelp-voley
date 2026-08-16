@@ -779,7 +779,7 @@ except NameError:
 try:
     POS_COLOR
 except NameError:
-    POS_COLOR = {'ARMADOR':'#a855f7','OPUESTO':'#ef4444','CENTRAL':'#22c55e','PUNTA':'#3b82f6','LIBERO':'#9292b5','OTRO':'#64748b'}
+    POS_COLOR = {'ARMADOR':'#a855f7','OPUESTO':'#ef4444','CENTRAL':'#22c55e','PUNTA':'#3b82f6','LIBERO':'#f59e0b','OTRO':'#64748b'}
 
 def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
     """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""

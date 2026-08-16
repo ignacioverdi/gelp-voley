@@ -24,12 +24,12 @@ if exist ".git" (
   echo.
   pause ^& exit /b
 )
-echo  Conectando con tu repositorio gelp-voley...
+echo  Conectando con tu repositorio GELP...
 git init
 git add -A
 git commit -m "Conectar carpeta con GitHub"
 git branch -M main
-git remote add origin https://github.com/ignacioverdi/gelp-voley.git
+git remote add origin https://github.com/ignacioverdi/GELP.git
 echo.
 echo  Subiendo por primera vez...
 echo  (Puede abrirse el navegador para que inicies sesion en GitHub la primera vez.)

@@ -5,7 +5,7 @@ cd /d "%~dp0"
 set PYTHONUTF8=1
 set PYTHONIOENCODING=utf-8
 echo ==================================================
-echo     CLUB GIMNASIA Y ESGRIMA DE LA PLATA - ACTUALIZACION COMPLETA (TODO EN 1)
+echo     GELP - ACTUALIZACION COMPLETA (TODO EN 1)
 echo ==================================================
 
 REM === 1) Reconstruir el generador desde el base64 embebido ===
@@ -1608,7 +1608,7 @@ findstr /C:"rFlo" datos_historial.js >nul && (echo   OK: dashboard saque/recep/a
 if exist "ataque_chenois.html" (echo   OK: paginas por club generadas) else (echo   FALTA paginas por club - avisa)
 
 echo ==================================================
-echo     SUBIR A GITHUB (gelp-voley):
+echo     SUBIR A GITHUB (GELP):
 echo ==================================================
 echo     - datos_partidos.js   (armador + transicion + todo)
 echo     - datos_historial.js  (IMPORTANTE: dashboard saque/recep/ataque/bloqueo)

@@ -287,7 +287,7 @@ goto FIN
 :NOREPO
 echo.
 echo  [ATENCION] Esta carpeta no esta conectada a GitHub.
-echo  Corre esto DENTRO de la carpeta gelp-voley.
+echo  Corre esto DENTRO de la carpeta GELP.
 echo.
 pause
 goto FIN

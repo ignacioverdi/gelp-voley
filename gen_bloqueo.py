@@ -35,7 +35,7 @@ def zone_of(combo):
     if p in ("XP","VP","XB","XR","VB","VR"): return "8"
     return "3"   # central por defecto
 
-RENAME_TEAM = {"{{CLUB_SLUG}}":"sanlorenzo"}  # slug de video -> slug de PP_DATA (casos especiales)
+RENAME_TEAM = {"gelp":"sanlorenzo"}  # slug de video -> slug de PP_DATA (casos especiales)
 
 def _balance(txt, start):
     """Devuelve el objeto {...} balanceado desde 'start' (saltea strings)."""
@@ -133,7 +133,23 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
         ms = re.search(r'\[3SCOUT\](.*)', txt, re.S)
         if not ms:
             continue
-        mid = os.path.splitext(os.path.basename(ruta))[0]
+        # ── El identificador del partido ────────────────────────────────
+        # Tiene que ser EL MISMO que arma gen_plan_partido.py, o la pantalla
+        # descarta todo: filtra los bloqueos contra la lista de partidos
+        # seleccionados y ninguno coincide. Antes se usaba el nombre del
+        # archivo y por eso las zonas salian en cero aunque los bloqueos
+        # estuvieran cargados.
+        _fn = os.path.basename(ruta)
+        _mc = re.search(r'\b(\d{5,6})\b', _fn)
+        if _mc:
+            mid = _mc.group(1)
+        else:
+            _dm = re.search(r'(20\d\d-\d\d-\d\d)', _fn)
+            _b = _dm.group(1) if _dm else 'sinfecha'
+            import unicodedata as _u
+            _t = _u.normalize('NFKD', os.path.splitext(_fn)[0]).encode('ascii', 'ignore').decode()
+            _t = re.sub(r'[^A-Za-z0-9]+', '', _t).upper()[:12] or 'SIN'
+            mid = 'P' + _b + '-' + _t
 
         combo = ''
         zona = ''

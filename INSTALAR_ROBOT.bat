@@ -24,7 +24,7 @@ if exist "actualizar-liga.yml" (
     echo El robot ya estaba instalado. Todo OK.
   ) else (
     echo *** No encontre el archivo "actualizar-liga.yml" en esta carpeta.
-    echo *** Copia "actualizar-liga.yml" a la carpeta gelp-voley
+    echo *** Copia "actualizar-liga.yml" a la carpeta GELP
     echo *** y volve a hacer doble clic en este instalador.
   )
 )

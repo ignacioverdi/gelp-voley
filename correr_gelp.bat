@@ -8,7 +8,7 @@ color 09
 
 echo.
 echo  ==================================================
-echo     CLUB GIMNASIA Y ESGRIMA DE LA PLATA - ACTUALIZACION COMPLETA
+echo     GELP - ACTUALIZACION COMPLETA
 echo  ==================================================
 echo.
 
@@ -66,7 +66,7 @@ if exist videos_gelp.xlsx (
 echo  [3/3] Listo!
 echo.
 echo  ==================================================
-echo     ARCHIVOS PARA SUBIR A GITHUB (gelp-voley):
+echo     ARCHIVOS PARA SUBIR A GITHUB (GELP):
 echo  ==================================================
 echo.
 if exist liga_data.js           echo     - liga_data.js

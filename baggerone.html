@@ -15,9 +15,9 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0a0c16;--card:#0d0e1a;--card2:#111220;
+  --bg:#07080f;--card:#0d0e1a;--card2:#111220;
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);
-  --red:#0d0d5b;--green:#22c55e;--amber:#9292b5;
+  --red:#e8192c;--green:#22c55e;--amber:#f59e0b;
   --blue:#378ADD;--coral:#D85A30;
   --mut:#475569;--txt:#e2e8f0;--white:#ffffff;
 }
@@ -462,13 +462,13 @@ function contarPresentes(){
 
 function alinearEquipos(){
   var orden = ordenDeLaTabla();
-  if(!orden.length){ toast('Todavia no hay jugadores en la tabla ⚠️','#9292b5'); return; }
+  if(!orden.length){ toast('Todavia no hay jugadores en la tabla ⚠️','#f59e0b'); return; }
 
   /* Solo los que vinieron hoy. Y ademas tienen que seguir en el plantel: si
      alguien dejo el equipo sigue en la tabla por su historial, pero no se lo
      puede poner a jugar. */
   var vino = presentes();
-  if(!Object.keys(vino).length){ toast('Elegí al menos un jugador ⚠️','#9292b5'); return; }
+  if(!Object.keys(vino).length){ toast('Elegí al menos un jugador ⚠️','#f59e0b'); return; }
   var vigentes = {};
   JUGADORES.forEach(function(j){ vigentes[j.nombre] = true; });
   var reparto = orden.filter(function(j){ return vigentes[j.nombre] && vino[j.nombre]; });
@@ -679,7 +679,7 @@ function guardarPartido(){
     if(vb) jugB.push(vb);
   }
   if(jugA.length===0 || jugB.length===0){
-    toast('Agregá al menos un jugador por equipo ⚠️','#9292b5'); return;
+    toast('Agregá al menos un jugador por equipo ⚠️','#f59e0b'); return;
   }
 
   // Recolectar sets
@@ -691,7 +691,7 @@ function guardarPartido(){
   var s3b=parseInt(document.getElementById('s3b').value)||0;
 
   if(s1a===0&&s1b===0&&s2a===0&&s2b===0){
-    toast('Ingresá el resultado de al menos un set ⚠️','#9292b5'); return;
+    toast('Ingresá el resultado de al menos un set ⚠️','#f59e0b'); return;
   }
 
   // Calcular ganador por sets
@@ -712,7 +712,7 @@ function guardarPartido(){
   }
 
   var ganador = setsA > setsB ? 'A' : setsB > setsA ? 'B' : null;
-  if(!ganador){ toast('Resultado empatado — revisá los sets ⚠️','#9292b5'); return; }
+  if(!ganador){ toast('Resultado empatado — revisá los sets ⚠️','#f59e0b'); return; }
 
   // Totales de puntos
   var totalPtsA=0, totalPtsB=0;
