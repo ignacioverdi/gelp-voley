@@ -133,11 +133,25 @@
     if(!Object.keys(VD).length && MODO !== 'ent'){
       try{
         var _t = (window.LIGA_DATA && LIGA_DATA.teams) || {};
+        var _visto = {};
         Object.keys(_t).forEach(function(slug){
+          var _eq = _t[slug].name || slug;
           (_t[slug].matches || []).forEach(function(m){
-            var _c = m.code || ('P' + (m.date || '') + '-' + slug);
+            /* Un partido aparece en los DOS equipos que lo jugaron. Se
+               identifica por fecha + los dos nombres ordenados, asi no se
+               listan dos filas del mismo partido —una por equipo—. */
+            var _riv = m.rival || '';
+            var _par = [_eq, _riv].sort().join(' vs ');
+            var _clave = (m.date || '') + '|' + _par;
+            if(_visto[_clave]) return;
+            _visto[_clave] = 1;
+
+            var _c = m.code || ('P' + (m.date || '') + '-' +
+                     _par.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
             if(!_c || VD[_c]) return;
-            VD[_c] = {date: m.date || '', rival: m.rival || '', acciones: []};
+            /* los nombres de campo son los que lee la fila: homeName,
+               awayName y actions */
+            VD[_c] = {date: m.date || '', homeName: _eq, awayName: _riv, actions: []};
           });
         });
       }catch(e){}

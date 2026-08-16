@@ -32,7 +32,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 :root{
   --bg:#07080F;--card:#0D0E1A;--card2:#111220;
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);
-  --red:#E8192C;--amber:#F59E0B;--green:#22C55E;--blue:#3B82F6;
+  --red:#0d0d5b;--amber:#9292b5;--green:#22C55E;--blue:#3B82F6;
   --indigo:#818CF8;--cyan:#06B6D4;
   --text:#E2E8F0;--muted:#64748B;--subtle:#475569;
 }
@@ -48,7 +48,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',
 .jug-scroller{display:flex;gap:5px;flex-wrap:wrap;padding:8px 20px;border-bottom:1px solid var(--border);background:var(--card)}
 .jbtn{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;transition:all .15s}
 .jbtn:hover{border-color:var(--border2);color:var(--text)}
-.jbtn.on{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:var(--red)}
+.jbtn.on{background:rgba(13,13,91,.12);border-color:rgba(13,13,91,.4);color:var(--red)}
 
 /* HERO */
 .hero{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;flex-wrap:wrap;display:none}
@@ -63,10 +63,10 @@ html,body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',
 /* TIPO + SESION FILTERS */
 .filter-row{padding:8px 20px;border-bottom:1px solid var(--border);display:none;flex-wrap:wrap;gap:6px;align-items:center;background:var(--card)}
 .tfbtn{padding:5px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--subtle);font-size:10px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;transition:all .15s}
-.tfbtn.on-p{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:var(--red)}
+.tfbtn.on-p{background:rgba(13,13,91,.12);border-color:rgba(13,13,91,.4);color:var(--red)}
 .tfbtn.on-e{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:var(--green)}
 .sfbtn{padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;transition:all .15s}
-.sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:var(--red)}
+.sfbtn.on{background:rgba(13,13,91,.1);border-color:rgba(13,13,91,.35);color:var(--red)}
 .divider{width:1px;height:16px;background:var(--border2);flex-shrink:0}
 
 /* BATERIAS */
@@ -441,7 +441,7 @@ function renderCalendario(c){
     var jug=(s.jugadores||[]).find(function(j){return j.c===G.num;});
     var isP=s.tipo==='P';
     var color=isP?'var(--red)':'var(--green)';
-    var bg=isP?'rgba(232,25,44,.1)':'rgba(34,197,94,.1)';
+    var bg=isP?'rgba(13,13,91,.1)':'rgba(34,197,94,.1)';
     var icon=isP?'🏆':'🏋️';
     var res=s.resultado||{};
     var resStr=isP?(setsDelClub(res)!==undefined?(setsDelClub(res)+'-'+res.rival):''):'';
@@ -507,7 +507,7 @@ function renderRendimiento(c){
   });
   var metricas=[
     {key:'aEff',lbl:'EFF Ataque',color:'#F97316',obj:44},
-    {key:'sEff',lbl:'EFF Saque', color:'#F59E0B',obj:3},
+    {key:'sEff',lbl:'EFF Saque', color:'#9292b5',obj:3},
     {key:'rEff',lbl:'EFF Recep.',color:'#22C55E',obj:36},
     {key:'bEff',lbl:'EFF Bloq.', color:'#818CF8',obj:23},
   ];
@@ -655,9 +655,9 @@ function renderSaque(c,sesData){
       sqConDatos.forEach(function(s){
         html+='<div class="cancha-wrap">';
         html+='<div class="cancha-title"><span>'+(s.tipo||s.cod)+'</span>';
-        html+='<span class="cancha-stat" style="color:#F59E0B">'+s.eff+'%</span>';
+        html+='<span class="cancha-stat" style="color:#9292b5">'+s.eff+'%</span>';
         html+='<span style="font-size:9px;color:var(--muted)">'+s.tot+' saq · '+s.pts+' pts</span></div>';
-        html+=buildCanchitaHTML(s,'#F59E0B');
+        html+=buildCanchitaHTML(s,'#9292b5');
         html+='</div>';
       });
       html+='</div>';
@@ -998,7 +998,7 @@ function setObjTipo(tipo, btn){
       <a class="hm-card" href="hm_ataque.html?equipo=gelp"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas</span></a>
       <a class="hm-card" href="hm_saque.html?equipo=gelp"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=gelp" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(146,146,181,.08);border-color:rgba(146,146,181,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#9292b5">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
       <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
     </div>
     <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">LIGA FEMENINA 2026/27 · temporada en curso</div>
