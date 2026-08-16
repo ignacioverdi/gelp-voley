@@ -595,7 +595,7 @@ function ppVid(code){
 function readKey(pid){return "ppread:"+(typeof TEAM!=="undefined"?TEAM:"")+":"+pid;}
 function readVal(p){try{var v=localStorage.getItem(readKey(p.id));if(v!==null)return v;}catch(e){}return p.read||"";}
 function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid")),el.innerHTML);}catch(e){}}
-function buildSection(p){var cfg=ROLECFG[p.role];
+function buildSection(p){var cfg=ROLECFG[p.role]; if(!cfg) return '';
   var fh=cfg.filters.map(function(fl,i){return filtCtrl(p.id+'-f'+i,fl,'',filterOpts(p,fl));}).join('');
   if(cfg.stats==='atk'||cfg.stats==='srv'||cfg.stats==='dig'){fh+='<div class="fgroup"><label title="Mín. pelotas">Mín.</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-family:inherit;font-weight:700"></div>';}
   return '<div class="player" data-num="'+p.num+'" data-pid="'+p.id+'"><div class="phead"><div class="pnum">'+p.num+'</div><div class="pname">'+p.name+'</div><div class="prole">'+(p.pos||p.role)+'</div><div class="pmeta">'+p.total+U(p.role)+'</div><button class="vtodo" onclick="openZone(\''+p.id+'\',\'*\')" title="Ver todos los videos juntos, de todas las zonas">&#9654; Ver todo</button></div>'
@@ -604,6 +604,11 @@ function buildSection(p){var cfg=ROLECFG[p.role];
    +'<div class="stats">'+tiles3(p,cfg)+'</div></div>'+'<div class="read" contenteditable="true" spellcheck="false" data-pid="'+p.id+'" data-ph="Escribí tu análisis…" title="Click para editar" oninput="saveRead(this)">'+readVal(p)+'</div>'+'</div>';
 }
 function render(p){var cfg=ROLECFG[p.role];
+  /* Si el rol no existe en ROLECFG, esta tarjeta se saltea en vez de tumbar
+     el bucle entero. Un solo rol desconocido dejaba sin dibujar TODAS las
+     tarjetas siguientes y la pantalla se veia vacia aunque los datos
+     estuvieran completos. */
+  if(!cfg) return;
   var vals=cfg.filters.map(function(fl,i){return readFilt(p.id+'-f'+i,fl);});
   var f=p.data.filter(function(a){return MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);}),n=f.length;
   var z={"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0},vz={};

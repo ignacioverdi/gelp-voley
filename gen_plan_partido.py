@@ -356,9 +356,18 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             # Antes solo distinguia central, opuesto y punta: la armadora y la
             # libero caian en "punta" por descarte. La armadora ataca poco pero
             # ataca, asi que aparecia en la lista con el puesto equivocado.
+            # ── Los roles que la pantalla sabe dibujar ──────────────────
+            # Solo existen 'punta', 'central' y 'opuesto' como filas de
+            # atacantes. Devolver 'armador' o 'libero' hacia que la pantalla
+            # buscara una configuracion que no existe, REVENTARA el bucle y
+            # dejara sin dibujar TODAS las tarjetas siguientes: por eso se
+            # veia el acumulado del equipo y ninguna jugadora.
+            #
+            # La armadora ataca poco pero ataca, asi que va con las opuestas,
+            # que es donde suele rematar cuando le toca.
             p = pos.get(n, '')
             return {'Central':'central', 'Opuesto':'opuesto', 'Punta':'punta',
-                    'Armador':'armador', 'L\u00edbero':'l\u00edbero'}.get(p, 'punta')
+                    'Armador':'opuesto', 'L\u00edbero':'punta'}.get(p, 'punta')
         players=[]
         def add(pfx,num,role,data,read):
             players.append({"id":pfx+str(num),"num":num,"name":apellido(D['names'].get(str(num),'')),
