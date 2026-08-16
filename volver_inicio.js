@@ -55,7 +55,7 @@
       'transition:transform .15s ease,border-color .15s ease';
     a.onmouseenter = function () {
       a.style.transform = 'scale(1.07)';
-      a.style.borderColor = 'rgba(13,13,91,.55)';
+      a.style.borderColor = 'rgba(232,25,44,.55)';
     };
     a.onmouseleave = function () {
       a.style.transform = 'scale(1)';

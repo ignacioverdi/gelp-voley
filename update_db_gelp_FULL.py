@@ -356,7 +356,14 @@ def parse_dvw_both(fpath, temporada):
 
             if skill=='A':
                 combo=tp[0] if tp else ''; traj=tp[1] if len(tp)>1 else ''
-            elif skill in ('S','R'):
+            elif skill in ('S','R','D','B'):
+                # La DEFENSA y el BLOQUEO escriben la trayectoria en el mismo
+                # lugar que el saque: "*06DT+~~~47" -> los ~ son campos vacios
+                # y el 47 es origen 4, destino 7.
+                #
+                # Antes caian en el 'else', que lee tp[1] —un campo vacio— y
+                # las zonas quedaban todas en 0: el mapa de calor se dibujaba
+                # sin una sola accion aunque los datos estuvieran cargados.
                 combo=''; traj=tp[3] if len(tp)>3 else ''
             elif skill=='E':
                 raw=tp[0] if tp else ''; combo=raw[:2] if len(raw)>=2 else raw
@@ -473,6 +480,27 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
     added = 0; skipped = 0
 
+    # ══ Si la base es de una version vieja, se reconstruye ═══════════════════
+    # Los partidos ya cargados no se vuelven a leer: es lo que hace que
+    # procesar 90 archivos tarde segundos y no minutos. Pero cuando el motor
+    # aprende a leer algo nuevo —la defensa, por ejemplo— esos partidos
+    # quedaron guardados SIN ese dato, y no hay forma de que aparezca.
+    #
+    # Antes habia que borrar nla_players_db.json a mano, y nadie podia
+    # adivinarlo: la pantalla se veia vacia sin decir por que.
+    _ESQUEMA = 2          # subir este numero cuando el parser lea algo nuevo
+    try:
+        _v = db.get('_esquema', 1)
+    except Exception:
+        _v = 1
+    if teams_data and _v < _ESQUEMA:
+        print('  La base es de una version anterior: se reconstruye para incorporar')
+        print('  los datos nuevos (defensa). Puede tardar un poco mas esta vez.')
+        teams_data = {}
+        games_log = []
+        existing_dates = set()
+        existing_sigs = set()
+
     for fname in dvw_files:
         if fname in existing_dates:
             skipped += 1; continue
@@ -529,7 +557,10 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
             try: g['result']=_parse_set_result(open(fp,encoding='latin-1',errors='ignore').read())
             except: pass
 
-    db_out = {'teams': teams_data, 'games': games_log}
+    # El numero de esquema queda guardado: si mañana el motor aprende a leer
+    # algo nuevo, se sube ese numero y la base se reconstruye sola en la
+    # proxima corrida, sin que nadie tenga que borrar un archivo.
+    db_out = {'_esquema': _ESQUEMA, 'teams': teams_data, 'games': games_log}
     with open(db_path, 'w', encoding='utf-8') as f:
         json.dump(db_out, f, ensure_ascii=False)
 

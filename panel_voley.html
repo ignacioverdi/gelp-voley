@@ -349,7 +349,7 @@ function filtrarSesiones(sesiones, tipo){
 
 // ── Pos colors ───────────────────────────────────────────────
 var POS_COLOR={
-  'ARMADOR':'#9292b5','CENTRAL':'#f97316',
+  'ARMADOR':'#f59e0b','CENTRAL':'#f97316',
   'PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'
 };
 
@@ -507,7 +507,7 @@ function renderObjetivosJugador(cid,nombre,extra){
   </div>
   <div class="live" id="hdr-live" style="display:none">● En vivo</div>
   <div class="pts-badge" id="hdr-score" style="display:flex;align-items:center;gap:8px;white-space:nowrap">
-    <span id="hs-hn" style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;color:#9292b5">LOC</span>
+    <span id="hs-hn" style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;color:#e6a743">LOC</span>
     <span id="hs-hp" style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:#e8e8f0">0</span>
     <span style="color:#3a3a4a;font-size:13px">-</span>
     <span id="hs-ap" style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:#e8e8f0">0</span>
@@ -526,10 +526,10 @@ function renderObjetivosJugador(cid,nombre,extra){
     <button class="hbtn tv-btn" id="tv-btn" onclick="toggleTV()">&#9654; TV</button>
     <button class="hbtn" id="video-btn" onclick="abrirVideo()" title="Video en vivo con delay" style="background:rgba(34,211,238,.12);color:#22d3ee;border-color:rgba(34,211,238,.3)">&#128249; Video</button>
     <span style="width:1px;height:24px;background:rgba(255,255,255,.12);margin:0 4px"></span>
-    <button class="hbtn hbtn2" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" style="background:rgba(146,146,181,.12);color:#9292b5;border-color:rgba(146,146,181,.3)">Distribución<br>armador</button>
-    <button class="hbtn hbtn2" onclick="abrirPlan('ataque')" title="Direcciones de ataque — en vivo" style="background:rgba(146,146,181,.12);color:#9292b5;border-color:rgba(146,146,181,.3)">Direcciones<br>ataque</button>
-    <button class="hbtn hbtn2" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" style="background:rgba(146,146,181,.12);color:#9292b5;border-color:rgba(146,146,181,.3)">Direcciones<br>saque</button>
-    <button class="hbtn hbtn2" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" style="background:rgba(146,146,181,.12);color:#9292b5;border-color:rgba(146,146,181,.3)">Zonas<br>recepción</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('armador')" title="Distribución del armador — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Distribución<br>armador</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('ataque')" title="Direcciones de ataque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Direcciones<br>ataque</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('saque')" title="Direcciones de saque — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Direcciones<br>saque</button>
+    <button class="hbtn hbtn2" onclick="abrirPlan('recepcion')" title="Zonas de recepción — en vivo" style="background:rgba(230,167,67,.12);color:#e6a743;border-color:rgba(230,167,67,.3)">Zonas<br>recepción</button>
     <button class="hbtn hbtn2" onclick="abrirPlanPreparadoModal()" title="Plan de partido que preparamos (para comparar con lo que pasa en vivo)" style="background:rgba(129,140,248,.12);color:#818cf8;border-color:rgba(129,140,248,.3)">Plan de<br>partido</button>
   </div>
 </header>
@@ -583,7 +583,7 @@ function renderObjetivosJugador(cid,nombre,extra){
         <div id="mk-hs" style="font-size:10px;color:#64748b;letter-spacing:2px;margin-top:2px">0 SETS</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <span id="mk-hp" style="font-size:38px;font-weight:900;color:#9292b5;line-height:1;min-width:52px;text-align:center">0</span>
+        <span id="mk-hp" style="font-size:38px;font-weight:900;color:#e6a743;line-height:1;min-width:52px;text-align:center">0</span>
         <span style="font-size:20px;color:#3a3a4a">–</span>
         <span id="mk-ap" style="font-size:38px;font-weight:900;color:#22d3ee;line-height:1;min-width:52px;text-align:center">0</span>
       </div>
@@ -931,7 +931,7 @@ function card(p,rank,worstRank,teamD,teamFDs,sz){
         if(!spEl)return;
         const btn=document.createElement('button');
         btn.textContent='📍 Ver dirección';
-        btn.style.cssText='background:rgba(146,146,181,.1);border:1px solid #9292b5;color:#9292b5;font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;padding:5px 10px;border-radius:6px;cursor:pointer;text-transform:uppercase;margin-top:4px';
+        btn.style.cssText='background:rgba(245,158,11,.1);border:1px solid #f59e0b;color:#f59e0b;font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;padding:5px 10px;border-radius:6px;cursor:pointer;text-transform:uppercase;margin-top:4px';
         btn.addEventListener('click',function(ev){ev.stopPropagation();openSaqueCanchaModal(_destsCopy,_origZCopy,_statsCopy);});
         spEl.appendChild(btn);
       },0);
@@ -1749,7 +1749,7 @@ function openSaqueCanchaModal(destinos,origZone,stats){
   document.getElementById('cancha-modal-title').textContent='Dirección de Saque';
   document.getElementById('cancha-modal-info').textContent=(origZone?'Zona origen más frecuente: '+origZone+' · ':'')+'Top destinos: '+destinos.map(d=>'zona '+d.z+' ('+d.pct+'%)').join(' · ');
   const sw=document.getElementById('cancha-stats-wrap');
-  const SC='#9292b5';
+  const SC='#f59e0b';
   if(sw&&stats&&stats.tot>0){
     const eff=Math.round((stats.pt-(stats.vend||0)-stats.err)/stats.tot*100);
     const effColor=eff>=40?'#22c55e':eff>=20?'#fbbf24':eff>=0?'#f97316':'#ef4444';
@@ -1764,7 +1764,7 @@ function openSaqueCanchaModal(destinos,origZone,stats){
 }
 
 function canchaDrawSaque(ctx,origZone,destinos,pct){
-  const SC='#9292b5';
+  const SC='#f59e0b';
   const CONE_COLS=['#ff8c00','#a855f7'];
   pct=pct===undefined?1:pct;
   const orig=origZone>0?canchaRivalZone(origZone):canchaRivalZone(1);
@@ -1867,7 +1867,7 @@ function showJugDetail(nombre, num){
   // Quick stats row
   var stats = [
     {v: jug.aT||0,  l:'Ataques',    c:'#818CF8'},
-    {v: jug.sT||0,  l:'Saques',     c:'#9292b5'},
+    {v: jug.sT||0,  l:'Saques',     c:'#F59E0B'},
     {v: jug.rT||0,  l:'Recepciones',c:'#22C55E'},
     {v: jug.bT||0,  l:'Bloqueos',   c:'#06B6D4'},
   ].filter(function(s){ return s.v > 0; });
@@ -1886,7 +1886,7 @@ function showJugDetail(nombre, num){
   // Eficiencias
   var efics = [];
   if(jug.aT) efics.push({lbl:'EFF Ataque',  val:effAtaque(jug),  c:'#F97316'});
-  if(jug.sT) efics.push({lbl:'EFF Saque',   val:effSaque(jug),   c:'#9292b5'});
+  if(jug.sT) efics.push({lbl:'EFF Saque',   val:effSaque(jug),   c:'#F59E0B'});
   if(jug.rT) efics.push({lbl:'EFF Recep.',  val:effRecepcion(jug),c:'#22C55E'});
   if(jug.bT) efics.push({lbl:'EFF Bloq.',   val:effBloqueo(jug), c:'#06B6D4'});
 
@@ -1929,7 +1929,7 @@ function showJugDetail(nombre, num){
     html += '<div style="font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#64748b;margin:16px 0 8px">SAQUE</div>';
     html += '<div style="background:rgba(13,14,26,.8);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px">'
       + '<div style="display:flex;gap:20px;flex-wrap:wrap">'
-      + (jug.sT ? '<div><div style="font-size:9px;color:#64748b">Total</div><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:#9292b5">'+jug.sT+'</div></div>' : '')
+      + (jug.sT ? '<div><div style="font-size:9px;color:#64748b">Total</div><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:#f59e0b">'+jug.sT+'</div></div>' : '')
       + (jug.sPunto ? '<div><div style="font-size:9px;color:#64748b">Puntos</div><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:#22c55e">'+jug.sPunto+'</div></div>' : '')
       + (jug.sErr ? '<div><div style="font-size:9px;color:#64748b">Errores</div><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:#ef4444">'+jug.sErr+'</div></div>' : '')
       + (jug.sPos ? '<div><div style="font-size:9px;color:#64748b">Positivos</div><div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:#86efac">'+jug.sPos+'</div></div>' : '')
@@ -2000,7 +2000,7 @@ function closeJugDetail(){
         Abrí <b style="color:#e2e8f0">camara.html</b> en el celular que apunta a la cancha, tocá Transmitir, y escribí acá el código de sala.
       </div>
       <input id="vd-sala" inputmode="numeric" maxlength="4" placeholder="0000"
-        style="width:180px;text-align:center;font-family:Barlow Condensed,monospace;font-size:40px;font-weight:800;letter-spacing:8px;background:#1a1b2b;border:1px solid rgba(255,255,255,.1);color:#9292b5;border-radius:12px;padding:12px;outline:none">
+        style="width:180px;text-align:center;font-family:Barlow Condensed,monospace;font-size:40px;font-weight:800;letter-spacing:8px;background:#1a1b2b;border:1px solid rgba(255,255,255,.1);color:#e6a743;border-radius:12px;padding:12px;outline:none">
       <button onclick="vdConectar()" style="background:#22d3ee;color:#04212a;border:0;border-radius:12px;padding:14px 30px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit">Conectar</button>
       <div id="vd-estado" class="vd-estado" style="font-size:13px;color:#8a8ba0;min-height:20px"></div>
     </div>
@@ -2010,13 +2010,13 @@ function closeJugDetail(){
       <div id="vd-videowrap" style="position:relative;background:#000;border-radius:14px;overflow:hidden;width:100%;max-height:45vh;aspect-ratio:16/9;flex-shrink:0">
         <video id="vd-live" autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:none"></video>
         <video id="vd-delay" autoplay muted playsinline style="width:100%;height:100%;object-fit:contain;display:block"></video>
-        <div id="vd-estado-replay" style="display:none;position:absolute;top:12px;left:12px;padding:6px 14px;border-radius:20px;background:rgba(146,146,181,.9);color:#1a1200;font-weight:800;font-size:12px;letter-spacing:1px">↺ ÚLTIMO PUNTO</div>
+        <div id="vd-estado-replay" style="display:none;position:absolute;top:12px;left:12px;padding:6px 14px;border-radius:20px;background:rgba(230,167,67,.9);color:#1a1200;font-weight:800;font-size:12px;letter-spacing:1px">↺ ÚLTIMO PUNTO</div>
         <div id="vd-delay-badge" style="position:absolute;top:12px;right:12px;padding:6px 14px;border-radius:20px;background:rgba(0,0,0,.6);color:#22d3ee;font-weight:800;font-size:12px;letter-spacing:1px;backdrop-filter:blur(6px)">DELAY <span id="vd-delay-lbl">0 s</span></div>
         <button onclick="vdMaximizar()" title="Pantalla completa" style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,.6);color:#e2e8f0;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:16px;backdrop-filter:blur(6px)">⛶</button>
       </div>
       <!-- controles -->
       <div style="display:flex;flex-direction:column;gap:10px;flex-shrink:0">
-        <button onclick="vdReplay()" style="width:100%;background:#9292b5;color:#1a1200;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:inherit">↺ Ver último punto</button>
+        <button onclick="vdReplay()" style="width:100%;background:#e6a743;color:#1a1200;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:inherit">↺ Ver último punto</button>
         <div style="display:flex;align-items:center;gap:12px;background:#12131f;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px">
           <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a8ba0;white-space:nowrap">Delay</span>
           <input type="range" id="vd-slider" min="0" max="25" step="1" value="0" oninput="vdSlider(this.value)" style="flex:1;accent-color:#22d3ee">
