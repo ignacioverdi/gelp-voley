@@ -1,1 +1,0 @@
-window.EQUIPO_DATA={};

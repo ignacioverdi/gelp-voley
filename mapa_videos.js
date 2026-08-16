@@ -1,1 +1,0 @@
-window.MAPA_VIDEOS={};

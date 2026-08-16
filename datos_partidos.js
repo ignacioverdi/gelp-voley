@@ -1,1 +1,0 @@
-window.PARTIDOS_DATA=[];

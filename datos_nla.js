@@ -1,1 +1,0 @@
-window.NLA_DATA={};

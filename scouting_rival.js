@@ -1,1 +1,0 @@
-window.SCOUTING_RIVAL={};

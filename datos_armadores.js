@@ -1,1 +1,0 @@
-window.ARMADORES_DATA={};
