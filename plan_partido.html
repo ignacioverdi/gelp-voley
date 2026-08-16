@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plan de Partido — GELP</title>
+<title>Plan de Partido — {{CLUB}}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0c16;--card:#0d0e1a;--card2:#12132a;--border:rgba(255,255,255,.07);--red:#0d0d5b;--txt:#e2e8f0;--mut:#8791a3;--faint:#5b6474;--h0:#171826;--h1:#5c2531;--h2:#a02335;--h3:#0d0d5b}
+:root{--bg:#07080f;--card:#0d0e1a;--card2:#12132a;--border:rgba(255,255,255,.07);--red:#e8192c;--txt:#e2e8f0;--mut:#8791a3;--faint:#5b6474;--h0:#171826;--h1:#5c2531;--h2:#a02335;--h3:#e8192c}
 *{box-sizing:border-box}
 html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;font-size:15px;line-height:1.4;font-variant-numeric:tabular-nums}
@@ -193,7 +193,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <body>
 <div class="wrap">
 <header class="masthead">
-  <div class="eyebrow">GELP · DataVolley 4</div>
+  <div class="eyebrow">{{CLUB}} · DataVolley 4</div>
   <h1>Plan de partido</h1>
   <div class="sub">Análisis de: <b id="teamname" style="color:var(--red)">—</b></div>
   <div class="legend">
@@ -422,7 +422,7 @@ const TAGFMT={pot:'Pot',flo:'Flot'};
 const ORDER=["4","3","2","7","8","9","5","6","1"];
 function opts(a){return a.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join("");}
 function g(id){return document.getElementById(id).value;}
-const PAL={red:{c:["#5c2531","#a02335","#0d0d5b"],t:["#f0c6cd","#ffdfe4","#fff"]},blue:{c:["#1e3356","#245aa6","#2f7ff0"],t:["#c3d4f2","#dbe8ff","#fff"]},orange:{c:["#4a3218","#a3611b","#f6851b"],t:["#f0d3ac","#ffe6c9","#fff"]},green:{c:["#14432a","#15803d","#22c55e"],t:["#bfe8cf","#dcf5e5","#fff"]},arm:{c:["#2e2450","#5b3aa6","#8b5cf6"],t:["#d6cbf2","#e9e2ff","#fff"]}};
+const PAL={red:{c:["#5c2531","#a02335","#e8192c"],t:["#f0c6cd","#ffdfe4","#fff"]},blue:{c:["#1e3356","#245aa6","#2f7ff0"],t:["#c3d4f2","#dbe8ff","#fff"]},orange:{c:["#4a3218","#a3611b","#f6851b"],t:["#f0d3ac","#ffe6c9","#fff"]},green:{c:["#14432a","#15803d","#22c55e"],t:["#bfe8cf","#dcf5e5","#fff"]},arm:{c:["#2e2450","#5b3aa6","#8b5cf6"],t:["#d6cbf2","#e9e2ff","#fff"]}};
 function heat(v,mx,pal){if(v<=0)return["var(--h0)","#6b7280","1px solid var(--border)"];var p=PAL[pal||'red'],r=v/mx,i=r<0.34?0:(r<0.67?1:2);return[p.c[i],p.t[i],"none"];}
 function bkt(m){return m<=8?'b1':(m<=16?'b2':'b3');}
 function passes(a,cfg,vals){for(var i=0;i<cfg.filters.length;i++){var fl=cfg.filters[i],v=vals[i];if(v==='all')continue;if(Array.isArray(v)){if(v.indexOf(String(a[fl.idx]))<0)return false;continue;}if(fl.range){if(bkt(a[fl.idx])!==v)return false;}else if(String(a[fl.idx])!==v)return false;}return true;}
@@ -480,6 +480,28 @@ function renderArmador(){
   armTeam=(slug&&GPL.teams&&GPL.teams[slug])?GPL.teams[slug]:null;
   if(!armTeam||!(armTeam.setters&&armTeam.setters.length)){sec.classList.add("hidden");return;}
   sec.classList.remove("hidden");
+  /* ══ La fase inicial ═══════════════════════════════════════════════════
+     Arrancaba SIEMPRE en side-out. Con una temporada entera da igual —
+     siempre hay armados en esa fase—, pero con pocos partidos puede no
+     haber ninguno y las seis rotaciones aparecen en cero: la pantalla se ve
+     rota aunque los datos esten completos.
+
+     Ahora se mira que hay antes de elegir: si en side-out no hay nada, se
+     abre en la fase que si tenga. Una sola vez, para no pisar lo que el
+     entrenador elija despues. */
+  if(!window._armFaseVista){
+    window._armFaseVista = true;
+    try{
+      var _s = (armTeam.setters[0] && armTeam.setters[0].s) || [];
+      var _so = 0, _tr = 0;
+      for(var _i=0; _i<_s.length; _i++){ if(_s[_i][4]===0) _so++; else _tr++; }
+      if(_so === 0 && _tr > 0) armPhase = "TR";
+      else if(_so === 0 && _tr === 0) armPhase = "all";
+      /* el desplegable tiene que mostrar la fase que se eligio */
+      var _sel = document.getElementById("armfase");
+      if(_sel) _sel.value = armPhase;
+    }catch(e){}
+  }
   var _fs=document.getElementById("focusSel");var _foc=(_fs&&_fs.value&&_fs.value!=="all")?_fs.value:"";
   var _asel=document.getElementById("armsetsel");
   if(_foc){
