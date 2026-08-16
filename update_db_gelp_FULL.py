@@ -893,10 +893,34 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         # Nadie tiene que abrir un archivo ni correr nada a mano.
         _OFICIAL = _puestos_corregidos()
 
+        # ══ Lo que DECLARA el .dvw ════════════════════════════════════════
+        # El scout carga el puesto de cada jugadora en el archivo. Ese dato se
+        # estaba ignorando y todo salia de deducir como juega cada una, que
+        # falla con pocos partidos: una libero con 17 recepciones quedaba como
+        # 'OTRO' y desaparecia de la pantalla de recepcion.
+        #
+        # El orden es: lo que corrigio el club en la app, despues lo que
+        # declara el archivo, y recien al final la deduccion.
+        # El puesto viaja en info['pos'], con la abreviatura del propio motor:
+        # L libero · OH punta · OPP opuesto · MB central · S armador.
+        _SIGLA = {'L': 'LIBERO', 'OH': 'OUTSIDE', 'OPP': 'OPPOSITE',
+                  'MB': 'MIDDLE', 'S': 'SETTER'}
+        _DECL = {}
+        try:
+            for _ns, _pd in td.items():
+                _r = ((_pd.get('info') or {}).get('pos') or '').strip().upper()
+                if _r in _SIGLA:
+                    _DECL[str(_ns)] = _SIGLA[_r]
+        except Exception:
+            pass
+
         team_setters = set(str(s['num']) for s in setters_list)
         for ns0, pd0 in td.items():
             if str(ns0) in _OFICIAL and _OFICIAL[str(ns0)]:
                 roster[str(ns0)] = _OFICIAL[str(ns0)]
+                continue
+            if str(ns0) in _DECL:
+                roster[str(ns0)] = _DECL[str(ns0)]
                 continue
             atk0 = pd0.get('atk',[]); rec0 = len(pd0.get('rec',[]))
             nser = str(ns0)
@@ -1872,6 +1896,24 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
         nums_presentes=set(int(n) for n in bat_acum if n!='__EQUIPO__')
         # Mapa posición PT/PUNTA/etc → etiqueta del perfil
         POS_MAP={'MIDDLE':'CENTRAL','OUTSIDE':'PUNTA','OPPOSITE':'OPUESTO','SETTER':'ARMADOR','LIBERO':'LIBERO'}
+        # El roster del club, que ya resolvio el puesto de cada jugadora con lo
+        # que corrigio el club, lo que declara el .dvw y recien despues la
+        # deduccion. Es la unica fuente: antes cada parte del motor calculaba
+        # el puesto por su cuenta y daban resultados distintos.
+        # Se lee del liga_data.js que se acaba de escribir: aca LIGA es de otra
+        # funcion y no esta disponible.
+        _roster_club = {}
+        try:
+            _lg = os.path.join(output_dir, 'liga_data.js')
+            if os.path.exists(_lg):
+                _t = open(_lg, encoding='utf-8', errors='replace').read()
+                _m = re.search(r'=\s*(\{.*\})\s*;', _t, re.S)
+                if _m:
+                    _d = json.loads(_m.group(1))
+                    _mine = MAIN_TEAM.lower().replace(' ', '_')
+                    _roster_club = ((_d.get('teams') or {}).get(_mine) or {}).get('roster') or {}
+        except Exception:
+            _roster_club = {}
         # Detectar posición por su perfil de juego en el acumulado
         def _detectar_pos(num):
             P=bat_acum.get(f"{num:02d}") or bat_acum.get(str(num))
@@ -1889,7 +1931,17 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             sT=P.get('S',{}).get('T',0)
             rT=P.get('R',{}).get('T',0)
             aT=sum(P.get(g,{}).get('T',0) for g in ['cent','rap','alta'])
-            pos_det=CASLA_POS_OFICIAL.get(num) or _detectar_pos(num)
+            # ── El puesto de cada jugadora ──────────────────────────────
+            # Usaba la tabla del club de origen y, si no estaba, deducia como
+            # juega cada una. Para cualquier otro club eso daba puestos
+            # inventados: una libero salia como opuesta y desaparecia de la
+            # pantalla de recepcion, que solo muestra puntas y liberos.
+            #
+            # Ahora manda el roster, que ya resolvio el puesto con lo que
+            # corrigio el club, lo que declara el .dvw y recien despues la
+            # deduccion.
+            _rr = POS_MAP.get(_roster_club.get(str(num), ''))
+            pos_det = _rr or CASLA_POS_OFICIAL.get(num) or _detectar_pos(num)
             _canch=to_canchitas(P) if P else {'saques':[],'ataques':[],'recepcion':{}}
             partidos_jug.append({'num':num,'nombre':nm,'pos':pos_det,
                 'color':POS_COLOR.get(pos_det,'#64748b'),'info':{},
