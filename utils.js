@@ -58,7 +58,7 @@ function filtrarSesiones(sesiones, tipo){
 
 // ── Pos colors ───────────────────────────────────────────────
 var POS_COLOR={
-  'ARMADOR':'#f59e0b','CENTRAL':'#f97316',
+  'ARMADOR':'#9292b5','CENTRAL':'#f97316',
   'PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'
 };
 

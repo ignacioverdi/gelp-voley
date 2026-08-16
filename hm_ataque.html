@@ -10,7 +10,7 @@
 :root{
   --bg:#07080F;--card:#0D0E1A;--card2:#111220;
   --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
-  --red:#E8192C;--amber:#F59E0B;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;
+  --red:#0d0d5b;--amber:#9292b5;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;
   --text:#E2E8F0;--muted:#64748B;--subtle:#475569
 }
 html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",sans-serif;min-height:100vh}
@@ -25,9 +25,9 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .chips{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:2px}
 .chip{padding:3px 8px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;font-family:"Barlow Condensed",sans-serif;transition:all .12s;text-transform:uppercase;letter-spacing:.5px}
 .chip:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
-.chip.on{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:var(--red)}
+.chip.on{background:rgba(13,13,91,.12);border-color:rgba(13,13,91,.4);color:var(--red)}
 .chip.on-g{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);color:var(--green)}
-.chip.on-a{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.35);color:var(--amber)}
+.chip.on-a{background:rgba(146,146,181,.1);border-color:rgba(146,146,181,.35);color:var(--amber)}
 .chip.on-i{background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.35);color:var(--indigo)}
 .chip.on-c{background:rgba(6,182,212,.1);border-color:rgba(6,182,212,.35);color:var(--cyan)}
 .psel{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:2px}
@@ -35,7 +35,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .counter{margin-top:10px;padding:10px;background:rgba(255,255,255,.02);border-radius:8px;border:1px solid var(--border);text-align:center}
 .counter-n{font-family:"Bebas Neue",sans-serif;font-size:32px;color:var(--text)}
 .counter-l{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
-.reset-btn{width:100%;margin-top:10px;padding:7px;background:rgba(232,25,44,.07);border:1px solid rgba(232,25,44,.2);color:var(--red);border-radius:7px;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Barlow Condensed",sans-serif}
+.reset-btn{width:100%;margin-top:10px;padding:7px;background:rgba(13,13,91,.07);border:1px solid rgba(13,13,91,.2);color:var(--red);border-radius:7px;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Barlow Condensed",sans-serif}
 .sec{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--border)}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
 .scard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 13px;text-align:center}
@@ -45,7 +45,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .combo-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
 .ccard{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:9px 12px;min-width:85px;cursor:pointer;transition:all .14s;text-align:center}
 .ccard:hover{border-color:rgba(255,255,255,.14)}
-.ccard.sel{border-color:rgba(232,25,44,.4);background:rgba(232,25,44,.06)}
+.ccard.sel{border-color:rgba(13,13,91,.4);background:rgba(13,13,91,.06)}
 /* Cinco canchas repartidas en todo el ancho, todas del mismo tamaño.
    Antes iban en una fila flexible con separación fija: sobraba espacio
    a la derecha y quedaban desparejas. */
@@ -103,7 +103,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 <div class="sidebar">
   <div class="flabel" style="margin-top:0">Origen de datos</div>
   <div style="display:flex;gap:4px;margin-bottom:10px" id="modo-toggle">
-    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#e8192c);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
+    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#0d0d5b);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
     <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid var(--border2,rgba(255,255,255,.15));color:#94a3b8;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">ENTRENAMIENTO</button>
   </div>
   <div class="flabel" data-i18n="Jugador">Jugador</div>
@@ -231,9 +231,9 @@ Object.keys(RAW.players).forEach(function(num){
 
 var COMBO_POS = {"X5": 4, "V5": 4, "G4": 4, "W4": 4, "XT": 4, "X9": 4, "X1": 3, "X2": 3, "X7": 3, "XM": 3, "XG": 3, "XC": 3, "XD": 3, "J1": 3, "J2": 3, "J3": 3, "J4": 3, "J5": 3, "X6": 2, "V6": 2, "G2": 2, "W2": 2, "X3": 2, "X4": 2, "C6": 2, "XB": 8, "XP": 8, "XR": 8, "VB": 8, "VP": 8, "VR": 8, "Y8": 8, "G8": 8, "X0": 5, "V0": 5, "X8": 9, "V8": 9, "C8": 9, "Y9": 9, "G9": 9};
 var POS_LABEL = {2:"Pos 2 (Banda Der.)",3:"Pos 3 (Central)",4:"Pos 4 (Banda Izq.)",8:"Pos 8 (Pipe/Zag.)",5:"Pos 5 (Zag. Izq.)",9:"Pos 9 (Zag. Der.)"};
-var POS_COLOR = {2:"#818CF8",3:"#F59E0B",4:"#F97316",8:"#22C55E",5:"#06B6D4",9:"#EC4899"};
+var POS_COLOR = {2:"#818CF8",3:"#9292b5",4:"#F97316",8:"#22C55E",5:"#06B6D4",9:"#EC4899"};
 var RES_LABEL = {"#":"Kill","+":"Positivo","-":"Negativo","/":"Bloqueado","=":"Error","!":"Exclamativo"};
-var RES_COLOR = {"#":"#22c55e","+":"#86efac","-":"#f59e0b","/":"#ef4444","=":"#dc2626"};
+var RES_COLOR = {"#":"#22c55e","+":"#86efac","-":"#9292b5","/":"#ef4444","=":"#dc2626"};
 var MOMENT_LABEL = {early:"0-8 pts",mid:"9-16 pts",late:"17+ pts"};
 var F = {player:"",atype:"all",rival:"all",set:"all",moment:"all",result:"all",combo:"all",rec_quality:"all",rec_player:"all",origin:"all"};
 
@@ -540,7 +540,7 @@ function courtSVG(destZones,originZone,total,color,title){
      salieron de esa zona. Para eso esta el filtro de la barra izquierda, que
      ademas filtra de verdad. La linea vacia mantiene las canchas alineadas. */
   h+="<div class='cc-origin' style='visibility:hidden'>&nbsp;</div>";
-  h+="<div class='cc-lbl' style='color:rgba(232,25,44,.6)'>"+title+"</div>";
+  h+="<div class='cc-lbl' style='color:rgba(13,13,91,.6)'>"+title+"</div>";
   h+=ccGrid(destZones,RIVAL,color,total,{minN:CC_MIN});
   return h+"</div>";
 }
@@ -607,7 +607,7 @@ function render(){
     html+="<div style='text-align:center'><div style='font-family:Bebas Neue,sans-serif;font-size:22px;color:"+RES_COLOR[r[0]]+"'>"+r[2]+"</div><div style='font-size:11px;color:var(--muted)'>"+r[1]+" ("+Math.round(r[2]/total*100)+"%)</div></div>";
   });
   html+="</div><div style='display:flex;height:8px;border-radius:4px;overflow:hidden'>";
-  [[kills,"#22c55e"],[pos,"#86efac"],[neg,"#f59e0b"],[bloq,"#ef4444"],[err,"#dc2626"]].forEach(function(r){
+  [[kills,"#22c55e"],[pos,"#86efac"],[neg,"#9292b5"],[bloq,"#ef4444"],[err,"#dc2626"]].forEach(function(r){
     if(r[0]>0) html+="<div style='flex:"+r[0]+";background:"+r[1]+"'></div>";
   });
   html+="</div></div>";
@@ -634,7 +634,7 @@ function render(){
     html+="<div class='rbar'>";
     if(d.k) html+="<div style='flex:"+d.k+";background:#22c55e'></div>";
     if(d.p) html+="<div style='flex:"+d.p+";background:#86efac'></div>";
-    var negN=d.tot-d.k-d.p-d.e; if(negN>0) html+="<div style='flex:"+negN+";background:#f59e0b'></div>";
+    var negN=d.tot-d.k-d.p-d.e; if(negN>0) html+="<div style='flex:"+negN+";background:#9292b5'></div>";
     if(d.e) html+="<div style='flex:"+d.e+";background:#ef4444'></div>";
     html+="</div></div>";
   });
@@ -830,7 +830,7 @@ function _initModoBtns(){
   var m=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
   var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
   if(!bp||!be) return;
-  function on(b){b.style.background='var(--accent,#e8192c)';b.style.color='#fff';b.style.border='none';}
+  function on(b){b.style.background='var(--accent,#0d0d5b)';b.style.color='#fff';b.style.border='none';}
   function off(b){b.style.background='transparent';b.style.color='#94a3b8';b.style.border='1px solid var(--border2,rgba(255,255,255,.15))';}
   if(m==='entrenamiento'){on(be);off(bp);} else {on(bp);off(be);}
   // Si no hay datos de entrenamiento, deshabilitar ese botón

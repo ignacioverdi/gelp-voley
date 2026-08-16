@@ -18,7 +18,7 @@
 :root{
   --bg:#080a12;--card:#0e1019;--card2:#13162a;--elev:#171a30;
   --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
-  --red:#ef2740;--redd:#c01528;--green:#22c55e;--amber:#f59e0b;
+  --red:#ef2740;--redd:#c01528;--green:#22c55e;--amber:#9292b5;
   --indigo:#818cf8;--orange:#f97316;--teal:#2dd4bf;--mut:#5b6680;--mut2:#9aa6c0;--txt:#e7ecf5;
 }
 body{background:
@@ -89,7 +89,7 @@ select,select option{color:#111!important;background-color:#fff!important}
 .ej-badge{font-size:9px;padding:3px 9px;border-radius:6px;letter-spacing:.8px;font-weight:700;text-transform:uppercase}
 .badge-series{background:rgba(129,140,248,.12);color:#818cf8;border:1px solid rgba(129,140,248,.22)}
 .badge-reps{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.22)}
-.badge-descanso{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.22)}
+.badge-descanso{background:rgba(146,146,181,.12);color:#9292b5;border:1px solid rgba(146,146,181,.22)}
 .badge-carga{background:rgba(45,212,191,.14);color:#2dd4bf;border:1px solid rgba(45,212,191,.26)}
 .carga-section{padding:11px 16px;border-top:1px solid var(--border);background:rgba(45,212,191,.045)}
 .carga-lbl{font-size:9px;color:#2dd4bf;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;opacity:.9;font-weight:700}
@@ -104,7 +104,7 @@ select,select option{color:#111!important;background-color:#fff!important}
 .ej-video-btn.sin-video{opacity:.28;cursor:default;pointer-events:none}
 .nota-profe{padding:9px 16px 12px;border-top:1px solid var(--border)}
 .nota-profe-lbl{font-size:8px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;opacity:.75}
-.nota-profe-txt{font-size:12px;color:#fbbf24;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.13);border-radius:9px;padding:9px 12px;line-height:1.5}
+.nota-profe-txt{font-size:12px;color:#fbbf24;background:rgba(146,146,181,.06);border:1px solid rgba(146,146,181,.13);border-radius:9px;padding:9px 12px;line-height:1.5}
 .nota-card{margin:14px 0 4px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:14px}
 .nota-card-lbl{font-size:10px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;font-weight:700}
 .nota-card-txt{width:100%;min-height:70px;resize:vertical;background:#fff;color:#111;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:11px 13px;font-size:14px;font-family:'Inter',sans-serif;line-height:1.5;outline:none;box-sizing:border-box}
@@ -437,7 +437,7 @@ function countRegistros(num){
 
 // ── WELLNESS (readiness) — lee la MISMA data que wellness.html ─────
 function todayISO(){ var d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); }
-function wellColor(p){ return p>=85?'#22c55e':p>=70?'#4ade80':p>=55?'#f59e0b':'#ef4444'; }
+function wellColor(p){ return p>=85?'#22c55e':p>=70?'#4ade80':p>=55?'#9292b5':'#ef4444'; }
 var WELL = {
   cache: [],
   _eid: function(e){ return e.num+'_'+e.date+'_'+e.sesion; },
@@ -511,7 +511,7 @@ function renderReadiness(num){
   if(banner){
     var msg, bc;
     if(r.pct<55){ bc='#ef4444'; msg='⚠ Llegó con readiness bajo ('+r.pct+'%). Considerá bajar volumen o intensidad y priorizar técnica.'; }
-    else if(r.pct<70){ bc='#f59e0b'; msg='Readiness moderado ('+r.pct+'%). Ajustá la carga si lo notás cansado.'; }
+    else if(r.pct<70){ bc='#9292b5'; msg='Readiness moderado ('+r.pct+'%). Ajustá la carga si lo notás cansado.'; }
     else { bc='#22c55e'; msg='✓ Llegó en buen estado ('+r.pct+'%). Listo para la carga planificada.'; }
     if(r.rpe) msg+=' · RPE último: '+r.rpe+'/10';
     banner.style.display='flex'; banner.style.borderColor=bc+'33'; banner.style.background=bc+'10';
@@ -1009,7 +1009,7 @@ function calcularRM(){
   if(!peso || !reps || peso <= 0 || reps <= 0){ alert('Ingresá peso y reps válidos.'); return; }
   var rm1 = formula === 'epley' ? peso*(1+reps/30) : formula === 'brzycki' ? peso*(36/(37-reps)) : peso/(1.013-0.0267123*reps);
   rm1 = Math.round(rm1*2)/2;
-  var pcts = [{pct:100,label:'1RM',color:'#e8192c'},{pct:95,label:'95%',color:'#f97316'},{pct:90,label:'90%',color:'#f59e0b'},{pct:85,label:'85%',color:'#eab308'},{pct:80,label:'80%',color:'#22c55e'},{pct:75,label:'75%',color:'#22c55e'},{pct:70,label:'70%',color:'#818cf8'},{pct:60,label:'60%',color:'#818cf8'}];
+  var pcts = [{pct:100,label:'1RM',color:'#0d0d5b'},{pct:95,label:'95%',color:'#f97316'},{pct:90,label:'90%',color:'#9292b5'},{pct:85,label:'85%',color:'#eab308'},{pct:80,label:'80%',color:'#22c55e'},{pct:75,label:'75%',color:'#22c55e'},{pct:70,label:'70%',color:'#818cf8'},{pct:60,label:'60%',color:'#818cf8'}];
   var res = document.getElementById('calc-results');
   res.innerHTML = '';
   res.style.display = 'grid';

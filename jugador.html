@@ -39,7 +39,7 @@
 :root{
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
-  --red:#e8192c;--green:#22c55e;--amber:#f59e0b;
+  --red:#0d0d5b;--green:#22c55e;--amber:#9292b5;
   --indigo:#818cf8;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;
 }
 body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;}
@@ -72,9 +72,9 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .acceso-arrow{font-size:14px;color:var(--mut);opacity:.5;flex-shrink:0;}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
 .obj-sfbtn{padding:4px 11px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
-.obj-sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
+.obj-sfbtn.on{background:rgba(13,13,91,.1);border-color:rgba(13,13,91,.35);color:#0d0d5b}
 .obj-tfbtn{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
-.obj-tfbtn.on.partido{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#e8192c}
+.obj-tfbtn.on.partido{background:rgba(13,13,91,.12);border-color:rgba(13,13,91,.4);color:#0d0d5b}
 .obj-tfbtn.on.ent{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;}
 .stat-card-title{font-size:8px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
@@ -85,14 +85,14 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .rutina-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:24px;}
 .rutina-ej{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
 .rutina-ej:last-child{border:none;}
-.rutina-ej-num{width:20px;height:20px;border-radius:5px;flex-shrink:0;background:rgba(232,25,44,.1);border:1px solid rgba(232,25,44,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--red);}
+.rutina-ej-num{width:20px;height:20px;border-radius:5px;flex-shrink:0;background:rgba(13,13,91,.1);border:1px solid rgba(13,13,91,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--red);}
 .rutina-ej-nombre{font-weight:700;font-size:12px;flex:1;}
 .rutina-ej-meta{font-size:10px;color:var(--mut);}
 .estado-msg{text-align:center;padding:32px 20px;color:var(--mut);}
 .estado-msg-icon{font-size:28px;margin-bottom:8px;}
 .estado-msg-txt{font-size:11px;letter-spacing:.5px;}
-.next-match{background:linear-gradient(135deg,rgba(232,25,44,.12),rgba(232,25,44,.04));border:1px solid rgba(232,25,44,.2);border-radius:14px;padding:14px 16px;margin-bottom:24px;display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--txt);transition:all .18s;}
-.next-match:hover{border-color:rgba(232,25,44,.4);transform:translateY(-1px);}
+.next-match{background:linear-gradient(135deg,rgba(13,13,91,.12),rgba(13,13,91,.04));border:1px solid rgba(13,13,91,.2);border-radius:14px;padding:14px 16px;margin-bottom:24px;display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--txt);transition:all .18s;}
+.next-match:hover{border-color:rgba(13,13,91,.4);transform:translateY(-1px);}
 .next-match-dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0;box-shadow:0 0 8px var(--red);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .next-match-info{flex:1;}
@@ -550,7 +550,7 @@ function renderComparativaJugador(){
 var params = new URLSearchParams(window.location.search);
 var numJug = parseInt(params.get('num')) || 0;
 
-var POS_COLOR = {'ARMADOR':'#f59e0b','CENTRAL':'#f97316','PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'};
+var POS_COLOR = {'ARMADOR':'#9292b5','CENTRAL':'#f97316','PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'};
 
 /* Respaldo, solo si no se pudo abrir datos_equipo.js.enc. Las fotos van en
    null a proposito: se llaman por el numero de camiseta (fotos/01.jpg), y el
@@ -620,7 +620,7 @@ function renderHero(j){
       '<div class="hero-sub">'+(j.pais||'🇦🇷')+' GELP VOLEY · Temporada '+_curSeason()+'/'+String(_curSeason()+1).slice(2)+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
       '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'+
         '<a href="historial_voley.html" style="padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">📈 STATS</a>'+
-        '<a href="prep_fisica.html" style="padding:6px 14px;border-radius:8px;background:rgba(232,25,44,.12);border:1px solid rgba(232,25,44,.25);color:#e8192c;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">💪 RUTINA</a>'+
+        '<a href="prep_fisica.html" style="padding:6px 14px;border-radius:8px;background:rgba(13,13,91,.12);border:1px solid rgba(13,13,91,.25);color:#0d0d5b;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">💪 RUTINA</a>'+
       '</div>'+
     '</div>'+
     (j.foto?'<img src="'+j.foto+'" alt="'+j.nombre+'" onerror="this.style.display=\'none\'" style="width:72px;height:94px;object-fit:cover;object-position:top;border-radius:12px;flex-shrink:0;border:2px solid '+color+'40;box-shadow:0 4px 14px rgba(0,0,0,.45)">':'');
@@ -668,7 +668,7 @@ function renderQuickStats(j){
   var rNeg=t.rT>0?Math.round((t.rVend+t.rErr)/t.rT*100):null;
   var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
   var html='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">';
-  html+=mkRect('#F59E0B','Saque',[{v:fmtE(sEff),l:'EFF',c:effC(sEff)},{v:t.sT,l:'Total'},{v:t.sPunto,l:'Puntos'},{v:t.sErr,l:'Errores'}]);
+  html+=mkRect('#9292b5','Saque',[{v:fmtE(sEff),l:'EFF',c:effC(sEff)},{v:t.sT,l:'Total'},{v:t.sPunto,l:'Puntos'},{v:t.sErr,l:'Errores'}]);
   html+=mkRect('#F97316','Ataque',[{v:fmtE(aEff),l:'EFF',c:effC(aEff)},{v:t.aPunto,l:'Puntos'},{v:t.aVend,l:'Bloqueados'},{v:t.aErr,l:'Errores'}]);
   html+=mkRect('#22C55E','Recepción',[{v:fmtE(rEff),l:'EFF',c:effC(rEff)},{v:t.rT,l:'Total'},{v:fmtE(rPos),l:'Rec. #+'},{v:fmtE(rNeg),l:'Rec. /='}]);
   html+=mkRect('#06B6D4','Bloqueo',[{v:fmtE(bEff),l:'EFF #+',c:effC(bEff)},{v:t.bT,l:'Total'}]);
@@ -682,16 +682,16 @@ function renderAccesos(j){
   var grid=document.getElementById('accesos-grid');
   var items=[
     {icon:'📈',title:'Historial',desc:'Mis estadísticas',url:'historial_voley.html?player='+encodeURIComponent(j.nombre),color:'#818cf8'},
-    {icon:'💪',title:'Rutina',desc:'Mi preparación física',url:'prep_fisica.html?player='+encodeURIComponent(j.nombre),color:'#e8192c'},
+    {icon:'💪',title:'Rutina',desc:'Mi preparación física',url:'prep_fisica.html?player='+encodeURIComponent(j.nombre),color:'#0d0d5b'},
     {icon:'🚀',title:'Plan de Desarrollo',desc:'Mis objetivos técnicos a mejorar',url:'plan_desarrollo.html?num='+j.num+'&n='+encodeURIComponent(j.nombre),color:'#a78bfa'},
-    {icon:'🎯',title:'Plan de Partido',desc:'Plan del próximo partido',url:'plan_partido.html',color:'#f59e0b'},
+    {icon:'🎯',title:'Plan de Partido',desc:'Plan del próximo partido',url:'plan_partido.html',color:'#9292b5'},
     {icon:'📊',title:'Panel en Vivo',desc:'Sesión actual',url:'panel_voley.html',color:'#22c55e'},
     {icon:'🔥',title:'Heat Maps',desc:'Ataque · Saque · Rec · Armado',url:'javascript:showHeatmapMenu()',color:'#F97316'},
-    {icon:'🏆',title:'Ranking',desc:'Mi posición en el equipo',url:'ranking.html?num='+j.num,color:'#F59E0B'},
+    {icon:'🏆',title:'Ranking',desc:'Mi posición en el equipo',url:'ranking.html?num='+j.num,color:'#9292b5'},
     {icon:'🏠',title:'Hub',desc:'Todo el sistema',url:'index.html',color:'#64748b',full:true}
   ];
   var SETTER_NUMS=[4,9,19];
-  if(SETTER_NUMS.indexOf(parseInt(j.num))>=0) items.splice(items.length-1,0,{icon:'🎯',title:'Distribución',desc:'Mi armado de juego',url:'plan_partido.html?equipo=gelp&jug='+j.num+'#armador',color:'#f59e0b'});
+  if(SETTER_NUMS.indexOf(parseInt(j.num))>=0) items.splice(items.length-1,0,{icon:'🎯',title:'Distribución',desc:'Mi armado de juego',url:'plan_partido.html?equipo=gelp&jug='+j.num+'#armador',color:'#9292b5'});
   var _ppRec=(window.PP_DATA&&window.PP_DATA['gelp']&&(window.PP_DATA['gelp'].players||[]))||[];
   if(_ppRec.some(function(p){return parseInt(p.num)===parseInt(j.num)&&p.role==='reception';})) items.splice(items.length-1,0,{icon:'🛡',title:'Recepción',desc:'Mi recepción por zona',url:'plan_partido.html?equipo=gelp&jug='+j.num+'#recepcion',color:'#22c55e'});
   items.splice(items.length-1,0,{icon:'⚡',title:'Saque',desc:'Mis saques por zona',url:'plan_partido.html?equipo=gelp&jug='+j.num+'#saque',color:'#f97316'});
@@ -744,7 +744,7 @@ function renderStats(j){
       '<div class="stat-row"><span class="stat-row-lbl">Puntos</span><span class="stat-row-val" style="color:#22c55e">'+a.aPunto+'</span></div>'+
       '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+(a.aT>0?Math.round(a.aEff/a.aT)+'%':'—')+'</span></div></div>';
   }
-  grid.innerHTML=makeCards(acc.P,'🏆 PARTIDOS','#e8192c')+makeCards(acc.E,'🏋️ ENTRENAMIENTOS','#22c55e');
+  grid.innerHTML=makeCards(acc.P,'🏆 PARTIDOS','#0d0d5b')+makeCards(acc.E,'🏋️ ENTRENAMIENTOS','#22c55e');
 }
 
 function renderRutina(j){
@@ -814,7 +814,7 @@ function _videoTodo(){
       <a class="hm-card" href="plan_partido.html?equipo=gelp#ataque"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas<br>Combos · Calidad rec.</span></a>
       <a class="hm-card" href="plan_partido.html?equipo=gelp#saque"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Flotado/Potencia<br>Zonas origen/destino</span></a>
       <a class="hm-card" href="plan_partido.html?equipo=gelp#recepcion" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="plan_partido.html?equipo=gelp#armador"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="plan_partido.html?equipo=gelp#armador"   style="background:rgba(146,146,181,.08);border-color:rgba(146,146,181,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#9292b5">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
       <a class="hm-card" href="plan_partido.html?equipo=gelp#defensa"  style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🤲</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Origen/Destino</span></a>
       <a class="hm-card" href="plan_partido.html?equipo=gelp#bloqueo"  style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#2DD4BF">BLOQUEO</span><span class="hm-sub">Dónde bloquea · Zona origen ataque</span></a>
     </div>

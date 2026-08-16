@@ -33,10 +33,10 @@
     a.style.cssText =
       'display:inline-flex;align-items:center;gap:6px;text-decoration:none;'+
       "font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;"+
-      'color:#e8192c;background:rgba(232,25,44,.10);border:1px solid rgba(232,25,44,.30);'+
+      'color:#0d0d5b;background:rgba(13,13,91,.10);border:1px solid rgba(13,13,91,.30);'+
       'padding:6px 12px;border-radius:8px;white-space:nowrap;margin-left:8px;cursor:pointer;transition:background .15s;';
-    a.addEventListener('mouseover', function(){ a.style.background='rgba(232,25,44,.20)'; });
-    a.addEventListener('mouseout',  function(){ a.style.background='rgba(232,25,44,.10)'; });
+    a.addEventListener('mouseover', function(){ a.style.background='rgba(13,13,91,.20)'; });
+    a.addEventListener('mouseout',  function(){ a.style.background='rgba(13,13,91,.10)'; });
 
     var slot = document.querySelector('.header-right') || document.querySelector('header');
     if (slot){ slot.appendChild(a); }

@@ -25,7 +25,7 @@
 :root{
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
   --border:rgba(255,255,255,.08);
-  --red:#e8192c;--green:#22c55e;--amber:#f59e0b;
+  --red:#0d0d5b;--green:#22c55e;--amber:#9292b5;
   --indigo:#818cf8;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;
 }
 body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;}
@@ -33,7 +33,7 @@ select,select option{color:#111!important;background:#fff!important;}
 
 /* HEADER */
 .header{padding:12px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.01);}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:5px;background:linear-gradient(120deg,#e8192c,#fff 50%,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:5px;background:linear-gradient(120deg,#0d0d5b,#fff 50%,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .header-right{display:flex;align-items:center;gap:12px;}
 .back-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;}
 .back-btn:hover{color:var(--txt);}
@@ -42,7 +42,7 @@ select,select option{color:#111!important;background:#fff!important;}
 .controles{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(255,255,255,.01);}
 .ctrl-label{font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;}
 .ctrl-sel{padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:var(--card);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;outline:none;}
-.ctrl-sel:focus{border-color:rgba(232,25,44,.4);}
+.ctrl-sel:focus{border-color:rgba(13,13,91,.4);}
 .jchip{padding:6px 11px;border-radius:9px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.4px;cursor:pointer;transition:.12s;}
 .jchip:hover{color:#fff;}
 .jchip.on{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.4);color:#4ade80;}
@@ -54,7 +54,7 @@ select,select option{color:#111!important;background:#fff!important;}
 /* MAIN */
 .main{padding:20px 28px;max-width:1800px;margin:0 auto;}
 .dia-titulo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:5px;margin-bottom:20px;color:var(--red);display:flex;align-items:center;gap:12px;}
-.dia-titulo::after{content:'';flex:1;height:1px;background:rgba(232,25,44,.2);}
+.dia-titulo::after{content:'';flex:1;height:1px;background:rgba(13,13,91,.2);}
 
 /* BLOQUE */
 .bloque{margin-bottom:24px;}
@@ -65,13 +65,13 @@ select,select option{color:#111!important;background:#fff!important;}
 /* TABLA EJERCICIO */
 .ejercicio-wrap{margin-bottom:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
 .ejercicio-titulo{padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);background:var(--card2);}
-.ej-num{width:24px;height:24px;border-radius:6px;background:rgba(232,25,44,.1);border:1px solid rgba(232,25,44,.2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--red);flex-shrink:0;}
+.ej-num{width:24px;height:24px;border-radius:6px;background:rgba(13,13,91,.1);border:1px solid rgba(13,13,91,.2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--red);flex-shrink:0;}
 .ej-nombre{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;flex:1;}
 .ej-badges{display:flex;gap:6px;}
 .ej-badge{font-size:9px;padding:2px 8px;border-radius:4px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
 .badge-s{background:rgba(129,140,248,.1);color:#818cf8;border:1px solid rgba(129,140,248,.2);}
 .badge-r{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
-.badge-d{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2);}
+.badge-d{background:rgba(146,146,181,.1);color:#9292b5;border:1px solid rgba(146,146,181,.2);}
 .badge-c{background:rgba(45,212,191,.12);color:#2dd4bf;border:1px solid rgba(45,212,191,.24);}
 .ej-video-btn{padding:4px 10px;border-radius:6px;border:1px solid rgba(129,140,248,.2);background:rgba(129,140,248,.08);color:#818cf8;font-size:10px;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;}
 .ej-video-btn:hover{background:rgba(129,140,248,.2);}
@@ -90,7 +90,7 @@ select,select option{color:#111!important;background:#fff!important;}
 .jug-pos{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:700;text-transform:uppercase;}
 .pos-CENTRAL{background:rgba(249,115,22,.1);color:#f97316;}
 .pos-PUNTA{background:rgba(34,197,94,.1);color:#22c55e;}
-.pos-ARMADOR{background:rgba(245,158,11,.1);color:#f59e0b;}
+.pos-ARMADOR{background:rgba(146,146,181,.1);color:#9292b5;}
 .pos-OPUESTO{background:rgba(129,140,248,.1);color:#818cf8;}
 .pos-LIBERO{background:rgba(6,182,212,.1);color:#06b6d4;}
 
@@ -99,7 +99,7 @@ select,select option{color:#111!important;background:#fff!important;}
 .peso-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;}
 .serie-lbl{font-size:8px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;}
 .peso-inp{width:58px;padding:5px 4px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--txt);font-family:'Bebas Neue',sans-serif;font-size:17px;text-align:center;outline:none;transition:all .15s;}
-.peso-inp:focus{border-color:rgba(232,25,44,.4);background:rgba(232,25,44,.05);}
+.peso-inp:focus{border-color:rgba(13,13,91,.4);background:rgba(13,13,91,.05);}
 .peso-inp::placeholder{color:var(--mut);font-size:11px;}
 .peso-inp.filled{border-color:rgba(34,197,94,.3);color:var(--green);}
 .series-grid{display:flex;gap:6px;justify-content:center;}

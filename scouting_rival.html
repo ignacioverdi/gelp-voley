@@ -14,7 +14,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;min-height:100vh}
-  body::before{content:'';position:fixed;inset:0;background:radial-gradient(1200px 600px at 80% -10%,rgba(232,25,44,.06),transparent 60%),radial-gradient(900px 500px at -10% 110%,rgba(129,140,248,.05),transparent 60%);pointer-events:none;z-index:0}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(1200px 600px at 80% -10%,rgba(13,13,91,.06),transparent 60%),radial-gradient(900px 500px at -10% 110%,rgba(129,140,248,.05),transparent 60%);pointer-events:none;z-index:0}
   .wrap{position:relative;z-index:1}
 
   .header-right{position:fixed;top:10px;right:10px;z-index:99998;display:flex;align-items:center;gap:6px}
@@ -34,7 +34,7 @@
     font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;
     transition:all .15s;display:flex;align-items:center;gap:8px;white-space:nowrap}
   .tbtn:hover{border-color:rgba(255,255,255,.22);transform:translateY(-1px)}
-  .tbtn.on{border-color:var(--red);background:rgba(232,25,44,.12);color:#fff;box-shadow:0 4px 18px rgba(232,25,44,.18)}
+  .tbtn.on{border-color:var(--red);background:rgba(13,13,91,.12);color:#fff;box-shadow:0 4px 18px rgba(13,13,91,.18)}
   .tbtn .mc{font-size:10px;color:var(--mut);font-weight:600}
   .tbtn.on .mc{color:#fca5a5}
 
@@ -99,7 +99,7 @@
 
   .court{width:100%;max-width:230px;margin:6px auto 0;display:block}
 
-  .claves{margin-top:16px;background:linear-gradient(135deg,rgba(232,25,44,.08),rgba(129,140,248,.06));border:1px solid rgba(232,25,44,.25);border-radius:16px;padding:16px 18px}
+  .claves{margin-top:16px;background:linear-gradient(135deg,rgba(13,13,91,.08),rgba(129,140,248,.06));border:1px solid rgba(13,13,91,.25);border-radius:16px;padding:16px 18px}
   .claves-hd{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#fff;display:flex;align-items:center;gap:9px;margin-bottom:12px}
   .clave{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px;line-height:1.45}
   .clave:last-child{border-bottom:none}
@@ -493,7 +493,7 @@ function renderRecentFund(fk){
     b.style.color=on?'#38bdf8':'var(--mut2)';
     b.style.borderColor=on?'rgba(56,189,248,.45)':'var(--border)';});
   function badge(fl){var m={alza:['EN ALZA','#22c55e','rgba(34,197,94,.15)'],baja:['EN BAJA','#ef4444','rgba(239,68,68,.15)'],
-      nuevo:['NUEVO TITULAR','#9292b5','rgba(245,158,11,.15)'],ausente:['AUSENTE','#94a3b8','rgba(148,163,184,.15)']};
+      nuevo:['NUEVO TITULAR','#9292b5','rgba(146,146,181,.15)'],ausente:['AUSENTE','#94a3b8','rgba(148,163,184,.15)']};
     var x=m[fl]; return x?'<span style="font-size:9px;font-weight:800;letter-spacing:.5px;color:'+x[1]+';background:'+x[2]+';padding:2px 7px;border-radius:5px;white-space:nowrap">'+x[0]+'</span>':'';}
   var h='<div style="font-size:11px;color:var(--mut);margin-bottom:12px">Mostrando <b style="color:#38bdf8">'+f.label+'</b> · la cifra es <b style="color:var(--mut2)">'+f.metric+'</b>.</div>';
   if(f.starters&&f.starters.length){
