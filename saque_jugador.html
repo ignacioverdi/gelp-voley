@@ -86,7 +86,7 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
   <div id="content"><div class="empty">Cargando...</div></div>
 </div>
 <script>
-var POS_COLOR={'ARMADOR':'#9292b5','OPUESTO':'#f97316','PUNTA':'#818cf8','CENTRAL':'#22c55e','LIBERO':'#06b6d4'};
+var POS_COLOR={'ARMADOR':'#f59e0b','OPUESTO':'#f97316','PUNTA':'#818cf8','CENTRAL':'#22c55e','LIBERO':'#06b6d4'};
 function effColor(v){ if(v===null||v===undefined||isNaN(v)) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':v>=-20?'#f97316':'#ef4444'; }
 function calcPct(a,b){ return b>0?Math.round(a*100/b):0; }
 
@@ -460,7 +460,7 @@ function renderComparativaPosicion(cont, currentNum, type){
   if(!pjugs.length) return;
   var pd = getJugadoresPosicion(currentNum);
   if(!pd.pos || !pd.same.length) return;
-  var POS_COLOR2 = {ARMADOR:'#9292b5',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
+  var POS_COLOR2 = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
   var posCol = POS_COLOR2[pd.pos] || '#64748b';
   var allNums = [currentNum].concat(pd.same.map(function(j){return j.num;}));
   var rows = allNums.map(function(num){

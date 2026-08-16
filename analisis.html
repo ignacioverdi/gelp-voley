@@ -1366,7 +1366,7 @@ function mkRow(jug, cols, highlight){
   var jugs = typeof Nafels_JUGADORES !== 'undefined' ? Nafels_JUGADORES : [];
   var info = jugs.find(function(c){ return c.num === jug.c; });
   var nm = info ? info.nombre.replace(/^\d+\s*/,'') : jug.n;
-  var POS_COLOR = {ARMADOR:'#9292b5',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
+  var POS_COLOR = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
   var posCol = POS_COLOR[jug.pos] || '#64748b';
   var bg = highlight ? 'background:rgba(13,13,91,.06);' : '';
   return '<tr style="border-bottom:1px solid rgba(255,255,255,.04);'+bg+'">'
@@ -1403,7 +1403,7 @@ function tablaComparativa(jugs){
   var effCS = function(v){ return v===null||v==='—'?'#475569':v>=3?'#22c55e':v>=0?'#86efac':v>=-5?'#fbbf24':'#ef4444'; };
   var effCR = function(v){ return v===null||v==='—'?'#475569':v>=36?'#22c55e':v>=28?'#86efac':v>=20?'#fbbf24':'#ef4444'; };
 
-  var POS_COLORS = {PUNTA:'#22C55E',CENTRAL:'#F97316',OPUESTO:'#F97316',ARMADOR:'#9292b5',LIBERO:'#06B6D4'};
+  var POS_COLORS = {PUNTA:'#22C55E',CENTRAL:'#F97316',OPUESTO:'#F97316',ARMADOR:'#F59E0B',LIBERO:'#06B6D4'};
   var POS_ORDER = ['PUNTA','OPUESTO','CENTRAL','ARMADOR','LIBERO'];
 
   var aCol = [
@@ -1465,7 +1465,7 @@ function tablaComparativa(jugs){
 // ── RANKINGS ──────────────────────────────────────────────────────────
 function tablaRanking(jugs){
   var jugs = typeof Nafels_JUGADORES !== 'undefined' ? Nafels_JUGADORES : [];
-  var POS_COLOR = {ARMADOR:'#9292b5',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
+  var POS_COLOR = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
 
   function rankSection(title, icon, color, jugsFilt, valFn, label, subFn, subLabel){
     var sorted = jugsFilt.filter(function(j){ var v=valFn(j); return v!==null&&v!==undefined&&!isNaN(v); })

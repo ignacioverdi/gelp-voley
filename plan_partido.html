@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07080f;--card:#0d0e1a;--card2:#12132a;--border:rgba(255,255,255,.07);--red:#0d0d5b;--txt:#e2e8f0;--mut:#8791a3;--faint:#5b6474;--h0:#171826;--h1:#5c2531;--h2:#a02335;--h3:#0d0d5b}
+:root{--bg:#07080f;--card:#0d0e1a;--card2:#12132a;--border:rgba(255,255,255,.07);--red:#0d0d5b;--txt:#e2e8f0;--mut:#8791a3;--faint:#5b6474;--h0:#171826;--h1:#5c2531;--h2:#a02335;--h3:#e8192c}
 *{box-sizing:border-box}
 html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;font-size:15px;line-height:1.4;font-variant-numeric:tabular-nums}
@@ -414,7 +414,10 @@ const ROLECFG={
  defense:{court:2,evIdx:3,tIdx:5,vIdx:6,tagIdx:0,stats:'dig',pal:'green',
    filters:[{lab:'Tipo',idx:7,opts:[["all","Todas"]],dyn:'combo'},{lab:'Ataque desde',idx:1,opts:DAZ},{lab:'Momento',idx:4,opts:SMO,range:true},{lab:'Resultado',idx:3,opts:DGS}],
    dir:null,tiles:['Efic','#+','/=','Potencia','Flotado','N','Perfecta','Cubre','Mala'],hl:[0,1]},
- bloqueo:{court:1,evIdx:2,tIdx:3,vIdx:4,tagIdx:0,stats:'blk',pal:'blue',
+ /* Cada fundamento con su gama, para distinguirlos de un vistazo:
+    ataque rojo · saque azul · recepcion amarillo · defensa verde ·
+    bloqueo violeta. El bloqueo estaba en azul y se confundia con el saque. */
+ bloqueo:{court:1,evIdx:2,tIdx:3,vIdx:4,tagIdx:0,stats:'blk',pal:'arm',
    filters:[{lab:"Combo",idx:0,opts:[["all","Todas"]],dyn:"combo"},{lab:"Fase",idx:5,opts:FASE},{lab:"Zona",idx:1,opts:[["all","Todas"],["4","z4 (punta)"],["3","z3 (central)"],["2","z2 (opuesto)"],["8","z8 (pipe)"],["9","z9 (zaguero)"]]},{lab:"Resultado",idx:2,opts:BLS}],
    dir:null,tiles:['Efic','Positivos','Err/Tocado','\u2014','\u2014','Bloqueos','Kills','Toques','Malos'],hl:[0,5]}
 };
@@ -422,7 +425,7 @@ const TAGFMT={pot:'Pot',flo:'Flot'};
 const ORDER=["4","3","2","7","8","9","5","6","1"];
 function opts(a){return a.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join("");}
 function g(id){return document.getElementById(id).value;}
-const PAL={red:{c:["#5c2531","#a02335","#0d0d5b"],t:["#f0c6cd","#ffdfe4","#fff"]},blue:{c:["#1e3356","#245aa6","#2f7ff0"],t:["#c3d4f2","#dbe8ff","#fff"]},orange:{c:["#4a3218","#a3611b","#f6851b"],t:["#f0d3ac","#ffe6c9","#fff"]},green:{c:["#14432a","#15803d","#22c55e"],t:["#bfe8cf","#dcf5e5","#fff"]},arm:{c:["#2e2450","#5b3aa6","#8b5cf6"],t:["#d6cbf2","#e9e2ff","#fff"]}};
+const PAL={red:{c:["#5c2531","#a02335","#e8192c"],t:["#f0c6cd","#ffdfe4","#fff"]},blue:{c:["#1e3356","#245aa6","#2f7ff0"],t:["#c3d4f2","#dbe8ff","#fff"]},orange:{c:["#4a3218","#a3611b","#f6851b"],t:["#f0d3ac","#ffe6c9","#fff"]},green:{c:["#14432a","#15803d","#22c55e"],t:["#bfe8cf","#dcf5e5","#fff"]},arm:{c:["#2e2450","#5b3aa6","#8b5cf6"],t:["#d6cbf2","#e9e2ff","#fff"]}};
 function heat(v,mx,pal){if(v<=0)return["var(--h0)","#6b7280","1px solid var(--border)"];var p=PAL[pal||'red'],r=v/mx,i=r<0.34?0:(r<0.67?1:2);return[p.c[i],p.t[i],"none"];}
 function bkt(m){return m<=8?'b1':(m<=16?'b2':'b3');}
 function passes(a,cfg,vals){for(var i=0;i<cfg.filters.length;i++){var fl=cfg.filters[i],v=vals[i];if(v==='all')continue;if(Array.isArray(v)){if(v.indexOf(String(a[fl.idx]))<0)return false;continue;}if(fl.range){if(bkt(a[fl.idx])!==v)return false;}else if(String(a[fl.idx])!==v)return false;}return true;}

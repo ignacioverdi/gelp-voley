@@ -1853,7 +1853,7 @@ function showJugDetail(nombre, num){
     jugInfo = PLANTEL.find(function(j){ return j.num === num; });
   }
 
-  var POS_COLOR = {ARMADOR:'#9292b5',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
+  var POS_COLOR = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
   var pos = jugInfo ? jugInfo.pos : '';
   var posColor = POS_COLOR[pos] || '#64748b';
 
