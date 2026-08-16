@@ -416,6 +416,36 @@ def _parse_set_result(txt):
             elif a>h: as_+=1
     return [hs,as_] if (hs or as_) else None
 
+def _puestos_corregidos():
+    """Los puestos que el staff corrigio en la pantalla de Equipo.
+
+    Se leen de la base del club. Si no hay internet o la rama esta vacia, se
+    sigue con lo que digan los .dvw: la correccion es una mejora, nunca un
+    requisito.
+    """
+    MAPA = {'LIBERO': 'LIBERO', 'PUNTA': 'OUTSIDE', 'OPUESTO': 'OPPOSITE',
+            'CENTRAL': 'MIDDLE', 'ARMADOR': 'SETTER'}
+    out = {}
+    try:
+        import json as _j, io as _io, re as _re, urllib.request as _u
+        fb = _io.open('firebase.js', encoding='utf-8', errors='replace').read()
+        url = _re.search(r"FB_URL\s*=\s*'([^']+)'", fb)
+        rama = _re.search(r"FB_RAMA\s*=\s*'([^']*)'", fb)
+        if not url:
+            return out
+        pre = ('clubes/%s/' % rama.group(1)) if (rama and rama.group(1)) else ''
+        with _u.urlopen('%s/%splantel_pos.json' % (url.group(1).rstrip('/'), pre),
+                        timeout=10) as r:
+            d = _j.loads(r.read().decode('utf-8'))
+        if isinstance(d, dict):
+            for k, v in d.items():
+                if isinstance(v, str) and v.upper() in MAPA:
+                    out[str(int(k))] = MAPA[v.upper()]
+    except Exception:
+        pass
+    return out
+
+
 def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # Load existing DB
     if os.path.exists(db_path):
@@ -852,8 +882,22 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones — jerarquía: setter→libero→central→outside/opposite
         roster={}
+        # ══ El plantel confirmado por el club manda ═══════════════════════
+        # Los puestos se deducen de como juega cada una, y eso falla: una
+        # jugadora con pocas acciones queda como 'OTRO', y una punta que
+        # recibio mucho puede quedar como libero. El club lo confirma una vez
+        # en plantel_oficial.json y desde ahi vale eso.
+        # Los puestos que el cuerpo tecnico corrigio DESDE LA APP, en la
+        # pantalla de Equipo. Viven en la base del club, asi que los toma
+        # tanto este motor como el robot que procesa los partidos subidos.
+        # Nadie tiene que abrir un archivo ni correr nada a mano.
+        _OFICIAL = _puestos_corregidos()
+
         team_setters = set(str(s['num']) for s in setters_list)
         for ns0, pd0 in td.items():
+            if str(ns0) in _OFICIAL and _OFICIAL[str(ns0)]:
+                roster[str(ns0)] = _OFICIAL[str(ns0)]
+                continue
             atk0 = pd0.get('atk',[]); rec0 = len(pd0.get('rec',[]))
             nser = str(ns0)
             if nser in team_setters: roster[nser]='SETTER'; continue
