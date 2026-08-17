@@ -64,6 +64,10 @@ header.masthead .sub{color:var(--mut);font-size:13.5px}
 .armcourt .cell .cn-p{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;line-height:1;opacity:.95;white-space:nowrap}
 .armcourt .cell.has{cursor:pointer}
 .armnote{font-size:12px;color:var(--faint);margin-top:12px}
+/* El subtitulo de cada grupo de posicion: mas chico que el del fundamento,
+   para que se lea la jerarquia de un vistazo. */
+.rolehead.sub{font-size:11px;letter-spacing:2px;opacity:.62;margin:14px 0 6px}
+.rolehead.sub:empty{display:none}
 .rolehead{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.04em;color:var(--red);margin:22px 0 10px;padding-bottom:4px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:10px}
 .rolehead span{font-family:'Barlow Condensed';font-size:12px;font-weight:500;color:var(--faint);text-transform:none;letter-spacing:0}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -255,12 +259,28 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <div class="rolehead">Opuestos <span>ataque · espejo invertido pos. 2 · línea = z5/z7/z4</span></div>
 <div class="grid2" id="row-opuesto"></div>
 </div><div class="tabgroup" id="tab-saque"><div class="rolehead">Saque <span>dónde y cómo saca · azul · fuerza = fuerte/medio/fácil</span></div>
+<!-- Separado por posicion, igual que el ataque: un armador y una punta no
+     sacan igual, y verlos mezclados esconde el patron de cada grupo. -->
+<div class="rolehead sub">Puntas</div><div class="grid3" id="row-saque-punta"></div>
+<div class="rolehead sub">Centrales</div><div class="grid3" id="row-saque-central"></div>
+<div class="rolehead sub">Opuestos y armadores</div><div class="grid3" id="row-saque-opuesto"></div>
 <div class="grid3" id="row-saque"></div>
 </div><div class="tabgroup" id="tab-recepcion"><div class="rolehead">Recepción <span>cómo recibe según el saque rival · naranja · zona donde recibe</span></div>
+<div class="rolehead sub">Puntas</div><div class="grid3" id="row-reception-punta"></div>
+<div class="rolehead sub">Centrales</div><div class="grid3" id="row-reception-central"></div>
+<div class="rolehead sub">Opuestos y armadores</div><div class="grid3" id="row-reception-opuesto"></div>
+<div class="rolehead sub">Líberos</div><div class="grid3" id="row-reception-libero"></div>
 <div class="grid3" id="row-reception"></div>
 </div><div class="tabgroup" id="tab-defensa"><div class="rolehead">Defensa <span>dónde y cómo defiende · verde · zona donde levanta la pelota</span></div>
+<div class="rolehead sub">Puntas</div><div class="grid3" id="row-defense-punta"></div>
+<div class="rolehead sub">Centrales</div><div class="grid3" id="row-defense-central"></div>
+<div class="rolehead sub">Opuestos y armadores</div><div class="grid3" id="row-defense-opuesto"></div>
+<div class="rolehead sub">Líberos</div><div class="grid3" id="row-defense-libero"></div>
 <div class="grid3" id="row-defense"></div>
 </div><div class="tabgroup" id="tab-bloqueo"><div class="rolehead">Bloqueo <span>dónde bloquea según la zona de origen del ataque rival · celeste</span></div>
+<div class="rolehead sub">Puntas</div><div class="grid3" id="row-bloqueo-punta"></div>
+<div class="rolehead sub">Centrales</div><div class="grid3" id="row-bloqueo-central"></div>
+<div class="rolehead sub">Opuestos y armadores</div><div class="grid3" id="row-bloqueo-opuesto"></div>
 <div class="grid3" id="row-bloqueo"></div>
 </div><footer>Ataque (rojo): dirección según recepción. Saque (azul): tipo, zona de origen, momento (puntos del set) y fuerza sobre la recepción; / = vendido (2ª mejor). Recepción (naranja): según tipo/zona del saque rival; zona real de caída de la pelota (todas las zonas). Video por timestamp (reproduce en partidos publicados en la app). Muestras chicas = tomar con cuidado.</footer>
 </div>
@@ -598,6 +618,24 @@ function ppVid(code){
 function readKey(pid){return "ppread:"+(typeof TEAM!=="undefined"?TEAM:"")+":"+pid;}
 function readVal(p){try{var v=localStorage.getItem(readKey(p.id));if(v!==null)return v;}catch(e){}return p.read||"";}
 function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid")),el.innerHTML);}catch(e){}}
+function _sufijoPos(p){
+  /* A que grupo pertenece esta jugadora. Solo aplica a los fundamentos que
+     se separan por posicion; para el ataque —que ya tiene su fila por rol—
+     y para los que no la tienen, devuelve vacio. */
+  if(['saque','reception','defense','bloqueo'].indexOf(p.role) < 0) return '';
+  /* Se saca el acento antes de comparar: el puesto llega como "Líbero" y
+     con acento no coincidia con nada, asi que las liberas quedaban fuera de
+     todos los grupos y no se mostraban. */
+  var pos = String(p.pos || '').toUpperCase()
+              .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if(pos.indexOf('LIBER') === 0) return '-libero';
+  if(pos.indexOf('PUNT') === 0 || pos === 'OH') return '-punta';
+  if(pos.indexOf('CENT') === 0 || pos === 'MB') return '-central';
+  if(pos.indexOf('OPUE') === 0 || pos.indexOf('ARMA') === 0
+     || pos === 'OPP' || pos === 'S') return '-opuesto';
+  return '';
+}
+
 function buildSection(p){var cfg=ROLECFG[p.role]; if(!cfg) return '';
   var fh=cfg.filters.map(function(fl,i){return filtCtrl(p.id+'-f'+i,fl,'',filterOpts(p,fl));}).join('');
   if(cfg.stats==='atk'||cfg.stats==='srv'||cfg.stats==='dig'){fh+='<div class="fgroup"><label title="Mín. pelotas">Mín.</label><input type="number" min="0" value="0" id="'+p.id+'-min" style="background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-family:inherit;font-weight:700"></div>';}
@@ -696,7 +734,18 @@ function buildTeam(){
   var _bk=(window.PP_BLOCK&&window.PP_BLOCK[TEAM])||[];_bk.forEach(function(bp){if(!bp.id)bp.id='blk'+bp.num;});PLAYERS=PLAYERS.concat(_bk);
   TEAMCARDS=[]; ['punta','central','opuesto','saque','reception','defense','bloqueo'].forEach(function(role){var tp=makeTeamPlayer(role); if(tp) TEAMCARDS.push(tp);});
   TEAMCARDS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('afterbegin',buildSection(p));});
-  PLAYERS.forEach(function(p){var el=document.getElementById('row-'+p.role);if(el)el.insertAdjacentHTML('beforeend',buildSection(p));});
+  /* ══ Cada tarjeta, en la fila de su posicion ══════════════════════════
+     El ataque ya venia separado en puntas, centrales y opuestos. Saque,
+     recepcion, defensa y bloqueo mostraban a todo el plantel en una sola
+     lista: un armador y una punta mezclados, cuando no sacan ni defienden
+     igual. Asi el patron de cada grupo se pierde.
+
+     El puesto sale del plantel; el que no lo tenga va a la fila general. */
+  PLAYERS.forEach(function(p){
+    var el = document.getElementById('row-' + p.role + _sufijoPos(p));
+    if(!el) el = document.getElementById('row-' + p.role);
+    if(el) el.insertAdjacentHTML('beforeend', buildSection(p));
+  });
   TEAMCARDS.concat(PLAYERS).forEach(function(p){ROLECFG[p.role].filters.forEach(function(fl,i){var fe=document.getElementById(p.id+'-f'+i);if(fe)fe.addEventListener('change',function(){if(ROLECFG[p.role].stats==='dig'&&fl.lab==='Ataque desde'){defRefreshTipo(p);}render(p);});});var me=document.getElementById(p.id+'-min');if(me)me.addEventListener('input',function(){render(p);});render(p);});
   buildRivalPanel();buildMatchPanel();updateCounts();
   document.getElementById('teamname').textContent=TEAMS[TEAM].name;
