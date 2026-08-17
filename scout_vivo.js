@@ -314,7 +314,7 @@
     var fb = document.getElementById('sv-feedback');
     if (!fb) return;
     if (estado==='OK'){ fb.textContent='✓ '+codigo; fb.style.color='#22c55e'; }
-    else if (estado==='REVISAR'){ fb.textContent='⚠ revisar: '+codigo; fb.style.color='#9292b5'; }
+    else if (estado==='REVISAR'){ fb.textContent='⚠ revisar: '+codigo; fb.style.color='#f59e0b'; }
     else if (estado==='UNDO'){ fb.textContent='↶ deshecho'; fb.style.color='#94a3b8'; }
     else if (estado==='NUEVA'){ fb.textContent='● sesión nueva'; fb.style.color='#38bdf8'; }
     else { fb.textContent=''; }
@@ -325,7 +325,7 @@
     var box=document.getElementById('sv-log'); if(!box) return;
     var ultimos = SES.log.slice(-8).reverse();
     box.innerHTML = ultimos.map(function(e){
-      var col = e.estado==='OK' ? '#22c55e' : '#9292b5';
+      var col = e.estado==='OK' ? '#22c55e' : '#f59e0b';
       return '<span style="display:inline-block;margin-right:8px;color:'+col+'">'+e.codigo+'</span>';
     }).join('');
   }
@@ -335,12 +335,12 @@
     var css = document.createElement('style');
     css.textContent =
       '#sv-bar{position:fixed;left:0;right:0;bottom:0;z-index:100000;background:rgba(8,8,16,.97);'+
-      'border-top:2px solid #0d0d5b;box-shadow:0 -6px 24px rgba(0,0,0,.5);padding:8px 10px;'+
+      'border-top:2px solid #e8192c;box-shadow:0 -6px 24px rgba(0,0,0,.5);padding:8px 10px;'+
       "font-family:'Barlow Condensed',system-ui,sans-serif;backdrop-filter:blur(6px)}"+
       '#sv-bar .row{display:flex;gap:8px;align-items:center;max-width:1100px;margin:0 auto;flex-wrap:wrap}'+
       '#sv-input{flex:1;min-width:180px;background:#0d0e1a;border:1px solid rgba(255,255,255,.18);color:#fff;'+
       'border-radius:9px;padding:11px 14px;font-size:18px;font-weight:700;letter-spacing:1px;outline:none}'+
-      '#sv-input:focus{border-color:#0d0d5b}'+
+      '#sv-input:focus{border-color:#e8192c}'+
       '#sv-bar button{border:none;cursor:pointer;border-radius:9px;padding:10px 14px;font-family:inherit;'+
       'font-weight:800;letter-spacing:1px;font-size:13px}'+
       '.sv-undo{background:rgba(148,163,184,.15);color:#cbd5e1}'+
@@ -399,7 +399,7 @@
       '#sv-guia{display:none;position:fixed;inset:0;z-index:100001;background:rgba(4,4,10,.86);'+
       'align-items:flex-start;justify-content:center;overflow:auto;padding:24px 14px 120px;'+
       "font-family:'Barlow Condensed',system-ui,sans-serif}"+
-      '#sv-guia .card{background:#0d0e1a;border:1px solid rgba(255,255,255,.1);border-top:3px solid #0d0d5b;'+
+      '#sv-guia .card{background:#0d0e1a;border:1px solid rgba(255,255,255,.1);border-top:3px solid #e8192c;'+
       'border-radius:14px;max-width:920px;width:100%;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,.6)}'+
       '#sv-guia .ghead{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;'+
       'border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:#0d0e1a;border-radius:14px 14px 0 0}'+
@@ -407,7 +407,7 @@
       '#sv-guia .gclose{background:rgba(255,255,255,.08);color:#cbd5e1;border:none;border-radius:8px;cursor:pointer;font-size:15px;font-weight:800;padding:7px 13px}'+
       '#sv-guia .gbody{padding:8px 20px 20px}'+
       '#sv-guia .sec{margin-top:18px}'+
-      '#sv-guia .sec h3{color:#0d0d5b;font-size:15px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 6px}'+
+      '#sv-guia .sec h3{color:#e8192c;font-size:15px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 6px}'+
       '#sv-guia .sec p{color:#cbd5e1;font-size:15px;margin:4px 0;line-height:1.5}'+
       '#sv-guia code{font-family:ui-monospace,Menlo,Consolas,monospace;background:#070710;border:1px solid rgba(255,255,255,.12);color:#7dd3fc;padding:2px 7px;border-radius:6px;font-size:14px}'+
       '#sv-guia .ej{font-family:ui-monospace,Menlo,Consolas,monospace;background:#070710;border:1px solid rgba(34,197,94,.3);color:#22c55e;padding:2px 7px;border-radius:6px;font-size:14px;font-weight:700}'+
@@ -416,7 +416,7 @@
       '#sv-guia .vchip b{font-family:monospace;font-size:16px;margin-right:2px}'+
       '#sv-guia .sv-g-chip{display:inline-block;font-family:monospace;font-size:13px;font-weight:700;background:#11121f;'+
       'border:1px solid rgba(255,255,255,.12);color:#e2e8f0;border-radius:6px;padding:3px 8px;margin:3px}'+
-      '#sv-guia .note{background:rgba(13,13,91,.08);border:1px solid rgba(13,13,91,.3);border-radius:10px;'+
+      '#sv-guia .note{background:rgba(232,25,44,.08);border:1px solid rgba(232,25,44,.3);border-radius:10px;'+
       'padding:10px 14px;margin-top:8px;color:#fca5a5;font-size:14px;line-height:1.6}';
     document.head.appendChild(css);
 
@@ -443,10 +443,10 @@
           '<div class="vrow">'+
             '<span class="vchip"><b style="color:#22c55e">u</b> # perfecto / punto</span>'+
             '<span class="vchip"><b style="color:#86efac">i</b> + positivo</span>'+
-            '<span class="vchip"><b style="color:#9292b5">p</b> ! neutral</span>'+
+            '<span class="vchip"><b style="color:#f59e0b">p</b> ! neutral</span>'+
             '<span class="vchip"><b style="color:#fb923c">o</b> - negativo</span>'+
             '<span class="vchip"><b style="color:#f87171">j</b> / vendida o bloqueada</span>'+
-            '<span class="vchip"><b style="color:#0d0d5b">k</b> = error</span>'+
+            '<span class="vchip"><b style="color:#dc2626">k</b> = error</span>'+
           '</div></div>'+
         '<div class="sec"><h3>Saque</h3>'+
           '<p><code>s + tipo + camiseta + zona-origen + zona-destino</code></p>'+
