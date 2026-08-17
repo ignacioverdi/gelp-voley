@@ -156,7 +156,11 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     try{
       if(!Object.keys(VD).length && MODO !== 'entrenamiento'
          && window.LIGA_DATA && LIGA_DATA.teams){
-        var _EV = ['#','+','!','-','/','='];
+        /* El orden TIENE que ser el mismo que usa el motor al guardar
+           (RES_IDX en update_db): # / + ! = -
+           Con otro orden, un + se lee como ! y las defensas buenas aparecen
+           todas como regulares: 16 acciones y 0% en todo. */
+        var _EV = ['#','/','+','!','=','-'];
         var _T = LIGA_DATA.teams;
         Object.keys(_T).forEach(function(slug){
           var _t = _T[slug] || {}, _nom = _t.name || slug;
