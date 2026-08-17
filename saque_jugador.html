@@ -21,7 +21,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- datos_historial.js: lo carga el selector de modo (arriba) -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#f59e0b;--indigo:#818cf8;--green:#22c55e;--red:#ef4444;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;}
+:root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#9094b7;--indigo:#818cf8;--green:#22c55e;--red:#09135f;--orange:#9094b7;--mut:#475569;--txt:#e2e8f0;}
 body{background:#07080f;color:#e2e8f0;font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding:0;margin:0}
 canvas { image-rendering: -webkit-optimize-contrast; }
 .canchitas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;}
@@ -52,13 +52,13 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 .back-btn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;flex-shrink:0}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
 .fbtn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s}
-.fbtn.active-partido{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#e8192c}
+.fbtn.active-partido{background:rgba(9,19,95,.12);border-color:rgba(9,19,95,.4);color:#09135f}
 .fbtn.active-entrenamiento{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
 .subfiltro-row{width:100%;display:none;gap:5px;flex-wrap:wrap;padding:6px 0 0}
-.subfiltro-select{padding:5px 12px;border-radius:7px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.08);color:#e8192c;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;min-width:220px}
+.subfiltro-select{padding:5px 12px;border-radius:7px;border:1px solid rgba(9,19,95,.4);background:rgba(9,19,95,.08);color:#09135f;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;min-width:220px}
 .subfiltro-select option{color:#111;background:#fff}
 .sfbtn{padding:4px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
-.sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
+.sfbtn.on{background:rgba(9,19,95,.1);border-color:rgba(9,19,95,.35);color:#09135f}
 .main{max-width:1100px;margin:0 auto;padding:20px 16px}
 .empty{text-align:center;padding:60px;color:#475569;font-size:13px;letter-spacing:1px}
 </style>
@@ -87,7 +87,7 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 </div>
 <script>
 var POS_COLOR={'ARMADOR':'#f59e0b','OPUESTO':'#f97316','PUNTA':'#818cf8','CENTRAL':'#22c55e','LIBERO':'#06b6d4'};
-function effColor(v){ if(v===null||v===undefined||isNaN(v)) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':v>=-20?'#f97316':'#ef4444'; }
+function effColor(v){ if(v===null||v===undefined||isNaN(v)) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':v>=-20?'#9094b7':'#09135f'; }
 function calcPct(a,b){ return b>0?Math.round(a*100/b):0; }
 
 function drawWood(ctx,x,y,w,h,c1,c2){
@@ -102,7 +102,7 @@ function drawNet(ctx,CL,CW,Y){
   var ng=ctx.createLinearGradient(0,Y-3,0,Y+7);
   ng.addColorStop(0,'#2a2a3a');ng.addColorStop(0.4,'#d0d0e0');ng.addColorStop(1,'#2a2a3a');
   ctx.fillStyle=ng;ctx.fillRect(CL-3,Y-3,CW+6,8);
-  ctx.fillStyle='#cc1515';ctx.fillRect(CL-3,Y-5,CW+6,3);
+  ctx.fillStyle='#09135f';ctx.fillRect(CL-3,Y-5,CW+6,3);
 }
 function drawCone(ctx,ox,oy,dx,dy,col,bw,pct,showPct,label,W){
   var ex=ox+(dx-ox)*pct, ey=oy+(dy-oy)*pct;
@@ -144,8 +144,8 @@ function drawSaqueCourt(ctx,W,H,saque,color,pct){
   var RIVAL_H=NET-CT, OWN_H=CB-NET;
   var c1=CL+CW/3,c2=CL+CW*2/3;
   ctx.fillStyle='#1a2a40';ctx.fillRect(0,0,W,H);
-  drawWood(ctx,CL,CT,CW,RIVAL_H,'#C88030','#E09840');
-  drawWood(ctx,CL,NET,CW,OWN_H,'#8B5E1A','#A06820');
+  drawWood(ctx,CL,CT,CW,RIVAL_H,'#9094b7','#9094b7');
+  drawWood(ctx,CL,NET,CW,OWN_H,'#8B5E1A','#9094b7');
   drawNet(ctx,CL,CW,NET);
   ctx.save();ctx.setLineDash([]);
   ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1.5;
@@ -408,14 +408,14 @@ function renderComparativaSaque(j, cont){
   section.innerHTML = '<div style="font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#64748b;margin-bottom:14px">COMPARATIVA VS EQUIPO</div>';
   var table = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-family:Barlow Condensed,sans-serif">'
     + '<thead><tr>'
-    + ['Tipo','Vos','Equipo','Dif.','Total','Puntos','Errores'].map(function(h,i){var c=i===1?'#F59E0B':'#64748b';return '<th style="padding:6px 8px;font-size:9px;color:'+c+';letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:'+(i===0?'left':'center')+'">'+h+'</th>';}).join('')
+    + ['Tipo','Vos','Equipo','Dif.','Total','Puntos','Errores'].map(function(h,i){var c=i===1?'#9094b7':'#64748b';return '<th style="padding:6px 8px;font-size:9px;color:'+c+';letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:'+(i===0?'left':'center')+'">'+h+'</th>';}).join('')
     + '</tr></thead><tbody>';
   saques.forEach(function(s){
     var tipo = s.tipo || s.cod || 'SM';
     var myEff = s.eff !== null && s.eff !== undefined ? s.eff : 0;
     var teamEff = teamAvg[tipo];
     var diff = teamEff !== undefined ? myEff - teamEff : null;
-    var diffColor = diff === null ? '#475569' : diff >= 3 ? '#22c55e' : diff >= 0 ? '#86efac' : diff >= -5 ? '#fbbf24' : '#ef4444';
+    var diffColor = diff === null ? '#475569' : diff >= 3 ? '#22c55e' : diff >= 0 ? '#86efac' : diff >= -5 ? '#9094b7' : '#09135f';
     var diffStr = diff === null ? '—' : (diff >= 0 ? '+' : '') + diff + '%';
     var myColor = effColor(myEff);
     table += '<tr style="border-bottom:1px solid rgba(255,255,255,.04)">'
@@ -425,7 +425,7 @@ function renderComparativaSaque(j, cont){
       + '<td style="padding:8px;text-align:center"><span style="font-family:Bebas Neue,sans-serif;font-size:20px;color:'+diffColor+'">'+diffStr+'</span></td>'
       + '<td style="padding:8px;text-align:center;font-size:12px;color:#64748b">'+s.tot+'</td>'
       + '<td style="padding:8px;text-align:center;font-size:12px;color:#22c55e">'+s.pts+'</td>'
-      + '<td style="padding:8px;text-align:center;font-size:12px;color:#ef4444">'+(s.err||0)+'</td>'
+      + '<td style="padding:8px;text-align:center;font-size:12px;color:#09135f">'+(s.err||0)+'</td>'
       + '</tr>';
   });
   table += '</tbody></table></div>';
@@ -444,8 +444,8 @@ function getJugadoresPosicion(currentNum){
 }
 function effColorCmp(v, type){
   if(v===null||v===undefined) return '#475569';
-  if(type==='atq') return v>=44?'#22c55e':v>=35?'#86efac':v>=20?'#fbbf24':'#ef4444';
-  if(type==='sq')  return v>=3?'#22c55e':v>=0?'#86efac':v>=-5?'#fbbf24':'#ef4444';
+  if(type==='atq') return v>=44?'#22c55e':v>=35?'#86efac':v>=20?'#9094b7':'#09135f';
+  if(type==='sq')  return v>=3?'#22c55e':v>=0?'#86efac':v>=-5?'#9094b7':'#09135f';
   return '#e2e8f0';
 }
 function renderComparativaPosicion(cont, currentNum, type){
@@ -484,12 +484,12 @@ function renderComparativaPosicion(cont, currentNum, type){
   section.innerHTML = '<div style="font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:'+posCol+';margin-bottom:12px">VS '+pd.pos+'S</div>';
   var table = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-family:Barlow Condensed,sans-serif">';
   table += '<thead><tr><th style="padding:6px 8px;font-size:9px;color:#64748b;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:left">Jugador</th>';
-  allCodes.forEach(function(cod){table += '<th style="padding:6px 8px;font-size:9px;color:'+(type==='ataque'?'#F97316':'#F59E0B')+';letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">'+cod+'</th>';});
-  if(type==='saque') table += '<th style="padding:6px 8px;font-size:9px;color:#22c55e;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">Pts</th><th style="padding:6px 8px;font-size:9px;color:#ef4444;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">Err</th>';
+  allCodes.forEach(function(cod){table += '<th style="padding:6px 8px;font-size:9px;color:'+(type==='ataque'?'#9094b7':'#9094b7')+';letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">'+cod+'</th>';});
+  if(type==='saque') table += '<th style="padding:6px 8px;font-size:9px;color:#22c55e;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">Pts</th><th style="padding:6px 8px;font-size:9px;color:#09135f;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);text-align:center">Err</th>';
   table += '</tr></thead><tbody>';
   rows.forEach(function(r){
-    var bg = r.isCur ? 'background:rgba(232,25,44,.06);' : '';
-    var nameCol = r.isCur ? '#e8192c' : '#94a3b8';
+    var bg = r.isCur ? 'background:rgba(9,19,95,.06);' : '';
+    var nameCol = r.isCur ? '#09135f' : '#94a3b8';
     table += '<tr style="border-bottom:1px solid rgba(255,255,255,.04);'+bg+'">';
     table += '<td style="padding:8px;font-size:12px;font-weight:700;color:'+nameCol+'">'+r.nm+(r.isCur?' ←':'')+'</td>';
     allCodes.forEach(function(cod){
@@ -504,7 +504,7 @@ function renderComparativaPosicion(cont, currentNum, type){
       var totPts = r.data.reduce(function(s,d){return s+(d.pts||0);},0);
       var totErr = r.data.reduce(function(s,d){return s+(d.err||0);},0);
       table += '<td style="padding:8px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:18px;color:#22c55e">'+totPts+'</td>';
-      table += '<td style="padding:8px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:18px;color:#ef4444">'+totErr+'</td>';
+      table += '<td style="padding:8px;text-align:center;font-family:Bebas Neue,sans-serif;font-size:18px;color:#09135f">'+totErr+'</td>';
     }
     table += '</tr>';
   });
