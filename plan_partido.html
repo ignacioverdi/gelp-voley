@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07080f;--card:#0d0e1a;--card2:#12132a;--border:rgba(255,255,255,.07);--red:#e8192c;--txt:#e2e8f0;--mut:#8791a3;--faint:#5b6474;--h0:#171826;--h1:#5c2531;--h2:#a02335;--h3:#e8192c}
+:root{--bg:#07080f;--card:#0d0e1a;--card2:#12132a;--border:rgba(255,255,255,.07);--red:#0d0d5b;--txt:#e2e8f0;--mut:#8791a3;--faint:#5b6474;--h0:#171826;--h1:#5c2531;--h2:#a02335;--h3:#e8192c}
 *{box-sizing:border-box}
 html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;font-size:15px;line-height:1.4;font-variant-numeric:tabular-nums}
@@ -104,7 +104,7 @@ select:hover{border-color:var(--red)}select:focus{outline:none;border-color:var(
 .stats .tile .v{font-size:22px}
 .tile .l{font-size:9px;text-transform:uppercase;letter-spacing:.04em;color:var(--faint)}
 .tile .v{font-family:'Bebas Neue',sans-serif;font-size:18px;line-height:1}
-.tile.hl{background:rgba(232,25,44,.14)}
+.tile.hl{background:rgba(13,13,91,.14)}
 .tile.hl .l,.tile.hl .v{color:var(--red)}
 .read{margin-top:10px;padding:8px 11px;background:var(--card2);border-left:2px solid var(--red);border-radius:0 7px 7px 0;font-size:13.5px;color:var(--txt);line-height:1.35}
 .read b{color:var(--red);font-weight:600}
@@ -361,8 +361,8 @@ function ppPintarTipo(){
   var bs=document.querySelectorAll('[data-pptipo]');
   for(var i=0;i<bs.length;i++){
     var on = bs[i].getAttribute('data-pptipo')===t;
-    bs[i].style.background  = on ? 'rgba(239,39,64,.18)' : '';
-    bs[i].style.borderColor = on ? 'rgba(239,39,64,.55)' : '';
+    bs[i].style.background  = on ? 'rgba(13,13,91,.18)' : '';
+    bs[i].style.borderColor = on ? 'rgba(13,13,91,.55)' : '';
     bs[i].style.fontWeight  = on ? '800' : '';
   }
 }
@@ -446,7 +446,7 @@ var ARM_SLUG = (function(){
   return m;
 })();
 var ARMZ=["4","3","2","7","8","9","5","6","1"];
-var ARM_ZCOL={"4":"245,158,11","3":"168,85,247","2":"59,130,246","7":"20,184,166","8":"6,182,212","9":"236,72,153","5":"239,68,68","6":"234,179,8","1":"249,115,22"};
+var ARM_ZCOL={"4":"146,146,181","3":"168,85,247","2":"59,130,246","7":"20,184,166","8":"6,182,212","9":"236,72,153","5":"239,68,68","6":"234,179,8","1":"249,115,22"};
 function armHeat(z,v,pct){if(v<=0)return["var(--h0)","#6b7280","1px solid var(--border)"];var rgb=ARM_ZCOL[z]||"124,134,148",op=Math.max(0.18,pct/100*0.6+0.18);return["rgba("+rgb+","+op.toFixed(2)+")","#f1f5f9","1px solid rgba("+rgb+",.8)"];}
 var armSetIdx=0,armPhase="SO",armRec="all",armRecZone=null,armRecNum=null,armCall="all",armTeam=null;var ARM_RECBANDS={r1:[1,9,2],r6:[6,8,3],r5:[5,7,4]};
 function gpGetZone(c,orig,sp){

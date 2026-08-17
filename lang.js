@@ -2374,7 +2374,7 @@
       b.style.cssText =
         'font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:800;letter-spacing:1px;'+
         'cursor:pointer;border-radius:6px;padding:4px 8px;transition:all .15s;'+
-        (on ? 'color:#fff;background:#e8192c;border:1px solid #e8192c;'
+        (on ? 'color:#fff;background:#0d0d5b;border:1px solid #0d0d5b;'
             : 'color:#94a3b8;background:transparent;border:1px solid rgba(255,255,255,.12);');
       b.addEventListener('click', function(){ setLang(l); });
       wrap.appendChild(b);

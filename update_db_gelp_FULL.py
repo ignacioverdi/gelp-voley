@@ -646,12 +646,34 @@ def calculate_stats(teams_data, temporada_filter=None):
                 'blk_k':pct_val(blk_acts,'#'),'blk_pos':pct_val(blk_acts,'+'),
             })
 
+        # ══ Las metricas por tipo de ataque y por fase ════════════════════
+        # La tabla de la liga ordena por ocho fundamentos, pero el motor solo
+        # producia cuatro: los otros seis quedaban con una raya y ordenar por
+        # ellos no hacia nada.
+        #
+        # El tipo de ataque va en el codigo: Q central, T rapida, H alta. Y la
+        # fase distingue el ataque tras recepcion del contraataque, que son
+        # dos habilidades distintas.
+        _por_tipo = lambda L, t: [a for a in L if (a.get('stype') or '') == t]
+        _alta = _por_tipo(all_atk, 'H')
+        _cent = _por_tipo(all_atk, 'Q')
+        _rap  = _por_tipo(all_atk, 'T')
+        _so   = [a for a in all_atk if a.get('atype') == 0]
+        _tr   = [a for a in all_atk if a.get('atype') == 1]
+
         team_stats_out.append({
             'team':team,'temporada':temporada_filter or 'all',
             'atk_eff':eff_atk(all_atk),'srv_eff':eff_srv(all_srv),
             'rec_eff':eff_rec(all_rec),'blk_eff':eff_blk(all_blk),
             'atk_tot':len(all_atk),'srv_tot':len(all_srv),
             'rec_tot':len(all_rec),'blk_tot':len(all_blk),
+            # los nombres son los que busca la tabla de la liga
+            'blk_pt':eff_blk(all_blk),
+            'atk_alta':eff_atk(_alta),'alta_tot':len(_alta),
+            'atk_cent':eff_atk(_cent),'cent_tot':len(_cent),
+            'atk_rap':eff_atk(_rap),  'rap_tot':len(_rap),
+            'atk_so':eff_atk(_so),    'so_tot':len(_so),
+            'atk_tr':eff_atk(_tr),    'tr_tot':len(_tr),
         })
 
     return players, team_stats_out

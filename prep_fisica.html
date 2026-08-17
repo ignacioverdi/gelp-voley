@@ -18,19 +18,19 @@
 :root{
   --bg:#080a12;--card:#0e1019;--card2:#13162a;--elev:#171a30;
   --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
-  --red:#ef2740;--redd:#c01528;--green:#22c55e;--amber:#f59e0b;
+  --red:#0d0d5b;--redd:#c01528;--green:#22c55e;--amber:#9292b5;
   --indigo:#818cf8;--orange:#f97316;--teal:#2dd4bf;--mut:#5b6680;--mut2:#9aa6c0;--txt:#e7ecf5;
 }
 body{background:
    radial-gradient(900px 480px at 88% -8%,rgba(45,212,191,.06),transparent 60%),
-   radial-gradient(900px 520px at 0% 0%,rgba(239,39,64,.08),transparent 55%),
+   radial-gradient(900px 520px at 0% 0%,rgba(13,13,91,.08),transparent 55%),
    var(--bg);
   font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh}
 select,select option{color:#111!important;background-color:#fff!important}
 .page-header{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;
   background:rgba(10,12,20,.72);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
 .page-title{font-family:'Bebas Neue',sans-serif;font-size:23px;letter-spacing:5px;
-  background:linear-gradient(110deg,#ef2740,#fff 55%,#2dd4bf);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  background:linear-gradient(110deg,#0d0d5b,#fff 55%,#2dd4bf);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .back-btn{padding:7px 14px;border-radius:9px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut2);
   font-family:'Barlow Condensed';font-size:12px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;transition:.15s}
 .back-btn:hover{color:var(--txt);border-color:var(--border2)}
@@ -40,18 +40,18 @@ select,select option{color:#111!important;background-color:#fff!important}
 .player-btn{padding:8px 15px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--mut2);
   font-family:'Barlow Condensed';font-size:13px;font-weight:700;letter-spacing:.8px;cursor:pointer;transition:.15s;text-transform:uppercase}
 .player-btn:hover{border-color:var(--border2);color:var(--txt);transform:translateY(-1px)}
-.player-btn.active{background:linear-gradient(180deg,rgba(239,39,64,.18),rgba(239,39,64,.08));border-color:rgba(239,39,64,.5);color:#ff5870;box-shadow:0 4px 18px rgba(239,39,64,.15)}
+.player-btn.active{background:linear-gradient(180deg,rgba(13,13,91,.18),rgba(13,13,91,.08));border-color:rgba(13,13,91,.5);color:#ff5870;box-shadow:0 4px 18px rgba(13,13,91,.15)}
 .main{max-width:1200px;margin:0 auto;padding:24px 28px}
 #welcome-screen{text-align:center;padding:80px 20px}
-.welcome-icon{font-size:50px;margin-bottom:16px;filter:drop-shadow(0 6px 20px rgba(239,39,64,.3))}
+.welcome-icon{font-size:50px;margin-bottom:16px;filter:drop-shadow(0 6px 20px rgba(13,13,91,.3))}
 .welcome-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:4px;margin-bottom:8px}
 .welcome-sub{font-size:14px;color:var(--mut2);line-height:1.6}
 .rd-banner{display:flex;align-items:center;gap:10px;padding:11px 16px;border:1px solid var(--border);border-radius:12px;margin-bottom:18px;line-height:1.45}
 .rd-banner a{font-weight:700}
 .jug-header{display:flex;align-items:center;gap:18px;margin-bottom:24px;padding:20px 24px;
   background:linear-gradient(180deg,var(--elev),var(--card));border:1px solid var(--border);border-radius:18px;flex-wrap:wrap}
-.jug-avatar{width:58px;height:58px;border-radius:16px;border:1px solid rgba(239,39,64,.5);display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue';font-size:24px;color:#ff5870;background:rgba(239,39,64,.1);flex-shrink:0}
+.jug-avatar{width:58px;height:58px;border-radius:16px;border:1px solid rgba(13,13,91,.5);display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue';font-size:24px;color:#ff5870;background:rgba(13,13,91,.1);flex-shrink:0}
 .jug-name{font-family:'Bebas Neue',sans-serif;font-size:27px;letter-spacing:3px;line-height:1}
 .jug-meta{font-size:11px;color:var(--mut);letter-spacing:1.5px;margin-top:4px;text-transform:uppercase}
 .readiness{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:12px;border:1px solid var(--border2);background:rgba(255,255,255,.03)}
@@ -66,7 +66,7 @@ select,select option{color:#111!important;background-color:#fff!important}
 .semana-tab{padding:9px 18px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--mut2);
   font-family:'Barlow Condensed';font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:.15s;white-space:nowrap;text-transform:uppercase}
 .semana-tab:hover{color:var(--txt);border-color:var(--border2)}
-.semana-tab.active{background:rgba(239,39,64,.14);border-color:rgba(239,39,64,.45);color:#ff5870}
+.semana-tab.active{background:rgba(13,13,91,.14);border-color:rgba(13,13,91,.45);color:#ff5870}
 .bloque{margin-bottom:14px;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--card)}
 .bloque-header{padding:15px 18px;background:linear-gradient(180deg,var(--elev),var(--card));display:flex;align-items:center;gap:12px;cursor:pointer;transition:.15s}
 .bloque-header:hover{background:var(--card2)}
@@ -80,7 +80,7 @@ select,select option{color:#111!important;background-color:#fff!important}
 .ejercicio{background:var(--card2);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;transition:.15s}
 .ejercicio:hover{border-color:var(--border2)}
 .ejercicio-header{padding:13px 16px;display:flex;align-items:center;gap:12px}
-.ej-num{width:26px;height:26px;border-radius:8px;background:rgba(239,39,64,.12);border:1px solid rgba(239,39,64,.25);display:flex;align-items:center;justify-content:center;
+.ej-num{width:26px;height:26px;border-radius:8px;background:rgba(13,13,91,.12);border:1px solid rgba(13,13,91,.25);display:flex;align-items:center;justify-content:center;
   font-family:'Bebas Neue';font-size:14px;color:#ff5870;flex-shrink:0}
 .ej-info{flex:1;min-width:0}
 .ej-nombre{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px}
@@ -89,7 +89,7 @@ select,select option{color:#111!important;background-color:#fff!important}
 .ej-badge{font-size:9px;padding:3px 9px;border-radius:6px;letter-spacing:.8px;font-weight:700;text-transform:uppercase}
 .badge-series{background:rgba(129,140,248,.12);color:#818cf8;border:1px solid rgba(129,140,248,.22)}
 .badge-reps{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.22)}
-.badge-descanso{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.22)}
+.badge-descanso{background:rgba(146,146,181,.12);color:#9292b5;border:1px solid rgba(146,146,181,.22)}
 .badge-carga{background:rgba(45,212,191,.14);color:#2dd4bf;border:1px solid rgba(45,212,191,.26)}
 .carga-section{padding:11px 16px;border-top:1px solid var(--border);background:rgba(45,212,191,.045)}
 .carga-lbl{font-size:9px;color:#2dd4bf;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;opacity:.9;font-weight:700}
@@ -104,7 +104,7 @@ select,select option{color:#111!important;background-color:#fff!important}
 .ej-video-btn.sin-video{opacity:.28;cursor:default;pointer-events:none}
 .nota-profe{padding:9px 16px 12px;border-top:1px solid var(--border)}
 .nota-profe-lbl{font-size:8px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;opacity:.75}
-.nota-profe-txt{font-size:12px;color:#fbbf24;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.13);border-radius:9px;padding:9px 12px;line-height:1.5}
+.nota-profe-txt{font-size:12px;color:#fbbf24;background:rgba(146,146,181,.06);border:1px solid rgba(146,146,181,.13);border-radius:9px;padding:9px 12px;line-height:1.5}
 .nota-card{margin:14px 0 4px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:14px}
 .nota-card-lbl{font-size:10px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;font-weight:700}
 .nota-card-txt{width:100%;min-height:70px;resize:vertical;background:#fff;color:#111;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:11px 13px;font-size:14px;font-family:'Inter',sans-serif;line-height:1.5;outline:none;box-sizing:border-box}
@@ -137,9 +137,9 @@ select,select option{color:#111!important;background-color:#fff!important}
 .calc-lbl{font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase}
 .calc-input{padding:11px 12px;border-radius:10px;border:1px solid var(--border);background:#fff;color:#111!important;
   font-family:'Bebas Neue';font-size:18px;text-align:center;outline:none;width:100%}
-.calc-btn{width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,#ef2740,#c01528);color:#fff;
+.calc-btn{width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,#0d0d5b,#c01528);color:#fff;
   font-family:'Bebas Neue';font-size:17px;letter-spacing:3px;cursor:pointer;transition:.2s}
-.calc-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(239,39,64,.32)}
+.calc-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(13,13,91,.32)}
 .calc-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:8px;margin-top:16px}
 .calc-result-item{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:13px;text-align:center}
 .calc-result-pct{font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
@@ -208,7 +208,7 @@ select,select option{color:#111!important;background-color:#fff!important}
        renglon en vez de encimarse con el titulo: movil.css la busca por ese
        nombre. -->
   <div class="header-right" style="display:flex;align-items:center;gap:12px;">
-    <a href="prep_builder.html" class="back-btn" style="border-color:rgba(239,39,64,.4);color:#ff5870" data-solo-editor>✏️ Armar rutinas</a>
+    <a href="prep_builder.html" class="back-btn" style="border-color:rgba(13,13,91,.4);color:#ff5870" data-solo-editor>✏️ Armar rutinas</a>
     <div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div>
     <div class="fecha-txt" style="font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;" id="fecha-hoy"></div>
   </div>
@@ -437,7 +437,7 @@ function countRegistros(num){
 
 // ── WELLNESS (readiness) — lee la MISMA data que wellness.html ─────
 function todayISO(){ var d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); }
-function wellColor(p){ return p>=85?'#22c55e':p>=70?'#4ade80':p>=55?'#f59e0b':'#ef4444'; }
+function wellColor(p){ return p>=85?'#22c55e':p>=70?'#4ade80':p>=55?'#9292b5':'#ef4444'; }
 var WELL = {
   cache: [],
   _eid: function(e){ return e.num+'_'+e.date+'_'+e.sesion; },
@@ -511,7 +511,7 @@ function renderReadiness(num){
   if(banner){
     var msg, bc;
     if(r.pct<55){ bc='#ef4444'; msg='⚠ Llegó con readiness bajo ('+r.pct+'%). Considerá bajar volumen o intensidad y priorizar técnica.'; }
-    else if(r.pct<70){ bc='#f59e0b'; msg='Readiness moderado ('+r.pct+'%). Ajustá la carga si lo notás cansado.'; }
+    else if(r.pct<70){ bc='#9292b5'; msg='Readiness moderado ('+r.pct+'%). Ajustá la carga si lo notás cansado.'; }
     else { bc='#22c55e'; msg='✓ Llegó en buen estado ('+r.pct+'%). Listo para la carga planificada.'; }
     if(r.rpe) msg+=' · RPE último: '+r.rpe+'/10';
     banner.style.display='flex'; banner.style.borderColor=bc+'33'; banner.style.background=bc+'10';
@@ -1009,7 +1009,7 @@ function calcularRM(){
   if(!peso || !reps || peso <= 0 || reps <= 0){ alert('Ingresá peso y reps válidos.'); return; }
   var rm1 = formula === 'epley' ? peso*(1+reps/30) : formula === 'brzycki' ? peso*(36/(37-reps)) : peso/(1.013-0.0267123*reps);
   rm1 = Math.round(rm1*2)/2;
-  var pcts = [{pct:100,label:'1RM',color:'#e8192c'},{pct:95,label:'95%',color:'#f97316'},{pct:90,label:'90%',color:'#f59e0b'},{pct:85,label:'85%',color:'#eab308'},{pct:80,label:'80%',color:'#22c55e'},{pct:75,label:'75%',color:'#22c55e'},{pct:70,label:'70%',color:'#818cf8'},{pct:60,label:'60%',color:'#818cf8'}];
+  var pcts = [{pct:100,label:'1RM',color:'#0d0d5b'},{pct:95,label:'95%',color:'#f97316'},{pct:90,label:'90%',color:'#9292b5'},{pct:85,label:'85%',color:'#eab308'},{pct:80,label:'80%',color:'#22c55e'},{pct:75,label:'75%',color:'#22c55e'},{pct:70,label:'70%',color:'#818cf8'},{pct:60,label:'60%',color:'#818cf8'}];
   var res = document.getElementById('calc-results');
   res.innerHTML = '';
   res.style.display = 'grid';
