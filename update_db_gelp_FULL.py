@@ -740,8 +740,18 @@ def detectar_armadores(content, pfx, setter_count=2, extra_liberos=None, positio
     armadores_rol = [n for n,_ in ranked if str(pos.get(n,'')) == '5']
     otros = [n for n,_ in ranked if str(pos.get(n,'')) != '5']
     # El titular es el que más arma (casi siempre rol armador)
+    # ══ Quien es armadora ═══════════════════════════════════════════════
+    # Si el .dvw declara armadoras, se usan SOLO esas. Antes se sumaba a
+    # cualquiera que hubiera armado, y una punta que toco de dedos cinco
+    # veces aparecia como armadora suplente: en un partido siempre hay
+    # jugadoras que arman de emergencia, y eso no las convierte en armadoras.
+    #
+    # La deduccion por volumen queda para los archivos que NO declaran el
+    # puesto —los de VolleyMetrics vienen asi—.
+    candidatas = armadores_rol if armadores_rol else otros
+
     result = []
-    for n in armadores_rol + otros:
+    for n in candidatas:
         if n not in result:
             result.append(n)
         # Antes cortaba en 2. Un plantel puede tener tres armadoras y la

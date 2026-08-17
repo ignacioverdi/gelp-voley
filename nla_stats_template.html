@@ -66,13 +66,13 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 .pos-PUNTA{background:rgba(249,115,22,.15);color:#fb923c}
 .pos-OPUESTO{background:rgba(34,197,94,.15);color:#4ade80}
 .pos-CENTRAL{background:rgba(129,140,248,.15);color:#a5b4fc}
-.pos-ARMADOR{background:rgba(146,146,181,.15);color:#fcd34d}
+.pos-ARMADOR{background:rgba(245,158,11,.15);color:#fcd34d}
 .pos-LIBERO{background:rgba(6,182,212,.15);color:#22d3ee}
 .pos-OTRO{background:rgba(100,116,139,.15);color:#94a3b8}
 .pos-OUTSIDE{background:rgba(249,115,22,.15);color:#fb923c}
 .pos-OPPOSITE{background:rgba(34,197,94,.15);color:#4ade80}
 .pos-MIDDLE{background:rgba(129,140,248,.15);color:#a5b4fc}
-.pos-SETTER{background:rgba(146,146,181,.15);color:#fcd34d}
+.pos-SETTER{background:rgba(245,158,11,.15);color:#fcd34d}
 .eff-val{font-family:'Bebas Neue',sans-serif;font-size:14px}
 .pos-eff{color:#22c55e}.neg-eff{color:#ef4444}.neu-eff{color:#64748b}
 .no-data{text-align:center;padding:48px;color:var(--muted);font-size:13px;letter-spacing:1px}
@@ -124,7 +124,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 <div class="header">
   <div>
     <div class="subtitle">Volley GELP — Análisis Liga</div>
-    <h1>NLA SUIZA — ESTADÍSTICAS</h1>
+    <h1>LIGA FEMENINA — ESTADÍSTICAS</h1>
   </div>
   <!-- La temporada la escribe el generador: estaba fija en 2025/26 y seguia
        diciendo eso aunque los datos ya fueran de la 26/27. -->
@@ -177,7 +177,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
   <span class="results-count" id="results-count"></span>
 </div>
 <div class="panel active" id="panel-equipos">
-  <div class="section-title">RANKING EQUIPOS NLA — ELEGÍ UN FUNDAMENTO PARA ORDENAR</div>
+  <div class="section-title">RANKING DE EQUIPOS — ELEGÍ UN FUNDAMENTO PARA ORDENAR</div>
   <div class="skill-pills" id="skill-pills"></div>
   <div class="table-wrap">
     <table id="teams-table">
@@ -188,7 +188,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
   <div class="rank-legend">Cada celda: <b>EFF%</b> <span class="lg-tot">(total de acciones)</span> · color = ranking en ese fundamento (<span style="color:#22c55e">verde</span> mejor → <span style="color:#ef4444">rojo</span> peor) · <span style="color:#22c55e;font-weight:700">Gelp</span> resaltado. <span id="updated-label" style="color:#475569"></span></div>
 </div>
 <div class="panel" id="panel-jugadores">
-  <div class="section-title">RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO</div>
+  <div class="section-title">RANKING DE JUGADORES — ELEGÍ UN FUNDAMENTO</div>
   <div class="skill-pills" id="player-skills"></div>
   <div class="skill-pills sub-pills" id="player-subs"></div>
   <div class="table-wrap">
@@ -309,7 +309,23 @@ function teamSeason(){var el=document.getElementById('f-temporada');var v=el?el.
 function renderTeams(){
   var f=getF();
   var season=teamSeason();
-  var seasonTeams=TEAMS.filter(function(t){return t.temporada===season;});
+  /* Con "Todas" seleccionado el filtro quedaba vacio y ningun equipo
+     coincidia: la tabla se veia sin una sola fila. Ahora, si no se eligio
+     temporada, entran todos los equipos de todas. */
+  var _elT=document.getElementById('f-temporada');
+  var _todas=!(_elT&&_elT.value);
+  var seasonTeams=TEAMS.filter(function(t){return _todas||t.temporada===season;});
+  /* Si un equipo aparece en varias temporadas se muestra una sola vez, con
+     la mas reciente: si no, la tabla lista el mismo club repetido. */
+  if(_todas){
+    var _visto={};
+    seasonTeams=seasonTeams.slice().sort(function(a,b){
+      return String(b.temporada).localeCompare(String(a.temporada));
+    }).filter(function(t){
+      if(_visto[t.team]) return false;
+      _visto[t.team]=1; return true;
+    });
+  }
   var rows=seasonTeams.filter(function(t){return !f.team||t.team===f.team;});
   // ranking-frac por columna (dentro de la temporada)
   var fracByMetric={};

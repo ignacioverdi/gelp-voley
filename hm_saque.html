@@ -6,7 +6,7 @@
 <title>ANALISIS DE SAQUE — GELP 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#0d0d5b;--amber:#9292b5;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
+:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#E8192C;--amber:#F59E0B;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
 html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",sans-serif;min-height:100vh}
 .hdr{background:rgba(7,8,15,.97);border-bottom:1px solid var(--border);padding:11px 20px;position:sticky;top:0;z-index:100}
 .hdr-t{font-family:"Bebas Neue",sans-serif;font-size:18px;letter-spacing:3px}
@@ -19,9 +19,9 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .chips{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:2px}
 .chip{padding:3px 8px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;font-family:"Barlow Condensed",sans-serif;transition:all .12s;text-transform:uppercase}
 .chip:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
-.chip.on{background:rgba(13,13,91,.12);border-color:rgba(13,13,91,.4);color:var(--red)}
+.chip.on{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:var(--red)}
 .chip.on-g{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);color:var(--green)}
-.chip.on-a{background:rgba(146,146,181,.1);border-color:rgba(146,146,181,.35);color:var(--amber)}
+.chip.on-a{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.35);color:var(--amber)}
 .chip.on-i{background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.35);color:var(--indigo)}
 .chip.on-c{background:rgba(6,182,212,.1);border-color:rgba(6,182,212,.35);color:var(--cyan)}
 .psel{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:2px}
@@ -29,7 +29,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .counter{margin-top:10px;padding:10px;background:rgba(255,255,255,.02);border-radius:8px;border:1px solid var(--border);text-align:center}
 .counter-n{font-family:"Bebas Neue",sans-serif;font-size:32px}
 .counter-l{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
-.reset-btn{width:100%;margin-top:10px;padding:7px;background:rgba(13,13,91,.07);border:1px solid rgba(13,13,91,.2);color:var(--red);border-radius:7px;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Barlow Condensed",sans-serif}
+.reset-btn{width:100%;margin-top:10px;padding:7px;background:rgba(232,25,44,.07);border:1px solid rgba(232,25,44,.2);color:var(--red);border-radius:7px;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Barlow Condensed",sans-serif}
 .sec{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--border)}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
 .scard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 13px;text-align:center}
@@ -78,7 +78,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 <div class="sidebar">
   <div class="flabel" style="margin-top:0">Origen de datos</div>
   <div style="display:flex;gap:4px;margin-bottom:10px" id="modo-toggle">
-    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#0d0d5b);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
+    <button id="modo-partido" onclick="setModo('partido')" style="flex:1;background:var(--accent,#e8192c);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
     <button id="modo-entrenamiento" onclick="setModo('entrenamiento')" style="flex:1;background:transparent;border:1px solid var(--border2,rgba(255,255,255,.15));color:#94a3b8;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">ENTRENAMIENTO</button>
   </div>
   <div class="flabel" data-i18n="Jugador"><span data-t="g_jugador">Jugador</span></div>
@@ -141,7 +141,7 @@ var T1K='SM',T2K='SQ';
 var TKEY='s',TYPESKEY='stypes';
 var ORIG_SIDE='own',DEST_SIDE='rival';
 var RES_LABEL={"#": "Punto", "+": "Positivo", "-": "Negativo", "/": "Vendido", "=": "Error", "!": "Exclamativo"};
-var RES_COLOR={"#": "#22c55e", "+": "#a3e635", "-": "#9292b5", "/": "#86efac", "=": "#ef4444", "!": "#fbbf24"};
+var RES_COLOR={"#": "#22c55e", "+": "#a3e635", "-": "#f59e0b", "/": "#86efac", "=": "#ef4444", "!": "#fbbf24"};
 var F={player:'',stype:'all',rival:'all',gi:'all',set:'all',moment:'all',result:'all',origin:'all'};
 var PLAYERS={};
 Object.keys(RAW.players).forEach(function(num){
@@ -256,7 +256,7 @@ function singleCourtSVG(origZones, destZones, origColor, destColor, total, extra
   var s="<svg viewBox='0 0 "+W+" "+H+"' xmlns='http://www.w3.org/2000/svg' style='width:100%;max-width:170px;display:block;margin:0 auto'>";
   s+="<style>text{pointer-events:none}</style><rect width='"+W+"' height='"+H+"' fill='rgba(13,14,26,.97)' rx='8'/>";
   // Rival field background
-  s+="<rect x='"+P+"' y='"+P+"' width='"+(W-P*2)+"' height='"+(H/2-P)+"' fill='rgba(13,13,91,.03)' rx='3'/>";
+  s+="<rect x='"+P+"' y='"+P+"' width='"+(W-P*2)+"' height='"+(H/2-P)+"' fill='rgba(232,25,44,.03)' rx='3'/>";
   // Own field background
   s+="<rect x='"+P+"' y='"+(H/2)+"' width='"+(W-P*2)+"' height='"+(H/2-P)+"' fill='rgba(129,140,248,.03)' rx='3'/>";
   // Net
@@ -297,7 +297,7 @@ function singleCourtSVG(origZones, destZones, origColor, destColor, total, extra
       s+="<text x='"+(x+5)+"' y='"+(y+11)+"' font-size='6' fill='rgba(255,255,255,.2)' font-family='Bebas Neue,sans-serif'>"+zone+"</text>";
     });
   });
-  s+="<text x='"+(W/2)+"' y='"+(P+9)+"' font-size='6' fill='rgba(13,13,91,.5)' text-anchor='middle' font-family='Barlow Condensed,sans-serif' font-weight='800' letter-spacing='2'>▲ RIVAL</text>";
+  s+="<text x='"+(W/2)+"' y='"+(P+9)+"' font-size='6' fill='rgba(232,25,44,.5)' text-anchor='middle' font-family='Barlow Condensed,sans-serif' font-weight='800' letter-spacing='2'>▲ RIVAL</text>";
   s+="<text x='"+(W/2)+"' y='"+(H-3)+"' font-size='6' fill='rgba(129,140,248,.35)' text-anchor='middle' font-family='Barlow Condensed,sans-serif' font-weight='800' letter-spacing='2'>▼ PROPIO</text>";
   s+='</svg>';
   return s;
@@ -444,7 +444,7 @@ function _initModoBtns(){
   var m=(function(){try{return localStorage.getItem('vb_modo')||'partido';}catch(e){return 'partido';}})();
   var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
   if(!bp||!be) return;
-  function on(b){b.style.background='var(--accent,#0d0d5b)';b.style.color='#fff';b.style.border='none';}
+  function on(b){b.style.background='var(--accent,#e8192c)';b.style.color='#fff';b.style.border='none';}
   function off(b){b.style.background='transparent';b.style.color='#94a3b8';b.style.border='1px solid var(--border2,rgba(255,255,255,.15))';}
   if(m==='entrenamiento'){on(be);off(bp);} else {on(bp);off(be);}
   // Si no hay datos de entrenamiento, deshabilitar ese botón
