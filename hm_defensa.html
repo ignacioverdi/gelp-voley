@@ -198,7 +198,12 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 
   var VD = _cortesDelModo();
   var EQ=(new URLSearchParams(location.search).get('equipo')||'gelp').toLowerCase();
-  var RES_ORDER=['#','+','!','-','='];
+  /* El orden de valoracion de la defensa, de mejor a peor:
+         #  perfecta · +  buena · !  regular · -  mala · /  sobrepase · =  error
+     Faltaba el '/': una defensa que se va al campo rival es peor que una
+     mala pero no es un error, y sin esa categoria quedaba mezclada con las
+     demas o directamente no se contaba. */
+  var RES_ORDER=['#','+','!','-','/','='];
   var RES_LABEL={'#':'Perfecta','+':'Buena','!':'Regular','-':'Mala','=':'Error'};
   var RES_HEX={'#':'#22C55E','+':'#84CC16','!':'#EAB308','-':'#F97316','=':'#EF4444'};
 
@@ -267,7 +272,12 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
       return true;
     });
   }
-  function eff(acts){ if(!acts.length)return null; var s=0; acts.forEach(function(a){ s+=(a.ev==='#'?1:a.ev==='+'?0.5:a.ev==='-'?-0.5:a.ev==='='?-1:0); }); return Math.round(s/acts.length*100); }
+  function eff(acts){ if(!acts.length)return null; var s=0; acts.forEach(function(a){ s+=(a.ev==='#'?1:a.ev==='+'?0.5:a.ev==='-'?-0.5:a.ev==='/'?-0.5:a.ev==='='?-1:0)
+      /* El orden de la defensa, de mejor a peor: # + ! - / =
+         El sobrepase (/) restaba 0 y quedaba igual que una defensa regular,
+         cuando en realidad es peor que una mala: la pelota se va al campo
+         rival sin control. Ahora pesa igual que la negativa, como en el
+         motor. */; }); return Math.round(s/acts.length*100); }
   function effColor(e){ return e===null?'#475569':e>=40?'#22C55E':e>=15?'#84CC16':e>=0?'#EAB308':e>=-25?'#F97316':'#EF4444'; }
   function pct(n,t){ return t>0?Math.round(n/t*100):0; }
 
