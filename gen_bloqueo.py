@@ -71,6 +71,34 @@ def load_video(path):
             idx=txt.find(mk,idx+1)
     return None
 
+def _puestos_del_club():
+    """El puesto de cada jugadora, leido de liga_data.js.
+
+    Es el mismo que usa el resto del sistema, asi el bloqueo se agrupa igual
+    que el ataque y no con un criterio propio.
+    """
+    MAPA = {'OUTSIDE': 'Punta', 'MIDDLE': 'Central', 'OPPOSITE': 'Opuesto',
+            'SETTER': 'Armador', 'LIBERO': 'L\u00edbero'}
+    out = {}
+    try:
+        with open('liga_data.js', encoding='utf-8', errors='replace') as _f:
+            t = _f.read()
+        d = json.loads(re.search(r'=\s*(\{.*\})\s*;', t, re.S).group(1))
+        # Un puesto por EQUIPO: los dorsales se repiten entre clubes, y
+        # juntando todo en una tabla la #2 de un equipo pisaba a la #2 del
+        # otro. La central de GELP salia como armadora porque en el rival ese
+        # dorsal es de la armadora.
+        for _slug, _eq in (d.get('teams') or {}).items():
+            _t = {}
+            for num, rol in (_eq.get('roster') or {}).items():
+                if rol in MAPA:
+                    _t[str(num)] = MAPA[rol]
+            out[_slug] = _t
+    except Exception:
+        pass
+    return out
+
+
 def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     """Arma datos_bloqueo.js leyendo los .dvw, sin depender del video.
 
@@ -187,10 +215,17 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     if not BLOCK:
         return 0
 
+    _PUESTOS = _puestos_del_club()
     OUT = {}
     total = 0
     for team, ps in BLOCK.items():
+        # 'pos' es el puesto de cada jugadora. Sin el, la pantalla no puede
+        # separar el bloqueo por posicion —puntas, centrales, opuestos— y
+        # todas quedan mezcladas en una sola lista, cuando un central y una
+        # punta bloquean cosas distintas.
+        _pt = _PUESTOS.get(team, {})
         pl = [{'num': n, 'name': i['name'], 'role': 'bloqueo',
+               'pos': _pt.get(str(n), ''),
                'total': len(i['data']), 'data': i['data']} for n, i in ps.items()]
         pl.sort(key=lambda p: -p['total'])
         OUT[team] = pl
@@ -308,9 +343,13 @@ def build(fuentes, out='datos_bloqueo.js'):
             BLOCK.setdefault(key,{}).setdefault(num,{'name':a.get('name'),'data':[]})['data'].append(
                 [combo, rz, a.get('ev'), t, mid, ph, TIPO_DE.get(mid,'partido')])
 
+    _PUE = _puestos_del_club()
     OUT={}
     for team,ps in BLOCK.items():
-        pl=[{'num':n,'name':i['name'],'role':'bloqueo','total':len(i['data']),'data':i['data']} for n,i in ps.items()]
+        # el puesto, para que la pantalla pueda agrupar por posicion
+        _pt2 = _PUE.get(team, {})
+        pl=[{'num':n,'name':i['name'],'role':'bloqueo','pos':_pt2.get(str(n),''),
+             'total':len(i['data']),'data':i['data']} for n,i in ps.items()]
         pl.sort(key=lambda p:-p['total'])
         OUT[team]=pl
     open(out,'w',encoding='utf-8').write('window.PP_BLOCK='+json.dumps(OUT,ensure_ascii=False,separators=(',',':'))+';')

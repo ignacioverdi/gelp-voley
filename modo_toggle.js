@@ -28,7 +28,7 @@
       b.textContent = label;
       b.style.cssText = 'border:none;cursor:pointer;padding:6px 14px;border-radius:7px;'+
         'font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1px;'+
-        (on ? 'background:#09135f;color:#fff;' : 'background:transparent;color:#94a3b8;');
+        (on ? 'background:#e8192c;color:#fff;' : 'background:transparent;color:#94a3b8;');
       b.onclick = function(){ if(!on) setModo(val); };
       return b;
     }

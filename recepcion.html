@@ -10,13 +10,13 @@
 :root{
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
   --border:rgba(255,255,255,.06);
-  --amber:#9094b7;--indigo:#818cf8;--green:#22c55e;
-  --red:#09135f;--orange:#9094b7;--mut:#475569;--txt:#e2e8f0;
+  --amber:#f59e0b;--indigo:#818cf8;--green:#22c55e;
+  --red:#ef4444;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;
 }
 body{
   background:var(--bg);
   background-image:radial-gradient(ellipse at 0% 0%,rgba(129,140,248,.08) 0%,transparent 50%),
-    radial-gradient(ellipse at 100% 100%,rgba(144,148,183,.06) 0%,transparent 50%);
+    radial-gradient(ellipse at 100% 100%,rgba(245,158,11,.06) 0%,transparent 50%);
   font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;
 }
 .page-header{
@@ -27,16 +27,16 @@ body{
 }
 .page-title{
   font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;
-  background:linear-gradient(120deg,#9094b7,#fff 50%,#818cf8);
+  background:linear-gradient(120deg,#f59e0b,#fff 50%,#818cf8);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .rival-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--amber);}
 .match-info{font-size:13px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;
-  border:1px solid rgba(144,148,183,.2);border-radius:6px;padding:4px 10px;
-  background:rgba(144,148,183,.05);margin-top:3px;display:inline-block;}
+  border:1px solid rgba(245,158,11,.2);border-radius:6px;padding:4px 10px;
+  background:rgba(245,158,11,.05);margin-top:3px;display:inline-block;}
 .nav-dots{display:flex;gap:8px;align-items:center;}
 .nav-dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;}
-.nav-dot.on{background:var(--amber);box-shadow:0 0 8px rgba(144,148,183,.5);}
+.nav-dot.on{background:var(--amber);box-shadow:0 0 8px rgba(245,158,11,.5);}
 .main{max-width:1600px;margin:0 auto;padding:24px 32px;}
 
 /* Jugador */
@@ -90,7 +90,7 @@ body{
 }
 .tab-btn:hover{background:rgba(255,255,255,.07);color:#e2e8f0;}
 .tab-btn.active-ataque{background:rgba(129,140,248,.12);border-color:rgba(129,140,248,.4);color:#818cf8;}
-.tab-btn.active-saque{background:rgba(144,148,183,.12);border-color:rgba(144,148,183,.4);color:#9094b7;}
+.tab-btn.active-saque{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.4);color:#f59e0b;}
 .toggle-arrow{color:var(--mut);font-size:14px;transition:transform .3s;}
 .jugador-section.open .toggle-arrow{transform:rotate(180deg);}
 
@@ -205,9 +205,9 @@ select, select option {
 .pdf-btn {
   padding: 7px 16px;
   border-radius: 8px;
-  border: 1px solid rgba(9,19,95,.4);
-  background: rgba(9,19,95,.08);
-  color: #09135f;
+  border: 1px solid rgba(232,25,44,.4);
+  background: rgba(232,25,44,.08);
+  color: #e8192c;
   font-family: 'Barlow Condensed', sans-serif;
   font-size:15px;
   font-weight: 700;
@@ -216,7 +216,7 @@ select, select option {
   transition: all .15s;
   text-transform: uppercase;
 }
-.pdf-btn:hover { background: rgba(9,19,95,.18); border-color: rgba(9,19,95,.7); }
+.pdf-btn:hover { background: rgba(232,25,44,.18); border-color: rgba(232,25,44,.7); }
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   body { background: #07080f !important; color: #e2e8f0 !important; }
@@ -302,7 +302,7 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
   <div class="hdr-title">RECEPCIÓN <span>GELP</span></div>
   
   <div style="display:flex;gap:6px;margin-left:auto">
-    <button id="rec-tbtn-p" onclick="recSetTipo('partido',this)" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(9,19,95,.4);background:rgba(9,19,95,.12);color:#09135f;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase">🏆 PARTIDO</button>
+    <button id="rec-tbtn-p" onclick="recSetTipo('partido',this)" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.12);color:#e8192c;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase">🏆 PARTIDO</button>
     <button id="rec-tbtn-e" onclick="recSetTipo('entrenamiento',this)" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase">🏋️ ENT</button>
   </div>
   <div id="rec-subfiltro" style="display:none;gap:4px;flex-wrap:wrap;padding:6px 0;width:100%"></div>
@@ -492,10 +492,10 @@ function initReceptores(){
     var bEq=document.createElement('button');
     bEq.className='jbtn on';
     bEq.textContent='EQUIPO';
-    bEq.style.cssText='border-color:rgba(9,19,95,.5);background:rgba(9,19,95,.12);color:#09135f';
+    bEq.style.cssText='border-color:rgba(232,25,44,.5);background:rgba(232,25,44,.12);color:#e8192c';
     bEq.onclick=function(){
       document.querySelectorAll('.jbtn').forEach(function(x){x.classList.remove('on');x.style.cssText='';});
-      bEq.classList.add('on');bEq.style.cssText='border-color:rgba(9,19,95,.5);background:rgba(9,19,95,.12);color:#09135f';
+      bEq.classList.add('on');bEq.style.cssText='border-color:rgba(232,25,44,.5);background:rgba(232,25,44,.12);color:#e8192c';
       CUR='EQUIPO'; CUR_RIVAL='TODOS'; buildRivalSelector(); render();
     };
     jbtns.appendChild(bEq);
@@ -511,9 +511,9 @@ function initReceptores(){
   }
 }
 
-function ec(v){return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#9094b7':'#09135f';}
-function bgc(v){return v>=25?'rgba(34,197,94,.13)':v>=5?'rgba(134,239,172,.08)':v>=0?'rgba(148,163,184,.05)':v>=-15?'rgba(144,148,183,.15)':'rgba(9,19,95,.18)';}
-function bdc(v){return v>=25?'rgba(34,197,94,.35)':v>=5?'rgba(134,239,172,.2)':v>=0?'rgba(148,163,184,.12)':v>=-15?'rgba(144,148,183,.35)':'rgba(9,19,95,.35)';}
+function ec(v){return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#f97316':'#ef4444';}
+function bgc(v){return v>=25?'rgba(34,197,94,.13)':v>=5?'rgba(134,239,172,.08)':v>=0?'rgba(148,163,184,.05)':v>=-15?'rgba(249,115,22,.15)':'rgba(239,68,68,.18)';}
+function bdc(v){return v>=25?'rgba(34,197,94,.35)':v>=5?'rgba(134,239,172,.2)':v>=0?'rgba(148,163,184,.12)':v>=-15?'rgba(249,115,22,.35)':'rgba(239,68,68,.35)';}
 
 function calcTot(desde){
   var t=0,we=0,wp=0,wn=0;
@@ -540,7 +540,7 @@ function zoneCard(d, label, maxTot, typeColor){
     +'<div class="zc-grid">'
     +'<div class="zc-stat"><div class="zc-stat-l">Total</div><div class="zc-stat-v" style="color:#e2e8f0">'+d.tot+'</div></div>'
     +'<div class="zc-stat"><div class="zc-stat-l"># +</div><div class="zc-stat-v" style="color:#22c55e">'+d.pos+'%</div></div>'
-    +'<div class="zc-stat"><div class="zc-stat-l">/ =</div><div class="zc-stat-v" style="color:#09135f">'+d.neg+'%</div></div>'
+    +'<div class="zc-stat"><div class="zc-stat-l">/ =</div><div class="zc-stat-v" style="color:#ef4444">'+d.neg+'%</div></div>'
     +'</div></div>';
 }
 
@@ -569,7 +569,7 @@ function makeZonePanel(desdeKey, desdeLabel, td, typeColor, typeLabel){
     +'<div class="ts"><div class="ts-v" style="color:#e2e8f0">'+tot.tot+'</div><div class="ts-l">saques</div></div>'
     +'<div class="ts"><div class="ts-v" style="color:'+ec(tot.eff)+'">'+tot.eff+'%</div><div class="ts-l">EFF</div></div>'
     +'<div class="ts"><div class="ts-v" style="color:#22c55e">'+tot.pos+'%</div><div class="ts-l"># +</div></div>'
-    +'<div class="ts"><div class="ts-v" style="color:#09135f">'+tot.neg+'%</div><div class="ts-l">/ =</div></div>'
+    +'<div class="ts"><div class="ts-v" style="color:#ef4444">'+tot.neg+'%</div><div class="ts-l">/ =</div></div>'
     +'</div>';
 
   // Draw court bg after appended
@@ -583,7 +583,7 @@ function makeZonePanel(desdeKey, desdeLabel, td, typeColor, typeLabel){
     var ctx=c.getContext('2d');
     ctx.scale(dpr,dpr);
     var g=ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,'#9094b7');g.addColorStop(.5,'#9094b7');g.addColorStop(1,'#9094b7');
+    g.addColorStop(0,'#b87830');g.addColorStop(.5,'#d49040');g.addColorStop(1,'#b87830');
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
     ctx.save();ctx.globalAlpha=.05;ctx.strokeStyle='#3a1800';ctx.lineWidth=1;
     for(var i=0;i<H;i+=5){ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(W,i);ctx.stroke();}
@@ -623,7 +623,7 @@ function makeAcumPanel(td, typeColor, typeLabel){
     +'<div class="ts"><div class="ts-v" style="color:#e2e8f0">'+tot.tot+'</div><div class="ts-l">saques</div></div>'
     +'<div class="ts"><div class="ts-v" style="color:'+ec(tot.eff)+'">'+tot.eff+'%</div><div class="ts-l">EFF</div></div>'
     +'<div class="ts"><div class="ts-v" style="color:#22c55e">'+tot.pos+'%</div><div class="ts-l"># +</div></div>'
-    +'<div class="ts"><div class="ts-v" style="color:#09135f">'+tot.neg+'%</div><div class="ts-l">/ =</div></div>'
+    +'<div class="ts"><div class="ts-v" style="color:#ef4444">'+tot.neg+'%</div><div class="ts-l">/ =</div></div>'
     +'</div>';
   return el;
 }
@@ -741,7 +741,7 @@ function render(){
 
   var types=[
     {key:'flotado', label:'Saque flotado',  color:'#818cf8'},
-    {key:'potencia',label:'Saque potencia', color:'#9094b7'}
+    {key:'potencia',label:'Saque potencia', color:'#f97316'}
   ];
   var zones=[
     {key:'desde_z5',label:'Saque desde Zona 5'},
@@ -773,7 +773,7 @@ function render(){
       var rowAcum=document.createElement('div');
       rowAcum.className='acum-row';
       rowAcum.appendChild(makeAcumPanel(d.flotado, '#818cf8','Saque flotado'));
-      rowAcum.appendChild(makeAcumPanel(d.potencia,'#9094b7','Saque potencia'));
+      rowAcum.appendChild(makeAcumPanel(d.potencia,'#f97316','Saque potencia'));
       cont.appendChild(rowAcum);
     }
   });
@@ -826,7 +826,7 @@ function recSetTipo(tipo, btn){
   window._recMode = tipo;
   // Update button styles
   document.getElementById('rec-tbtn-p').style.cssText = tipo==='partido'
-    ? "padding:5px 12px;border-radius:8px;border:1px solid rgba(9,19,95,.4);background:rgba(9,19,95,.12);color:#09135f;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase"
+    ? "padding:5px 12px;border-radius:8px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.12);color:#e8192c;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase"
     : "padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase";
   document.getElementById('rec-tbtn-e').style.cssText = tipo==='entrenamiento'
     ? "padding:5px 12px;border-radius:8px;border:1px solid rgba(34,197,94,.4);background:rgba(34,197,94,.12);color:#22c55e;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase"
@@ -901,11 +901,11 @@ function recBuildJbtns(receptores){
   
   var bEq = recMakeBtn('EQUIPO', function(){
     jbtns.querySelectorAll('button').forEach(function(x){ recBtnOff(x); x.style.cssText=''; });
-    recBtnOn(bEq); bEq.style.cssText = 'border-color:rgba(9,19,95,.5);background:rgba(9,19,95,.12);color:#09135f';
+    recBtnOn(bEq); bEq.style.cssText = 'border-color:rgba(232,25,44,.5);background:rgba(232,25,44,.12);color:#e8192c';
     CUR='EQUIPO'; CUR_RIVAL='TODOS'; buildRivalSelector(); render();
   });
   bEq.classList.add('jbtn','on');
-  bEq.style.cssText = 'border-color:rgba(9,19,95,.5);background:rgba(9,19,95,.12);color:#09135f';
+  bEq.style.cssText = 'border-color:rgba(232,25,44,.5);background:rgba(232,25,44,.12);color:#e8192c';
   jbtns.appendChild(bEq);
   
   receptores.forEach(function(p){

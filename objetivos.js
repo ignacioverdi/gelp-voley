@@ -27,16 +27,16 @@ function objClassify(id,val){
   var m=window.OBJETIVOS_CONFIG.metas[id];
   if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)', border:'rgba(34,197,94,.35)', label:'Objetivo'};
   if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
-  if(val>=m.y)  return{color:'#9094b7',bg:'rgba(144,148,183,.1)', border:'rgba(144,148,183,.3)', label:'Neutro'};
-  return {color:'#09135f',bg:'rgba(9,19,95,.1)', border:'rgba(9,19,95,.3)', label:'Lejos'};
+  if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)', border:'rgba(251,191,36,.3)', label:'Neutro'};
+  return {color:'#ef4444',bg:'rgba(239,68,68,.1)', border:'rgba(239,68,68,.3)', label:'Lejos'};
 }
 function objClassifyVsTeam(val,teamVal){
   if(teamVal===null||teamVal===undefined) return{color:'#64748b',bg:'rgba(100,116,139,.08)',border:'rgba(100,116,139,.2)',label:'—'};
   var d=val-teamVal;
   if(d>=5)  return{color:'#22c55e',bg:'rgba(34,197,94,.1)', border:'rgba(34,197,94,.35)', label:'Sobre equipo'};
   if(d>=0)  return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca equipo'};
-  if(d>=-8) return{color:'#9094b7',bg:'rgba(144,148,183,.1)', border:'rgba(144,148,183,.3)', label:'Neutro'};
-  return {color:'#09135f',bg:'rgba(9,19,95,.1)', border:'rgba(9,19,95,.3)', label:'Bajo equipo'};
+  if(d>=-8) return{color:'#fbbf24',bg:'rgba(251,191,36,.1)', border:'rgba(251,191,36,.3)', label:'Neutro'};
+  return {color:'#ef4444',bg:'rgba(239,68,68,.1)', border:'rgba(239,68,68,.3)', label:'Bajo equipo'};
 }
 
 /* ── Dibujo de una batería (barra vertical + marca de objetivo) idéntico al dashboard ── */
@@ -176,7 +176,7 @@ function renderBaterias(containerId, jugVals, eqVals, titulo, rivalVals){
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">'+(titulo||'BATERÍAS')+'</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    +[['#22c55e','Sobre equipo'],['#86efac','Cerca'],['#9094b7','Neutro'],['#09135f','Bajo equipo']].map(function(x){
+    +[['#22c55e','Sobre equipo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Bajo equipo']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
     +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
@@ -190,7 +190,7 @@ function renderBaterias(containerId, jugVals, eqVals, titulo, rivalVals){
     +'</div>';
   rows.forEach(function(row){
     if(row.sep){ html+='<div style="height:1px;background:rgba(255,255,255,.1);margin:10px 0 12px"></div>'; return; }
-    var lblColor = row.esRival ? '#09135f' : '#94a3b8';
+    var lblColor = row.esRival ? '#f87171' : '#94a3b8';
     html+='<div style="display:flex;align-items:center;gap:8px;width:100%;margin-bottom:8px">'
       +'<div style="width:64px;flex-shrink:0;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:'+lblColor+';text-align:right;padding-right:8px">'+row.label+'</div>'
       +Object.keys(metas).map(function(id){

@@ -182,14 +182,14 @@
     if(window.VB_PLAN_VENCIDO){
       _cartel('<b>La suscripción venció el ' + window.VB_PLAN_VENCIDO + '.</b> '
         + 'Los datos del club quedan sin acceso hasta renovarla. '
-        + 'Escribinos y lo resolvemos en el momento.', '#09135f');
+        + 'Escribinos y lo resolvemos en el momento.', '#b91c1c');
     } else if(window.VB_LLAVE_VENCIDA){
       _cartel('<b>Hace más de 30 días que la app no se conecta.</b> '
-        + 'Abrila una vez con internet y vuelve a funcionar sin conexión.', '#09135f');
+        + 'Abrila una vez con internet y vuelve a funcionar sin conexión.', '#b45309');
     } else if(window.VB_PLAN_VENCE_EN !== undefined){
       var d = window.VB_PLAN_VENCE_EN;
       _cartel('La suscripción vence en <b>' + d + (d === 1 ? ' día' : ' días')
-        + '</b>. Escribinos para renovarla.', '#09135f');
+        + '</b>. Escribinos para renovarla.', '#b45309');
     }
   }
   /* se revisa un rato despues, cuando ya llego la respuesta del servidor */

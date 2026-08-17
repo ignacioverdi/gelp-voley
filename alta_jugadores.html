@@ -12,8 +12,8 @@
   --bg:#07080f; --panel:#11131d; --panel2:#171a26;
   --b:rgba(255,255,255,.09); --b2:rgba(255,255,255,.18);
   --tx:#e9edf4; --mut:#7b8598;
-  --club:#09135f; --club-t:#fff;
-  --ok:#3ddc84; --mal:#09135f; --alerta:#9094b7;
+  --club:#e8192c; --club-t:#fff;
+  --ok:#3ddc84; --mal:#ff6b6b; --alerta:#fbbf24;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--tx);
@@ -67,7 +67,7 @@ textarea:focus{border-color:var(--club)}
 .fila .clave{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--mut);font-size:12.5px}
 .fila .est{font-size:12px;font-weight:600;text-align:right}
 .fila.ok .est{color:var(--ok)} .fila.mal .est{color:var(--mal)} .fila.ya .est{color:var(--alerta)}
-.fila.malo{border-color:rgba(9,19,95,.45)}
+.fila.malo{border-color:rgba(255,107,107,.45)}
 .vacio{color:var(--mut);padding:18px 0;font-size:14px}
 
 .resumen{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
