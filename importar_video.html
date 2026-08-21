@@ -162,8 +162,30 @@
             if(_visto[_clave]) return;
             _visto[_clave] = 1;
 
-            var _c = m.code || ('P' + (m.date || '') + '-' +
-                     _par.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
+            /* ══ El codigo TIENE que ser el del sistema ═══════════════════
+               El resto de la app identifica cada partido con un codigo que
+               depende del nombre del archivo .dvw: "P2026-08-07-20260807AMIS".
+               Si aca se inventa otro —por fecha y equipos— el link queda
+               guardado bajo una clave que nadie busca: el video se carga
+               pero ninguna pantalla lo encuentra.
+
+               plan_partido_data.js ya tiene esos codigos con su fecha, asi
+               que se toma de ahi. */
+            var _c = m.code || '';
+            if(!_c){
+              try{
+                var _PP = window.PP_DATA || {};
+                for(var _eq2 in _PP){
+                  var _inf = (_PP[_eq2] || {}).info || {};
+                  for(var _cod in _inf){
+                    if((_inf[_cod] || {}).date === m.date){ _c = _cod; break; }
+                  }
+                  if(_c) break;
+                }
+              }catch(e){}
+            }
+            if(!_c) _c = 'P' + (m.date || '') + '-' +
+                     _par.toLowerCase().replace(/[^a-z0-9]+/g, '-');
             if(!_c || VD[_c]) return;
             /* los nombres de campo son los que lee la fila: homeName,
                awayName y actions */
