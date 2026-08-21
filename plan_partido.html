@@ -252,7 +252,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
     <div class="grp" id="armrecgrp"><label>Recepción</label><!-- Separado por valoracion: agrupar "#+" y "!−" escondia la diferencia
          entre una recepcion perfecta y una buena, que para el armador son dos
          situaciones distintas —con una puede jugar todo, con la otra no—. -->
-    <select id="armrecsel" class="armsel" onchange="setArmRec(this.value)"><option value="all">Toda</option><option value="#">#</option><option value="+">+</option><option value="!">!</option><option value="-">−</option></select></div>
+    <select id="armrecsel" class="armsel" multiple size="1" onchange="setArmRecMulti(this)" title="Ctrl+click para elegir varias"><option value="all" selected>Toda</option><option value="#">#</option><option value="+">+</option><option value="!">!</option><option value="-">−</option></select></div>
     <div class="grp" id="armreczgrp"><label>Recep. desde</label><select id="armreczsel" class="armsel" onchange="setArmRecZone(this.value)"><option value="all">Todas</option><option value="r1">Z1</option><option value="r6">Z6</option><option value="r5">Z5</option></select></div>
     <div class="grp"><label>Recibe</label><select id="armrecnum" class="armsel" onchange="setArmRecNum(this.value)"></select></div>
     <div class="grp"><label>Llamada</label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
@@ -513,7 +513,8 @@ function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
       var rq=r[7], REC_IDX={"#":0,"/":1,"+":2,"!":3,"=":4,"-":5};
       if(armRec==="pos"){ if(!(rq===0||rq===2)) return false; }
       else if(armRec==="neg"){ if(!(rq===3||rq===5)) return false; }
-      else if(REC_IDX[armRec]!==undefined){ if(rq!==REC_IDX[armRec]) return false; }
+      else { var _ss=String(armRec).split(',').filter(Boolean);
+             if(_ss.length && _ss.map(function(x){return REC_IDX[x];}).indexOf(rq)<0) return false; }
     }
     if(armRecZone){var _b=ARM_RECBANDS[armRecZone];if(!_b||_b.indexOf(r[15])<0)return false;}
     if(armRecNum!=null&&r[16]!==armRecNum)return false;
@@ -608,6 +609,20 @@ function renderArmador(){
 function setArmSetter(i){armSetIdx=i;renderArmador();}
 function setArmPhase(f){armPhase=f;renderArmador();}
 function setArmRec(r){armRec=r;renderArmador();}
+/* Varias valoraciones a la vez: para ver "# y +" juntas, que es la pregunta
+   habitual —cuanto distribuye el armador cuando la recepcion le llega bien—.
+   Elegir "Toda" limpia el resto. */
+function setArmRecMulti(sel){
+  var v=[];
+  for(var i=0;i<sel.options.length;i++) if(sel.options[i].selected) v.push(sel.options[i].value);
+  if(!v.length || v.indexOf('all')>=0){
+    armRec='all';
+    for(var j=0;j<sel.options.length;j++) sel.options[j].selected=(sel.options[j].value==='all');
+  } else {
+    armRec=v.join(',');
+  }
+  renderArmador();
+}
 function setArmRecZone(z){armRecZone=(z==="all")?null:z;renderArmador();}
 function setArmRecNum(v){armRecNum=v?parseInt(v,10):null;renderArmador();}
 function setArmCall(v){armCall=(v==="all")?"all":parseInt(v,10);renderArmador();}

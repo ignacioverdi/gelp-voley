@@ -1842,7 +1842,8 @@ function gpComputeRotDist(setterObj,pos,phase,rec){
       var rq=r[7];
       if(rec==='pos'&&!(rq===0||rq===2)) return false;
       else if(rec==='neg'&&!(rq===3||rq===5)) return false;
-      else if(GP_REC_IDX[rec]!==undefined&&rq!==GP_REC_IDX[rec]) return false;
+      else { var _ss=String(rec).split(',').filter(Boolean);
+             if(_ss.length && _ss.map(function(x){return GP_REC_IDX[x];}).indexOf(rq)<0) return false; }
     }
     if(GP_ARM_MATCHES&&GP_ARM_MATCHES.size){ if(r.length<13||!GP_ARM_MATCHES.has(r[12])) return false; }
     if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return false; }
@@ -1929,7 +1930,8 @@ function gpZoneClips(setterObj,pos,phase,rec,zone){
     if(phase==='SO'&&rec){ var rq=r[7];
       if(rec==='pos'&&!(rq===0||rq===2)) return;
       else if(rec==='neg'&&!(rq===3||rq===5)) return;
-      else if(GP_REC_IDX[rec]!==undefined&&rq!==GP_REC_IDX[rec]) return; }
+      else { var _ss=String(rec).split(',').filter(Boolean);
+             if(_ss.length && _ss.map(function(x){return GP_REC_IDX[x];}).indexOf(rq)<0) return; } }
     if(GP_ARM_MATCHES&&GP_ARM_MATCHES.size){ if(r.length<13||!GP_ARM_MATCHES.has(r[12])) return; }
     if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return ; }
     if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return ; }
@@ -2206,7 +2208,20 @@ function renderArmador(){
     [['all','Todas'],['#','#'],['+','+'],['!','!'],['-','−']].forEach(function(o){
       var b=document.createElement('button'); b.textContent=o[1];
       b.style.cssText='border:none;background:transparent;color:#94a3b8;font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;padding:5px 13px;border-radius:6px;cursor:pointer';
-      b.addEventListener('click',function(){ if(GP_ARM_PHASE!=='SO')return; GP_ARM_REC=o[0]; gpArmSyncAll(); });
+      /* ══ Se pueden elegir VARIAS valoraciones ═══════════════════════
+         Antes era una sola: para ver "# y +" juntas no habia forma. Ahora
+         cada boton suma o quita, como los filtros del plan de partido.
+         "Todas" limpia la seleccion. */
+      b.addEventListener('click',function(){
+        if(GP_ARM_PHASE!=='SO')return;
+        if(o[0]==='all'){ GP_ARM_REC='all'; gpArmSyncAll(); return; }
+        var sel = (GP_ARM_REC==='all'||GP_ARM_REC==='pos'||GP_ARM_REC==='neg')
+                    ? [] : String(GP_ARM_REC).split(',').filter(Boolean);
+        var k = sel.indexOf(o[0]);
+        if(k>=0) sel.splice(k,1); else sel.push(o[0]);
+        GP_ARM_REC = sel.length ? sel.join(',') : 'all';
+        gpArmSyncAll();
+      });
       recWrap.appendChild(b); recBtns[o[0]]=b;
     });
     // ── Recepción desde (banda de zona: Z1=1+9+2 / Z6=6+8+3 / Z5=5+7+4) ──
@@ -2248,8 +2263,9 @@ function renderArmador(){
       var so=GP_ARM_PHASE==='SO';
       recWrap.style.opacity=so?'1':'.35'; recWrap.style.pointerEvents=so?'auto':'none'; recLbl.style.opacity=so?'1':'.35';
       gpStyleBtn(recBtns.all, so&&GP_ARM_REC==='all', '#64748b');
+      var _sel = String(GP_ARM_REC).split(',');
       ['#','+','!','-'].forEach(function(k){
-        if(recBtns[k]) gpStyleBtn(recBtns[k], so&&GP_ARM_REC===k, '#22c55e');
+        if(recBtns[k]) gpStyleBtn(recBtns[k], so&&_sel.indexOf(k)>=0, '#22c55e');
       });
       if(recBtns.pos) gpStyleBtn(recBtns.pos, so&&GP_ARM_REC==='pos', '#22c55e');
       if(recBtns.neg) gpStyleBtn(recBtns.neg, so&&GP_ARM_REC==='neg', '#09135f');

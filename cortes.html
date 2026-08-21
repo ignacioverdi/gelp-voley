@@ -351,15 +351,35 @@
          El campo 't' es el segundo del video. Sin video queda en 0 y el clip
          no se puede reproducir —eso ya lo avisa la pantalla— pero la accion
          se lista igual, con su valoracion y su zona. */
+      /* ══ Las acciones de cada partido ══════════════════════════════════
+         Sin esto los partidos aparecian en la lista con "0 clips": se veia
+         el partido y no habia nada que mirar ni que filtrar.
+
+         Cada fundamento guarda sus datos en un orden distinto —lo define el
+         motor al escribir liga_data—, asi que se lee posicion por posicion:
+
+           ataque   [rival, partido, set, 1, fase, combo, EV, ORIGEN, DESTINO, ...]
+           saque    [rival, partido, set, 1, tipo, EV, ORIGEN, DESTINO]
+           recep.   [rival, partido, set, 1, tipo, EV, ORIGEN, DESTINO]
+           defensa  [rival, partido, set, 1, EV, ORIGEN, DESTINO]
+
+         El campo 't' es el segundo del video: sin video queda en 0 y el clip
+         no se puede reproducir, pero la accion se lista igual con su zona y
+         su valoracion, que es lo que usan los filtros y el cuadrante. */
       var _EV = ['#','/','+','!','=','-'];
-      var _SK = {atk:'Ataque', srv:'Saque', rec:'Recepción', dig:'Defensa'};
+      var _F = {
+        atk: {campo:'a', sk:'Ataque',    skill:'A', ev:6, oz:7, dz:8},
+        srv: {campo:'s', sk:'Saque',     skill:'S', ev:5, oz:6, dz:7},
+        rec: {campo:'r', sk:'Recepción', skill:'R', ev:5, oz:6, dz:7},
+        dig: {campo:'d', sk:'Defensa',   skill:'D', ev:4, oz:5, dz:6}
+      };
       Object.keys(_T).forEach(function(slug){
         var _t = _T[slug] || {}, _ms = _t.matches || [];
-        ['atk','srv','rec','dig'].forEach(function(f){
-          var _campo = {atk:'a', srv:'s', rec:'r', dig:'d'}[f];
+        Object.keys(_F).forEach(function(f){
+          var _cfg = _F[f];
           Object.keys(_t[f] || {}).forEach(function(num){
             var _j = _t[f][num] || {};
-            (_j[_campo] || []).forEach(function(a){
+            (_j[_cfg.campo] || []).forEach(function(a){
               var _m = _ms[a[1]] || {};
               var _par = [(_t.name||slug), (_m.rival||'')].sort().join('-')
                            .toLowerCase().replace(/[^a-z0-9]+/g,'-');
@@ -368,9 +388,11 @@
               if(!_dest) return;
               _dest.actions = _dest.actions || [];
               _dest.actions.push({
-                tm: slug, sk: _SK[f], num: +num,
+                tm: slug, sk: _cfg.sk, skill: _cfg.skill, num: +num,
                 name: _j.name || ('#' + num),
-                ev: _EV[a[4]] || '!', t: 0
+                ev: _EV[a[_cfg.ev]] || '!',
+                oz: a[_cfg.oz] || 0, dz: a[_cfg.dz] || 0,
+                set: a[2] || 1, t: 0
               });
             });
           });
