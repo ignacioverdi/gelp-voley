@@ -379,6 +379,34 @@ if __name__=='__main__':
         _c=sorted([f for f in glob.glob('datos_video_ent*.js') if 'ent' in f.lower()])
         if _c: _ent=[_c[-1]]
     vp = _args[0] if len(_args)>0 else autodetect_video()
+
+    # ══ El video puede tener MENOS partidos que los .dvw ═════════════════════
+    # El archivo de video se arma con los partidos que alguien cargo a mano, y
+    # los .dvw son todos los que proceso el sistema. Si el video tiene menos,
+    # usarlo deja equipos enteros sin bloqueo: pasaba con un video de un solo
+    # partido y tres .dvw cargados, y los otros dos equipos desaparecian.
+    #
+    # Se comparan los dos y se usa la fuente mas completa. El video es mejor
+    # cuando esta al dia —trae el segundo de cada accion— pero no cuando le
+    # faltan partidos.
+    if vp and os.path.isfile(vp):
+        try:
+            _dv = len([f for c in os.listdir('.')
+                       if os.path.isdir(c) and c.upper().startswith('DVW')
+                       and 'ENTREN' not in c.upper()
+                       for f in os.listdir(c) if f.lower().endswith('.dvw')])
+            _vd = load_video(vp) or {}
+            _nv = len(_vd.get('matches') or {})
+            if _dv > _nv:
+                print('[bloqueo] el video tiene %d partido(s) y los .dvw %d: uso los .dvw'
+                      % (_nv, _dv))
+                _n = bloqueo_desde_dvw('datos_bloqueo.js')
+                if _n:
+                    print('[bloqueo] %d bloqueos leidos de los .dvw' % _n)
+                    sys.exit(0)
+        except Exception:
+            pass
+
     if not vp or not os.path.isfile(vp):
         # ══ Sin video: se lee de los .dvw ═══════════════════════════════
         # El bloqueo se armaba SOLO desde el archivo de video, que existe
