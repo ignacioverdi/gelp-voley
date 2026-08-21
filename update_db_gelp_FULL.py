@@ -992,11 +992,17 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
                 setters_detected.setdefault(team, set()).add(sn)
                 r = parse_setter_rallies(content, pfx, rpfx, ishome, sn, date, rival, code)
                 if r: rallies_both[team][sn].extend(r)
-    # Keep top-2 setters per team by volume
+    # ══ Cuantos armadores se conservan ══════════════════════════════════════
+    # Cortaba en 2. Un plantel con tres armadoras perdia a la tercera, y si
+    # ademas alguna cambio de dorsal —dos entradas para la misma persona— la
+    # armadora real quedaba tercera y desaparecia de todas las pantallas.
+    #
+    # Con 6 entran todos los casos reales. El orden sigue siendo por cantidad
+    # de armados, que es lo que dice quien es titular y quien suplente.
     setters_map = {}
     rallies_final = {}
     for team, sd in rallies_both.items():
-        ranked = sorted(sd.items(), key=lambda x: -len(x[1]))[:2]
+        ranked = sorted(sd.items(), key=lambda x: -len(x[1]))[:6]
         setters_map[team] = [sn for sn, _ in ranked]
         rallies_final[team] = {str(sn): rl for sn, rl in ranked}
     return setters_map, rallies_final
@@ -1085,6 +1091,12 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         for sn in team_setters:
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
             if not rl: continue
+            # Si este dorsal ya no existe en la base, es porque la jugadora
+            # cambio de numero y sus datos se unieron bajo el nuevo. La
+            # entrada vieja se saltea: si no, aparece un armador fantasma
+            # sin nombre —"#4"— al lado del real.
+            if str(sn) not in td:
+                continue
             sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
             arm = [[ridx.get(r['rival'],0),_gidx.get((r.get('date',''),r.get('rival','')),0),r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type','')] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
