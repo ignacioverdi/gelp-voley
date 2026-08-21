@@ -154,8 +154,10 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
        del equipo, que es contra lo que compara. Lo unico que falta sin video
        es el corte para ver la jugada. */
     try{
-      if(!Object.keys(VD).length && MODO !== 'entrenamiento'
-         && window.LIGA_DATA && LIGA_DATA.teams){
+      /* Se completan los partidos que FALTEN, no solo cuando la lista esta
+         vacia: con un partido con video y otros sin el, la condicion anterior
+         no se cumplia y esos otros quedaban afuera. */
+      if(MODO !== 'entrenamiento' && window.LIGA_DATA && LIGA_DATA.teams){
         /* El orden TIENE que ser el mismo que usa el motor al guardar
            (RES_IDX en update_db): # / + ! = -
            Con otro orden, un + se lee como ! y las defensas buenas aparecen

@@ -130,7 +130,11 @@
        Ahora, si esa lista viene vacia, se arma con los partidos que ya
        procesaron los .dvw —que estan en liga_data.js—. Asi el primer video
        se puede asociar desde el dia uno. */
-    if(!Object.keys(VD).length && MODO !== 'ent'){
+    /* Se completan los partidos que FALTEN, no solo cuando la lista esta
+       vacia. Con un partido con video y dos sin el, la condicion anterior
+       —"si no hay ninguno"— no se cumplia y esos dos nunca aparecian: no
+       habia forma de cargarles el video. */
+    if(MODO !== 'ent'){
       try{
         var _t = (window.LIGA_DATA && LIGA_DATA.teams) || {};
         var _visto = {};
