@@ -306,6 +306,15 @@
   try{
     if(MODO!=='ent' && window.LIGA_DATA && LIGA_DATA.teams){
       VD.matches = VD.matches || {};
+      /* Los partidos que YA vienen del video se anotan por FECHA. Sin esto,
+         uno con codigo propio —"50101" o "P2026-08-07-20260807AMIS"— no
+         coincide con la clave que se arma aca y el mismo partido entra dos
+         veces: uno con sus acciones y video, otro vacio. */
+      var _yaHay = {};
+      Object.keys(VD.matches).forEach(function(_k){
+        var _v = VD.matches[_k] || {};
+        if(_v.date) _yaHay[_v.date] = 1;
+      });
       var _T = LIGA_DATA.teams;
       var _pend = [];
       Object.keys(_T).forEach(function(slug){
@@ -319,6 +328,7 @@
                        .toLowerCase().replace(/[^a-z0-9]+/g,'-');
           var _c = m.code || ('P' + (m.date||'') + '-' + _par);
           if(!_c || VD.matches[_c]) return;
+          if(m.date && _yaHay[m.date]) return;   /* ese dia ya esta */
           /* 'teams' es el campo que lee el desplegable: {slug: nombre}.
              Sin el, el partido se agrega pero el equipo no aparece en la
              lista y no hay forma de elegirlo. */
@@ -386,6 +396,14 @@
               var _cod = _m.code || ('P' + (_m.date||'') + '-' + _par);
               var _dest = VD.matches[_cod];
               if(!_dest) return;
+              /* ══ No tocar los partidos que YA tienen video ══════════════
+                 Las acciones del video traen el segundo exacto de cada
+                 jugada; estas, no —salen de liga_data, que no guarda
+                 tiempos—. Mezclarlas rompia la reproduccion: el clip no
+                 sabia a que minuto saltar.
+
+                 Solo se completan los partidos que no tienen ninguna. */
+              if(_dest.actions && _dest.actions.length) return;
               _dest.actions = _dest.actions || [];
               _dest.actions.push({
                 /* El numero va como TEXTO con dos digitos —"08", no 8—,
