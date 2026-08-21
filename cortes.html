@@ -312,8 +312,26 @@
         (_t.matches || []).forEach(function(m){
           var _c = m.code || ('P' + (m.date||'') + '-' + slug);
           if(!_c || VD.matches[_c]) return;
+          /* 'teams' es el campo que lee el desplegable: {slug: nombre}.
+             Sin el, el partido se agrega pero el equipo no aparece en la
+             lista y no hay forma de elegirlo. */
+          var _riv = m.rival || '';
+          /* El identificador del rival tiene que ser EL MISMO que usa su
+             propio equipo en liga_data, o el desplegable lo lista dos veces:
+             una como equipo y otra como rival. Se busca entre los equipos ya
+             conocidos antes de inventar uno. */
+          var _rs = '';
+          var _rn = _riv.toLowerCase().replace(/[^a-z0-9]/g,'');
+          for(var _o in _T){
+            var _on = String((_T[_o]||{}).name || _o).toLowerCase().replace(/[^a-z0-9]/g,'');
+            if(_on === _rn || _o === _rn){ _rs = _o; break; }
+          }
+          if(!_rs) _rs = _rn;
+          var _tm = {};
+          _tm[slug] = _t.name || slug;
+          if(_rs) _tm[_rs] = _riv;
           VD.matches[_c] = {date:m.date||'', home:_t.name||slug,
-                            away:m.rival||'', acciones:[], actions:[]};
+                            away:_riv, teams:_tm, acciones:[], actions:[]};
         });
       });
     }
