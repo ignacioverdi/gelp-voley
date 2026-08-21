@@ -91,8 +91,8 @@ var MODO_SIN_SENAL = false;
       d = document.createElement('div');
       d.id = 'sin-senal';
       d.style.cssText = 'position:fixed;top:8px;left:50%;transform:translateX(-50%);'+
-        'z-index:9999;background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.45);'+
-        'color:#f59e0b;border-radius:20px;padding:5px 16px;font-family:inherit;'+
+        'z-index:9999;background:rgba(144,148,183,.14);border:1px solid rgba(144,148,183,.45);'+
+        'color:#9094b7;border-radius:20px;padding:5px 16px;font-family:inherit;'+
         'font-size:11px;font-weight:700;letter-spacing:.5px;pointer-events:none;'+
         'backdrop-filter:blur(6px)';
       d.textContent = 'Sin se\\u00f1al \\u00b7 se guarda igual';

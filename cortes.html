@@ -20,6 +20,9 @@
      ano solo: "2026" en vez de "26-27". Los de arriba cubren las ligas
      que cruzan de ano; estos, las que no. Los que no existen los
      descarta el onerror, asi que no molesta pedir de mas. -->
+<!-- liga_data trae los partidos procesados: asi se listan aunque
+     todavia no tengan el video cargado. -->
+<script src="liga_data.js.enc" onerror="void 0"></script>
 <script src="datos_video_2025.js.enc?v=3" onerror="void 0"></script>
 <script src="datos_video_2026.js.enc?v=3" onerror="void 0"></script>
 <script src="datos_video_2027.js.enc?v=3" onerror="void 0"></script>
@@ -290,6 +293,31 @@
     return (localStorage.getItem('cortes_modo')==='ent') ? 'ent' : 'partido';
   })();
   var VD=(MODO==='ent'?window.VIDEO_DATA_ENT:window.VIDEO_DATA)||{combos:{},matches:{}}, COMBOS=VD.combos||{};
+
+  /* ══ Los partidos sin video tambien se listan ═════════════════════════════
+     Esta pantalla se alimentaba SOLO del archivo de video, que se arma con
+     los partidos que alguien cargo a mano. Con un video de un partido, el
+     desplegable ofrecia unicamente esos dos equipos: entrabas por una
+     jugadora de tu club y te aparecian los rivales de otro partido.
+
+     Los partidos procesados estan en liga_data.js. Se agregan los que
+     falten, con sus acciones. Sin video no hay clip para reproducir —eso se
+     avisa en pantalla— pero al menos se ve QUE hay y de quien. */
+  try{
+    if(MODO!=='ent' && window.LIGA_DATA && LIGA_DATA.teams){
+      VD.matches = VD.matches || {};
+      var _T = LIGA_DATA.teams;
+      Object.keys(_T).forEach(function(slug){
+        var _t = _T[slug] || {};
+        (_t.matches || []).forEach(function(m){
+          var _c = m.code || ('P' + (m.date||'') + '-' + slug);
+          if(!_c || VD.matches[_c]) return;
+          VD.matches[_c] = {date:m.date||'', home:_t.name||slug,
+                            away:m.rival||'', acciones:[], actions:[]};
+        });
+      });
+    }
+  }catch(e){}
   var MAP=Object.assign({}, VD.links||{}); (function(){var _mv=(MODO==='ent'?window.MAPA_VIDEOS_ENT:window.MAPA_VIDEOS)||{};for(var _k in _mv){if(_mv[_k])MAP[_k]=_mv[_k];}})();
   // --------- temporada (oct→abr): 25-26 = oct2025→abr2026 ---------
   function seasonOf(d){if(!d)return '';var p=(''+d).split('-');var y=parseInt(p[0],10),mo=parseInt(p[1],10);if(isNaN(y)||isNaN(mo))return '';var s=(mo>=8)?y:y-1;return String(s%100).padStart(2,'0')+'-'+String((s+1)%100).padStart(2,'0');}
