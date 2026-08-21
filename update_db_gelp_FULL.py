@@ -319,8 +319,27 @@ def parse_dvw_both(fpath, temporada):
     lines = content.split('\n')
     home_raw, away_raw = get_teams(lines)
     home = norm(home_raw); away = norm(away_raw)
+    # ══ La fecha del partido ══════════════════════════════════════════════
+    # Salia SOLO del nombre del archivo. Si el nombre no la trae —pasa cuando
+    # el partido se sube desde la app y el sistema lo renombra— la fecha queda
+    # vacia, y sin fecha el filtro de duplicados no actua: el mismo partido
+    # subido tres veces se contaba tres veces.
+    #
+    # Ahora, si el nombre no la tiene, se lee de adentro del .dvw, que siempre
+    # la trae en [3MATCH] con formato MM/DD/AAAA.
     m = re.search(r'(\d{4}-\d{2}-\d{2})', os.path.basename(fpath))
     date = m.group(1) if m else ''
+    if not date:
+        try:
+            _mm = re.search(r'\[3MATCH\][^\n]*\n\s*(\d{1,2})/(\d{1,2})/(\d{4})',
+                            '\n'.join(lines[:40]))
+            if _mm:
+                _a, _b, _an = int(_mm.group(1)), int(_mm.group(2)), _mm.group(3)
+                # el .dvw escribe MM/DD/AAAA; si el primero pasa de 12 vienen al reves
+                _mes, _dia = (_a, _b) if _a <= 12 else (_b, _a)
+                date = '%s-%02d-%02d' % (_an, _mes, _dia)
+        except Exception:
+            pass
 
     # La temporada de ESTE partido, segun su torneo. Si el club no configuro
     # torneos, queda la que vino por parametro y nada cambia.
@@ -356,14 +375,7 @@ def parse_dvw_both(fpath, temporada):
 
             if skill=='A':
                 combo=tp[0] if tp else ''; traj=tp[1] if len(tp)>1 else ''
-            elif skill in ('S','R','D','B'):
-                # La DEFENSA y el BLOQUEO escriben la trayectoria en el mismo
-                # lugar que el saque: "*06DT+~~~47" -> los ~ son campos vacios
-                # y el 47 es origen 4, destino 7.
-                #
-                # Antes caian en el 'else', que lee tp[1] —un campo vacio— y
-                # las zonas quedaban todas en 0: el mapa de calor se dibujaba
-                # sin una sola accion aunque los datos estuvieran cargados.
+            elif skill in ('S','R'):
                 combo=''; traj=tp[3] if len(tp)>3 else ''
             elif skill=='E':
                 raw=tp[0] if tp else ''; combo=raw[:2] if len(raw)>=2 else raw
@@ -480,27 +492,6 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
     added = 0; skipped = 0
 
-    # ══ Si la base es de una version vieja, se reconstruye ═══════════════════
-    # Los partidos ya cargados no se vuelven a leer: es lo que hace que
-    # procesar 90 archivos tarde segundos y no minutos. Pero cuando el motor
-    # aprende a leer algo nuevo —la defensa, por ejemplo— esos partidos
-    # quedaron guardados SIN ese dato, y no hay forma de que aparezca.
-    #
-    # Antes habia que borrar nla_players_db.json a mano, y nadie podia
-    # adivinarlo: la pantalla se veia vacia sin decir por que.
-    _ESQUEMA = 2          # subir este numero cuando el parser lea algo nuevo
-    try:
-        _v = db.get('_esquema', 1)
-    except Exception:
-        _v = 1
-    if teams_data and _v < _ESQUEMA:
-        print('  La base es de una version anterior: se reconstruye para incorporar')
-        print('  los datos nuevos (defensa). Puede tardar un poco mas esta vez.')
-        teams_data = {}
-        games_log = []
-        existing_dates = set()
-        existing_sigs = set()
-
     for fname in dvw_files:
         if fname in existing_dates:
             skipped += 1; continue
@@ -557,10 +548,7 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
             try: g['result']=_parse_set_result(open(fp,encoding='latin-1',errors='ignore').read())
             except: pass
 
-    # El numero de esquema queda guardado: si mañana el motor aprende a leer
-    # algo nuevo, se sube ese numero y la base se reconstruye sola en la
-    # proxima corrida, sin que nadie tenga que borrar un archivo.
-    db_out = {'_esquema': _ESQUEMA, 'teams': teams_data, 'games': games_log}
+    db_out = {'teams': teams_data, 'games': games_log}
     with open(db_path, 'w', encoding='utf-8') as f:
         json.dump(db_out, f, ensure_ascii=False)
 
@@ -646,34 +634,12 @@ def calculate_stats(teams_data, temporada_filter=None):
                 'blk_k':pct_val(blk_acts,'#'),'blk_pos':pct_val(blk_acts,'+'),
             })
 
-        # ══ Las metricas por tipo de ataque y por fase ════════════════════
-        # La tabla de la liga ordena por ocho fundamentos, pero el motor solo
-        # producia cuatro: los otros seis quedaban con una raya y ordenar por
-        # ellos no hacia nada.
-        #
-        # El tipo de ataque va en el codigo: Q central, T rapida, H alta. Y la
-        # fase distingue el ataque tras recepcion del contraataque, que son
-        # dos habilidades distintas.
-        _por_tipo = lambda L, t: [a for a in L if (a.get('stype') or '') == t]
-        _alta = _por_tipo(all_atk, 'H')
-        _cent = _por_tipo(all_atk, 'Q')
-        _rap  = _por_tipo(all_atk, 'T')
-        _so   = [a for a in all_atk if a.get('atype') == 0]
-        _tr   = [a for a in all_atk if a.get('atype') == 1]
-
         team_stats_out.append({
             'team':team,'temporada':temporada_filter or 'all',
             'atk_eff':eff_atk(all_atk),'srv_eff':eff_srv(all_srv),
             'rec_eff':eff_rec(all_rec),'blk_eff':eff_blk(all_blk),
             'atk_tot':len(all_atk),'srv_tot':len(all_srv),
             'rec_tot':len(all_rec),'blk_tot':len(all_blk),
-            # los nombres son los que busca la tabla de la liga
-            'blk_pt':eff_blk(all_blk),
-            'atk_alta':eff_atk(_alta),'alta_tot':len(_alta),
-            'atk_cent':eff_atk(_cent),'cent_tot':len(_cent),
-            'atk_rap':eff_atk(_rap),  'rap_tot':len(_rap),
-            'atk_so':eff_atk(_so),    'so_tot':len(_so),
-            'atk_tr':eff_atk(_tr),    'tr_tot':len(_tr),
         })
 
     return players, team_stats_out
@@ -762,18 +728,8 @@ def detectar_armadores(content, pfx, setter_count=2, extra_liberos=None, positio
     armadores_rol = [n for n,_ in ranked if str(pos.get(n,'')) == '5']
     otros = [n for n,_ in ranked if str(pos.get(n,'')) != '5']
     # El titular es el que más arma (casi siempre rol armador)
-    # ══ Quien es armadora ═══════════════════════════════════════════════
-    # Si el .dvw declara armadoras, se usan SOLO esas. Antes se sumaba a
-    # cualquiera que hubiera armado, y una punta que toco de dedos cinco
-    # veces aparecia como armadora suplente: en un partido siempre hay
-    # jugadoras que arman de emergencia, y eso no las convierte en armadoras.
-    #
-    # La deduccion por volumen queda para los archivos que NO declaran el
-    # puesto —los de VolleyMetrics vienen asi—.
-    candidatas = armadores_rol if armadores_rol else otros
-
     result = []
-    for n in candidatas:
+    for n in armadores_rol + otros:
         if n not in result:
             result.append(n)
         # Antes cortaba en 2. Un plantel puede tener tres armadoras y la
