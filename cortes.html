@@ -388,7 +388,12 @@
               if(!_dest) return;
               _dest.actions = _dest.actions || [];
               _dest.actions.push({
-                tm: slug, sk: _cfg.sk, skill: _cfg.skill, num: +num,
+                /* El numero va como TEXTO con dos digitos —"08", no 8—,
+                   igual que en el archivo de video. Si se mezclan los dos
+                   formatos, la misma jugadora aparece dos veces en la lista
+                   y los filtros no la encuentran. */
+                tm: slug, sk: _cfg.sk, skill: _cfg.skill,
+                num: ('0' + String(num)).slice(-2),
                 name: _j.name || ('#' + num),
                 ev: _EV[a[_cfg.ev]] || '!',
                 oz: a[_cfg.oz] || 0, dz: a[_cfg.dz] || 0,
