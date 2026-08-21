@@ -137,7 +137,19 @@
     if(MODO !== 'ent'){
       try{
         var _t = (window.LIGA_DATA && LIGA_DATA.teams) || {};
+        /* Los partidos que YA vienen del video se anotan primero, por fecha
+           y equipos. Sin esto, uno con codigo real —"50101"— no coincidia con
+           la clave que se arma por fecha y el mismo partido aparecia dos
+           veces: uno con sus acciones y otro vacio. */
         var _visto = {};
+        Object.keys(VD).forEach(function(_k){
+          var _v = VD[_k] || {};
+          var _n1 = _v.homeName || _v.home || '';
+          var _n2 = _v.awayName || _v.away || '';
+          if(_v.date && (_n1 || _n2)){
+            _visto[_v.date + '|' + [_n1, _n2].sort().join(' vs ')] = 1;
+          }
+        });
         Object.keys(_t).forEach(function(slug){
           var _eq = _t[slug].name || slug;
           (_t[slug].matches || []).forEach(function(m){
