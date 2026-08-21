@@ -500,7 +500,22 @@ function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
 function renderArmador(){
   var sec=document.getElementById("armsec");
   var slug=(typeof VIVO!=='undefined'&&VIVO)?TEAM:ARM_SLUG[TEAM];
-  armTeam=(slug&&GPL.teams&&GPL.teams[slug])?GPL.teams[slug]:null;
+  /* ══ Buscar el equipo sin depender de los separadores ═════════════════
+     liga_data guarda "banco_provincia" y esta pantalla usa "bancoprovincia":
+     comparando la clave tal cual, el rival nunca encontraba sus armadores y
+     la pestaña quedaba vacia. Se comparan sin guiones ni espacios. */
+  armTeam = null;
+  if(slug && GPL.teams){
+    if(GPL.teams[slug]) armTeam = GPL.teams[slug];
+    else {
+      var _b = String(slug).toLowerCase().replace(/[^a-z0-9]/g,'');
+      for(var _k in GPL.teams){
+        if(String(_k).toLowerCase().replace(/[^a-z0-9]/g,'') === _b){
+          armTeam = GPL.teams[_k]; break;
+        }
+      }
+    }
+  }
   if(!armTeam||!(armTeam.setters&&armTeam.setters.length)){sec.classList.add("hidden");return;}
   sec.classList.remove("hidden");
   /* ══ La fase inicial ═══════════════════════════════════════════════════

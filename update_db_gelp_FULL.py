@@ -484,6 +484,11 @@ def _puestos_corregidos():
     return out
 
 
+# Los dorsales que cambiaron: {equipo: {viejo: nuevo}}. Lo llena la
+# unificacion y lo usan los pasos que leen el .dvw original.
+CAMBIO_DORSAL = {}
+
+
 def _unificar_por_nombre(teams_data):
     """Junta las jugadoras que aparecen con dos dorsales distintos.
 
@@ -526,6 +531,13 @@ def _unificar_por_nombre(teams_data):
                     if jugadoras[viejo].get(k):
                         jugadoras[queda].setdefault(k, []).extend(jugadoras[viejo][k])
                 jugadoras.pop(viejo, None)
+            # Queda anotado que el dorsal viejo pasa a ser el nuevo. Los
+            # armadores y los liberos se detectan leyendo el .dvw original,
+            # donde la jugadora todavia tiene su numero viejo: sin este mapa
+            # la armadora aparecia con el dorsal que ya no usa, o partida en
+            # dos entradas.
+            for viejo in sobran:
+                CAMBIO_DORSAL.setdefault(team, {})[str(viejo)] = str(queda)
             print('  [unificado] %s: el #%s absorbe al #%s'
                   % ((jugadoras[queda].get('info') or {}).get('name', nom),
                      queda, ', #'.join(sobran)))
@@ -1054,6 +1066,22 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         _code_map = {(r.get('date',''), r.get('rival','')): r.get('code','') for r in _all_rl}
         matches = [{'i': i, 'date': d, 'rival': rv, 'code': _code_map.get((d, rv), '')} for i, (d, rv) in enumerate(_seen)]
         setters_list = []
+        # ══ Los dorsales que cambiaron ══════════════════════════════════
+        # Los armadores se detectan leyendo el .dvw, donde la jugadora tiene
+        # su numero de ESE partido. Si cambio de dorsal, aparecia dos veces
+        # —una por numero— con sus armados partidos al medio.
+        _cd = CAMBIO_DORSAL.get(team, {})
+        if _cd:
+            _ts, _tr = [], {}
+            for _n in team_setters:
+                _n2 = _cd.get(str(_n), str(_n))
+                if _n2 not in _ts:
+                    _ts.append(_n2)
+            for _n, _v in (team_rallies or {}).items():
+                _n2 = _cd.get(str(_n), str(_n))
+                _tr.setdefault(_n2, []).extend(_v or [])
+            team_setters, team_rallies = _ts, _tr
+
         for sn in team_setters:
             rl = team_rallies.get(str(sn), []) if isinstance(team_rallies, dict) else []
             if not rl: continue
