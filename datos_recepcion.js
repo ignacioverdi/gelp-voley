@@ -6,7 +6,7 @@ window.RECEPCION_RIVAL_DATA = {
       "flotado": {
         "desde_z1": {
           "p1": {
-            "tot": 0,
+            "tot": 1,
             "eff": 0,
             "pos": 0,
             "neg": 0,
@@ -14,20 +14,20 @@ window.RECEPCION_RIVAL_DATA = {
             "perf": 0
           },
           "p6": {
-            "tot": 2,
-            "eff": 50,
+            "tot": 8,
+            "eff": 25,
             "pos": 50,
-            "neg": 0,
-            "err": 0,
-            "perf": 1
+            "neg": 12,
+            "err": 1,
+            "perf": 2
           },
           "p5": {
-            "tot": 10,
-            "eff": 30,
-            "pos": 40,
-            "neg": 0,
+            "tot": 28,
+            "eff": 38,
+            "pos": 50,
+            "neg": 7,
             "err": 0,
-            "perf": 2
+            "perf": 9
           }
         },
         "desde_z6": {
@@ -66,32 +66,32 @@ window.RECEPCION_RIVAL_DATA = {
             "perf": 1
           },
           "p6": {
-            "tot": 0,
-            "eff": 0,
-            "pos": 0,
+            "tot": 2,
+            "eff": 25,
+            "pos": 50,
             "neg": 0,
             "err": 0,
             "perf": 0
           },
           "p5": {
-            "tot": 3,
-            "eff": -17,
-            "pos": 33,
-            "neg": 33,
+            "tot": 5,
+            "eff": 20,
+            "pos": 60,
+            "neg": 20,
             "err": 1,
-            "perf": 0
+            "perf": 1
           }
         }
       },
       "potencia": {
         "desde_z1": {
           "p1": {
-            "tot": 0,
-            "eff": 0,
-            "pos": 0,
+            "tot": 3,
+            "eff": 50,
+            "pos": 67,
             "neg": 0,
             "err": 0,
-            "perf": 0
+            "perf": 1
           },
           "p6": {
             "tot": 0,
@@ -340,20 +340,20 @@ window.RECEPCION_RIVAL_DATA = {
       "flotado": {
         "desde_z1": {
           "p1": {
-            "tot": 2,
-            "eff": 25,
-            "pos": 50,
-            "neg": 50,
+            "tot": 6,
+            "eff": 50,
+            "pos": 67,
+            "neg": 17,
             "err": 0,
-            "perf": 1
+            "perf": 3
           },
           "p6": {
-            "tot": 3,
-            "eff": -33,
-            "pos": 0,
-            "neg": 33,
+            "tot": 10,
+            "eff": 0,
+            "pos": 10,
+            "neg": 10,
             "err": 1,
-            "perf": 0
+            "perf": 1
           },
           "p5": {
             "tot": 0,
@@ -392,7 +392,7 @@ window.RECEPCION_RIVAL_DATA = {
         },
         "desde_z5": {
           "p1": {
-            "tot": 0,
+            "tot": 2,
             "eff": 0,
             "pos": 0,
             "neg": 0,
@@ -400,12 +400,12 @@ window.RECEPCION_RIVAL_DATA = {
             "perf": 0
           },
           "p6": {
-            "tot": 2,
-            "eff": 0,
-            "pos": 0,
+            "tot": 3,
+            "eff": 33,
+            "pos": 33,
             "neg": 0,
             "err": 0,
-            "perf": 0
+            "perf": 1
           },
           "p5": {
             "tot": 2,
@@ -420,20 +420,20 @@ window.RECEPCION_RIVAL_DATA = {
       "potencia": {
         "desde_z1": {
           "p1": {
-            "tot": 0,
-            "eff": 0,
-            "pos": 0,
+            "tot": 1,
+            "eff": 100,
+            "pos": 100,
             "neg": 0,
             "err": 0,
-            "perf": 0
+            "perf": 1
           },
           "p6": {
-            "tot": 0,
-            "eff": 0,
-            "pos": 0,
-            "neg": 0,
+            "tot": 6,
+            "eff": 33,
+            "pos": 50,
+            "neg": 17,
             "err": 0,
-            "perf": 0
+            "perf": 2
           },
           "p5": {
             "tot": 0,
@@ -507,28 +507,28 @@ window.RECEPCION_RIVAL_DATA = {
       "flotado": {
         "desde_z1": {
           "p1": {
-            "tot": 0,
-            "eff": 0,
-            "pos": 0,
+            "tot": 4,
+            "eff": 38,
+            "pos": 75,
             "neg": 0,
             "err": 0,
             "perf": 0
           },
           "p6": {
-            "tot": 3,
-            "eff": 17,
+            "tot": 6,
+            "eff": 0,
             "pos": 33,
-            "neg": 0,
-            "err": 0,
+            "neg": 17,
+            "err": 1,
             "perf": 0
           },
           "p5": {
-            "tot": 1,
-            "eff": -50,
-            "pos": 0,
-            "neg": 100,
-            "err": 0,
-            "perf": 0
+            "tot": 9,
+            "eff": -17,
+            "pos": 22,
+            "neg": 44,
+            "err": 2,
+            "perf": 1
           }
         },
         "desde_z6": {
@@ -575,10 +575,10 @@ window.RECEPCION_RIVAL_DATA = {
             "perf": 0
           },
           "p5": {
-            "tot": 3,
-            "eff": -50,
+            "tot": 4,
+            "eff": -38,
             "pos": 0,
-            "neg": 67,
+            "neg": 50,
             "err": 1,
             "perf": 0
           }
@@ -603,7 +603,7 @@ window.RECEPCION_RIVAL_DATA = {
             "perf": 0
           },
           "p5": {
-            "tot": 0,
+            "tot": 1,
             "eff": 0,
             "pos": 0,
             "neg": 0,
@@ -674,12 +674,12 @@ window.RECEPCION_RIVAL_DATA = {
       "flotado": {
         "desde_z1": {
           "p1": {
-            "tot": 0,
-            "eff": 0,
-            "pos": 0,
+            "tot": 1,
+            "eff": 100,
+            "pos": 100,
             "neg": 0,
             "err": 0,
-            "perf": 0
+            "perf": 1
           },
           "p6": {
             "tot": 1,
@@ -690,12 +690,12 @@ window.RECEPCION_RIVAL_DATA = {
             "perf": 1
           },
           "p5": {
-            "tot": 5,
-            "eff": 0,
-            "pos": 20,
-            "neg": 20,
+            "tot": 7,
+            "eff": 21,
+            "pos": 43,
+            "neg": 14,
             "err": 1,
-            "perf": 1
+            "perf": 2
           }
         },
         "desde_z6": {
@@ -770,11 +770,11 @@ window.RECEPCION_RIVAL_DATA = {
             "perf": 0
           },
           "p5": {
-            "tot": 0,
-            "eff": 0,
+            "tot": 1,
+            "eff": -100,
             "pos": 0,
-            "neg": 0,
-            "err": 0,
+            "neg": 100,
+            "err": 1,
             "perf": 0
           }
         },

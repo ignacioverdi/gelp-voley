@@ -26,6 +26,11 @@ window.EQUIPO_DATA = {
    "pos": "ARMADOR"
   },
   {
+   "num": 5,
+   "nombre": "#5",
+   "pos": "ARMADOR"
+  },
+  {
    "num": 6,
    "nombre": "#6",
    "pos": "LIBERO"
@@ -44,6 +49,16 @@ window.EQUIPO_DATA = {
    "num": 9,
    "nombre": "#9",
    "pos": "LIBERO"
+  },
+  {
+   "num": 10,
+   "nombre": "#10",
+   "pos": "ARMADOR"
+  },
+  {
+   "num": 11,
+   "nombre": "#11",
+   "pos": "CENTRAL"
   },
   {
    "num": 12,
