@@ -14,6 +14,7 @@
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
+<script src="liga_data.js.enc" onerror="void 0"></script>
 <script src="datos_video_ent_25-26.js.enc" onerror="void 0"></script>
 <script src="datos_video_ent_26-27.js.enc" onerror="void 0"></script>
 <script src="datos_video_ent_27-28.js.enc" onerror="void 0"></script>
@@ -803,6 +804,27 @@ function _videoTodo(){
       if(!M) return;
       Object.keys(M).forEach(function(k){ VD[k] = M[k]; });
     });
+  }catch(e){}
+
+  /* ══ Los partidos sin video tambien cuentan ═══════════════════════════
+     Esta parte se alimentaba SOLO del archivo de video, que se arma con los
+     partidos que alguien cargo a mano. Con un video incompleto —o sin
+     ninguno— faltaban partidos enteros y equipos que si estan procesados.
+
+     Se completan desde liga_data.js, que tiene todo lo que paso por el
+     sistema. Lo unico que falta sin video es el clip para reproducir. */
+  try{
+    if(window.LIGA_DATA && LIGA_DATA.teams){
+      Object.keys(LIGA_DATA.teams).forEach(function(slug){
+        var _t = LIGA_DATA.teams[slug] || {};
+        (_t.matches || []).forEach(function(m){
+          var _c = m.code || ('P' + (m.date||'') + '-' + slug);
+          if(!_c || VD[_c]) return;
+          VD[_c] = {date:m.date||'', home:_t.name||slug, away:m.rival||'',
+                    acciones:[], actions:[]};
+        });
+      });
+    }
   }catch(e){}
   return VD;
 }
