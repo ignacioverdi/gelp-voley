@@ -173,6 +173,17 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 @media(max-width:680px){.grid3,.grid2{grid-template-columns:1fr}header.masthead h1{font-size:36px}}
 @media print{body{background:#fff;color:#111}.player{background:#fff;border-color:#ccc}.filters,.vmodal{display:none!important}.cell.vid::after{display:none}}
 .mdd{width:100%}
+/* El desplegable de recepcion del armador vive entre los otros controles de
+   esa barra: se le da el mismo aspecto para que no desentone, y se fuerza el
+   color del texto —sin esto quedaba blanco sobre blanco y no se leia—. */
+.armrecdd{width:auto;min-width:62px}
+.armrecdd>.msum{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;
+  padding:4px 7px;border-radius:7px;border:1px solid var(--border);
+  background:var(--card2);color:var(--txt)}
+.armrecdd .mpop{background:var(--card2);border-color:var(--border)}
+.armrecdd .mopt{color:var(--txt)}
+.armrecdd .mall button{background:var(--card);color:var(--txt);border:1px solid var(--border);
+  border-radius:6px;font-size:11px;padding:3px 8px;cursor:pointer}
 .msum{list-style:none;cursor:pointer;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:5px 6px;font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
 .msum::-webkit-details-marker{display:none}
 .mpop{position:absolute;z-index:40;margin-top:3px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px;display:flex;flex-direction:column;gap:4px;min-width:130px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
@@ -252,7 +263,10 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
     <div class="grp" id="armrecgrp"><label>Recepción</label><!-- Separado por valoracion: agrupar "#+" y "!−" escondia la diferencia
          entre una recepcion perfecta y una buena, que para el armador son dos
          situaciones distintas —con una puede jugar todo, con la otra no—. -->
-    <select id="armrecsel" class="armsel" multiple size="1" onchange="setArmRecMulti(this)" title="Ctrl+click para elegir varias"><option value="all" selected>Toda</option><option value="#">#</option><option value="+">+</option><option value="!">!</option><option value="-">−</option></select></div>
+<!-- El mismo control que ya usan los filtros de Resultado en ataque, saque y
+         defensa: casillas dentro de un desplegable, con "Todos" y "Ninguno".
+         Antes era un select multiple, que necesita Ctrl+click y no se ve bien. -->
+    <details class="mdd armrecdd" id="armrecsel"><summary class="msum">Toda</summary><div class="mpop"><div class="mall"><button type="button" onclick="armRecTodos(1)">Todos</button><button type="button" onclick="armRecTodos(0)">Ninguno</button></div><label class="mopt"><input type="checkbox" value="#" checked onchange="armRecLeer()">#</label><label class="mopt"><input type="checkbox" value="+" checked onchange="armRecLeer()">+</label><label class="mopt"><input type="checkbox" value="!" checked onchange="armRecLeer()">!</label><label class="mopt"><input type="checkbox" value="-" checked onchange="armRecLeer()">−</label></div></details></div>
     <div class="grp" id="armreczgrp"><label>Recep. desde</label><select id="armreczsel" class="armsel" onchange="setArmRecZone(this.value)"><option value="all">Todas</option><option value="r1">Z1</option><option value="r6">Z6</option><option value="r5">Z5</option></select></div>
     <div class="grp"><label>Recibe</label><select id="armrecnum" class="armsel" onchange="setArmRecNum(this.value)"></select></div>
     <div class="grp"><label>Llamada</label><select id="armcall" class="armsel" onchange="setArmCall(this.value)"></select></div>
@@ -609,19 +623,23 @@ function renderArmador(){
 function setArmSetter(i){armSetIdx=i;renderArmador();}
 function setArmPhase(f){armPhase=f;renderArmador();}
 function setArmRec(r){armRec=r;renderArmador();}
-/* Varias valoraciones a la vez: para ver "# y +" juntas, que es la pregunta
-   habitual —cuanto distribuye el armador cuando la recepcion le llega bien—.
-   Elegir "Toda" limpia el resto. */
-function setArmRecMulti(sel){
-  var v=[];
-  for(var i=0;i<sel.options.length;i++) if(sel.options[i].selected) v.push(sel.options[i].value);
-  if(!v.length || v.indexOf('all')>=0){
-    armRec='all';
-    for(var j=0;j<sel.options.length;j++) sel.options[j].selected=(sel.options[j].value==='all');
-  } else {
-    armRec=v.join(',');
-  }
+/* Varias valoraciones a la vez, con el mismo control que el resto de la app:
+   para ver "# y +" juntas, que es la pregunta habitual —cuanto distribuye el
+   armador cuando la recepcion le llega bien—. */
+function armRecLeer(){
+  var d=document.getElementById('armrecsel'); if(!d) return;
+  var bx=[].slice.call(d.querySelectorAll('input'));
+  var ch=bx.filter(function(c){return c.checked;}).map(function(c){return c.value;});
+  var todas=(ch.length===0||ch.length===bx.length);
+  var sm=d.querySelector('summary');
+  if(sm) sm.textContent = todas ? 'Toda' : ch.join(' ');
+  armRec = todas ? 'all' : ch.join(',');
   renderArmador();
+}
+function armRecTodos(v){
+  var d=document.getElementById('armrecsel'); if(!d) return;
+  [].slice.call(d.querySelectorAll('input')).forEach(function(c){ c.checked=!!v; });
+  armRecLeer();
 }
 function setArmRecZone(z){armRecZone=(z==="all")?null:z;renderArmador();}
 function setArmRecNum(v){armRecNum=v?parseInt(v,10):null;renderArmador();}
