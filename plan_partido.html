@@ -685,7 +685,46 @@ function ppVid(code){
   try{ _ent = ((INFO[code]&&INFO[code].tipo)==='entrenamiento'); }catch(e){}
   var M1 = (_ent ? window.MAPA_VIDEOS_ENT : window.MAPA_VIDEOS) || {};
   var M2 = (_ent ? window.MAPA_VIDEOS : window.MAPA_VIDEOS_ENT) || {};
-  var M = M1; var u=M[code]||M2[code]||"";if(!u)return "";u=String(u);var m=u.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);return m?m[1]:(u.length===11?u:"");}
+  var M = M1; var u=M[code]||M2[code]||"";
+  /* ══ Buscar tambien por fecha ══════════════════════════════════════════
+     El video se guarda con el codigo del partido. Pero un .dvw sin codigo
+     oficial —pasa con los amistosos y con los que se exportan sin numerar—
+     hace que el sistema le invente uno con la fecha: "P2026-08-07-...". El
+     mapa de videos, en cambio, guarda el codigo real: "50101".
+
+     Como no coinciden, el doble-click en una zona no abria nada aunque el
+     video estuviera cargado. Se busca por la FECHA, que es la misma en los
+     dos lados: primero entre los partidos que la pantalla ya conoce, y si no
+     aparece, en las propias claves del mapa. */
+  if(!u){
+    try{
+      var _f = (INFO[code] || {}).date || '';
+      if(!_f){ var _fm = String(code).match(/(20\d\d-\d\d-\d\d)/); if(_fm) _f = _fm[1]; }
+      if(_f){
+        var _fsin = _f.replace(/-/g, '');
+        /* un partido del mismo dia que SI tenga video */
+        for(var _k in INFO){
+          if((INFO[_k] || {}).date === _f && (M1[_k] || M2[_k])){
+            u = M1[_k] || M2[_k]; break;
+          }
+        }
+        /* o una clave del mapa que lleve esa fecha adentro */
+        if(!u){
+          var _bus = function(MM){
+            for(var _c in MM){
+              var _s = String(_c);
+              if(_s.indexOf(_f) >= 0 || _s.indexOf(_fsin) >= 0) return MM[_c];
+            }
+            return '';
+          };
+          u = _bus(M1) || _bus(M2);
+        }
+        /* No se adivina mas alla de eso: darle a un partido el video de otro
+           dia es peor que no mostrar ninguno. */
+      }
+    }catch(e){}
+  }
+  if(!u)return "";u=String(u);var m=u.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);return m?m[1]:(u.length===11?u:"");}
 function readKey(pid){return "ppread:"+(typeof TEAM!=="undefined"?TEAM:"")+":"+pid;}
 function readVal(p){try{var v=localStorage.getItem(readKey(p.id));if(v!==null)return v;}catch(e){}return p.read||"";}
 function saveRead(el){try{localStorage.setItem(readKey(el.getAttribute("data-pid")),el.innerHTML);}catch(e){}}
