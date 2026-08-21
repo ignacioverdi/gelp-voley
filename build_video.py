@@ -149,7 +149,19 @@ def parse_dvw(path, ent=False):
     if mcode: code=mcode.group(1)
     elif ent and date: code='ENT'+date.replace('-','')
     elif ent: code='ENT_'+re.sub(r'[^A-Za-z0-9]','',base)[:12]
-    else: return None   # partido sin codigo oficial -> se ignora
+    else:
+        # ══ Partido sin codigo oficial ═══════════════════════════════════
+        # Antes se descartaba. Pero un amistoso, o un .dvw exportado sin
+        # numerar, no trae ese codigo de 5 digitos: esos partidos quedaban
+        # SIN cortes de video para siempre, por mas que se cargara el link.
+        #
+        # Se arma el mismo identificador que usa el resto del sistema —tipo,
+        # fecha y nombre del archivo— asi el video que se cargue en esa
+        # pantalla lo encuentra.
+        _t = unicodedata.normalize('NFKD', os.path.splitext(base)[0])
+        _t = _t.encode('ascii','ignore').decode()
+        _t = re.sub(r'[^A-Za-z0-9]+','', _t).upper()[:12] or 'SIN'
+        code = 'P' + (date or 'sinfecha') + '-' + _t
 
     scout=txt.split('[3SCOUT]')[-1]
     scout_lines=scout.strip().splitlines()
@@ -340,7 +352,31 @@ if __name__=='__main__':
                 m['season']=season
                 existentes[code]=m; agregados+=1
         # hornear SOLO los links de los partidos de esta temporada
-        links={k:all_links[k] for k in existentes if k in all_links}
+        # ══ Emparejar los links con su partido ═══════════════════════════
+        # El link se guarda con la clave que uso la pantalla de Cargar Videos,
+        # y el partido con el codigo que arma este script. Cuando no coinciden
+        # —pasa con los partidos sin codigo oficial— el link se descartaba y
+        # el video no aparecia en ninguna pantalla, aunque estuviera cargado.
+        #
+        # Aca se emparejan tambien por FECHA, que es el dato que los dos lados
+        # tienen y no cambia. Asi el video llega a su partido sin importar con
+        # que nombre se guardo.
+        links = {k: all_links[k] for k in existentes if k in all_links}
+        _sin = [k for k in existentes if k not in links]
+        if _sin and all_links:
+            import re as _re2
+            for _k in _sin:
+                _f = (existentes[_k] or {}).get('date', '')
+                if not _f:
+                    continue
+                _fp = _f.replace('-', '')
+                for _lk, _lv in all_links.items():
+                    if not _lv:
+                        continue
+                    _s = str(_lk)
+                    if _f in _s or _fp in _s:
+                        links[_k] = _lv
+                        break
         D={'v':DATA_VERSION,'season':season,'combos':COMBOS,'matches':existentes,'links':links}
         body=('/* '+prefix+' '+season+' — generado automaticamente, no editar a mano */\n'
               '(function(){\n'

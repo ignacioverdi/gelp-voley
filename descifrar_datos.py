@@ -120,7 +120,25 @@ def main():
             claro = descifrar(b64, k, original)
         except Exception as e:
             print('    [ERROR] %-38s %s' % (original, e)); fallos += 1; continue
-        open(os.path.join(carpeta, *original.split('/')), 'w', encoding='utf-8').write(claro)
+        # ══ No pisar un archivo MAS NUEVO ═══════════════════════════════
+        # Si alguien dejo una version nueva del archivo —el mapa_videos.js
+        # recien generado, por ejemplo— descifrar encima la borraba y su
+        # trabajo se perdia sin ningun aviso: el link cargado desaparecia y
+        # la app seguia diciendo "0 videos".
+        #
+        # Cuando el archivo suelto es mas nuevo que su version cifrada, se
+        # conserva el suelto y se descarta el cifrado, que quedo viejo.
+        ruta_claro = os.path.join(carpeta, *original.split('/'))
+        if os.path.exists(ruta_claro):
+            try:
+                if os.path.getmtime(ruta_claro) > os.path.getmtime(ruta_enc) + 2:
+                    os.remove(ruta_enc)
+                    total += 1
+                    print('    %-40s se conserva el tuyo (es mas nuevo)' % original)
+                    continue
+            except Exception:
+                pass
+        open(ruta_claro, 'w', encoding='utf-8').write(claro)
         os.remove(ruta_enc)
         total += 1
         print('    %-40s legible' % original)
