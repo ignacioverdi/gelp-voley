@@ -75,7 +75,15 @@ def entrar():
                {'email': ROBOT_MAIL, 'password': ROBOT_CLAVE, 'returnSecureToken': True},
                'POST')
     if not r or '_error' in r or not r.get('idToken'):
+        # Se dice QUE fallo. Antes el 401 salia sin contexto y no habia forma
+        # de saber si el problema era la cuenta del robot, su clave, o el
+        # permiso sobre la rama: los tres dan el mismo numero.
+        print('   [robot] no pude iniciar sesion con %s'
+              % (ROBOT_MAIL or '(sin ROBOT_MAIL cargado)'))
+        print('   [robot] revisa que la cuenta exista en Authentication y que')
+        print('           ROBOT_MAIL y ROBOT_CLAVE en GitHub sean los suyos.')
         return None
+    print('   [robot] sesion iniciada como %s' % ROBOT_MAIL)
     return r['idToken']
 
 
