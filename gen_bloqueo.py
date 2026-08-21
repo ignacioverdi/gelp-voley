@@ -88,12 +88,17 @@ def _puestos_del_club():
         # juntando todo en una tabla la #2 de un equipo pisaba a la #2 del
         # otro. La central de GELP salia como armadora porque en el rival ese
         # dorsal es de la armadora.
+        # La clave se guarda SIN separadores. liga_data usa "banco_provincia"
+        # y este archivo "bancoprovincia": comparando tal cual, el rival nunca
+        # encontraba su roster y sus jugadoras quedaban sin puesto —o sea,
+        # sin fila donde dibujarse—.
+        import re as _re2
         for _slug, _eq in (d.get('teams') or {}).items():
             _t = {}
             for num, rol in (_eq.get('roster') or {}).items():
                 if rol in MAPA:
                     _t[str(num)] = MAPA[rol]
-            out[_slug] = _t
+            out[_re2.sub(r'[^a-z0-9]', '', str(_slug).lower())] = _t
     except Exception:
         pass
     return out
@@ -223,7 +228,7 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
         # separar el bloqueo por posicion —puntas, centrales, opuestos— y
         # todas quedan mezcladas en una sola lista, cuando un central y una
         # punta bloquean cosas distintas.
-        _pt = _PUESTOS.get(team, {})
+        _pt = _PUESTOS.get(re.sub(r'[^a-z0-9]', '', str(team).lower()), {})
         pl = [{'num': n, 'name': i['name'], 'role': 'bloqueo',
                'pos': _pt.get(str(n), ''),
                'total': len(i['data']), 'data': i['data']} for n, i in ps.items()]
@@ -347,7 +352,7 @@ def build(fuentes, out='datos_bloqueo.js'):
     OUT={}
     for team,ps in BLOCK.items():
         # el puesto, para que la pantalla pueda agrupar por posicion
-        _pt2 = _PUE.get(team, {})
+        _pt2 = _PUE.get(re.sub(r'[^a-z0-9]', '', str(team).lower()), {})
         pl=[{'num':n,'name':i['name'],'role':'bloqueo','pos':_pt2.get(str(n),''),
              'total':len(i['data']),'data':i['data']} for n,i in ps.items()]
         pl.sort(key=lambda p:-p['total'])
