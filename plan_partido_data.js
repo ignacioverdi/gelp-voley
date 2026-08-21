@@ -1,1 +1,0 @@
-window.PP_DATA={};
