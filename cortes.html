@@ -307,10 +307,17 @@
     if(MODO!=='ent' && window.LIGA_DATA && LIGA_DATA.teams){
       VD.matches = VD.matches || {};
       var _T = LIGA_DATA.teams;
+      var _pend = [];
       Object.keys(_T).forEach(function(slug){
         var _t = _T[slug] || {};
         (_t.matches || []).forEach(function(m){
-          var _c = m.code || ('P' + (m.date||'') + '-' + slug);
+          /* Un partido esta cargado en los DOS equipos que lo jugaron. Si la
+             clave lleva el nombre del equipo, el mismo partido entra dos
+             veces y la lista lo muestra repetido. Se arma con la fecha y los
+             dos nombres ORDENADOS, que da lo mismo desde cualquier lado. */
+          var _par = [(_t.name||slug), (m.rival||'')].sort().join('-')
+                       .toLowerCase().replace(/[^a-z0-9]+/g,'-');
+          var _c = m.code || ('P' + (m.date||'') + '-' + _par);
           if(!_c || VD.matches[_c]) return;
           /* 'teams' es el campo que lee el desplegable: {slug: nombre}.
              Sin el, el partido se agrega pero el equipo no aparece en la
@@ -332,6 +339,41 @@
           if(_rs) _tm[_rs] = _riv;
           VD.matches[_c] = {date:m.date||'', home:_t.name||slug,
                             away:_riv, teams:_tm, acciones:[], actions:[]};
+          _pend.push([_c, m.i]);
+        });
+      });
+
+      /* ══ Las acciones de cada partido ══════════════════════════════════
+         Sin esto los partidos aparecian en la lista pero con "0 clips": se
+         veia el partido y no habia nada que mirar. Las acciones estan en
+         liga_data, una lista por jugadora y por fundamento.
+
+         El campo 't' es el segundo del video. Sin video queda en 0 y el clip
+         no se puede reproducir —eso ya lo avisa la pantalla— pero la accion
+         se lista igual, con su valoracion y su zona. */
+      var _EV = ['#','/','+','!','=','-'];
+      var _SK = {atk:'Ataque', srv:'Saque', rec:'Recepción', dig:'Defensa'};
+      Object.keys(_T).forEach(function(slug){
+        var _t = _T[slug] || {}, _ms = _t.matches || [];
+        ['atk','srv','rec','dig'].forEach(function(f){
+          var _campo = {atk:'a', srv:'s', rec:'r', dig:'d'}[f];
+          Object.keys(_t[f] || {}).forEach(function(num){
+            var _j = _t[f][num] || {};
+            (_j[_campo] || []).forEach(function(a){
+              var _m = _ms[a[1]] || {};
+              var _par = [(_t.name||slug), (_m.rival||'')].sort().join('-')
+                           .toLowerCase().replace(/[^a-z0-9]+/g,'-');
+              var _cod = _m.code || ('P' + (_m.date||'') + '-' + _par);
+              var _dest = VD.matches[_cod];
+              if(!_dest) return;
+              _dest.actions = _dest.actions || [];
+              _dest.actions.push({
+                tm: slug, sk: _SK[f], num: +num,
+                name: _j.name || ('#' + num),
+                ev: _EV[a[4]] || '!', t: 0
+              });
+            });
+          });
         });
       });
     }
