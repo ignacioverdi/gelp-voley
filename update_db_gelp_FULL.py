@@ -543,6 +543,23 @@ def _unificar_por_nombre(teams_data):
                      queda, ', #'.join(sobran)))
 
 
+def slug_equipo(nombre):
+    """El identificador de un equipo, igual en TODO el sistema.
+
+    Cada generador armaba el suyo: este archivo escribia "banco_provincia" y
+    gen_plan_partido.py "bancoprovincia". Las pantallas leen de los dos, y
+    cuando el nombre tenia un espacio o un acento no coincidian: el rival
+    quedaba sin armadores, sin bloqueo y sin nada, mientras el club propio
+    —de una sola palabra— funcionaba bien.
+
+    Se sacan acentos y todo lo que no sea letra o numero, que es el criterio
+    mas estricto y el que ya usaban las pantallas.
+    """
+    import unicodedata as _u
+    t = _u.normalize('NFKD', nombre or '').encode('ascii', 'ignore').decode()
+    return re.sub(r'[^a-z0-9]', '', t.lower())
+
+
 def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # Load existing DB
     if os.path.exists(db_path):
@@ -1157,7 +1174,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             if rec0 >= 20: roster[nser]='OUTSIDE'
             elif rec0 <= 8: roster[nser]=('OUTSIDE' if punta>opp else 'OPPOSITE')
             else: roster[nser]=('OUTSIDE' if punta>=opp else 'OPPOSITE')
-        LIGA['teams'][team.lower().replace(' ','_')]={'name':team,'rivals':rivals,'games':_games_list,'atk':atk_p,'srv':srv_p,'rec':rec_p,'dig':dig_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster,'matches':matches}
+        LIGA['teams'][slug_equipo(team)]={'name':team,'rivals':rivals,'games':_games_list,'atk':atk_p,'srv':srv_p,'rec':rec_p,'dig':dig_p,'setters':setters_list,'setter':setters_list[0] if setters_list else None,'roster':roster,'matches':matches}
     with open(os.path.join(output_dir,'liga_data.js'),'w',encoding='utf-8') as f:
         f.write('window.LIGA_DATA = '+json.dumps(LIGA,ensure_ascii=False)+';\n')
     return len(LIGA['teams'])
@@ -1229,7 +1246,7 @@ def build_heatmaps(teams_data, template_dir='.', output_dir='.', temporada_filte
         td = teams_data.get(team, {})
         if not td: continue
 
-        slug = team.lower().replace(' ','_')
+        slug = slug_equipo(team)
 
         # Collect rivals
         rivals_set = set()

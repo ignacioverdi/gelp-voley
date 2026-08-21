@@ -128,13 +128,22 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     except Exception:
         TABLA = {}
 
+    def _sinacento(t):
+        import unicodedata as _u
+        return _u.normalize('NFKD', t or '').encode('ascii', 'ignore').decode()
+
     def corto(largo):
-        pl = re.sub(r'[^a-z0-9]', '', largo.lower())
+        # El identificador tiene que ser EL MISMO que arma liga_data, o la
+        # pantalla no encuentra el bloqueo del rival. Antes se cortaba a 18
+        # caracteres y no se sacaban los acentos: "Club Atlético Velez
+        # Sarsfield" quedaba como "clubatlticovelezsa" y no coincidia con
+        # nada.
+        pl = re.sub(r'[^a-z0-9]', '', _sinacento(largo).lower())
         for k, v in TABLA.items():
-            kk = re.sub(r'[^a-z0-9]', '', str(k).lower())
+            kk = re.sub(r'[^a-z0-9]', '', _sinacento(str(k)).lower())
             if kk and (kk == pl or kk in pl):
-                return re.sub(r'[^a-z0-9]', '', str(v).lower())
-        return re.sub(r'[^a-z0-9]', '', largo.split('(')[0].lower())[:18]
+                return re.sub(r'[^a-z0-9]', '', _sinacento(str(v)).lower())
+        return re.sub(r'[^a-z0-9]', '', _sinacento(largo.split('(')[0]).lower())
 
     BLOCK = {}
     for ruta in sorted(archivos):

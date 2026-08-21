@@ -284,6 +284,18 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             return DISP_BY_SLUG.get(sl) or re.sub(r'\s*\(.*','',raw).strip() or '?'
         for slug,pfx,opp_sl,opp_raw,my_s,opp_s in [(hslug,'*',aslug,aname,hs,as_),(aslug,'a',hslug,hname,as_,hs)]:
             if slug is None: continue
+            # Un equipo que no estaba en la configuracion —un rival nuevo, un
+            # partido de otra liga— se agrega solo. Antes el generador cortaba
+            # con un error y NO se generaba el plan de partido de nadie: un
+            # solo .dvw inesperado dejaba la pantalla entera vacia.
+            if slug not in DATA:
+                # el mismo molde que arriba: con defaultdict, o revienta al
+                # guardar la primera accion de una jugadora
+                DATA[slug] = {'name': DISP_BY_SLUG.get(slug) or slug,
+                              'atk':defaultdict(list), 'srv':defaultdict(list),
+                              'rec':defaultdict(list), 'dig':defaultdict(list),
+                              'info':{}, 'names':{}, 'lib':set(),
+                              'set':Counter(), 'app':Counter()}
             D=DATA[slug]
             walk(t,pfx,mid,D)
             D['info'][mid]={'opp':oppname(opp_sl,opp_raw),'date':date,'res':f"{my_s}-{opp_s}",
