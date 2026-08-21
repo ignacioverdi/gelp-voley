@@ -1820,8 +1820,10 @@ var BLQ_OPCIONES=[
 
 // ════════ NUEVA CANCHITA DEL ARMADOR (distribución por rotación con filtros) ════════
 var GP_ARM_PHASE='SO';   // 'SO' | 'TR'
-var GP_ARM_REC='pos';    // 'pos' (#+) | 'neg' (!-)
+var GP_ARM_REC='all';    // 'all' | '#' | '+' | '!' | '-'  (o 'pos'/'neg', de antes)
 var GP_ARM_MATCHES=null; // null = todos los partidos ; Set de índices = filtrar
+/* El orden es el que usa el motor al guardar: 0 # · 1 / · 2 + · 3 ! · 4 = · 5 − */
+var GP_REC_IDX={'#':0,'/':1,'+':2,'!':3,'=':4,'-':5};
 var GP_ARM_RECZONE=null; // null = todas ; 'r1'|'r6'|'r5' = banda de zona de recepción
 var GP_ARM_RECNUM=null;  // null = todos ; número = filtrar por receptor
 var GP_ARM_SERVETYPE=null; // null = todas ; 'M'=flotado | 'Q'=potencia (solo side-out)
@@ -1839,7 +1841,8 @@ function gpComputeRotDist(setterObj,pos,phase,rec){
     if(phase==='SO'&&rec){
       var rq=r[7];
       if(rec==='pos'&&!(rq===0||rq===2)) return false;
-      if(rec==='neg'&&!(rq===3||rq===5)) return false;
+      else if(rec==='neg'&&!(rq===3||rq===5)) return false;
+      else if(GP_REC_IDX[rec]!==undefined&&rq!==GP_REC_IDX[rec]) return false;
     }
     if(GP_ARM_MATCHES&&GP_ARM_MATCHES.size){ if(r.length<13||!GP_ARM_MATCHES.has(r[12])) return false; }
     if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return false; }
@@ -1925,7 +1928,8 @@ function gpZoneClips(setterObj,pos,phase,rec,zone){
     if(phase==='TR'&&at!==1) return;
     if(phase==='SO'&&rec){ var rq=r[7];
       if(rec==='pos'&&!(rq===0||rq===2)) return;
-      if(rec==='neg'&&!(rq===3||rq===5)) return; }
+      else if(rec==='neg'&&!(rq===3||rq===5)) return;
+      else if(GP_REC_IDX[rec]!==undefined&&rq!==GP_REC_IDX[rec]) return; }
     if(GP_ARM_MATCHES&&GP_ARM_MATCHES.size){ if(r.length<13||!GP_ARM_MATCHES.has(r[12])) return; }
     if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return ; }
     if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return ; }
@@ -1990,7 +1994,7 @@ function gpOpenVideo(rot,zone,sidx){
   var clips=gpZoneClips(_st,rot,GP_ARM_PHASE,rec,zone);
   gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
   gpV.key=(GP_RIVAL_SLUG||'rival')+'__r'+rot+'_'+GP_ARM_PHASE+(GP_ARM_PHASE==='SO'?('_'+GP_ARM_REC):'')+'_z'+zone;
-  var faseLbl=GP_ARM_PHASE==='SO'?('Side-out '+(GP_ARM_REC==='pos'?'#+':GP_ARM_REC==='neg'?'!-':'todas')):'Transición';
+  var faseLbl=GP_ARM_PHASE==='SO'?('Side-out '+(GP_ARM_REC==='all'?'todas':GP_ARM_REC==='pos'?'#+':GP_ARM_REC==='neg'?'!-':GP_ARM_REC)):'Transición';
   document.getElementById('gpVidTitle').textContent='P'+rot+' · Zona '+zone+' · '+faseLbl+' — '+clips.length+' ataques';
   document.getElementById('gpVidOverlay').style.display='flex';
   clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; });
@@ -2196,7 +2200,10 @@ function renderArmador(){
       b.addEventListener('click',function(){ GP_ARM_PHASE=o[0]; gpArmSyncAll(); });
       phaseWrap.appendChild(b); phaseBtns[o[0]]=b;
     });
-    [['all','Todas'],['pos','# +'],['neg','! -']].forEach(function(o){
+    /* Separado por valoracion: agrupar "#+" y "!−" escondia la diferencia
+       entre una recepcion perfecta y una buena, que para el armador son dos
+       situaciones distintas —con una puede jugar todo, con la otra no—. */
+    [['all','Todas'],['#','#'],['+','+'],['!','!'],['-','−']].forEach(function(o){
       var b=document.createElement('button'); b.textContent=o[1];
       b.style.cssText='border:none;background:transparent;color:#94a3b8;font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;padding:5px 13px;border-radius:6px;cursor:pointer';
       b.addEventListener('click',function(){ if(GP_ARM_PHASE!=='SO')return; GP_ARM_REC=o[0]; gpArmSyncAll(); });
@@ -2241,8 +2248,11 @@ function renderArmador(){
       var so=GP_ARM_PHASE==='SO';
       recWrap.style.opacity=so?'1':'.35'; recWrap.style.pointerEvents=so?'auto':'none'; recLbl.style.opacity=so?'1':'.35';
       gpStyleBtn(recBtns.all, so&&GP_ARM_REC==='all', '#64748b');
-      gpStyleBtn(recBtns.pos, so&&GP_ARM_REC==='pos', '#22c55e');
-      gpStyleBtn(recBtns.neg, so&&GP_ARM_REC==='neg', '#09135f');
+      ['#','+','!','-'].forEach(function(k){
+        if(recBtns[k]) gpStyleBtn(recBtns[k], so&&GP_ARM_REC===k, '#22c55e');
+      });
+      if(recBtns.pos) gpStyleBtn(recBtns.pos, so&&GP_ARM_REC==='pos', '#22c55e');
+      if(recBtns.neg) gpStyleBtn(recBtns.neg, so&&GP_ARM_REC==='neg', '#09135f');
       Object.keys(rzBtns).forEach(function(k){ var on=(k==='all'&&!GP_ARM_RECZONE)||(k===GP_ARM_RECZONE); gpStyleBtn(rzBtns[k], on, '#06b6d4'); });
       stWrap.style.opacity=so?'1':'.35'; stWrap.style.pointerEvents=so?'auto':'none'; stLbl.style.opacity=so?'1':'.35';
       Object.keys(stBtns).forEach(function(k){ var on=(k==='all'&&!GP_ARM_SERVETYPE)||(k===GP_ARM_SERVETYPE); gpStyleBtn(stBtns[k], so&&on, '#9094b7'); });
