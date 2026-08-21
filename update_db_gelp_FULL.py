@@ -589,7 +589,11 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #
     # Antes habia que borrar nla_players_db.json a mano, y nadie podia
     # adivinarlo: la pantalla se veia vacia sin decir por que.
-    _ESQUEMA = 2          # subir este numero cuando el parser lea algo nuevo
+    # 3: se unifican las jugadoras que cambiaron de dorsal. Las bases creadas
+    #    antes tienen las dos entradas —#4 y #5 de la misma persona— y como el
+    #    partido "ya estaba cargado" nunca se reprocesaban: la armadora seguia
+    #    apareciendo dos veces en el dashboard y en el plan de partido.
+    _ESQUEMA = 3          # subir este numero cuando el parser lea algo nuevo
     try:
         _v = db.get('_esquema', 1)
     except Exception:
@@ -2308,7 +2312,11 @@ if __name__ == '__main__':
         td = teams_data.get(team, {})
         libs = [int(ns) for ns,pd in td.items() if len(pd.get('rec',[]))>15 and len(pd.get('atk',[]))<=max(2,len(pd.get('rec',[]))*0.05)]
         liberos_map[team] = libs
-    print("\n   ┌─ CHEQUEO DE POSICIONES (confirma que esten bien) ─┐")
+    # Este chequeo lee los .dvw tal cual, ANTES de unificar los dorsales.
+    # Si una jugadora cambio de numero puede aparecer con los dos —el 4 y el
+    # 5 de la misma persona—: en la app llega uno solo. Se aclara para que el
+    # mensaje no haga pensar que quedo algo mal.
+    print("\n   ┌─ CHEQUEO DE POSICIONES (como vienen en los .dvw) ─┐")
     for team in NLA_TEAMS:
         if team in setters_map:
             arms = setters_map[team]

@@ -128,8 +128,13 @@ def main():
         #
         # Cuando el archivo suelto es mas nuevo que su version cifrada, se
         # conserva el suelto y se descarta el cifrado, que quedo viejo.
+        # Solo para los archivos que el usuario copia A MANO. Los demas los
+        # genera el propio HACER_TODO durante la corrida, asi que siempre
+        # quedan mas nuevos que su version cifrada: conservarlos dejaba datos
+        # sin cifrar dando vueltas y el publicador los borraba del repo.
+        A_MANO = ('mapa_videos.js', 'mapa_videos_ent.js', 'config_club.json')
         ruta_claro = os.path.join(carpeta, *original.split('/'))
-        if os.path.exists(ruta_claro):
+        if original in A_MANO and os.path.exists(ruta_claro):
             try:
                 if os.path.getmtime(ruta_claro) > os.path.getmtime(ruta_enc) + 2:
                     os.remove(ruta_enc)
