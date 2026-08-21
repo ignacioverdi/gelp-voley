@@ -15,6 +15,12 @@
   "_equipos": "El nombre largo tal como viene en el .dvw y el corto que se muestra en las tablas. Los que falten se acortan solos.",
   "equipos": {
     "Club Gimnasia y Esgrima de La Plata": "GELP",
-    "Club Banco Provincia de Buenos Aires La Plata": "Banco Provincia"
+    "Club Banco Provincia de Buenos Aires La Plata": "Banco Provincia",
+    "Club Atlético Velez Sarsfield": "Velez",
+    "Club Estudiantes de La Plata": "Estudiantes",
+    "Club Atlético River Plate": "River"
+  },
+  "temporada": {
+    "inicio": 8
   }
 }
