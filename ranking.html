@@ -19,7 +19,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080F;--card:#0D0E1A;--b:rgba(255,255,255,.06);--b2:rgba(255,255,255,.12);
-  --red:#E8192C;--txt:#E2E8F0;--mut:#64748B;}
+  --red:#09135f;--txt:#E2E8F0;--mut:#64748B;}
 html,body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;min-height:100vh}
 .hdr{background:rgba(7,8,15,.97);border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100}
 .hdr-top{display:flex;align-items:center;gap:12px;padding:10px 20px}
@@ -27,12 +27,12 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',s
 .main{max-width:1000px;margin:0 auto;padding:20px 16px}
 .filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
 .fbtn{padding:3px 12px;border-radius:20px;border:1px solid var(--b);background:transparent;color:var(--mut);font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;transition:all .15s}
-.fbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
+.fbtn.on{background:rgba(9,19,95,.1);border-color:rgba(9,19,95,.35);color:#09135f}
 .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .card{background:var(--card);border:1px solid var(--b);border-radius:12px;padding:14px 16px}
 .ctitle{font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
 .row{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:4px 6px;border-radius:6px}
-.row.me{background:rgba(232,25,44,.06)}
+.row.me{background:rgba(9,19,95,.06)}
 .medal{width:22px;text-align:center;font-size:13px;flex-shrink:0}
 .info{flex:1;min-width:0}
 .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
@@ -75,21 +75,21 @@ html,body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',s
 var CUR_NUM = 0;
 var CUR_POS = null;
 var EXPANDED = {};
-var PC = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
+var PC = {ARMADOR:'#9094b7',OPUESTO:'#9094b7',PUNTA:'#22C55E',CENTRAL:'#9094b7',LIBERO:'#06B6D4'};
 var SK = [
-  {k:'sq',    l:'Saque',        i:'⚡', c:'#F59E0B', o:3,  cods:['SM','SQ'],          src:'saques'},
+  {k:'sq',    l:'Saque',        i:'⚡', c:'#9094b7', o:3,  cods:['SM','SQ'],          src:'saques'},
   {k:'rec',   l:'Recepción',    i:'🛡', c:'#22C55E', o:36, cods:[],                   src:'rec'},
   {k:'bqpos', l:'Blq #+',       i:'🧱', c:'#06B6D4', o:43, cods:[],                   src:'blq'},
-  {k:'atqq',  l:'Atq Central',  i:'💥', c:'#F97316', o:48, cods:['X1','X7'],          src:'ataques'},
+  {k:'atqq',  l:'Atq Central',  i:'💥', c:'#9094b7', o:48, cods:['X1','X7'],          src:'ataques'},
   {k:'atqhb', l:'Atq Alta',     i:'💥', c:'#818CF8', o:20, cods:['X8','V8','X5','V5'],src:'ataques'},
-  {k:'atqx',  l:'Atq Rápida',   i:'💥', c:'#EC4899', o:42, cods:['XM','X2'],          src:'ataques'},
-  {k:'atqtr', l:'Transición',   i:'💥', c:'#F59E0B', o:34, cods:['XP','VP'],          src:'ataques'},
+  {k:'atqx',  l:'Atq Rápida',   i:'💥', c:'#09135f', o:42, cods:['XM','X2'],          src:'ataques'},
+  {k:'atqtr', l:'Transición',   i:'💥', c:'#9094b7', o:34, cods:['XP','VP'],          src:'ataques'},
 ];
 
 function tryInit(n){
   if(typeof _plantelNormalizado()!=='undefined' && typeof objCalcVals!=='undefined'){ init(); }
   else if(n>0){ setTimeout(function(){ tryInit(n-1); }, 300); }
-  else { document.getElementById('grid').innerHTML='<div style="grid-column:span 3;text-align:center;padding:40px;color:#ef4444">Error: verificar objetivos_config.js y datos_partidos.js en GitHub.</div>'; }
+  else { document.getElementById('grid').innerHTML='<div style="grid-column:span 3;text-align:center;padding:40px;color:#09135f">Error: verificar objetivos_config.js y datos_partidos.js en GitHub.</div>'; }
 }
 document.fonts.ready.then(function(){ tryInit(30); }).catch(function(){ tryInit(30); });
 
@@ -242,7 +242,7 @@ function makeRow(j, i, sk, maxV){
   var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
   var barW=Math.max(3,Math.abs(v)/maxV*100);
   var isCur=CUR_NUM&&j.num===CUR_NUM;
-  var valC=v>=sk.o?'#22c55e':v>=(sk.o-8)?'#fbbf24':'#ef4444';
+  var valC=v>=sk.o?'#22c55e':v>=(sk.o-8)?'#9094b7':'#09135f';
   var acc=getActionCount(j.pjug,sk);
   /* getActionCount devuelve {tot, pos}: hay que sacarle el número, no pegarlo
      entero. Antes se concatenaba el objeto y salía "[object Object] acc".
@@ -254,7 +254,7 @@ function makeRow(j, i, sk, maxV){
   var med=document.createElement('div'); med.className='medal';
   med.innerHTML=medal||'<span style="font-size:10px;color:#475569">'+(i+1)+'</span>';
   var info=document.createElement('div'); info.className='info';
-  info.innerHTML='<div class="top"><span class="nm" style="color:'+(isCur?'#e8192c':j.col)+'">'+j.nm+(isCur?' ←':'')+'</span><span class="val" style="color:'+valC+'">'+v+'%</span></div>'
+  info.innerHTML='<div class="top"><span class="nm" style="color:'+(isCur?'#09135f':j.col)+'">'+j.nm+(isCur?' ←':'')+'</span><span class="val" style="color:'+valC+'">'+v+'%</span></div>'
     +'<div class="bar-bg"><div class="bar" style="width:'+barW+'%;background:'+sk.c+'"></div></div>'
     +'<div class="sub">'+subTxt+'</div>';
   row.appendChild(med); row.appendChild(info);

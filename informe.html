@@ -6,8 +6,8 @@
 <title>Informe de partido</title>
 <style>
 :root{--bg:#0d1017;--sur:#141922;--card:#1a2029;--card2:#212936;--b:#2a3441;--b2:#38445a;
-      --txt:#e8edf5;--mut:#8b97ab;--dim:#5f6b7f;--ok:#3ddc84;--bad:#ff5f6d;--warn:#e6a743;
-      --loc:#e6a743;--vis:#4fc3f7}
+      --txt:#e8edf5;--mut:#8b97ab;--dim:#5f6b7f;--ok:#3ddc84;--bad:#09135f;--warn:#9094b7;
+      --loc:#9094b7;--vis:#4fc3f7}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
 
@@ -46,8 +46,8 @@ tbody tr:hover{background:var(--card)}
 /* la nota, como ficha de color según el valor */
 .chip{display:inline-block;min-width:38px;padding:2px 8px;border-radius:20px;font-weight:800;font-size:12px}
 .chip.a{background:rgba(61,220,132,.16);color:var(--ok);border:1px solid rgba(61,220,132,.34)}
-.chip.b{background:rgba(230,167,67,.14);color:var(--warn);border:1px solid rgba(230,167,67,.32)}
-.chip.c{background:rgba(255,95,109,.13);color:var(--bad);border:1px solid rgba(255,95,109,.3)}
+.chip.b{background:rgba(144,148,183,.14);color:var(--warn);border:1px solid rgba(144,148,183,.32)}
+.chip.c{background:rgba(9,19,95,.13);color:var(--bad);border:1px solid rgba(9,19,95,.3)}
 /* barrita detrás de los porcentajes */
 .bar{position:relative;display:inline-block;min-width:44px}
 .bar i{position:absolute;left:0;bottom:-3px;height:2px;background:currentColor;opacity:.45;border-radius:2px}
@@ -75,15 +75,15 @@ tr.tot td{border-top:2px solid var(--b2);font-weight:800;background:var(--card2)
   th{background:#eee!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   tr.tot td{background:#f4f4f4!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   td,th{border-bottom:1px solid #ccc}
-  .g{color:#0a7d3c!important} .r{color:#b3261e!important} .m{color:#777!important}
+  .g{color:#0a7d3c!important} .r{color:#09135f!important} .m{color:#777!important}
   tbody tr:nth-child(even){background:#fafafa!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .chip{border:1px solid #999!important;background:#fff!important;color:#000!important}
   .chip.a{color:#0a7d3c!important;border-color:#0a7d3c!important}
-  .chip.c{color:#b3261e!important;border-color:#b3261e!important}
+  .chip.c{color:#09135f!important;border-color:#09135f!important}
   .bar i{display:none}
   .bat{border-color:#bbb}
   .bat-tit{background:#eee!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .bat .ok{color:#0a7d3c!important} .bat .mid{color:#8a6100!important} .bat .no{color:#b3261e!important}
+  .bat .ok{color:#0a7d3c!important} .bat .mid{color:#8a6100!important} .bat .no{color:#09135f!important}
   .bat .obj{color:#666!important}
   h2.eq{border-left-color:#000}
   @page{size:A4 landscape;margin:12mm}

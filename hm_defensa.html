@@ -6,7 +6,7 @@
 <title>ANALISIS DE DEFENSA — GELP</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#E8192C;--amber:#F59E0B;--green:#22C55E;--lime:#84CC16;--orange:#F97316;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
+:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#09135f;--amber:#9094b7;--green:#22C55E;--lime:#84CC16;--orange:#9094b7;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
 html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",sans-serif;min-height:100vh}
 .hdr{background:rgba(7,8,15,.97);border-bottom:1px solid var(--border);padding:11px 20px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:14px}
 .hdr a.back{color:var(--muted);font-size:11px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:800;white-space:nowrap}
@@ -21,10 +21,10 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .chips{display:flex;flex-wrap:wrap;gap:3px}
 .chip{padding:3px 8px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;font-family:"Barlow Condensed",sans-serif;transition:all .12s;text-transform:uppercase}
 .chip:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
-.chip.on{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:var(--red)}
+.chip.on{background:rgba(9,19,95,.12);border-color:rgba(9,19,95,.4);color:var(--red)}
 .psel{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:700;cursor:pointer}
 .psel option{background:#0D0E1A}
-.vbtn{width:100%;margin-top:8px;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.45);color:var(--orange);padding:9px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:13px;letter-spacing:1px;cursor:pointer}
+.vbtn{width:100%;margin-top:8px;background:rgba(144,148,183,.12);border:1px solid rgba(144,148,183,.45);color:var(--orange);padding:9px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:13px;letter-spacing:1px;cursor:pointer}
 .counter{margin-top:12px;padding:10px;background:rgba(255,255,255,.02);border-radius:8px;border:1px solid var(--border);text-align:center}
 .counter-n{font-family:"Bebas Neue",sans-serif;font-size:32px;line-height:1}
 .counter-l{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
@@ -54,8 +54,8 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .fsel{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--text);padding:7px 10px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:6px}
 .fsel:last-child{margin-bottom:0}
 .fsel option{background:#0D0E1A}
-.reset-btn{width:100%;margin-top:10px;background:rgba(232,25,44,.08);border:1px solid rgba(232,25,44,.3);color:var(--red);padding:9px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:12px;letter-spacing:1px;cursor:pointer;text-transform:uppercase}
-.reset-btn:hover{background:rgba(232,25,44,.14)}
+.reset-btn{width:100%;margin-top:10px;background:rgba(9,19,95,.08);border:1px solid rgba(9,19,95,.3);color:var(--red);padding:9px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:12px;letter-spacing:1px;cursor:pointer;text-transform:uppercase}
+.reset-btn:hover{background:rgba(9,19,95,.14)}
 @media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto}.g4{grid-template-columns:repeat(2,1fr)}}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
@@ -205,7 +205,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
      demas o directamente no se contaba. */
   var RES_ORDER=['#','+','!','-','/','='];
   var RES_LABEL={'#':'Perfecta','+':'Buena','!':'Regular','-':'Mala','=':'Error'};
-  var RES_HEX={'#':'#22C55E','+':'#84CC16','!':'#EAB308','-':'#F97316','=':'#EF4444'};
+  var RES_HEX={'#':'#22C55E','+':'#84CC16','!':'#9094b7','-':'#9094b7','=':'#09135f'};
 
   function rivalOf(m){
     if(!m) return 'Rival';
@@ -278,7 +278,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
          cuando en realidad es peor que una mala: la pelota se va al campo
          rival sin control. Ahora pesa igual que la negativa, como en el
          motor. */; }); return Math.round(s/acts.length*100); }
-  function effColor(e){ return e===null?'#475569':e>=40?'#22C55E':e>=15?'#84CC16':e>=0?'#EAB308':e>=-25?'#F97316':'#EF4444'; }
+  function effColor(e){ return e===null?'#475569':e>=40?'#22C55E':e>=15?'#84CC16':e>=0?'#9094b7':e>=-25?'#9094b7':'#09135f'; }
   function pct(n,t){ return t>0?Math.round(n/t*100):0; }
 
   function courtSVG(origZ,destZ,total){
@@ -305,12 +305,12 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     var s="<svg viewBox='0 0 "+W+" "+H+"' xmlns='http://www.w3.org/2000/svg' style='width:100%;display:block'>";
     s+="<style>text{pointer-events:none}</style>";
     s+="<rect width='"+W+"' height='"+H+"' fill='rgba(13,14,26,.97)' rx='8'/>";
-    s+="<rect x='"+P+"' y='"+BAND+"' width='"+(W-P*2)+"' height='"+(H/2-BAND)+"' fill='rgba(232,25,44,.04)' rx='3'/>";
+    s+="<rect x='"+P+"' y='"+BAND+"' width='"+(W-P*2)+"' height='"+(H/2-BAND)+"' fill='rgba(9,19,95,.04)' rx='3'/>";
     s+="<rect x='"+P+"' y='"+(H/2)+"' width='"+(W-P*2)+"' height='"+(H/2-BAND)+"' fill='rgba(34,197,94,.04)' rx='3'/>";
     s+="<rect x='"+P+"' y='"+(H/2-1.5)+"' width='"+(W-P*2)+"' height='3' fill='rgba(255,255,255,.35)' rx='1.5'/>";
     RIVAL.forEach(function(row,ri){ row.forEach(function(zone,ci){
       var cnt=origZ[zone]||0,x=P+ci*CW,y=BAND+ri*CH, op=cnt>0?0.12+(cnt/maxO)*0.78:0.03;
-      s+="<rect x='"+(x+1.5)+"' y='"+(y+1.5)+"' width='"+(CW-3)+"' height='"+(CH-3)+"' fill='#E8192C' opacity='"+op+"' rx='3'"+(cnt>0?" onclick=\"verZona("+zone+",'oz')\" style=\"cursor:pointer\"":"")+"/>";
+      s+="<rect x='"+(x+1.5)+"' y='"+(y+1.5)+"' width='"+(CW-3)+"' height='"+(CH-3)+"' fill='#09135f' opacity='"+op+"' rx='3'"+(cnt>0?" onclick=\"verZona("+zone+",'oz')\" style=\"cursor:pointer\"":"")+"/>";
       if(cnt>0){ s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+4)+"' font-family='Bebas Neue,sans-serif' font-size='15' fill='white' text-anchor='middle'>"+cnt+"</text>";
         if(total>0)s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+13)+"' font-size='6.5' fill='rgba(255,255,255,.6)' text-anchor='middle'>"+pct(cnt,total)+"%</text>"; }
       s+="<text x='"+(x+4)+"' y='"+(y+9)+"' font-size='6' fill='rgba(255,255,255,.22)'>"+zone+"</text>";
@@ -322,7 +322,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
         if(total>0)s+="<text x='"+(x+CW/2)+"' y='"+(y+CH/2+13)+"' font-size='6.5' fill='rgba(255,255,255,.6)' text-anchor='middle'>"+pct(cnt,total)+"%</text>"; }
       s+="<text x='"+(x+4)+"' y='"+(y+9)+"' font-size='6' fill='rgba(255,255,255,.18)'>"+zone+"</text>";
     }); });
-    s+="<text x='"+(W/2)+"' y='10' font-size='6.5' fill='rgba(232,25,44,.7)' text-anchor='middle' font-weight='800' letter-spacing='2'>ATAQUE RIVAL</text>";
+    s+="<text x='"+(W/2)+"' y='10' font-size='6.5' fill='rgba(9,19,95,.7)' text-anchor='middle' font-weight='800' letter-spacing='2'>ATAQUE RIVAL</text>";
     s+="<text x='"+(W/2)+"' y='"+(H-4)+"' font-size='6.5' fill='rgba(34,197,94,.65)' text-anchor='middle' font-weight='800' letter-spacing='2'>DESTINO DEFENSA</text>";
     s+="</svg>"; return s;
   }
@@ -346,7 +346,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     html+="<div class='scard'><div class='big' style='color:"+effColor(e)+"'>"+(e!==null?e+'%':'--')+"</div><div class='lbl'>Eficiencia</div></div>";
     html+="<div class='scard'><div class='big' style='color:#22C55E'>"+good+"%</div><div class='lbl'>Buenas (#/+)</div></div>";
     html+="<div class='scard'><div class='big' style='color:#84CC16'>"+perf+"%</div><div class='lbl'>Perfectas (#)</div></div>";
-    html+="<div class='scard'><div class='big' style='color:#EF4444'>"+err+"%</div><div class='lbl'>Errores (=)</div></div>";
+    html+="<div class='scard'><div class='big' style='color:#09135f'>"+err+"%</div><div class='lbl'>Errores (=)</div></div>";
     html+="</div>";
 
     html+="<div class='panel'><div style='display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px'>";
@@ -361,7 +361,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     if(_hasZ){
       html+="<div class='court-title'>Origen del ataque ↔ destino de la defensa</div>";
       html+=courtSVG(origZ,destZ,total);
-      html+="<div class='legend'><div class='leg-item'><div class='leg-dot' style='background:#E8192C'></div>De dónde atacaron</div><div class='leg-item'><div class='leg-dot' style='background:#22C55E'></div>A dónde defendió</div></div>";
+      html+="<div class='legend'><div class='leg-item'><div class='leg-dot' style='background:#09135f'></div>De dónde atacaron</div><div class='leg-item'><div class='leg-dot' style='background:#22C55E'></div>A dónde defendió</div></div>";
       html+="<div style='font-size:11px;color:var(--muted);text-align:center;margin-top:8px'>Clickeá un casillero para ver esas defensas en video 🎬</div>";
     } else {
       html+="<div class='nodata' style='padding:22px 12px;font-size:12px'>El scouting de defensa de este club todavía no tiene zonas de origen/destino cargadas (oz/dz), así que el mapa de cancha no se dibuja. El resto — eficiencia, resultados y rival — sí funciona.</div>";
@@ -390,7 +390,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
       return '<button onclick="setModoDef(\'' + o[0] + '\')" style="' +
         'padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:800;' +
         'letter-spacing:1px;font-family:inherit;' +
-        (on ? 'border:1px solid rgba(239,68,68,.5);background:rgba(239,68,68,.14);color:#ef4444'
+        (on ? 'border:1px solid rgba(9,19,95,.5);background:rgba(9,19,95,.14);color:#09135f'
             : 'border:1px solid rgba(255,255,255,.12);background:transparent;color:#94a3b8') +
         '">' + o[1] + '</button>';
     }).join('');

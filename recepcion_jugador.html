@@ -21,20 +21,20 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- datos_historial.js: lo carga el selector de modo (arriba) -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#f59e0b;--indigo:#818cf8;--green:#22c55e;--red:#ef4444;--orange:#f97316;--mut:#475569;--txt:#e2e8f0;}
+:root{--bg:#07080f;--card:#0d0e1a;--card2:#111220;--border:rgba(255,255,255,.06);--amber:#9094b7;--indigo:#818cf8;--green:#22c55e;--red:#09135f;--orange:#9094b7;--mut:#475569;--txt:#e2e8f0;}
 body{background:#07080f;color:#e2e8f0;font-family:'Barlow Condensed',sans-serif;min-height:100vh;padding:0;margin:0}
 select, select option { color: #111111 !important; background-color: #ffffff !important; }
 .hdr{padding:12px 240px 12px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;background:rgba(7,8,15,.9);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);flex-wrap:wrap}
 .back-btn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;flex-shrink:0}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
 .fbtn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s}
-.fbtn.active-partido{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:#e8192c}
+.fbtn.active-partido{background:rgba(9,19,95,.12);border-color:rgba(9,19,95,.4);color:#09135f}
 .fbtn.active-entrenamiento{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
 .subfiltro-row{width:100%;display:none;gap:5px;flex-wrap:wrap;padding:6px 0 0}
-.subfiltro-select{padding:5px 12px;border-radius:7px;border:1px solid rgba(232,25,44,.4);background:rgba(232,25,44,.08);color:#e8192c;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;min-width:220px}
+.subfiltro-select{padding:5px 12px;border-radius:7px;border:1px solid rgba(9,19,95,.4);background:rgba(9,19,95,.08);color:#09135f;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;min-width:220px}
 .subfiltro-select option{color:#111;background:#fff}
 .sfbtn{padding:4px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
-.sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:#e8192c}
+.sfbtn.on{background:rgba(9,19,95,.1);border-color:rgba(9,19,95,.35);color:#09135f}
 .main{max-width:1280px;margin:0 auto;padding:20px 16px}
 .empty{text-align:center;padding:60px;color:#475569;font-size:13px;letter-spacing:1px}
 .info-note{font-size:10px;color:#475569;letter-spacing:1px;padding:10px 16px;background:rgba(255,255,255,.02);border-radius:6px;margin-bottom:14px;border:1px solid rgba(255,255,255,.04)}
@@ -106,9 +106,9 @@ function renderPanelRecepcion(j, container){
     container.innerHTML='<div style="color:#475569;padding:28px;text-align:center;font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase">Sin datos de recepción</div>';
     return;
   }
-  function ec(v){return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#f97316':'#ef4444';}
-  function bgc(v){return v>=25?'rgba(34,197,94,.13)':v>=5?'rgba(134,239,172,.08)':v>=0?'rgba(148,163,184,.05)':v>=-15?'rgba(249,115,22,.15)':'rgba(239,68,68,.18)';}
-  function bdc(v){return v>=25?'rgba(34,197,94,.35)':v>=5?'rgba(134,239,172,.2)':v>=0?'rgba(148,163,184,.12)':v>=-15?'rgba(249,115,22,.35)':'rgba(239,68,68,.35)';}
+  function ec(v){return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#9094b7':'#09135f';}
+  function bgc(v){return v>=25?'rgba(34,197,94,.13)':v>=5?'rgba(134,239,172,.08)':v>=0?'rgba(148,163,184,.05)':v>=-15?'rgba(144,148,183,.15)':'rgba(9,19,95,.18)';}
+  function bdc(v){return v>=25?'rgba(34,197,94,.35)':v>=5?'rgba(134,239,172,.2)':v>=0?'rgba(148,163,184,.12)':v>=-15?'rgba(144,148,183,.35)':'rgba(9,19,95,.35)';}
   function zoneCard(d, label, maxTot, typeColor){
     var vol = maxTot>0 ? Math.round((d.tot||0)/maxTot*100) : 0;
     var e = d.eff||0, p = d.pos||0, n = d.neg||0, t = d.tot||0;
@@ -120,7 +120,7 @@ function renderPanelRecepcion(j, container){
       +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px">'
       +'<div style="text-align:center"><div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:.5px">Total</div><div style="font-size:12px;font-weight:800;line-height:1.3;color:#e2e8f0">'+t+'</div></div>'
       +'<div style="text-align:center"><div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:.5px"># +</div><div style="font-size:12px;font-weight:800;line-height:1.3;color:#22c55e">'+p+'%</div></div>'
-      +'<div style="text-align:center"><div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:.5px">/ =</div><div style="font-size:12px;font-weight:800;line-height:1.3;color:#ef4444">'+n+'%</div></div>'
+      +'<div style="text-align:center"><div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:.5px">/ =</div><div style="font-size:12px;font-weight:800;line-height:1.3;color:#09135f">'+n+'%</div></div>'
       +'</div></div>';
   }
   function makeZonePanel(desdeKey, desdeLabel, td, typeColor, esTotal){
@@ -145,7 +145,7 @@ function renderPanelRecepcion(j, container){
       +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:#e2e8f0;font-family:Barlow Condensed,sans-serif">'+(total.tot||0)+'</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">recep</div></div>'
       +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:'+ec(total.eff||0)+';font-family:Barlow Condensed,sans-serif">'+(total.eff||0)+'%</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">EFF</div></div>'
       +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:#22c55e;font-family:Barlow Condensed,sans-serif">'+(total.pos||0)+'%</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px"># +</div></div>'
-      +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:#ef4444;font-family:Barlow Condensed,sans-serif">'+(total.neg||0)+'%</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">/ =</div></div>'
+      +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:#09135f;font-family:Barlow Condensed,sans-serif">'+(total.neg||0)+'%</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">/ =</div></div>'
       +'</div>';
     return el;
   }
@@ -171,7 +171,7 @@ function renderPanelRecepcion(j, container){
     if(tot.tot>0){tot.eff=Math.round((tot.pt*1+tot.mas*0.5-tot.ovp*0.5-tot.err)/tot.tot*100);tot.pos=Math.round((tot.pt+tot.mas)/tot.tot*100);tot.neg=Math.round((tot.ovp+tot.err)/tot.tot*100);}
     return {P5:P5,P6:P6,P1:P1,total:tot};
   }
-  var types=[{key:'flotado', label:'SAQUE FLOTADO', color:'#818cf8'},{key:'potencia',label:'SAQUE POTENCIA', color:'#f97316'}];
+  var types=[{key:'flotado', label:'SAQUE FLOTADO', color:'#818cf8'},{key:'potencia',label:'SAQUE POTENCIA', color:'#9094b7'}];
   // ORDEN de canchas: Z5 - Z6 - Z1 (+ TOTAL al final)
   var zones=[{key:'desde_z5',label:'Desde Zona 5'},{key:'desde_z6',label:'Desde Zona 6'},{key:'desde_z1',label:'Desde Zona 1'}];
   var wrapper = document.createElement('div');
@@ -314,10 +314,10 @@ function renderComparativaRecepcion(j, cont, num){
   if(!JUG.length) return;
   var mio=recEffByTipo(j);
   if(!mio||!mio.total) return;
-  function colorEff(v){ if(v===null||v===undefined) return '#475569'; return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#f97316':'#ef4444'; }
+  function colorEff(v){ if(v===null||v===undefined) return '#475569'; return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#9094b7':'#09135f'; }
   function cell(o){ return o?o.eff+'%':'—'; }
   function effV(o){ return o?o.eff:null; }
-  var TIPOS=[{k:'flotado',l:'Flotado',c:'#818cf8'},{k:'potencia',l:'Potencia',c:'#f97316'},{k:'total',l:'Total',c:'#22c55e'}];
+  var TIPOS=[{k:'flotado',l:'Flotado',c:'#818cf8'},{k:'potencia',l:'Potencia',c:'#9094b7'},{k:'total',l:'Total',c:'#22c55e'}];
 
   // ── promedio del EQUIPO por tipo ──
   var eqAvg={};
@@ -330,7 +330,7 @@ function renderComparativaRecepcion(j, cont, num){
   var rows1=TIPOS.map(function(t){
     var miE=effV(mio[t.k]); var eqE=eqAvg[t.k];
     var dif=(miE!==null&&eqE!==null)?miE-eqE:null;
-    var difC=dif===null?'#475569':dif>=5?'#22c55e':dif>=0?'#86efac':dif>=-8?'#fbbf24':'#ef4444';
+    var difC=dif===null?'#475569':dif>=5?'#22c55e':dif>=0?'#86efac':dif>=-8?'#9094b7':'#09135f';
     return '<tr style="border-bottom:1px solid rgba(255,255,255,.04)">'
       +'<td style="padding:8px 10px;text-align:left;font-size:12px;font-weight:700;color:'+t.c+'">'+t.l+'</td>'
       +'<td style="padding:8px;text-align:center"><span style="font-family:Bebas Neue,sans-serif;font-size:20px;color:'+colorEff(miE)+'">'+(miE!==null?miE+'%':'—')+'</span></td>'
@@ -372,8 +372,8 @@ function renderComparativaRecepcion(j, cont, num){
         var e=r&&r[t.k]?r[t.k].eff:null;
         return '<td style="padding:8px;text-align:center"><span style="font-family:Bebas Neue,sans-serif;font-size:18px;color:'+colorEff(e)+(isCur?';font-weight:800':'')+'">'+(e!==null?e+'%':'—')+'</span></td>';
       }).join('');
-      return '<tr style="border-bottom:1px solid rgba(255,255,255,.04);'+(isCur?'background:rgba(232,25,44,.06);':'')+'">'
-        +'<td style="padding:8px;font-size:12px;font-weight:'+(isCur?'800':'600')+';color:'+(isCur?'#e8192c':'#94a3b8')+'">'+nm+(isCur?' ←':'')+'</td>'
+      return '<tr style="border-bottom:1px solid rgba(255,255,255,.04);'+(isCur?'background:rgba(9,19,95,.06);':'')+'">'
+        +'<td style="padding:8px;font-size:12px;font-weight:'+(isCur?'800':'600')+';color:'+(isCur?'#09135f':'#94a3b8')+'">'+nm+(isCur?' ←':'')+'</td>'
         +celdas+'</tr>';
     }).join('');
     var s2=document.createElement('div');

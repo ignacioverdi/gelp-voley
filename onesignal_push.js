@@ -113,8 +113,8 @@
       '#os-pill{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;' +
         'display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;cursor:pointer;' +
         "font-family:'Barlow Condensed','Bebas Neue',system-ui,sans-serif;font-weight:700;font-size:14px;" +
-        'letter-spacing:.5px;color:#fff;background:#e11d2a;border:none;' +
-        'box-shadow:0 8px 24px rgba(225,29,42,.45);transition:transform .15s,opacity .25s;}' +
+        'letter-spacing:.5px;color:#fff;background:#09135f;border:none;' +
+        'box-shadow:0 8px 24px rgba(9,19,95,.45);transition:transform .15s,opacity .25s;}' +
       '#os-pill:hover{transform:translateY(-2px);}' +
       '#os-pill:active{transform:scale(.96);}' +
       '#os-pill.muted{background:#3a3f4b;box-shadow:0 8px 24px rgba(0,0,0,.4);}' +

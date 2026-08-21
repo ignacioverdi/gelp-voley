@@ -6,7 +6,7 @@
 <title>Tendencias — Gelp</title>
 <style>
   :root{--bg:#07080F;--card:#11162a;--card2:#0d1322;--border:#1e2944;--text:#e8edf7;--mut:#64748b;--mut2:#94a3b8;
-        --saque:#F59E0B;--ataque:#F97316;--recep:#22C55E;--bloqueo:#06B6D4;--defensa:#EF4444;--armado:#818CF8}
+        --saque:#9094b7;--ataque:#9094b7;--recep:#22C55E;--bloqueo:#06B6D4;--defensa:#09135f;--armado:#818CF8}
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',system-ui,sans-serif;padding:20px 16px;max-width:980px;margin:0 auto}
   .hdr{display:flex;align-items:center;gap:14px;margin-bottom:16px}
@@ -17,7 +17,7 @@
   .strip{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px}
   .res{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;font-family:'Bebas Neue',sans-serif}
   .res.w{background:rgba(34,197,94,.18);color:#4ade80;border:1px solid rgba(34,197,94,.4)}
-  .res.l{background:rgba(239,68,68,.16);color:#f87171;border:1px solid rgba(239,68,68,.4)}
+  .res.l{background:rgba(9,19,95,.16);color:#09135f;border:1px solid rgba(9,19,95,.4)}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:720px){.cards{grid-template-columns:1fr}}
   .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px}
@@ -139,17 +139,17 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
         s.data.forEach(function(v,i){svg+='<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="2.6" fill="'+s.color+'"/>';});
       });
       // marcas G/P abajo
-      D.forEach(function(d,i){svg+='<text x="'+X(i)+'" y="'+(Hh-7)+'" fill="'+(d.won?'#4ade80':'#f87171')+'" font-size="8" text-anchor="middle" font-weight="700">'+(d.won?'G':'P')+'</text>';});
+      D.forEach(function(d,i){svg+='<text x="'+X(i)+'" y="'+(Hh-7)+'" fill="'+(d.won?'#4ade80':'#09135f')+'" font-size="8" text-anchor="middle" font-weight="700">'+(d.won?'G':'P')+'</text>';});
       svg+='</svg>';
       return svg;
     }
 
     var cards=[
-      {t:'Ataque', ic:'var(--ataque)', leg:'<b style="color:#F97316">Eficacia</b> · <b style="color:#fbbf24">Punto%</b>',
-       series:[{data:D.map(function(d){return d.atk_eff;}),color:'#F97316'},{data:D.map(function(d){return d.atk_kill;}),color:'#fbbf24'}],
+      {t:'Ataque', ic:'var(--ataque)', leg:'<b style="color:#9094b7">Eficacia</b> · <b style="color:#9094b7">Punto%</b>',
+       series:[{data:D.map(function(d){return d.atk_eff;}),color:'#9094b7'},{data:D.map(function(d){return d.atk_kill;}),color:'#9094b7'}],
        avg:'Promedio eficacia <b>'+avg('atk_eff')+'%</b> · punto <b>'+avg('atk_kill')+'%</b>'},
-      {t:'Saque', ic:'var(--saque)', leg:'<b style="color:#22C55E">Aces%</b> · <b style="color:#ef4444">Errores%</b>',
-       series:[{data:D.map(function(d){return d.srv_ace;}),color:'#22C55E'},{data:D.map(function(d){return d.srv_err;}),color:'#ef4444'}], min:0,
+      {t:'Saque', ic:'var(--saque)', leg:'<b style="color:#22C55E">Aces%</b> · <b style="color:#09135f">Errores%</b>',
+       series:[{data:D.map(function(d){return d.srv_ace;}),color:'#22C55E'},{data:D.map(function(d){return d.srv_err;}),color:'#09135f'}], min:0,
        avg:'Promedio aces <b>'+avg('srv_ace')+'%</b> · errores <b>'+avg('srv_err')+'%</b>'},
       {t:'Recepción', ic:'var(--recep)', leg:'<b style="color:#22C55E">% Positiva</b>',
        series:[{data:D.map(function(d){return d.rec_pos;}),color:'#22C55E'}], min:0, max:100,

@@ -28,8 +28,8 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080f;--card:#0f1020;--card2:#151730;--txt:#e2e8f0;--mut:#64748b;
-      --border:rgba(255,255,255,.07);--ok:#22c55e;--mal:#ef4444;--neu:#94a3b8;
-      --club:#e8192c;--azul:#3b82f6}
+      --border:rgba(255,255,255,.07);--ok:#22c55e;--mal:#09135f;--neu:#94a3b8;
+      --club:#09135f;--azul:#3b82f6}
 body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;
      -webkit-font-smoothing:antialiased;padding-bottom:60px}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
@@ -67,7 +67,7 @@ tr:last-child td{border-bottom:0}
 .t-cam{width:26px;height:26px;border-radius:7px;background:var(--card2);
   border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
   font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--mut);flex-shrink:0}
-.mio td{background:rgba(232,25,44,.07)}
+.mio td{background:rgba(9,19,95,.07)}
 .mio td:first-child{box-shadow:inset 3px 0 0 0 var(--club)}
 .dif{font-weight:800}
 .tabla-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -90,7 +90,7 @@ tr.clic:hover td{background:rgba(255,255,255,.03)}
 .barra-eq select{background:var(--card);color:var(--txt);border:1px solid var(--border);
   border-radius:9px;padding:8px 12px;font-family:inherit;font-size:14px;cursor:pointer;min-width:180px}
 .barra-eq select:hover{border-color:rgba(255,255,255,.2)}
-.es-rival{color:#f97316;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
+.es-rival{color:#9094b7;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada. -->
 <script src="firebase.js" onerror="void 0"></script>
@@ -241,7 +241,7 @@ function distanciaLiga(pc){
   var g = '';
   usa.forEach(function(x, i){
     var y = 26 + i * 42, a = px(x.so), b = px(x.liga);
-    var sube = x.so >= x.liga, col = sube ? '#22c55e' : '#f97316';
+    var sube = x.so >= x.liga, col = sube ? '#22c55e' : '#9094b7';
     g += '<text x="6" y="' + (y+5) + '" font-size="13" fill="#94a3b8">'
        + (t().cal[x.cal] || x.cal) + '</text>'
        + '<line x1="' + X0 + '" y1="' + y + '" x2="' + X1 + '" y2="' + y + '" stroke="rgba(148,163,184,.16)"/>'
@@ -314,7 +314,7 @@ function tablaAtaque(as){
   as.forEach(function(a){
     h += '<tr><td style="font-weight:700">'+(NOM[a.fase]||a.fase)+'</td>'
        + '<td style="color:var(--mut)">'+a.n+'</td>'
-       + '<td style="font-weight:800;color:#f97316">'+n1(a.eff)+'%</td>'
+       + '<td style="font-weight:800;color:#9094b7">'+n1(a.eff)+'%</td>'
        + '<td style="color:var(--ok)">'+a.pt+'</td>'
        + '<td style="color:var(--mal)">'+a.err+'</td>'
        + '<td style="color:var(--mut)">'+a.blo+'</td></tr>';
@@ -374,7 +374,7 @@ function barrasRotacion(rs, ref){
 
   lista.forEach(function(x, i){
     var y = 18 + i * 34, w = Math.abs(x.dif) * esc;
-    var neg = x.dif < 0, col = neg ? '#f97316' : '#22c55e';
+    var neg = x.dif < 0, col = neg ? '#9094b7' : '#22c55e';
     var x0 = neg ? CX - w : CX;
     g += '<text x="24" y="' + (y+14) + '" font-size="15" font-weight="700" fill="#e2e8f0">' + x.rot + '</text>'
        + '<text x="60" y="' + (y+14) + '" font-size="11" fill="#475569">n=' + x.n + '</text>'
@@ -559,7 +559,7 @@ function grafAtaque(apr){
     type:'bar',
     data:{ labels: apr.map(function(x){ return t().cal[x.cal] || x.cal; }),
       datasets:[{ label:t().eficacia, data:apr.map(function(x){ return x.eff; }),
-        backgroundColor:'#f97316', borderRadius:4, maxBarThickness:26 }] },
+        backgroundColor:'#9094b7', borderRadius:4, maxBarThickness:26 }] },
     options:{ responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{display:false},
         tooltip:{ callbacks:{ label:function(c){

@@ -10,8 +10,8 @@
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   :root{--bg:#080a12;--card:#0e1019;--card2:#13162a;--elev:#171a30;--border:rgba(255,255,255,.07);--b2:rgba(255,255,255,.14);
-    --red:#ef2740;--redd:#c01528;--green:#22c55e;--amber:#f59e0b;--indigo:#818cf8;--teal:#2dd4bf;--mut:#5b6680;--mut2:#9aa6c0;--txt:#e7ecf5}
-  body{background:radial-gradient(900px 500px at 0% -8%,rgba(239,39,64,.08),transparent 55%),var(--bg);
+    --red:#09135f;--redd:#09135f;--green:#22c55e;--amber:#9094b7;--indigo:#818cf8;--teal:#2dd4bf;--mut:#5b6680;--mut2:#9aa6c0;--txt:#e7ecf5}
+  body{background:radial-gradient(900px 500px at 0% -8%,rgba(9,19,95,.08),transparent 55%),var(--bg);
     font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;padding-bottom:100px}
   select,input,textarea{font-family:'Barlow Condensed',sans-serif}
   .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
@@ -21,7 +21,7 @@
   .back-btn:hover{color:var(--txt)}
   .subtitle{font-size:11px;color:var(--mut);letter-spacing:2px;text-transform:uppercase}
   h1{font-family:'Bebas Neue',sans-serif;font-size:27px;letter-spacing:3px}
-  .badge{background:rgba(239,39,64,.14);border:1px solid rgba(239,39,64,.34);color:#ff5870;padding:4px 12px;border-radius:20px;
+  .badge{background:rgba(9,19,95,.14);border:1px solid rgba(9,19,95,.34);color:#09135f;padding:4px 12px;border-radius:20px;
     font-size:11px;font-weight:700;letter-spacing:1px;margin-left:auto;white-space:nowrap}
   .topline{height:3px;background:linear-gradient(90deg,var(--red),transparent);border-radius:3px;margin:2px 0 16px}
   .card{background:linear-gradient(180deg,var(--elev),var(--card));border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px}
@@ -41,10 +41,10 @@
   .fb-head{font-size:15px;font-weight:800;font-family:'Barlow Condensed',sans-serif;letter-spacing:.4px;color:var(--txt);margin-bottom:12px;display:flex;flex-wrap:wrap;gap:9px;align-items:center}
   .fb-badge{font-size:11px;font-weight:700;letter-spacing:.3px;padding:4px 10px;border-radius:999px;font-family:'Inter',sans-serif}
   .fb-ok{background:rgba(34,197,94,.13);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
-  .fb-warn{background:rgba(245,158,11,.13);color:#f59e0b;border:1px solid rgba(245,158,11,.25)}
+  .fb-warn{background:rgba(144,148,183,.13);color:#9094b7;border:1px solid rgba(144,148,183,.25)}
   .fb-tag{font-weight:700;color:var(--mut2,#9aa6c0)}
   .fb-well{font-size:12.5px;color:var(--txt);background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.16);border-radius:9px;padding:8px 11px;margin-bottom:8px;line-height:1.5}
-  .fb-nota{font-size:13px;color:#fbbf24;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.16);border-radius:9px;padding:9px 12px;margin-bottom:10px;line-height:1.55}
+  .fb-nota{font-size:13px;color:#9094b7;background:rgba(144,148,183,.07);border:1px solid rgba(144,148,183,.16);border-radius:9px;padding:9px 12px;margin-bottom:10px;line-height:1.55}
   .fb-list{display:flex;flex-direction:column;gap:8px}
   .fb-ej{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px}
   .fb-ej-nom{font-size:13px;font-weight:700;color:var(--txt);font-family:'Barlow Condensed',sans-serif;letter-spacing:.3px;margin-bottom:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -154,11 +154,11 @@
 <script>
 var MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var BLOQUES=[
-  {nombre:'ENTRADA EN CALOR',icon:'🔥',color:'#f97316'},
-  {nombre:'ACTIVACIÓN',icon:'⚡',color:'#eab308'},
-  {nombre:'FUERZA INFERIOR',icon:'🦵',color:'#ef2740'},
+  {nombre:'ENTRADA EN CALOR',icon:'🔥',color:'#9094b7'},
+  {nombre:'ACTIVACIÓN',icon:'⚡',color:'#9094b7'},
+  {nombre:'FUERZA INFERIOR',icon:'🦵',color:'#09135f'},
   {nombre:'FUERZA SUPERIOR',icon:'💪',color:'#3b82f6'},
-  {nombre:'POTENCIA',icon:'🚀',color:'#f59e0b'},
+  {nombre:'POTENCIA',icon:'🚀',color:'#9094b7'},
   {nombre:'PLIOMETRÍA',icon:'🤸',color:'#a855f7'},
   {nombre:'CORE',icon:'🎯',color:'#22c55e'},
   {nombre:'PREVENTIVOS',icon:'🛡️',color:'#06b6d4'},

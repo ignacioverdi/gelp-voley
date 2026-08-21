@@ -34,7 +34,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#07080f;--card:#0f1020;--card2:#151730;--txt:#e2e8f0;--mut:#64748b;
-      --border:rgba(255,255,255,.07);--nos:#3b82f6;--riv:#f97316;--club:#e8192c}
+      --border:rgba(255,255,255,.07);--nos:#3b82f6;--riv:#9094b7;--club:#09135f}
 body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;
      -webkit-font-smoothing:antialiased;padding-bottom:60px}
 .wrap{max-width:1280px;margin:0 auto;padding:0 16px}
@@ -376,11 +376,11 @@ function pintar(){
     if(!a || !b) return;
     h += '<div class="rot">'
       + '<div class="rot-top"><span class="rot-p">'+p+' <span style="color:var(--mut);font-size:14px">vs</span> '
-      + '<span style="color:#f97316">'+pr+'</span></span>'
+      + '<span style="color:#9094b7">'+pr+'</span></span>'
       + '<span class="rot-sub">'+t().zonaN+' '+p[1]+' '+t().contra+' '+pr[1]+'</span></div>'
       /* el rival arriba y espejado: su fondo primero, despues su red */
-      + fila(plR, b, [1,6,5], '#f97316', armR)
-      + fila(plR, b, [2,3,4], '#f97316', armR)
+      + fila(plR, b, [1,6,5], '#9094b7', armR)
+      + fila(plR, b, [2,3,4], '#9094b7', armR)
       + '<div class="red"></div>'
       + fila(plN, a, [4,3,2], '#3b82f6', armN)
       + fila(plN, a, [5,6,1], '#3b82f6', armN)

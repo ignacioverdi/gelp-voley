@@ -32,7 +32,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 :root{
   --bg:#07080F;--card:#0D0E1A;--card2:#111220;
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);
-  --red:#E8192C;--amber:#F59E0B;--green:#22C55E;--blue:#3B82F6;
+  --red:#09135f;--amber:#9094b7;--green:#22C55E;--blue:#3B82F6;
   --indigo:#818CF8;--cyan:#06B6D4;
   --text:#E2E8F0;--muted:#64748B;--subtle:#475569;
 }
@@ -48,7 +48,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',
 .jug-scroller{display:flex;gap:5px;flex-wrap:wrap;padding:8px 20px;border-bottom:1px solid var(--border);background:var(--card)}
 .jbtn{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;transition:all .15s}
 .jbtn:hover{border-color:var(--border2);color:var(--text)}
-.jbtn.on{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:var(--red)}
+.jbtn.on{background:rgba(9,19,95,.12);border-color:rgba(9,19,95,.4);color:var(--red)}
 
 /* HERO */
 .hero{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;flex-wrap:wrap;display:none}
@@ -63,10 +63,10 @@ html,body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',
 /* TIPO + SESION FILTERS */
 .filter-row{padding:8px 20px;border-bottom:1px solid var(--border);display:none;flex-wrap:wrap;gap:6px;align-items:center;background:var(--card)}
 .tfbtn{padding:5px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--subtle);font-size:10px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;transition:all .15s}
-.tfbtn.on-p{background:rgba(232,25,44,.12);border-color:rgba(232,25,44,.4);color:var(--red)}
+.tfbtn.on-p{background:rgba(9,19,95,.12);border-color:rgba(9,19,95,.4);color:var(--red)}
 .tfbtn.on-e{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:var(--green)}
 .sfbtn{padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;transition:all .15s}
-.sfbtn.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.35);color:var(--red)}
+.sfbtn.on{background:rgba(9,19,95,.1);border-color:rgba(9,19,95,.35);color:var(--red)}
 .divider{width:1px;height:16px;background:var(--border2);flex-shrink:0}
 
 /* BATERIAS */
@@ -161,7 +161,7 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 <div class="hdr">
   <div class="hdr-top">
     <a href="dashboard.html" class="back-btn">← Dashboard</a>
-    <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px">🔥 HEAT MAPS</button>
+    <button onclick="showHeatmapMenu()" style="background:rgba(144,148,183,.1);border:1px solid rgba(144,148,183,.3);color:#9094b7;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px">🔥 HEAT MAPS</button>
     <div class="hdr-title">MI PERFORMANCE</div>
   </div>
 </div>
@@ -441,7 +441,7 @@ function renderCalendario(c){
     var jug=(s.jugadores||[]).find(function(j){return j.c===G.num;});
     var isP=s.tipo==='P';
     var color=isP?'var(--red)':'var(--green)';
-    var bg=isP?'rgba(232,25,44,.1)':'rgba(34,197,94,.1)';
+    var bg=isP?'rgba(9,19,95,.1)':'rgba(34,197,94,.1)';
     var icon=isP?'🏆':'🏋️';
     var res=s.resultado||{};
     var resStr=isP?(setsDelClub(res)!==undefined?(setsDelClub(res)+'-'+res.rival):''):'';
@@ -506,8 +506,8 @@ function renderRendimiento(c){
     return G.tipo==='partido'?e.tipo==='P':e.tipo==='E';
   });
   var metricas=[
-    {key:'aEff',lbl:'EFF Ataque',color:'#F97316',obj:44},
-    {key:'sEff',lbl:'EFF Saque', color:'#F59E0B',obj:3},
+    {key:'aEff',lbl:'EFF Ataque',color:'#9094b7',obj:44},
+    {key:'sEff',lbl:'EFF Saque', color:'#9094b7',obj:3},
     {key:'rEff',lbl:'EFF Recep.',color:'#22C55E',obj:36},
     {key:'bEff',lbl:'EFF Bloq.', color:'#818CF8',obj:23},
   ];
@@ -533,7 +533,7 @@ function renderRendimiento(c){
     html+='<div class="evol-bars">';
     data.forEach(function(d){
       var pct=Math.abs(d.v)/range*100;
-      var barColor=d.v>=m.obj?m.color:'rgba(239,68,68,.7)';
+      var barColor=d.v>=m.obj?m.color:'rgba(9,19,95,.7)';
       html+='<div class="evol-col">';
       html+='<div class="evol-val" style="color:'+barColor+'">'+d.v+'%</div>';
       html+='<div class="evol-bar" style="height:'+pct+'%;background:'+barColor+'33;border:1px solid '+barColor+'66;border-bottom:none"></div>';
@@ -585,9 +585,9 @@ function renderAtaque(c,sesData){
       atqConDatos.forEach(function(a){
         html+='<div class="cancha-wrap">';
         html+='<div class="cancha-title"><span>'+a.cod+'</span>';
-        html+='<span class="cancha-stat" style="color:#F97316">'+a.eff+'%</span>';
+        html+='<span class="cancha-stat" style="color:#9094b7">'+a.eff+'%</span>';
         html+='<span style="font-size:9px;color:var(--muted)">'+a.tot+' acc · '+a.pts+' pts</span></div>';
-        html+=buildCanchitaHTML(a,'#F97316');
+        html+=buildCanchitaHTML(a,'#9094b7');
         html+='</div>';
       });
       html+='</div>';
@@ -632,9 +632,9 @@ function renderAtaque(c,sesData){
         var item={cod:cod,orig:3,tot:combo.tot,eff:eff,pts:combo.pt,pts_pct:eff,destinos:destinos};
         html+='<div class="cancha-wrap">';
         html+='<div class="cancha-title"><span>'+cod+'</span>';
-        html+='<span class="cancha-stat" style="color:#F97316">'+eff+'%</span>';
+        html+='<span class="cancha-stat" style="color:#9094b7">'+eff+'%</span>';
         html+='<span style="font-size:9px;color:var(--muted)">'+combo.tot+' acc</span></div>';
-        html+=buildCanchita(item,'#F97316');
+        html+=buildCanchita(item,'#9094b7');
         html+='</div>';
       });
       html+='</div>';
@@ -655,9 +655,9 @@ function renderSaque(c,sesData){
       sqConDatos.forEach(function(s){
         html+='<div class="cancha-wrap">';
         html+='<div class="cancha-title"><span>'+(s.tipo||s.cod)+'</span>';
-        html+='<span class="cancha-stat" style="color:#F59E0B">'+s.eff+'%</span>';
+        html+='<span class="cancha-stat" style="color:#9094b7">'+s.eff+'%</span>';
         html+='<span style="font-size:9px;color:var(--muted)">'+s.tot+' saq · '+s.pts+' pts</span></div>';
-        html+=buildCanchitaHTML(s,'#F59E0B');
+        html+=buildCanchitaHTML(s,'#9094b7');
         html+='</div>';
       });
       html+='</div>';
@@ -702,9 +702,9 @@ function pct(a,b){return b>0?Math.round(a*100/b):0;}
 function effColor(v){
   if(v==null||isNaN(v)) return '#475569';
   if(v>=40) return '#22c55e';
-  if(v>=20) return '#fbbf24';
-  if(v>=0)  return '#f97316';
-  return '#ef4444';
+  if(v>=20) return '#9094b7';
+  if(v>=0)  return '#9094b7';
+  return '#09135f';
 }
 
 function buildCanchita(item,jIdx,i,prefix,W,H,drawFn,color,j){
@@ -766,9 +766,9 @@ function renderPanelRecepcion(j, container){
     return;
   }
 
-  function ec(v){return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#f97316':'#ef4444';}
-  function bgc(v){return v>=25?'rgba(34,197,94,.13)':v>=5?'rgba(134,239,172,.08)':v>=0?'rgba(148,163,184,.05)':v>=-15?'rgba(249,115,22,.15)':'rgba(239,68,68,.18)';}
-  function bdc(v){return v>=25?'rgba(34,197,94,.35)':v>=5?'rgba(134,239,172,.2)':v>=0?'rgba(148,163,184,.12)':v>=-15?'rgba(249,115,22,.35)':'rgba(239,68,68,.35)';}
+  function ec(v){return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#9094b7':'#09135f';}
+  function bgc(v){return v>=25?'rgba(34,197,94,.13)':v>=5?'rgba(134,239,172,.08)':v>=0?'rgba(148,163,184,.05)':v>=-15?'rgba(144,148,183,.15)':'rgba(9,19,95,.18)';}
+  function bdc(v){return v>=25?'rgba(34,197,94,.35)':v>=5?'rgba(134,239,172,.2)':v>=0?'rgba(148,163,184,.12)':v>=-15?'rgba(144,148,183,.35)':'rgba(9,19,95,.35)';}
 
   function zoneCard(d, label, maxTot, typeColor){
     var vol = maxTot>0 ? Math.round((d.tot||0)/maxTot*100) : 0;
@@ -781,7 +781,7 @@ function renderPanelRecepcion(j, container){
       +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px">'
       +'<div style="text-align:center"><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px">Total</div><div style="font-size:10px;font-weight:800;line-height:1.3;color:#e2e8f0">'+t+'</div></div>'
       +'<div style="text-align:center"><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px"># +</div><div style="font-size:10px;font-weight:800;line-height:1.3;color:#22c55e">'+p+'%</div></div>'
-      +'<div style="text-align:center"><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px">/ =</div><div style="font-size:10px;font-weight:800;line-height:1.3;color:#ef4444">'+n+'%</div></div>'
+      +'<div style="text-align:center"><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px">/ =</div><div style="font-size:10px;font-weight:800;line-height:1.3;color:#09135f">'+n+'%</div></div>'
       +'</div></div>';
   }
 
@@ -805,14 +805,14 @@ function renderPanelRecepcion(j, container){
       +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:#e2e8f0;font-family:Barlow Condensed,sans-serif">'+( total.tot||0)+'</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">saques</div></div>'
       +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:'+ec(total.eff||0)+';font-family:Barlow Condensed,sans-serif">'+( total.eff||0)+'%</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">EFF</div></div>'
       +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:#22c55e;font-family:Barlow Condensed,sans-serif">'+( total.pos||0)+'%</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px"># +</div></div>'
-      +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:#ef4444;font-family:Barlow Condensed,sans-serif">'+( total.neg||0)+'%</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">/ =</div></div>'
+      +'<div style="text-align:center"><div style="font-size:15px;font-weight:900;color:#09135f;font-family:Barlow Condensed,sans-serif">'+( total.neg||0)+'%</div><div style="font-size:7px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">/ =</div></div>'
       +'</div>';
     return el;
   }
 
   var types=[
     {key:'flotado', label:'SAQUE FLOTADO', color:'#818cf8'},
-    {key:'potencia',label:'SAQUE POTENCIA', color:'#f97316'}
+    {key:'potencia',label:'SAQUE POTENCIA', color:'#9094b7'}
   ];
   var zones=[
     {key:'desde_z1',label:'Desde Zona 1'},
@@ -903,7 +903,7 @@ function renderObjetivos(cid,extra){
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
     +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">OBJETIVOS DEL EQUIPO · 2026</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
+    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#9094b7','Neutro'],['#09135f','Lejos']].map(function(x){
       return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
     +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
@@ -995,11 +995,11 @@ function setObjTipo(tipo, btn){
   <div class="hm-box">
     <div class="hm-title"><span>🔥 HEAT MAPS</span><button class="hm-close" onclick="closeHeatmapMenu()">✕</button></div>
     <div class="hm-grid">
-      <a class="hm-card" href="hm_ataque.html?equipo=gelp"    style="background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#F97316">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas</span></a>
+      <a class="hm-card" href="hm_ataque.html?equipo=gelp"    style="background:rgba(144,148,183,.08);border-color:rgba(144,148,183,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#9094b7">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas</span></a>
       <a class="hm-card" href="hm_saque.html?equipo=gelp"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=gelp" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
+      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(144,148,183,.08);border-color:rgba(144,148,183,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#9094b7">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(9,19,95,.08);border-color:rgba(9,19,95,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#09135f">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
     </div>
     <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">LIGA FEMENINA 2026/27 · temporada en curso</div>
   </div>
