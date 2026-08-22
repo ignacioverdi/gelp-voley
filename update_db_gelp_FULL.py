@@ -89,7 +89,18 @@ def equipos_de_los_datos(teams_data, actuales, propio):
     vistos = [t for t in (teams_data or {}) if t]
     if not vistos:
         return actuales
-    juntos = list(dict.fromkeys(list(actuales) + vistos))
+
+    # ══ En una categoria, solo los que jugaron ═══════════════════════════
+    # Los equipos configurados son los rivales de Primera. Una Sub-18 juega
+    # otro torneo, contra otros clubes: sumarlos hacia aparecer a Banco
+    # Provincia y a River en su tabla, con todas las casillas vacias.
+    #
+    # Primera sigue como estaba: ahi si conviene mostrar al rival que todavia
+    # no jugo, porque el calendario ya lo tiene.
+    if os.environ.get('VB_CATEGORIA'):
+        juntos = list(dict.fromkeys(vistos))
+    else:
+        juntos = list(dict.fromkeys(list(actuales) + vistos))
     if propio in juntos:
         juntos.remove(propio)
         juntos.insert(0, propio)
@@ -727,8 +738,13 @@ def calculate_stats(teams_data, temporada_filter=None):
             srv = [a for a in pd.get('srv',[]) if not temporada_filter or a.get('temporada')==temporada_filter]
             rec = [a for a in pd.get('rec',[]) if not temporada_filter or a.get('temporada')==temporada_filter]
             blk_acts = [a for a in pd.get('blk',[]) if not temporada_filter or a.get('temporada')==temporada_filter]
+            # La DEFENSA no se calculaba: la tabla de la liga tiene su columna
+            # y sus filtros, pero no habia con que llenarlos. Al elegir
+            # "Defensa" salia "sin jugadores con datos", como si nadie hubiera
+            # defendido en toda la temporada.
+            dig_acts = [a for a in pd.get('dig',[]) if not temporada_filter or a.get('temporada')==temporada_filter]
 
-            if len(atk)+len(srv)+len(rec)+len(blk_acts) < 20: continue
+            if len(atk)+len(srv)+len(rec)+len(blk_acts)+len(dig_acts) < 20: continue
 
             all_atk.extend(atk); all_srv.extend(srv)
             all_rec.extend(rec); all_blk.extend(blk_acts)
@@ -742,22 +758,35 @@ def calculate_stats(teams_data, temporada_filter=None):
             atk_tr=[a for a in atk if a.get('atype',0)==1]
             srv_q=[a for a in srv if a.get('stype','')=='Q']
             srv_m=[a for a in srv if a.get('stype','')=='M']
+            # ══ Los subfiltros de la tabla de la liga ═══════════════════════
+            # La tabla deja filtrar la recepcion por tipo de saque y el ataque
+            # por fase. Esos campos no se generaban: al apretar "Flotado" o
+            # "Side-out" no habia nada que mostrar y salia "sin jugadores con
+            # datos", como si el equipo no hubiera jugado.
+            rec_q=[a for a in rec if a.get('stype','')=='Q']   # contra potencia
+            rec_m=[a for a in rec if a.get('stype','')=='M']   # contra flotado
 
             players.append({
                 'team':team,'num':int(num_str),'name':info.get('name','').strip(),
                 'pos':pos,'pos_label':pos_label,'temporada':temporada_filter or 'all',
                 'atk_tot':len(atk),'atk_eff':eff_atk(atk),
                 'atk_so_eff':eff_atk(atk_so),'atk_tr_eff':eff_atk(atk_tr),
+                'atk_so_tot':len(atk_so),'atk_tr_tot':len(atk_tr),
                 'atk_k':pct_val(atk,'#'),'atk_e':pct_val(atk,'='),'atk_bl':pct_val(atk,'/'),
                 'srv_tot':len(srv),'srv_eff':eff_srv(srv),
                 'srv_q_eff':eff_srv(srv_q),'srv_m_eff':eff_srv(srv_m),
                 'srv_ace':pct_val(srv,'#'),'srv_e':pct_val(srv,'='),
                 'srv_q_tot':len(srv_q),'srv_m_tot':len(srv_m),
                 'rec_tot':len(rec),'rec_eff':eff_rec(rec),
+                'rec_q_tot':len(rec_q),'rec_q_eff':eff_rec(rec_q),
+                'rec_m_tot':len(rec_m),'rec_m_eff':eff_rec(rec_m),
                 'rec_perf':pct_val(rec,'#'),'rec_pos':pct_val(rec,'+'),
                 'rec_neg':pct_val(rec,'/'),'rec_e':pct_val(rec,'='),
                 'blk_tot':len(blk_acts),'blk_eff':eff_blk(blk_acts),
                 'blk_k':pct_val(blk_acts,'#'),'blk_pos':pct_val(blk_acts,'+'),
+                'def_tot':len(dig_acts),'def_eff':eff_dig(dig_acts),
+                'def_perf':pct_val(dig_acts,'#'),'def_pos':pct_val(dig_acts,'+'),
+                'def_e':pct_val(dig_acts,'='),
             })
 
         # ══ Las metricas por tipo de ataque y por fase ════════════════════
