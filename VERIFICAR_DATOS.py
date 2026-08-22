@@ -35,6 +35,19 @@ import glob
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 
+# Cuando lo llama HACER_TODO no tiene que frenar a esperar un Enter: la
+# corrida sigue sola y el resultado queda a la vista arriba.
+SIN_PAUSA = '--sin-pausa' in sys.argv
+
+
+def esperar(txt='  Enter para cerrar...'):
+    if SIN_PAUSA:
+        return
+    try:
+        input(txt)
+    except Exception:
+        pass
+
 # Los archivos que se cargan pero no son datos: son programa.
 PROGRAMA = {'datos_seguros.js'}
 
@@ -178,7 +191,7 @@ def main():
     pantallas = sorted(glob.glob(os.path.join(AQUI, '*.html')))
     if not pantallas:
         print('\n  No hay pantallas en esta carpeta.')
-        input('\n  Enter para cerrar...')
+        esperar()
         return 1
 
     # ── 1. los archivos que se cargan ───────────────────────────────────────
@@ -317,7 +330,7 @@ def main():
         print('     TODO EN ORDEN')
     print('  ' + '=' * 68)
     print()
-    input('  Enter para cerrar...')
+    esperar()
     return 0
 
 
@@ -332,7 +345,7 @@ if __name__ == '__main__':
         print('  ALGO FALLO: %s' % e)
         traceback.print_exc()
         try:
-            input('  Enter para cerrar...')
+            esperar()
         except Exception:
             pass
         sys.exit(1)

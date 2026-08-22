@@ -37,6 +37,19 @@ import glob
 from collections import Counter
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
+
+# Cuando lo llama HACER_TODO no tiene que frenar a esperar un Enter: la
+# corrida sigue sola y el resultado queda a la vista arriba.
+SIN_PAUSA = '--sin-pausa' in sys.argv
+
+
+def esperar(txt='  Enter para cerrar...'):
+    if SIN_PAUSA:
+        return
+    try:
+        input(txt)
+    except Exception:
+        pass
 _bloqueos_en_dvw = 0
 
 # Como se guarda cada valoracion, por fundamento. El orden lo define el motor
@@ -292,14 +305,14 @@ def main():
 
     if not propios:
         print('\n  No pude saber cual es el club. Falta config_club.json.')
-        input('\n  Enter para cerrar...')
+        esperar()
         return 1
 
     carpetas = [d for d in sorted(glob.glob(os.path.join(AQUI, 'DVW*')))
                 if os.path.isdir(d) and 'ENTREN' not in os.path.basename(d).upper()]
     if not carpetas:
         print('\n  No hay carpetas de partidos.')
-        input('\n  Enter para cerrar...')
+        esperar()
         return 1
 
     print()
@@ -315,12 +328,12 @@ def main():
         print()
         print('  Los datos estan cifrados: corre esto DESPUES de HACER_TODO')
         print('  y ANTES de publicar, que es cuando quedan legibles.')
-        input('\n  Enter para cerrar...')
+        esperar()
         return 0
     if not en_datos:
         print()
         print('  No pude leer liga_data.js. Corriste HACER_TODO?')
-        input('\n  Enter para cerrar...')
+        esperar()
         return 1
 
     print()
@@ -379,7 +392,7 @@ def main():
         print('     NO publiques hasta revisarlo.')
     print('  ' + '=' * 70)
     print()
-    input('  Enter para cerrar...')
+    esperar()
     return 0
 
 
@@ -394,7 +407,7 @@ if __name__ == '__main__':
         print('  ALGO FALLO: %s' % e)
         traceback.print_exc()
         try:
-            input('  Enter para cerrar...')
+            esperar()
         except Exception:
             pass
         sys.exit(1)
