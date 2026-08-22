@@ -772,6 +772,14 @@ def calculate_stats(teams_data, temporada_filter=None):
                 'atk_tot':len(atk),'atk_eff':eff_atk(atk),
                 'atk_so_eff':eff_atk(atk_so),'atk_tr_eff':eff_atk(atk_tr),
                 'atk_so_tot':len(atk_so),'atk_tr_tot':len(atk_tr),
+                # La tabla ordena a los JUGADORES por los mismos ocho
+                # fundamentos que a los equipos. Sin estos campos, elegir
+                # "Atq Central" o "Bloqueo #" no ordenaba nada.
+                'atk_so':eff_atk(atk_so),'atk_tr':eff_atk(atk_tr),
+                'atk_alta':eff_atk([a for a in atk if a.get('stype','')=='H']),
+                'atk_cent':eff_atk([a for a in atk if a.get('stype','')=='Q']),
+                'atk_rap':eff_atk([a for a in atk if a.get('stype','')=='T']),
+                'blk_pt':eff_blk(blk_acts),
                 'atk_k':pct_val(atk,'#'),'atk_e':pct_val(atk,'='),'atk_bl':pct_val(atk,'/'),
                 'srv_tot':len(srv),'srv_eff':eff_srv(srv),
                 'srv_q_eff':eff_srv(srv_q),'srv_m_eff':eff_srv(srv_m),

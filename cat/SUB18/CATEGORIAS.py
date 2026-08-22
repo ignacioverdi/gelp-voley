@@ -184,16 +184,30 @@ def main():
                     except Exception:
                         pass
 
-        # la carpeta de .dvw, enlazada por copia (los .dvw no pesan)
-        dest_dvw = os.path.join(destino, os.path.basename(origen))
-        os.makedirs(dest_dvw, exist_ok=True)
-        for f in glob.glob(os.path.join(origen, '*.dvw')):
-            try:
-                d = os.path.join(dest_dvw, os.path.basename(f))
-                if not os.path.exists(d) or os.path.getmtime(f) > os.path.getmtime(d):
-                    shutil.copy2(f, dest_dvw)
-            except Exception:
-                pass
+        # ── Las carpetas de .dvw de esta categoria ────────────────────────
+        # Los partidos y, si el equipo scoutea practicas, tambien sus
+        # entrenamientos: una Sub-18 puede tener los suyos igual que Primera,
+        # y sin esto no se procesaban.
+        carpetas_cat = [origen]
+        for d in sorted(glob.glob(os.path.join(AQUI, 'DVW*'))):
+            if not os.path.isdir(d) or d == origen:
+                continue
+            n = re.sub(r'[^A-Z0-9]', '', os.path.basename(d).upper())
+            if 'ENTREN' in n and marca in n:
+                carpetas_cat.append(d)
+
+        for carp_o in carpetas_cat:
+            dest_dvw = os.path.join(destino, os.path.basename(carp_o))
+            os.makedirs(dest_dvw, exist_ok=True)
+            for f in glob.glob(os.path.join(carp_o, '*.dvw')):
+                try:
+                    d = os.path.join(dest_dvw, os.path.basename(f))
+                    if not os.path.exists(d) or os.path.getmtime(f) > os.path.getmtime(d):
+                        shutil.copy2(f, dest_dvw)
+                except Exception:
+                    pass
+        if len(carpetas_cat) > 1:
+            print('     + entrenamientos de la categoria')
 
         # ── Procesar ──────────────────────────────────────────────────────
         # Se corre el mismo HACER_TODO, pero desde la carpeta de la categoria
