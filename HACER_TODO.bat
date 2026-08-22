@@ -203,6 +203,18 @@ python gen_informe.py --dvw_dir "!DVW_DIR!" --temporada "!TEMPORADA_ACTUAL!" --o
 if errorlevel 1 echo      [aviso] Problema armando el informe. Sigo igual.
 echo.
 
+REM ===================================================================
+REM   LAS DEMAS CATEGORIAS
+REM
+REM   Un club puede tener Primera, Sub-18, Sub-16... Cada una es un equipo
+REM   distinto y sus numeros no se mezclan. Primera se acaba de procesar
+REM   aca arriba, como siempre; las demas se procesan en su carpeta.
+REM
+REM   Si el club tiene UNA sola categoria, esto no hace nada: ni siquiera
+REM   imprime un mensaje.
+REM ===================================================================
+if exist "CATEGORIAS.py" if not defined VB_CATEGORIA python CATEGORIAS.py
+
 echo  ================= BATERIAS =================
 echo.
 REM   Las dos carpetas en UNA sola corrida. El generador etiqueta cada

@@ -15,7 +15,10 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 })();</script>
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
-  <script src="datos_seguros.js"></script>
+  <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
+<script src="categorias_club.js" onerror="void 0"></script>
+<script src="selector_categoria.js" onerror="void 0"></script>
+<script src="datos_seguros.js"></script>
 <script src="filtro_tipo.js" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
