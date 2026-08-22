@@ -53,36 +53,73 @@
   window.carpetaCategoria = carpeta;
 
   /* ══ Redirigir los datos ═════════════════════════════════════════════════
-     Las pantallas piden sus archivos con <script src="liga_data.js.enc">. En
-     vez de tocar las 52 pantallas una por una, se intercepta la creacion de
-     esas etiquetas y se les cambia la ruta.
+     Las pantallas piden sus archivos con <script src="liga_data.js.enc">,
+     escrito directamente en el HTML. Esas etiquetas NO pasan por
+     createElement: el navegador las procesa al leer el documento.
 
-     Solo se tocan los archivos de DATOS: las pantallas, los estilos y los
-     motores se comparten entre categorias. */
+     Por eso se reescriben con un observador: apenas aparece una etiqueta de
+     datos, se le corrige la ruta ANTES de que el navegador la descargue.
+
+     Solo se tocan los archivos de DATOS. Las pantallas, los estilos y los
+     motores se comparten entre categorias: lo unico que cambia es de donde
+     salen los numeros. */
   var ES_DATO = /^(liga_data|datos_|nla_|mapa_videos|plan_partido_data|scouting_rival)/;
+  /* Estos EMPIEZAN igual que un archivo de datos pero son programa: viven una
+     sola vez en la raiz y se comparten entre todas las categorias. Sin esta
+     lista, la app buscaba el descifrador adentro de cat/SUB18 y no lo
+     encontraba: la pantalla quedaba en blanco. */
+  var NO_SON_DATOS = ['datos_seguros.js'];
+
+  function rutaCat(src, pre){
+    var s = String(src || '');
+    if(!s || s.indexOf('cat/') >= 0) return s;
+    if(/^(https?:)?\/\//.test(s)) return s;      /* algo de afuera */
+    var f = s.split('/').pop().split('?')[0];
+    if(NO_SON_DATOS.indexOf(f) >= 0) return s;
+    return ES_DATO.test(f) ? (pre + s) : s;
+  }
 
   function redirigir(){
     var pre = carpeta();
     if(!pre) return;                    /* Primera: nada que redirigir */
-    var crear = document.createElement.bind(document);
-    document.createElement = function(tag){
-      var el = crear(tag);
-      if(String(tag).toLowerCase() !== 'script') return el;
-      try{
-        var setSrc = Object.getOwnPropertyDescriptor(
-          HTMLScriptElement.prototype, 'src');
-        Object.defineProperty(el, 'src', {
-          get: function(){ return setSrc.get.call(el); },
-          set: function(v){
-            var s = String(v);
-            var f = s.split('/').pop().split('?')[0];
-            if(ES_DATO.test(f) && s.indexOf('cat/') < 0) s = pre + s;
-            setSrc.set.call(el, s);
-          }
+
+    /* Las que ya estan en el documento y todavia no cargaron */
+    function arreglar(el){
+      if(!el || el.tagName !== 'SCRIPT') return;
+      var v = el.getAttribute('src');
+      if(!v) return;
+      var n = rutaCat(v, pre);
+      if(n !== v) el.setAttribute('src', n);
+    }
+
+    try{
+      var obs = new MutationObserver(function(muts){
+        muts.forEach(function(m){
+          for(var i = 0; i < m.addedNodes.length; i++) arreglar(m.addedNodes[i]);
         });
-      }catch(e){}
-      return el;
-    };
+      });
+      obs.observe(document.documentElement, {childList: true, subtree: true});
+      /* al terminar de cargar ya no hace falta observar */
+      document.addEventListener('DOMContentLoaded', function(){
+        try{ obs.disconnect(); }catch(e){}
+      });
+    }catch(e){}
+
+    /* y las que se creen por codigo */
+    try{
+      var crear = document.createElement.bind(document);
+      document.createElement = function(tag){
+        var el = crear(tag);
+        if(String(tag).toLowerCase() === 'script'){
+          var setAttr = el.setAttribute.bind(el);
+          el.setAttribute = function(k, v){
+            if(String(k).toLowerCase() === 'src') v = rutaCat(v, pre);
+            return setAttr(k, v);
+          };
+        }
+        return el;
+      };
+    }catch(e){}
   }
 
   /* ══ El selector ══════════════════════════════════════════════════════════
@@ -110,15 +147,27 @@
       location.reload();                 /* los datos se cargan al abrir */
     });
 
-    var destino = document.querySelector('.tempbar, .topbar, header .right, header');
+    /* ══ Donde se pone ════════════════════════════════════════════════════
+       Se busca la barra de arriba de la pantalla. Si no hay ninguna, va
+       flotando abajo a la izquierda: arriba a la derecha se superponia con
+       los botones de idioma y la fecha, y quedaba ilegible. */
+    var destino = document.querySelector('.tempbar, .seasonbar, .topbar-right');
     if(destino){
+      sel.style.marginLeft = '8px';
       destino.appendChild(sel);
-    } else {
-      var caja = document.createElement('div');
-      caja.style.cssText = 'position:fixed;top:10px;right:12px;z-index:9998';
-      caja.appendChild(sel);
-      document.body.appendChild(caja);
+      return;
     }
+    var caja = document.createElement('div');
+    caja.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:9998;'
+      + 'background:rgba(10,12,24,.94);border:1px solid rgba(255,255,255,.14);'
+      + 'border-radius:10px;padding:5px 7px;display:flex;align-items:center;gap:6px;'
+      + 'box-shadow:0 6px 20px rgba(0,0,0,.5)';
+    var et = document.createElement('span');
+    et.textContent = 'CATEGORÍA';
+    et.style.cssText = 'font-size:9px;letter-spacing:1.5px;color:#64748b';
+    caja.appendChild(et);
+    caja.appendChild(sel);
+    document.body.appendChild(caja);
   }
 
   redirigir();                           /* antes de que carguen los datos */
