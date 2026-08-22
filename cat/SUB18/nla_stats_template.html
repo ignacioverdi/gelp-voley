@@ -492,6 +492,58 @@ function loadStats(){
 }
 loadStats();
 </script><script src="lang.js" onerror="void 0"></script>
+
+<!-- ══ El selector de categoria ══════════════════════════════════════════
+     Esta tabla lleva sus datos ADENTRO: cada categoria genera la suya en su
+     carpeta. Por eso el selector no redirige archivos como en las demas
+     pantallas, sino que lleva directo a la tabla de esa categoria.
+
+     Si el club tiene una sola categoria, no aparece nada. -->
+<script src="categorias_club.js" onerror="void 0"></script>
+<script>
+(function(){
+  try{
+    var L = window.CATEGORIAS_CLUB || [];
+    if(L.length < 2) return;
+
+    /* en que categoria estamos: si la direccion tiene cat/XXX/, es esa */
+    var m = location.pathname.match(/\/cat\/([^\/]+)\//);
+    var aqui = m ? m[1].toUpperCase() : '';
+    var actual = L[0];
+    L.forEach(function(c){
+      if(String(c).replace(/[^A-Za-z0-9]/g,'').toUpperCase() === aqui) actual = c;
+    });
+
+    var sel = document.createElement('select');
+    sel.title = 'Categoría';
+    sel.style.cssText = 'background:#12132a;color:#e2e8f0;border:1px solid rgba(255,255,255,.14);'
+      + 'border-radius:8px;padding:5px 9px;font-family:inherit;font-size:12px;'
+      + 'font-weight:700;cursor:pointer;letter-spacing:.5px';
+    sel.innerHTML = L.map(function(c){
+      return '<option value="'+c+'"'+(c===actual?' selected':'')+'>'+c+'</option>';
+    }).join('');
+
+    sel.addEventListener('change', function(){
+      var n = String(sel.value).replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+      var base = location.pathname.replace(/\/cat\/[^\/]+\//, '/');
+      location.href = (n === String(L[0]).replace(/[^A-Za-z0-9]/g,'').toUpperCase())
+        ? base
+        : base.replace(/\/([^\/]+)$/, '/cat/' + n + '/$1');
+    });
+
+    var caja = document.createElement('div');
+    caja.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:9998;'
+      + 'background:rgba(10,12,24,.94);border:1px solid rgba(255,255,255,.14);'
+      + 'border-radius:10px;padding:5px 7px;display:flex;align-items:center;gap:6px;'
+      + 'box-shadow:0 6px 20px rgba(0,0,0,.5)';
+    var et = document.createElement('span');
+    et.textContent = 'CATEGORÍA';
+    et.style.cssText = 'font-size:9px;letter-spacing:1.5px;color:#64748b';
+    caja.appendChild(et); caja.appendChild(sel);
+    document.body.appendChild(caja);
+  }catch(e){}
+})();
+</script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · GELP VOLEY · Software propietario - Todos los derechos reservados -->
