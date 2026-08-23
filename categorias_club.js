@@ -22,6 +22,6 @@
    La primera de la lista es la que se abre por defecto.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-window.CATEGORIAS_CLUB = ['Primera', 'Sub-18'];
+window.CATEGORIAS_CLUB = ['Primera', 'Sub-21', 'Sub-18', 'Sub-16'];
 
 /* © 2025-2026 Ignacio Verdi · GELP VOLEY · Software propietario */
