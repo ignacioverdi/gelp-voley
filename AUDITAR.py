@@ -89,11 +89,72 @@ def plano(t):
     return re.sub(r'[^a-z0-9]', '', t.lower())
 
 
-def contar_en_dvw(carpetas, propios):
-    """Las acciones del club, contadas directo de los archivos."""
-    total = {}
+def _temporada_de_la_app(carpetas):
+    """Que temporada esta mostrando la app, y que .dvw le corresponden.
+
+    Un club puede tener partidos de varias temporadas en la misma carpeta: la
+    liga suiza va de septiembre a abril, asi que un archivo de enero pertenece
+    a la temporada que arranco el ano anterior.
+
+    La app muestra UNA temporada por vez —la que dice nla_players_db— y los
+    demas partidos quedan afuera. Sin filtrar por eso, el auditor cuenta los
+    97 partidos de la 25-26 contra una app que muestra la 26-27 y avisa que
+    faltan todas las acciones, cuando en realidad estan donde deben.
+
+    Devuelve (temporada, archivos_que_cuentan). Si no se puede saber, se
+    devuelven todos y el auditor se comporta como antes.
+    """
+    todos = []
     for carp in carpetas:
-        for f in sorted(glob.glob(os.path.join(carp, '*.dvw'))):
+        todos.extend(sorted(glob.glob(os.path.join(carp, '*.dvw'))))
+
+    try:
+        db = json.load(io.open(os.path.join(AQUI, 'nla_players_db.json'),
+                               encoding='utf-8'))
+    except Exception:
+        return None, todos
+
+    # la temporada que quedo activa: la que el motor uso al filtrar
+    activa = db.get('_temporada_filtro') or db.get('_temporada')
+    juegos = db.get('games') or []
+    if not activa:
+        # si no esta anotada, se deduce: la temporada de los partidos que la
+        # app muestra es la que aparece en liga_data
+        try:
+            t = io.open(os.path.join(AQUI, 'liga_data.js'),
+                        encoding='utf-8', errors='replace').read()
+            m = re.search(r'"temporada"\s*:\s*"([^"]+)"', t)
+            if m:
+                activa = m.group(1)
+        except Exception:
+            pass
+    if not activa:
+        return None, todos
+
+    # que archivos son de esa temporada, segun la base
+    de_la_temporada = {g.get('file') for g in juegos
+                       if str(g.get('temporada')) == str(activa)}
+    if not de_la_temporada:
+        return activa, []
+
+    return activa, [f for f in todos
+                    if os.path.basename(f) in de_la_temporada]
+
+
+def contar_en_dvw(carpetas, propios, archivos=None):
+    """Las acciones del club, contadas directo de los archivos.
+
+    Si se pasa 'archivos', se cuentan solo esos: son los de la temporada que
+    la app esta mostrando. Los demas .dvw de la carpeta pueden ser de otra
+    temporada y no tienen que entrar en la comparacion.
+    """
+    total = {}
+    if archivos is None:
+        archivos = []
+        for carp in carpetas:
+            archivos.extend(sorted(glob.glob(os.path.join(carp, '*.dvw'))))
+    if True:
+        for f in archivos:
             try:
                 t = leer_dvw(f)
             except Exception:
@@ -361,8 +422,33 @@ def main():
     print('  Club: %s' % (corto or '?'))
     print('  Partidos en: %s' % ', '.join(os.path.basename(c) for c in carpetas))
 
+    # ══ Solo los partidos de la temporada que la app muestra ═══════════════
+    # Una carpeta puede tener partidos de varias temporadas. Comparar todos
+    # contra una app que muestra una sola da diferencias que no existen.
+    _temp, _archivos = _temporada_de_la_app(carpetas)
+
+    if _temp and not _archivos:
+        print()
+        print('  ' + '=' * 68)
+        print('     LA TEMPORADA %s TODAVIA NO TIENE PARTIDOS' % _temp)
+        print('  ' + '=' * 68)
+        print()
+        print('     Los .dvw de la carpeta son de temporadas anteriores y la')
+        print('     app ya paso a la nueva. No hay nada que comparar.')
+        print()
+        print('     Cuando cargues el primer partido de %s, esto va a' % _temp)
+        print('     revisar que los numeros coincidan.')
+        print()
+        esperar()
+        return 0
+
+    if _temp:
+        print('  Temporada que muestra la app: %s  (%d partido(s))'
+              % (_temp, len(_archivos)))
+        print()
+
     # el nombre largo es el que aparece en los .dvw
-    en_dvw = contar_en_dvw(carpetas, propios)
+    en_dvw = contar_en_dvw(carpetas, propios, _archivos)
     en_datos = contar_en_datos(plano(corto))
 
     if en_datos == '__CIFRADO__':

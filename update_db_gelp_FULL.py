@@ -571,6 +571,26 @@ def slug_equipo(nombre):
     return re.sub(r'[^a-z0-9]', '', t.lower())
 
 
+def _temp_filtro_de_argv():
+    """La temporada que se pidio mostrar, tal como vino en la linea de comando.
+
+    Se anota en la base para que el control de calidad sepa contra que
+    comparar: si no, mide todos los .dvw de la carpeta contra una app que
+    muestra una sola temporada y avisa de diferencias que no existen.
+    """
+    import sys as _s
+    a = _s.argv
+    for i, x in enumerate(a):
+        if x == '--filter_temporada' and i + 1 < len(a):
+            return a[i + 1]
+        if x.startswith('--filter_temporada='):
+            return x.split('=', 1)[1]
+    return None
+
+
+_TEMP_FILTRO = _temp_filtro_de_argv()
+
+
 def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # Load existing DB
     if os.path.exists(db_path):
@@ -740,7 +760,13 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     except Exception:
         pass
 
-    db_out = {'_esquema': _ESQUEMA, 'teams': _crudo, 'games': games_log}
+    # Se anota QUE temporada quedo activa: es la que la app va a mostrar.
+    # El control de calidad la necesita para comparar contra los partidos que
+    # corresponden; sin ella compara todos los .dvw de la carpeta contra una
+    # app que muestra una sola temporada, y avisa de diferencias que no
+    # existen.
+    db_out = {'_esquema': _ESQUEMA, '_temporada_filtro': _TEMP_FILTRO,
+              'teams': _crudo, 'games': games_log}
     with open(db_path, 'w', encoding='utf-8') as f:
         json.dump(db_out, f, ensure_ascii=False)
 
