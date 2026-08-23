@@ -314,7 +314,7 @@
     var fb = document.getElementById('sv-feedback');
     if (!fb) return;
     if (estado==='OK'){ fb.textContent='✓ '+codigo; fb.style.color='#22c55e'; }
-    else if (estado==='REVISAR'){ fb.textContent='⚠ revisar: '+codigo; fb.style.color='#9094b7'; }
+    else if (estado==='REVISAR'){ fb.textContent='⚠ revisar: '+codigo; fb.style.color='#f59e0b'; }
     else if (estado==='UNDO'){ fb.textContent='↶ deshecho'; fb.style.color='#94a3b8'; }
     else if (estado==='NUEVA'){ fb.textContent='● sesión nueva'; fb.style.color='#38bdf8'; }
     else { fb.textContent=''; }
@@ -325,7 +325,7 @@
     var box=document.getElementById('sv-log'); if(!box) return;
     var ultimos = SES.log.slice(-8).reverse();
     box.innerHTML = ultimos.map(function(e){
-      var col = e.estado==='OK' ? '#22c55e' : '#9094b7';
+      var col = e.estado==='OK' ? '#22c55e' : '#f59e0b';
       return '<span style="display:inline-block;margin-right:8px;color:'+col+'">'+e.codigo+'</span>';
     }).join('');
   }
@@ -443,7 +443,7 @@
           '<div class="vrow">'+
             '<span class="vchip"><b style="color:#22c55e">u</b> # perfecto / punto</span>'+
             '<span class="vchip"><b style="color:#86efac">i</b> + positivo</span>'+
-            '<span class="vchip"><b style="color:#9094b7">p</b> ! neutral</span>'+
+            '<span class="vchip"><b style="color:#f59e0b">p</b> ! neutral</span>'+
             '<span class="vchip"><b style="color:#9094b7">o</b> - negativo</span>'+
             '<span class="vchip"><b style="color:#09135f">j</b> / vendida o bloqueada</span>'+
             '<span class="vchip"><b style="color:#09135f">k</b> = error</span>'+

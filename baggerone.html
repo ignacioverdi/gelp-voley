@@ -20,7 +20,7 @@
 :root{
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);
-  --red:#09135f;--green:#22c55e;--amber:#9094b7;
+  --red:#09135f;--green:#22c55e;--amber:#f59e0b;
   --blue:#378ADD;--coral:#09135f;
   --mut:#475569;--txt:#e2e8f0;--white:#ffffff;
 }
@@ -53,8 +53,8 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 10% 10%,rg
 .podio-pts-base{font-size:10px;letter-spacing:1px;opacity:.7;}
 
 .p1{width:110px;}
-.p1 .podio-avatar{width:76px;height:76px;border-color:rgba(144,148,183,.5);border-width:3px;}
-.p1 .podio-base{height:130px;background:linear-gradient(180deg,rgba(144,148,183,.25) 0%,rgba(144,148,183,.08) 100%);border:1px solid rgba(144,148,183,.3);}
+.p1 .podio-avatar{width:76px;height:76px;border-color:rgba(245,158,11,.5);border-width:3px;}
+.p1 .podio-base{height:130px;background:linear-gradient(180deg,rgba(245,158,11,.25) 0%,rgba(245,158,11,.08) 100%);border:1px solid rgba(245,158,11,.3);}
 .p1 .podio-rank{color:var(--amber);}
 .p1 .podio-nombre{font-size:15px;}
 .p1 .podio-avatar-num{color:var(--amber);}
@@ -465,13 +465,13 @@ function contarPresentes(){
 
 function alinearEquipos(){
   var orden = ordenDeLaTabla();
-  if(!orden.length){ toast('Todavia no hay jugadores en la tabla ⚠️','#9094b7'); return; }
+  if(!orden.length){ toast('Todavia no hay jugadores en la tabla ⚠️','#f59e0b'); return; }
 
   /* Solo los que vinieron hoy. Y ademas tienen que seguir en el plantel: si
      alguien dejo el equipo sigue en la tabla por su historial, pero no se lo
      puede poner a jugar. */
   var vino = presentes();
-  if(!Object.keys(vino).length){ toast('Elegí al menos un jugador ⚠️','#9094b7'); return; }
+  if(!Object.keys(vino).length){ toast('Elegí al menos un jugador ⚠️','#f59e0b'); return; }
   var vigentes = {};
   JUGADORES.forEach(function(j){ vigentes[j.nombre] = true; });
   var reparto = orden.filter(function(j){ return vigentes[j.nombre] && vino[j.nombre]; });
@@ -682,7 +682,7 @@ function guardarPartido(){
     if(vb) jugB.push(vb);
   }
   if(jugA.length===0 || jugB.length===0){
-    toast('Agregá al menos un jugador por equipo ⚠️','#9094b7'); return;
+    toast('Agregá al menos un jugador por equipo ⚠️','#f59e0b'); return;
   }
 
   // Recolectar sets
@@ -694,7 +694,7 @@ function guardarPartido(){
   var s3b=parseInt(document.getElementById('s3b').value)||0;
 
   if(s1a===0&&s1b===0&&s2a===0&&s2b===0){
-    toast('Ingresá el resultado de al menos un set ⚠️','#9094b7'); return;
+    toast('Ingresá el resultado de al menos un set ⚠️','#f59e0b'); return;
   }
 
   // Calcular ganador por sets
@@ -715,7 +715,7 @@ function guardarPartido(){
   }
 
   var ganador = setsA > setsB ? 'A' : setsB > setsA ? 'B' : null;
-  if(!ganador){ toast('Resultado empatado — revisá los sets ⚠️','#9094b7'); return; }
+  if(!ganador){ toast('Resultado empatado — revisá los sets ⚠️','#f59e0b'); return; }
 
   // Totales de puntos
   var totalPtsA=0, totalPtsB=0;

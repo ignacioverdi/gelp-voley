@@ -101,8 +101,8 @@ function partirCodigo(cod){
 /* El color de cada evaluacion, el mismo que usa el resto del panel. */
 function colorEval(ev){
   if(ev === '#') return '#22c55e';   /* punto      */
-  if(ev === '=') return '#09135f';   /* error      */
-  if(ev === '/') return '#9094b7';   /* bloqueado  */
+  if(ev === '=') return '#ef4444';   /* error      */
+  if(ev === '/') return '#f59e0b';   /* bloqueado  */
   if(ev === '+') return '#60a5fa';   /* positiva   */
   if(ev === '!') return '#a78bfa';   /* dudosa     */
   return 'var(--mut)';               /* el resto   */

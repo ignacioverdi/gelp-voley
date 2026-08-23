@@ -6,7 +6,7 @@
 <title>ANALISIS DE SAQUE — GELP 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#09135f;--amber:#9094b7;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
+:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#09135f;--amber:#F59E0B;--green:#22C55E;--cyan:#06B6D4;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
 html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",sans-serif;min-height:100vh}
 .hdr{background:rgba(7,8,15,.97);border-bottom:1px solid var(--border);padding:11px 20px;position:sticky;top:0;z-index:100}
 .hdr-t{font-family:"Bebas Neue",sans-serif;font-size:18px;letter-spacing:3px}
@@ -21,7 +21,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 .chip:hover{border-color:rgba(255,255,255,.18);color:var(--text)}
 .chip.on{background:rgba(9,19,95,.12);border-color:rgba(9,19,95,.4);color:var(--red)}
 .chip.on-g{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35);color:var(--green)}
-.chip.on-a{background:rgba(144,148,183,.1);border-color:rgba(144,148,183,.35);color:var(--amber)}
+.chip.on-a{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.35);color:var(--amber)}
 .chip.on-i{background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.35);color:var(--indigo)}
 .chip.on-c{background:rgba(6,182,212,.1);border-color:rgba(6,182,212,.35);color:var(--cyan)}
 .psel{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:2px}
@@ -144,7 +144,7 @@ var T1K='SM',T2K='SQ';
 var TKEY='s',TYPESKEY='stypes';
 var ORIG_SIDE='own',DEST_SIDE='rival';
 var RES_LABEL={"#": "Punto", "+": "Positivo", "-": "Negativo", "/": "Vendido", "=": "Error", "!": "Exclamativo"};
-var RES_COLOR={"#": "#22c55e", "+": "#a3e635", "-": "#9094b7", "/": "#86efac", "=": "#09135f", "!": "#9094b7"};
+var RES_COLOR={"#": "#22c55e", "+": "#a3e635", "-": "#f59e0b", "/": "#86efac", "=": "#ef4444", "!": "#fbbf24"};
 var F={player:'',stype:'all',rival:'all',gi:'all',set:'all',moment:'all',result:'all',origin:'all'};
 var PLAYERS={};
 Object.keys(RAW.players).forEach(function(num){
@@ -169,7 +169,7 @@ function calcEff(acts){
 }
 function effColor(v){
   if(v===null||v===undefined) return '#475569';
-  return v>=OBJ_VAL?'#22c55e':v>=(OBJ_VAL-10)?'#9094b7':'#09135f';
+  return v>=OBJ_VAL?'#22c55e':v>=(OBJ_VAL-10)?'#fbbf24':'#ef4444';
 }
 var pNums=Object.keys(PLAYERS).map(Number).sort(function(a,b){
   return PLAYERS[b].actions.length-PLAYERS[a].actions.length;
@@ -421,8 +421,8 @@ function render(){
       var diff=avgL-avgF;
       html+="<div style='display:flex;gap:14px;font-size:11px;color:var(--muted)'>";
       html+="<span>Inicio: <b style='color:#94a3b8'>"+avgF+"%</b></span>";
-      html+="<span>Final: <b style='color:"+(diff>=0?'#22c55e':'#09135f')+"'>"+avgL+"%</b></span>";
-      html+="<span style='font-weight:700;color:"+(diff>=0?'#22c55e':'#09135f')+"'>"+(diff>=0?'Mejorando +':'Bajando ')+diff+"%</span></div>";
+      html+="<span>Final: <b style='color:"+(diff>=0?'#22c55e':'#ef4444')+"'>"+avgL+"%</b></span>";
+      html+="<span style='font-weight:700;color:"+(diff>=0?'#22c55e':'#ef4444')+"'>"+(diff>=0?'Mejorando +':'Bajando ')+diff+"%</span></div>";
     }
     html+='</div>';
   }

@@ -52,10 +52,10 @@
 
      Se llama "ext-barra" y no "ext" porque esa clase ya existe en otras dos
      partes de la hoja de estilos, y la ultima definicion pisaba el color. */
-  .ext-barra{color:#09135f !important;font-weight:900;
-             background:rgba(9,19,95,.12);
+  .ext-barra{color:#ef4444 !important;font-weight:900;
+             background:rgba(239,68,68,.12);
              border-radius:4px;padding:0 2px;
-             box-shadow:inset 0 0 0 2px rgba(9,19,95,.45)}
+             box-shadow:inset 0 0 0 2px rgba(239,68,68,.45)}
   #code.ext{caret-color:#a78bfa}
   .extmenu.open{box-shadow:0 0 0 2px rgba(167,139,250,.35),0 18px 44px rgba(0,0,0,.5)}
 
@@ -78,7 +78,7 @@
 
 /* El extendido, al final de cada linea y en otro color: se distingue del
    codigo base sin tener que leerlo entero. */
-.crow .lc-ex { width:34px; color:#9094b7; font-weight:700; text-align:left; padding-left:4px; }
+.crow .lc-ex { width:34px; color:#f59e0b; font-weight:700; text-align:left; padding-left:4px; }
 
 /* Los separadores del formato interno, apagados: estan pero no distraen. */
 #code-espejo .sep{ color:rgba(148,163,184,.22); }
@@ -88,10 +88,10 @@
   --bg:#080810; --sur:#0f0f1a; --card:#13131f; --card2:#16162a;
   --b:rgba(255,255,255,.07); --b2:rgba(255,255,255,.14);
   --txt:#eeeef5; --mut:#6b6b84; --dim:#2a2a3a;
-  --loc:#9094b7;      /* equipo local  */
+  --loc:#fbbf24;      /* equipo local  */
   --vis:#22d3ee;      /* equipo visitante */
   --ok:#4ade80; --bad:#09135f; --warn:#9094b7;
-  --k-team:#a78bfa; --k-num:#f8fafc; --k-skill:#22d3ee; --k-type:#9094b7;
+  --k-team:#a78bfa; --k-num:#f8fafc; --k-skill:#22d3ee; --k-type:#fbbf24;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow',sans-serif;font-size:14px}
@@ -176,7 +176,7 @@ button{font-family:inherit;cursor:pointer}
 .sqbtn:hover{border-color:var(--k-zone)}
 .vrow{display:flex;gap:10px;align-items:baseline;padding:7px 8px;border-bottom:1px solid var(--b);cursor:pointer}
 .vrow:hover{background:var(--card2)}
-.vmsg{color:var(--warn,#9094b7);font-size:12px}
+.vmsg{color:var(--warn,#fbbf24);font-size:12px}
 .atrow{display:grid;grid-template-columns:60px 90px 1fr 34px;gap:6px;margin-bottom:6px;align-items:center}
 .hsel{float:right;margin-left:6px;background:var(--card2);border:1px solid var(--b);color:var(--mut);
   border-radius:6px;padding:2px 5px;font-size:10px;font-weight:600}
@@ -255,7 +255,7 @@ select.mini2{background:var(--card2);border:1px solid var(--b);color:var(--txt);
 .hint b{color:var(--txt);font-weight:600}
 .endrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .endbtn{padding:7px;border-radius:8px;border:1px solid var(--b2);font-family:'Barlow Condensed';font-weight:800;letter-spacing:1.4px;font-size:14px;background:var(--card)}
-.endbtn.h{color:var(--loc);border-color:rgba(144,148,183,.35)} .endbtn.h:hover{background:rgba(144,148,183,.1)}
+.endbtn.h{color:var(--loc);border-color:rgba(251,191,36,.35)} .endbtn.h:hover{background:rgba(251,191,36,.1)}
 .endbtn.a{color:var(--vis);border-color:rgba(34,211,238,.35)} .endbtn.a:hover{background:rgba(34,211,238,.1)}
 
 /* lista de códigos */
@@ -734,7 +734,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <div class="modal" id="m-partidos"><div class="sheet" style="max-width:900px">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
     <h2>📂 Partidos guardados</h2>
-    <button id="partidos-trash" onclick="borrarPartidosSel()" style="display:none;align-items:center;gap:6px;background:rgba(9,19,95,.15);color:#09135f;border:1px solid rgba(9,19,95,.4);border-radius:8px;padding:7px 14px;cursor:pointer;font:inherit;font-weight:700">🗑️ Borrar (<span id="partidos-trash-n">0</span>)</button>
+    <button id="partidos-trash" onclick="borrarPartidosSel()" style="display:none;align-items:center;gap:6px;background:rgba(239,68,68,.15);color:#09135f;border:1px solid rgba(239,68,68,.4);border-radius:8px;padding:7px 14px;cursor:pointer;font:inherit;font-weight:700">🗑️ Borrar (<span id="partidos-trash-n">0</span>)</button>
   </div>
   <div class="sub">Tocá un partido para abrirlo. Tildá los que quieras borrar y usá el botón rojo.</div>
   <div id="partidos-cont" style="margin-top:12px;max-height:60vh;overflow:auto"></div>
@@ -3994,8 +3994,8 @@ function partirCodigo(cod){
 /* El color de cada evaluacion, el mismo que usa el resto del panel. */
 function colorEval(ev){
   if(ev === '#') return '#22c55e';   /* punto      */
-  if(ev === '=') return '#09135f';   /* error      */
-  if(ev === '/') return '#9094b7';   /* bloqueado  */
+  if(ev === '=') return '#ef4444';   /* error      */
+  if(ev === '/') return '#f59e0b';   /* bloqueado  */
   if(ev === '+') return '#60a5fa';   /* positiva   */
   if(ev === '!') return '#a78bfa';   /* dudosa     */
   return 'var(--mut)';               /* el resto   */
@@ -6519,7 +6519,7 @@ function objKPIS(){
   try{ fase = calcFaseKPIs(M.codes||[], side==='home'?'*':'a') || {}; }catch(e){ fase={}; }
   var k=null; try{ k = calcObjetivos(D); }catch(e){}
   return [
-    {id:'saque',      label:'Eficiencia saque',      color:'#9094b7', val:k?k.effS:null, unit:'%'},
+    {id:'saque',      label:'Eficiencia saque',      color:'#fbbf24', val:k?k.effS:null, unit:'%'},
     {id:'rec',        label:'Eficiencia recepción',  color:'#4ade80', val:k?k.effR:null, unit:'%'},
     {id:'blq',        label:'Bloqueo # + %',         color:'#a78bfa', val:k?k.effB:null, unit:'%'},
     {id:'alta',       label:'Eficiencia ataque alta',color:'#38bdf8', val:k?k.effA:null, unit:'%'},
@@ -6528,7 +6528,7 @@ function objKPIS(){
     {id:'sideout',    label:'% Side out (rec #/+)',  color:'#4ade80', val:fase.sideout,   unit:'%'},
     {id:'transition', label:'% Transición',          color:'#38bdf8', val:fase.transition,unit:'%'},
     {id:'mbtr',       label:'# Central en transición',color:'#a78bfa',val:fase.mbTr,     unit:''},
-    {id:'pipesd',     label:'# Pipe en side out',    color:'#9094b7', val:fase.pipeSD,   unit:''},
+    {id:'pipesd',     label:'# Pipe en side out',    color:'#fbbf24', val:fase.pipeSD,   unit:''},
     {id:'pipetr',     label:'# Pipe en transición',  color:'#09135f', val:fase.pipeTR,   unit:''}
   ];
 }
@@ -6546,7 +6546,7 @@ function updateObj(){
     if(!hayMeta)        badge='<div class="obj-nada">Poné la meta</div>';
     else if(!hayDato)   badge='<div class="obj-nada">Sin datos aún</div>';
     else if(actual>=goal) badge='<div class="obj-badge" style="background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);color:#4ade80">&#10003; Logrado</div>';
-    else if(pct>=75)      badge='<div class="obj-badge" style="background:rgba(144,148,183,.12);border:1px solid rgba(144,148,183,.4);color:#9094b7">&#9650; Cerca</div>';
+    else if(pct>=75)      badge='<div class="obj-badge" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);color:#fbbf24">&#9650; Cerca</div>';
     else                  badge='<div class="obj-badge" style="background:rgba(9,19,95,.12);border:1px solid rgba(9,19,95,.35);color:#09135f">&#9660; En proceso</div>';
     var sub=(hayMeta&&hayDato)?'<div class="obj-sub">'+Math.round(actual)+k.unit+' de '+Math.round(goal)+k.unit+'</div>':'';
 
@@ -6919,12 +6919,12 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
     </div>
 
     <div style="background:var(--card2);border:1px solid var(--b2);border-radius:10px;padding:13px">
-      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#9094b7;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px">
         2 &middot; En el partido</div>
       <div style="font-size:12px;line-height:1.65;color:var(--txt)">
         Abr&iacute; la misma direcci&oacute;n de siempre. El panel abre normal.<br><br>
         Arriba aparece un cartel amarillo que dice
-        <b style="color:#9094b7">Sin se&ntilde;al &middot; se guarda igual</b>.<br><br>
+        <b style="color:#f59e0b">Sin se&ntilde;al &middot; se guarda igual</b>.<br><br>
         Scoute&aacute; como siempre: no cambia nada.
       </div>
     </div>
@@ -6959,8 +6959,8 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
     </div>
   </div>
 
-  <div style="margin-top:14px;background:rgba(144,148,183,.06);border:1px solid rgba(144,148,183,.25);border-radius:10px;padding:13px">
-    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#9094b7;margin-bottom:8px">
+  <div style="margin-top:14px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:13px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:8px">
       Lo que conviene saber</div>
     <div style="font-size:12px;line-height:1.75;color:var(--txt)">
       <b>La primera vez s&iacute; hace falta se&ntilde;al.</b> Es cuando se guarda.
@@ -7013,8 +7013,8 @@ var MODO_SIN_SENAL = false;
       d = document.createElement('div');
       d.id = 'sin-senal';
       d.style.cssText = 'position:fixed;top:8px;left:50%;transform:translateX(-50%);'+
-        'z-index:9999;background:rgba(144,148,183,.14);border:1px solid rgba(144,148,183,.45);'+
-        'color:#9094b7;border-radius:20px;padding:5px 16px;font-family:inherit;'+
+        'z-index:9999;background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.45);'+
+        'color:#f59e0b;border-radius:20px;padding:5px 16px;font-family:inherit;'+
         'font-size:11px;font-weight:700;letter-spacing:.5px;pointer-events:none;'+
         'backdrop-filter:blur(6px)';
       d.textContent = 'Sin se\u00f1al \u00b7 se guarda igual';

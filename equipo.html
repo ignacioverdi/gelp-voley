@@ -18,7 +18,7 @@
 :root{
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
   --border:rgba(255,255,255,.06);
-  --red:#09135f;--green:#22c55e;--amber:#9094b7;
+  --red:#09135f;--green:#22c55e;--amber:#f59e0b;
   --indigo:#818cf8;--mut:#475569;--txt:#e2e8f0;
 }
 body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rgba(9,19,95,.05) 0%,transparent 50%);font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;}
@@ -115,7 +115,7 @@ var EQUIPO_DEMO = {
 var DATA = window.EQUIPO_DATA || EQUIPO_DEMO;
 
 var POS_COLOR = {
-  'ARMADOR':'#9094b7','CENTRAL':'#9094b7',
+  'ARMADOR':'#f59e0b','CENTRAL':'#9094b7',
   'PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'
 };
 
@@ -268,7 +268,7 @@ cargarCorrecciones(function(){
 .hm-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 10px;border-radius:14px;text-decoration:none;color:#fff;transition:all .18s;border:1px solid}
 .hm-card:hover{transform:translateY(-2px);filter:brightness(1.15)}
 .hm-icon{font-size:28px}.hm-lbl{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px}
-.hm-sub{font-size:9px;color:#64748b;text-align:center}
+.hm-sub{font-size:9px;color:#94a3b8;text-align:center}
 </style>
 <div id="hm-overlay" onclick="if(event.target===this)closeHeatmapMenu()">
   <div class="hm-box">
@@ -277,10 +277,10 @@ cargarCorrecciones(function(){
       <a class="hm-card" href="hm_ataque.html?equipo=gelp"    style="background:rgba(144,148,183,.08);border-color:rgba(144,148,183,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#9094b7">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas</span></a>
       <a class="hm-card" href="hm_saque.html?equipo=gelp"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=gelp" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(144,148,183,.08);border-color:rgba(144,148,183,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#9094b7">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(9,19,95,.08);border-color:rgba(9,19,95,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#09135f">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
+      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">LIGA FEMENINA 2026/27 · temporada en curso</div>
+    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center">LIGA FEMENINA 2026/27 · temporada en curso</div>
   </div>
 </div>
 <script>

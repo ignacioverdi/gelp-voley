@@ -10,13 +10,13 @@
 :root{
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
   --border:rgba(255,255,255,.06);
-  --amber:#9094b7;--indigo:#818cf8;--green:#22c55e;
-  --red:#09135f;--orange:#9094b7;--mut:#475569;--txt:#e2e8f0;
+  --amber:#f59e0b;--indigo:#818cf8;--green:#22c55e;
+  --red:#ef4444;--orange:#9094b7;--mut:#475569;--txt:#e2e8f0;
 }
 body{
   background:var(--bg);
   background-image:radial-gradient(ellipse at 0% 0%,rgba(129,140,248,.08) 0%,transparent 50%),
-    radial-gradient(ellipse at 100% 100%,rgba(144,148,183,.06) 0%,transparent 50%);
+    radial-gradient(ellipse at 100% 100%,rgba(245,158,11,.06) 0%,transparent 50%);
   font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;
 }
 .page-header{
@@ -27,16 +27,16 @@ body{
 }
 .page-title{
   font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;
-  background:linear-gradient(120deg,#9094b7,#fff 50%,#818cf8);
+  background:linear-gradient(120deg,#f59e0b,#fff 50%,#818cf8);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .rival-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--amber);}
 .match-info{font-size:13px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;
-  border:1px solid rgba(144,148,183,.2);border-radius:6px;padding:4px 10px;
-  background:rgba(144,148,183,.05);margin-top:3px;display:inline-block;}
+  border:1px solid rgba(245,158,11,.2);border-radius:6px;padding:4px 10px;
+  background:rgba(245,158,11,.05);margin-top:3px;display:inline-block;}
 .nav-dots{display:flex;gap:8px;align-items:center;}
 .nav-dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;}
-.nav-dot.on{background:var(--amber);box-shadow:0 0 8px rgba(144,148,183,.5);}
+.nav-dot.on{background:var(--amber);box-shadow:0 0 8px rgba(245,158,11,.5);}
 .main{max-width:1600px;margin:0 auto;padding:24px 32px;}
 
 /* Jugador */
@@ -90,7 +90,7 @@ body{
 }
 .tab-btn:hover{background:rgba(255,255,255,.07);color:#e2e8f0;}
 .tab-btn.active-ataque{background:rgba(129,140,248,.12);border-color:rgba(129,140,248,.4);color:#818cf8;}
-.tab-btn.active-saque{background:rgba(144,148,183,.12);border-color:rgba(144,148,183,.4);color:#9094b7;}
+.tab-btn.active-saque{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.4);color:#f59e0b;}
 .toggle-arrow{color:var(--mut);font-size:14px;transition:transform .3s;}
 .jugador-section.open .toggle-arrow{transform:rotate(180deg);}
 
@@ -235,11 +235,11 @@ select, select option {
 body{padding-top:56px;background:#07080f}
 .hdr{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,8,15,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:10px 210px 10px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 @media(max-width:760px){.hdr{padding-right:24px}}
-.back-btn{padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:14px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase}
+.back-btn{padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-size:14px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase}
 .hdr-title{font-family:"Bebas Neue",sans-serif;font-size:17px;letter-spacing:3px;color:#e2e8f0}
 .hdr-title span{color:#22c55e}
 .jbtns{display:flex;gap:6px;flex-wrap:wrap;width:100%}
-.jbtn{padding:5px 14px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#64748b;transition:all .15s;text-transform:uppercase}
+.jbtn{padding:5px 14px;border-radius:8px;font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#94a3b8;transition:all .15s;text-transform:uppercase}
 .jbtn.on{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.12);color:#22c55e}
 .content{max-width:1300px;margin:0 auto;padding:20px 24px}
 
@@ -257,7 +257,7 @@ body{padding-top:56px;background:#07080f}
 /* Panel */
 .panel{border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.07);background:#0d0e1a}
 .panel-hdr{padding:7px 12px 6px;border-bottom:1px solid rgba(255,255,255,.06);position:relative}
-.panel-from{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#475569;margin-bottom:2px}
+.panel-from{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#8395ac;margin-bottom:2px}
 .panel-type{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
 
 /* Court background in panel */
@@ -269,19 +269,19 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
 .zone-card{border-radius:8px;padding:7px 5px;border:1px solid;backdrop-filter:blur(8px)}
 .zc-lbl{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-bottom:3px}
 .zc-eff{font-size:16px;font-weight:900;text-align:center;line-height:1;margin-bottom:1px}
-.zc-sub{font-size:11px;text-align:center;color:#475569;margin-bottom:3px}
+.zc-sub{font-size:11px;text-align:center;color:#8395ac;margin-bottom:3px}
 .zc-vol{height:3px;border-radius:2px;background:rgba(255,255,255,.08);margin:0 2px 4px}
 .zc-vol-fill{height:3px;border-radius:2px}
 .zc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px}
 .zc-stat{text-align:center}
-.zc-stat-l{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.5px}
+.zc-stat-l{font-size:10px;color:#8395ac;text-transform:uppercase;letter-spacing:.5px}
 .zc-stat-v{font-size:13px;font-weight:800;line-height:1.3}
 
 /* Total strip */
 .t-strip{display:grid;grid-template-columns:repeat(4,1fr);padding:5px 10px 7px;border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:2}
 .ts{text-align:center}
 .ts-v{font-size:15px;font-weight:900;line-height:1;font-family:"Barlow Condensed",sans-serif}
-.ts-l{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.ts-l{font-size:10px;color:#8395ac;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
@@ -303,7 +303,7 @@ canvas.panel-court{position:absolute;inset:0;width:100%;height:100%;opacity:.28;
   
   <div style="display:flex;gap:6px;margin-left:auto">
     <button id="rec-tbtn-p" onclick="recSetTipo('partido',this)" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(9,19,95,.4);background:rgba(9,19,95,.12);color:#09135f;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase">🏆 PARTIDO</button>
-    <button id="rec-tbtn-e" onclick="recSetTipo('entrenamiento',this)" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase">🏋️ ENT</button>
+    <button id="rec-tbtn-e" onclick="recSetTipo('entrenamiento',this)" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase">🏋️ ENT</button>
   </div>
   <div id="rec-subfiltro" style="display:none;gap:4px;flex-wrap:wrap;padding:6px 0;width:100%"></div>
   <div class="jbtns" id="jbtns"></div>
@@ -514,9 +514,9 @@ function initReceptores(){
   }
 }
 
-function ec(v){return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#9094b7':'#09135f';}
-function bgc(v){return v>=25?'rgba(34,197,94,.13)':v>=5?'rgba(134,239,172,.08)':v>=0?'rgba(148,163,184,.05)':v>=-15?'rgba(144,148,183,.15)':'rgba(9,19,95,.18)';}
-function bdc(v){return v>=25?'rgba(34,197,94,.35)':v>=5?'rgba(134,239,172,.2)':v>=0?'rgba(148,163,184,.12)':v>=-15?'rgba(144,148,183,.35)':'rgba(9,19,95,.35)';}
+function ec(v){return v>=25?'#22c55e':v>=5?'#86efac':v>=0?'#94a3b8':v>=-15?'#9094b7':'#ef4444';}
+function bgc(v){return v>=25?'rgba(34,197,94,.13)':v>=5?'rgba(134,239,172,.08)':v>=0?'rgba(148,163,184,.05)':v>=-15?'rgba(144,148,183,.15)':'rgba(239,68,68,.18)';}
+function bdc(v){return v>=25?'rgba(34,197,94,.35)':v>=5?'rgba(134,239,172,.2)':v>=0?'rgba(148,163,184,.12)':v>=-15?'rgba(144,148,183,.35)':'rgba(239,68,68,.35)';}
 
 function calcTot(desde){
   var t=0,we=0,wp=0,wn=0;
@@ -543,7 +543,7 @@ function zoneCard(d, label, maxTot, typeColor){
     +'<div class="zc-grid">'
     +'<div class="zc-stat"><div class="zc-stat-l">Total</div><div class="zc-stat-v" style="color:#e2e8f0">'+d.tot+'</div></div>'
     +'<div class="zc-stat"><div class="zc-stat-l"># +</div><div class="zc-stat-v" style="color:#22c55e">'+d.pos+'%</div></div>'
-    +'<div class="zc-stat"><div class="zc-stat-l">/ =</div><div class="zc-stat-v" style="color:#09135f">'+d.neg+'%</div></div>'
+    +'<div class="zc-stat"><div class="zc-stat-l">/ =</div><div class="zc-stat-v" style="color:#ef4444">'+d.neg+'%</div></div>'
     +'</div></div>';
 }
 
@@ -572,7 +572,7 @@ function makeZonePanel(desdeKey, desdeLabel, td, typeColor, typeLabel){
     +'<div class="ts"><div class="ts-v" style="color:#e2e8f0">'+tot.tot+'</div><div class="ts-l">saques</div></div>'
     +'<div class="ts"><div class="ts-v" style="color:'+ec(tot.eff)+'">'+tot.eff+'%</div><div class="ts-l">EFF</div></div>'
     +'<div class="ts"><div class="ts-v" style="color:#22c55e">'+tot.pos+'%</div><div class="ts-l"># +</div></div>'
-    +'<div class="ts"><div class="ts-v" style="color:#09135f">'+tot.neg+'%</div><div class="ts-l">/ =</div></div>'
+    +'<div class="ts"><div class="ts-v" style="color:#ef4444">'+tot.neg+'%</div><div class="ts-l">/ =</div></div>'
     +'</div>';
 
   // Draw court bg after appended
@@ -626,7 +626,7 @@ function makeAcumPanel(td, typeColor, typeLabel){
     +'<div class="ts"><div class="ts-v" style="color:#e2e8f0">'+tot.tot+'</div><div class="ts-l">saques</div></div>'
     +'<div class="ts"><div class="ts-v" style="color:'+ec(tot.eff)+'">'+tot.eff+'%</div><div class="ts-l">EFF</div></div>'
     +'<div class="ts"><div class="ts-v" style="color:#22c55e">'+tot.pos+'%</div><div class="ts-l"># +</div></div>'
-    +'<div class="ts"><div class="ts-v" style="color:#09135f">'+tot.neg+'%</div><div class="ts-l">/ =</div></div>'
+    +'<div class="ts"><div class="ts-v" style="color:#ef4444">'+tot.neg+'%</div><div class="ts-l">/ =</div></div>'
     +'</div>';
   return el;
 }
@@ -738,7 +738,7 @@ function render(){
   cont.innerHTML = '';
 
   if(!d){
-    cont.innerHTML='<div style="color:#475569;padding:40px;text-align:center;font-family:Barlow Condensed,sans-serif;letter-spacing:1px">SIN DATOS PARA ESTE JUGADOR</div>';
+    cont.innerHTML='<div style="color:#8395ac;padding:40px;text-align:center;font-family:Barlow Condensed,sans-serif;letter-spacing:1px">SIN DATOS PARA ESTE JUGADOR</div>';
     return;
   }
 
@@ -770,7 +770,7 @@ function render(){
     if(ti===0){
       var hdrAcum=document.createElement('div');
       hdrAcum.className='sec-hdr';
-      hdrAcum.innerHTML='<div class="sec-pill" style="background:rgba(255,255,255,.04);color:#64748b;border:0.5px solid rgba(255,255,255,.1)">Acumulado total</div><div class="sec-line"></div>';
+      hdrAcum.innerHTML='<div class="sec-pill" style="background:rgba(255,255,255,.04);color:#94a3b8;border:0.5px solid rgba(255,255,255,.1)">Acumulado total</div><div class="sec-line"></div>';
       cont.appendChild(hdrAcum);
 
       var rowAcum=document.createElement('div');
@@ -830,10 +830,10 @@ function recSetTipo(tipo, btn){
   // Update button styles
   document.getElementById('rec-tbtn-p').style.cssText = tipo==='partido'
     ? "padding:5px 12px;border-radius:8px;border:1px solid rgba(9,19,95,.4);background:rgba(9,19,95,.12);color:#09135f;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase"
-    : "padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase";
+    : "padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase";
   document.getElementById('rec-tbtn-e').style.cssText = tipo==='entrenamiento'
     ? "padding:5px 12px;border-radius:8px;border:1px solid rgba(34,197,94,.4);background:rgba(34,197,94,.12);color:#22c55e;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase"
-    : "padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase";
+    : "padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase";
 
   if(tipo === 'partido'){
     // Restore original GELP data

@@ -36,7 +36,7 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 :root{
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);
-  --red:#09135f;--green:#22c55e;--amber:#9094b7;
+  --red:#09135f;--green:#22c55e;--amber:#f59e0b;
   --indigo:#818cf8;--orange:#9094b7;--cyan:#06b6d4;
   --mut:#475569;--txt:#e2e8f0;
 }
@@ -70,8 +70,8 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .tabla tr.total-row td{background:rgba(255,255,255,.03);font-weight:700;border-top:1px solid var(--border);}
 .tabla tr:hover td{background:rgba(255,255,255,.02);}
 .eff-pos{color:var(--green);}.eff-neg{color:var(--red);}
-.val-perf{color:#22c55e;}.val-pos{color:#86efac;}.val-adm{color:#9094b7;}
-.val-neg{color:#9094b7;}.val-vend{color:#9094b7;}.val-err{color:#09135f;}.val-tot{color:var(--txt);}.val-mut{color:var(--mut);}
+.val-perf{color:#22c55e;}.val-pos{color:#86efac;}.val-adm{color:#fbbf24;}
+.val-neg{color:#9094b7;}.val-vend{color:#9094b7;}.val-err{color:#ef4444;}.val-tot{color:var(--txt);}.val-mut{color:var(--mut);}
 .sec-label{font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
 .sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
 .empty{text-align:center;padding:60px;color:var(--mut);}
@@ -103,9 +103,9 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .cancha-modal-hdr{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:420px;margin-bottom:12px}
 .cancha-modal-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#e2e8f0}
 .cancha-modal-close{padding:6px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:7px;color:#94a3b8;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase}
-.cancha-modal-info{font-size:12px;color:#64748b;letter-spacing:.8px;text-align:center;max-width:360px;margin-bottom:10px}
+.cancha-modal-info{font-size:12px;color:#94a3b8;letter-spacing:.8px;text-align:center;max-width:360px;margin-bottom:10px}
 .cancha-modal-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:12px}
-.cml-item{display:flex;align-items:center;gap:6px;font-size:10px;color:#64748b;letter-spacing:.8px;text-transform:uppercase}
+.cml-item{display:flex;align-items:center;gap:6px;font-size:10px;color:#94a3b8;letter-spacing:.8px;text-transform:uppercase}
 .cml-dot{width:20px;height:3px;border-radius:2px}
 /* Botones DV4 clickeables */
 .dv4-cod-btn{
@@ -141,7 +141,7 @@ function effBloqueo(j){
 }
 function effColor(v){
   if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
-  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#9094b7':'#09135f';
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#9094b7':'#ef4444';
 }
 
 
@@ -181,7 +181,7 @@ function filtrarSesiones(sesiones, tipo){
 
 // ── Pos colors ───────────────────────────────────────────────
 var POS_COLOR={
-  'ARMADOR':'#9094b7','CENTRAL':'#9094b7',
+  'ARMADOR':'#f59e0b','CENTRAL':'#9094b7',
   'PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'
 };
 
@@ -254,7 +254,7 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 
 
 <div class="header">
-  <a href="dashboard.html" class="back-btn" style="text-decoration:none;padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-right:8px">← Dashboard</a>
+  <a href="dashboard.html" class="back-btn" style="text-decoration:none;padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-right:8px">← Dashboard</a>
 <div style="display:flex;align-items:center;gap:14px;">
     <a href="index.html" class="back-btn">← Inicio</a>
     <button onclick="showHeatmapMenu()" style="background:rgba(144,148,183,.1);border:1px solid rgba(144,148,183,.3);color:#9094b7;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px">🔥 HEAT MAPS</button>
@@ -566,7 +566,7 @@ function getJugadores(idx){
   }
 }
 
-function effColor(v){ return v===null||isNaN(v)?'var(--mut)':v>20?'#22c55e':v>0?'#86efac':v===0?'var(--mut)':'#09135f'; }
+function effColor(v){ return v===null||isNaN(v)?'var(--mut)':v>20?'#22c55e':v>0?'#86efac':v===0?'var(--mut)':'#ef4444'; }
 function sEff(j){ return j.sT>0?Math.round((j.sPunto*1+j.sVend*0.5+j.sPos*0.25-j.sErr*1)/j.sT*100):null; }
 function rEff(j){ return j.rT>0?Math.round((j.rPunto*1+j.rPos*0.5-j.rVend*0.5-j.rErr*1)/j.rT*100):null; }
 function aEff(j){ return j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null; }
@@ -588,10 +588,10 @@ function tablaSaque(jugs){
   var h=_subFiltros('saque')+'<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th style="color:var(--mut)">PJ</th>';
-  h+=thSec('── SAQUE ──',7,'#9094b7');
+  h+=thSec('── SAQUE ──',7,'#f59e0b');
   h+='</tr><tr><th class="left" style="padding:8px 12px">Nombre</th>';
   if(isAcum) h+='<th></th>';
-  h+='<th style="border-left:1px solid rgba(255,255,255,.06);color:#9094b7">EFF%</th>';
+  h+='<th style="border-left:1px solid rgba(255,255,255,.06);color:#f59e0b">EFF%</th>';
   h+='<th>TOT</th><th class="val-perf">#</th><th class="val-pos">+</th><th class="val-adm">!</th><th class="val-neg">-</th><th class="val-err">=</th>';
   h+='</tr></thead><tbody>';
   var tT=0,tPt=0,tPos=0,tAdm=0,tNeg=0,tVend=0,tErr=0;
@@ -705,7 +705,7 @@ function tablaResumen(jugs){
   var h='<div class="tabla-wrap"><table class="tabla"><thead><tr>';
   h+='<th class="left sec">JUGADOR</th>';
   if(isAcum) h+='<th>PJ</th>';
-  h+=thSec('SAQUE',2,'#9094b7')+thSec('RECEPCIÓN',2,'#22c55e')+thSec('ATAQUE',2,'#818cf8')+thSec('BLOQUEO',2,'#06b6d4');
+  h+=thSec('SAQUE',2,'#f59e0b')+thSec('RECEPCIÓN',2,'#22c55e')+thSec('ATAQUE',2,'#818cf8')+thSec('BLOQUEO',2,'#06b6d4');
   h+='</tr><tr><th class="left" style="padding:8px 12px">Nombre</th>';
   if(isAcum) h+='<th></th>';
   ['EFF%','TOT','EFF%','TOT','EFF%','TOT','EFF%','TOT'].forEach(function(c,i){
@@ -798,7 +798,7 @@ function renderIndividualNew(num){
   if(acum.sT>0){
     var sWrap=document.createElement('div'); sWrap.className='ind-card';
     var sHdr=document.createElement('div'); sHdr.className='ind-card-hdr';
-    var sTit=document.createElement('div'); sTit.className='ind-fund-title'; sTit.style.color='#9094b7'; sTit.textContent='⚡ SAQUE';
+    var sTit=document.createElement('div'); sTit.className='ind-fund-title'; sTit.style.color='#f59e0b'; sTit.textContent='⚡ SAQUE';
     sHdr.appendChild(sTit);
     if(hasSaqueCancha){
       var destsEncoded=encodeURIComponent(JSON.stringify(topDestsS));
@@ -808,15 +808,15 @@ function renderIndividualNew(num){
       sBtnC.setAttribute('data-saque-orig',origZoneS);
       sBtnC.setAttribute('data-saque-stats',statsEncoded);
       sBtnC.setAttribute('onclick','saqueClickCancha(this)');
-      sBtnC.style.cssText='display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:6px;border:1px solid rgba(144,148,183,.3);background:rgba(144,148,183,.08);color:#9094b7;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;cursor:pointer';
+      sBtnC.style.cssText='display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:6px;border:1px solid rgba(245,158,11,.3);background:rgba(245,158,11,.08);color:#f59e0b;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;cursor:pointer';
       sBtnC.textContent='🗺️ Ver en cancha';
       sHdr.appendChild(sBtnC);
     }
     sWrap.appendChild(sHdr);
     var sPills=document.createElement('div'); sPills.className='stat-pills';
-    [[se!==null?se+'%':'--','EFF%','#9094b7'],[acum.sT,'TOT','#9094b7'],
+    [[se!==null?se+'%':'--','EFF%','#f59e0b'],[acum.sT,'TOT','#f59e0b'],
      [acum.sPunto,'#','#22c55e'],[acum.sPos,'+','#86efac'],
-     [acum.sAdm,'!','#9094b7'],[acum.sNeg,'-','#9094b7'],[acum.sErr,'=','#09135f']
+     [acum.sAdm,'!','#fbbf24'],[acum.sNeg,'-','#9094b7'],[acum.sErr,'=','#ef4444']
     ].forEach(function(p){
       var c=document.createElement('div'); c.className='stat-pill';
       var v=document.createElement('div'); v.className='stat-pill-val'; v.style.color=p[2]; v.textContent=p[0];
@@ -834,8 +834,8 @@ function renderIndividualNew(num){
       '<div class="stat-pills">'+
       pill('EFF%',re!==null?re+'%':'--',effColor(re))+pill('TOT',acum.rT,'#22c55e')+
       pill('#',acum.rPunto,'#22c55e')+pill('+',acum.rPos,'#86efac')+
-      pill('!',acum.rAdm,'#9094b7')+pill('-',acum.rNeg,'#9094b7')+
-      pill('/',acum.rVend,'#9094b7')+pill('=',acum.rErr,'#09135f')+
+      pill('!',acum.rAdm,'#fbbf24')+pill('-',acum.rNeg,'#9094b7')+
+      pill('/',acum.rVend,'#9094b7')+pill('=',acum.rErr,'#ef4444')+
       '</div></div>';
   }
 
@@ -866,8 +866,8 @@ function renderIndividualNew(num){
     var aPills=document.createElement('div'); aPills.className='stat-pills';
     [[ae!==null?ae+'%':'--','EFF%','#818cf8'],[acum.aT,'TOT','#818cf8'],
      [acum.aPunto,'#','#22c55e'],[acum.aPos,'+','#86efac'],
-     [acum.aAdm,'!','#9094b7'],[acum.aNeg,'-','#9094b7'],
-     [acum.aVend,'/','#9094b7'],[acum.aErr,'=','#09135f']
+     [acum.aAdm,'!','#fbbf24'],[acum.aNeg,'-','#9094b7'],
+     [acum.aVend,'/','#9094b7'],[acum.aErr,'=','#ef4444']
     ].forEach(function(p){
       var c=document.createElement('div'); c.className='stat-pill';
       var v=document.createElement('div'); v.className='stat-pill-val'; v.style.color=p[2]; v.textContent=p[0];
@@ -901,7 +901,7 @@ function renderIndividualNew(num){
   var evol='';
   if(hist_jug.length>1){
     evol='<div class="section-title">EVOLUCIÓN POR PARTIDO</div><div class="tabla-wrap"><table class="tabla"><thead><tr>';
-    evol+='<th class="left">Partido</th><th style="color:#9094b7">S</th><th style="color:#9094b7">S%</th>';
+    evol+='<th class="left">Partido</th><th style="color:#f59e0b">S</th><th style="color:#f59e0b">S%</th>';
     evol+='<th style="color:#22c55e">R</th><th style="color:#22c55e">R%</th>';
     evol+='<th style="color:#818cf8">A</th><th style="color:#818cf8">A%</th><th style="color:#06b6d4">B</th>';
     evol+='</tr></thead><tbody>';
@@ -912,7 +912,7 @@ function renderIndividualNew(num){
       var res=j.resultado||{},gan=setsDelClub(res) > setsDelRival(res);
       var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
       evol+='<tr style="background:'+bg+'"><td class="left" style="padding:8px 12px">';
-      evol+='<span style="color:'+(gan?'#22c55e':'#09135f');
+      evol+='<span style="color:'+(gan?'#22c55e':'#ef4444');
       evol+=';margin-right:6px">'+(gan?'✅':'❌')+'</span>'+j.fecha+' vs '+(j.rival||'')+'</td>';
       evol+='<td>'+j.sT+'</td><td style="color:'+effColor(se2)+';font-weight:700">'+(se2!==null?se2+'%':'--')+'</td>';
       evol+='<td>'+j.rT+'</td><td style="color:'+effColor(re2)+';font-weight:700">'+(re2!==null?re2+'%':'--')+'</td>';
@@ -1169,7 +1169,7 @@ function canchaDrawAttack(ctx,cod,destinos,pct){
 function statPill(label,value,color,title){
   return '<div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px;flex:1;padding:7px 6px;background:rgba(255,255,255,.04);border-radius:7px;border:1px solid rgba(255,255,255,.07)" title="'+title+'">'+
     '<div style="font-family:Barlow Condensed,sans-serif;font-size:19px;font-weight:900;line-height:1;color:'+color+'">'+value+'</div>'+
-    '<div style="font-size:9px;color:#64748b;letter-spacing:1px;text-transform:uppercase">'+label+'</div>'+
+    '<div style="font-size:9px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase">'+label+'</div>'+
   '</div>';
 }
 
@@ -1198,7 +1198,7 @@ function openCanchaModal(cod, destinos, playerName, stats){
     const tot=stats.tot||0, pt=stats.pt||0, err=stats.err||0, vend=stats.vend||0;
     const pctPt=tot>0?Math.round(pt/tot*100):0;
     const eff=tot>0?Math.round((pt-vend-err)/tot*100):null;
-    const effColor=eff===null?'#64748b':eff>=50?'#22c55e':eff>=25?'#9094b7':eff>=0?'#9094b7':'#09135f';
+    const effColor=eff===null?'#64748b':eff>=50?'#22c55e':eff>=25?'#fbbf24':eff>=0?'#9094b7':'#ef4444';
     statsWrap.style.display='flex';
     statsWrap.innerHTML='<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;width:100%;max-width:420px">'+
         statPill('EFF',eff!==null?eff+'%':'--',effColor,'Eficiencia')+
@@ -1206,7 +1206,7 @@ function openCanchaModal(cod, destinos, playerName, stats){
         statPill('#',pt,'#22c55e','Puntos')+
         statPill('#%',pctPt+'%','#22c55e','% Puntos')+
         statPill('/',vend,'#9094b7','Vendidas')+
-        statPill('=',err,'#09135f','Errores')+
+        statPill('=',err,'#ef4444','Errores')+
       '</div>';
   } else if(statsWrap){
     statsWrap.style.display='none';
@@ -1249,10 +1249,10 @@ function openSaqueCanchaModal(destinos,origZone,stats){
   info+='Top destinos: '+destinos.map(d=>'zona '+d.z+' ('+d.pct+'%)').join(' \u00b7 ');
   document.getElementById('cancha-modal-info').textContent=info;
   const sw=document.getElementById('cancha-stats-wrap');
-  const SC='#9094b7';
+  const SC='#f59e0b';
   if(sw&&stats&&stats.tot>0){
     const eff=Math.round((stats.pt-(stats.vend||0)-stats.err)/stats.tot*100);
-    const effColor=eff>=40?'#22c55e':eff>=20?'#9094b7':eff>=0?'#9094b7':'#09135f';
+    const effColor=eff>=40?'#22c55e':eff>=20?'#fbbf24':eff>=0?'#9094b7':'#ef4444';
     sw.style.display='flex'; sw.style.justifyContent='center';
     sw.innerHTML='<div style="display:flex;gap:8px;flex-wrap:nowrap;justify-content:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;width:100%;max-width:420px">'
       +statPill('EFF',eff+'%',effColor,'Eficiencia')
@@ -1260,7 +1260,7 @@ function openSaqueCanchaModal(destinos,origZone,stats){
       +statPill('#',stats.pt,'#22c55e','Puntos')
       +statPill('#%',(stats.pct||0)+'%','#22c55e','% Puntos')
       +statPill('/',stats.vend||0,'#9094b7','Vendidas')
-      +statPill('=',stats.err,'#09135f','Errores')
+      +statPill('=',stats.err,'#ef4444','Errores')
       +'</div>';
   } else if(sw){ sw.style.display='none'; }
   const canvas=document.getElementById('cancha-canvas');
@@ -1279,7 +1279,7 @@ function openSaqueCanchaModal(destinos,origZone,stats){
 }
 
 function canchaDrawSaque(ctx,origZone,destinos,pct){
-  const SC='#9094b7';
+  const SC='#f59e0b';
   const CONE_COLS=['#9094b7','#a855f7'];
   pct=pct===undefined?1:pct;
   const orig=origZone>0?canchaRivalZone(origZone):canchaRivalZone(1);
@@ -1402,9 +1402,9 @@ function posSection(title, color, jugs, cols){
 
 function tablaComparativa(jugs){
   var byPos = getPosJugadores();
-  var effC = function(v){ return v===null||v==='—'?'#475569':v>=40?'#22c55e':v>=20?'#86efac':v>=-5?'#9094b7':'#09135f'; };
-  var effCS = function(v){ return v===null||v==='—'?'#475569':v>=3?'#22c55e':v>=0?'#86efac':v>=-5?'#9094b7':'#09135f'; };
-  var effCR = function(v){ return v===null||v==='—'?'#475569':v>=36?'#22c55e':v>=28?'#86efac':v>=20?'#9094b7':'#09135f'; };
+  var effC = function(v){ return v===null||v==='—'?'#475569':v>=40?'#22c55e':v>=20?'#86efac':v>=-5?'#fbbf24':'#ef4444'; };
+  var effCS = function(v){ return v===null||v==='—'?'#475569':v>=3?'#22c55e':v>=0?'#86efac':v>=-5?'#fbbf24':'#ef4444'; };
+  var effCR = function(v){ return v===null||v==='—'?'#475569':v>=36?'#22c55e':v>=28?'#86efac':v>=20?'#fbbf24':'#ef4444'; };
 
   var POS_COLORS = {PUNTA:'#22C55E',CENTRAL:'#F97316',OPUESTO:'#F97316',ARMADOR:'#F59E0B',LIBERO:'#06B6D4'};
   var POS_ORDER = ['PUNTA','OPUESTO','CENTRAL','ARMADOR','LIBERO'];
@@ -1413,20 +1413,20 @@ function tablaComparativa(jugs){
     {l:'Jugador',left:true},{k:'aEff',l:'EFF Ataque',c:'#9094b7',color:effC},
     {k:'aT',l:'Total',color:function(v){return '#94a3b8';}},
     {k:'aPunto',l:'Puntos',color:function(v){return '#22c55e';}},
-    {k:'aVend',l:'Bloq.',color:function(v){return '#09135f';}},
-    {k:'aErr',l:'Errores',color:function(v){return '#09135f';}},
+    {k:'aVend',l:'Bloq.',color:function(v){return '#ef4444';}},
+    {k:'aErr',l:'Errores',color:function(v){return '#ef4444';}},
   ];
   var sCol = [
-    {l:'Jugador',left:true},{k:'sEff',l:'EFF Saque',c:'#9094b7',color:effCS},
+    {l:'Jugador',left:true},{k:'sEff',l:'EFF Saque',c:'#F59E0B',color:effCS},
     {k:'sT',l:'Total',color:function(v){return '#94a3b8';}},
     {k:'sPunto',l:'Puntos',color:function(v){return '#22c55e';}},
-    {k:'sErr',l:'Errores',color:function(v){return '#09135f';}},
+    {k:'sErr',l:'Errores',color:function(v){return '#ef4444';}},
   ];
   var rCol = [
     {l:'Jugador',left:true},{k:'rEff',l:'EFF Recep.',c:'#22C55E',color:effCR},
     {k:'rT',l:'Total',color:function(v){return '#94a3b8';}},
     {k:'rPunto',l:'Perfecto',color:function(v){return '#22c55e';}},
-    {k:'rErr',l:'Errores',color:function(v){return '#09135f';}},
+    {k:'rErr',l:'Errores',color:function(v){return '#ef4444';}},
   ];
 
   var h = '<div style="padding:4px 0">';
@@ -1442,7 +1442,7 @@ function tablaComparativa(jugs){
   });
 
   // SAQUE section
-  h += '<div style="font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#9094b7;margin-bottom:12px;margin-top:20px">⚡ SAQUE POR POSICIÓN</div>';
+  h += '<div style="font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#F59E0B;margin-bottom:12px;margin-top:20px">⚡ SAQUE POR POSICIÓN</div>';
   POS_ORDER.forEach(function(pos){
     var pg = byPos[pos];
     if(!pg||!pg.length) return;
@@ -1486,7 +1486,7 @@ function tablaRanking(jugs){
       var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
       var barW = Math.max(5, Math.min(100, Math.abs(val)/Math.abs(valFn(sorted[0]))*100));
       h += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">';
-      h += '<div style="width:24px;text-align:center;font-size:14px">'+(medal||'<span style="font-size:11px;color:#475569">'+(i+1)+'</span>')+'</div>';
+      h += '<div style="width:24px;text-align:center;font-size:14px">'+(medal||'<span style="font-size:11px;color:#8395ac">'+(i+1)+'</span>')+'</div>';
       h += '<div style="flex:1">';
       h += '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px">';
       h += '<span style="font-size:12px;font-weight:700;color:#e2e8f0"><span style="color:'+posCol+';margin-right:4px">#'+j.c+'</span>'+nm+'</span>';
@@ -1495,7 +1495,7 @@ function tablaRanking(jugs){
       h += '<div style="height:4px;background:rgba(255,255,255,.04);border-radius:2px;overflow:hidden">';
       h += '<div style="height:100%;width:'+barW+'%;background:'+color+';border-radius:2px;transition:width .3s"></div>';
       h += '</div>';
-      if(sub!==null) h += '<div style="font-size:9px;color:#475569;margin-top:2px">'+subLabel+': '+sub+'</div>';
+      if(sub!==null) h += '<div style="font-size:9px;color:#8395ac;margin-top:2px">'+subLabel+': '+sub+'</div>';
       h += '</div></div>';
     });
     h += '</div>';
@@ -1516,7 +1516,7 @@ function tablaRanking(jugs){
   // Saque
   var sqJugs = jugs.filter(function(j){return j.sT>=5;});
   h += '<div>';
-  h += rankSection('Ranking Saque','⚡','#9094b7',sqJugs,
+  h += rankSection('Ranking Saque','⚡','#F59E0B',sqJugs,
     function(j){return j.sEff||0;},'%',
     function(j){return j.sPunto;},'Puntos directos');
   h += '</div>';
@@ -1554,7 +1554,7 @@ function tablaRanking(jugs){
 .hm-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 10px;border-radius:14px;text-decoration:none;color:#fff;transition:all .18s;border:1px solid}
 .hm-card:hover{transform:translateY(-2px);filter:brightness(1.15)}
 .hm-icon{font-size:28px}.hm-lbl{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px}
-.hm-sub{font-size:9px;color:#64748b;text-align:center}
+.hm-sub{font-size:9px;color:#94a3b8;text-align:center}
 </style>
 <div id="hm-overlay" onclick="if(event.target===this)closeHeatmapMenu()">
   <div class="hm-box">
@@ -1563,10 +1563,10 @@ function tablaRanking(jugs){
       <a class="hm-card" href="hm_ataque.html?equipo=gelp"    style="background:rgba(144,148,183,.08);border-color:rgba(144,148,183,.3)"><span class="hm-icon">⚡</span><span class="hm-lbl" style="color:#9094b7">ATAQUE</span><span class="hm-sub">EFF · SO/TR · Zonas</span></a>
       <a class="hm-card" href="hm_saque.html?equipo=gelp"     style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3)"><span class="hm-icon">🎯</span><span class="hm-lbl" style="color:#22C55E">SAQUE</span><span class="hm-sub">EFF · Zonas origen/destino</span></a>
       <a class="hm-card" href="hm_recepcion.html?equipo=gelp" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🛡️</span><span class="hm-lbl" style="color:#818CF8">RECEPCION</span><span class="hm-sub">EFF · Calidad · Zonas</span></a>
-      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(144,148,183,.08);border-color:rgba(144,148,183,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#9094b7">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
-      <a class="hm-card" href="hm_defensa.html" style="background:rgba(9,19,95,.08);border-color:rgba(9,19,95,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#09135f">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
+      <a class="hm-card" href="hm_armador.html?equipo=gelp"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B">ARMADO</span><span class="hm-sub">Llamadas · Pos · EFF</span></a>
+      <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Por rival</span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8">BLOQUEO</span><span class="hm-sub">EFF · Zona del ataque · Combos</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">LIGA FEMENINA 2026/27 · temporada en curso</div>
+    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center">LIGA FEMENINA 2026/27 · temporada en curso</div>
   </div>
 </div>
 <script>
@@ -1644,19 +1644,19 @@ function objClassify(id,val){
   var m=window.OBJETIVOS_CONFIG.metas[id];
   if(val>=m.g2) return{color:'#22c55e',bg:'rgba(34,197,94,.1)', border:'rgba(34,197,94,.35)', label:'Objetivo'};
   if(val>=m.g1) return{color:'#86efac',bg:'rgba(134,239,172,.08)',border:'rgba(134,239,172,.3)', label:'Cerca'};
-  if(val>=m.y)  return{color:'#9094b7',bg:'rgba(144,148,183,.1)', border:'rgba(144,148,183,.3)', label:'Neutro'};
-  return {color:'#09135f',bg:'rgba(9,19,95,.1)', border:'rgba(9,19,95,.3)', label:'Lejos'};
+  if(val>=m.y)  return{color:'#fbbf24',bg:'rgba(251,191,36,.1)', border:'rgba(251,191,36,.3)', label:'Neutro'};
+  return {color:'#ef4444',bg:'rgba(239,68,68,.1)', border:'rgba(239,68,68,.3)', label:'Lejos'};
 }
 
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 
 function cell(v){ return (v===null||v===undefined)?'—':(v+'%'); }
 
-function colorEff(v){ if(v===null||v===undefined) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':'#09135f'; }
+function colorEff(v){ if(v===null||v===undefined) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':'#ef4444'; }
 
 function diff(a,b){
-    if(a===null||a===undefined||b===null||b===undefined) return '<span style="color:#475569">—</span>';
-    var d=a-b, col=d>=5?'#22c55e':d>=0?'#86efac':d>=-8?'#9094b7':'#09135f';
+    if(a===null||a===undefined||b===null||b===undefined) return '<span style="color:#8395ac">—</span>';
+    var d=a-b, col=d>=5?'#22c55e':d>=0?'#86efac':d>=-8?'#fbbf24':'#ef4444';
     return '<span style="color:'+col+';font-weight:800">'+(d>0?'+':'')+d+'</span>';
   }
 
@@ -1715,10 +1715,10 @@ function renderObjetivosJugador(cid, jugVals, eqVals){
   var rows=[{label:'Equipo',vals:eqVals,isJug:false}];
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
-    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">MI PERFORMANCE VS OBJETIVO</div>'
+    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#94a3b8">MI PERFORMANCE VS OBJETIVO</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
-    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#9094b7','Neutro'],['#09135f','Lejos']].map(function(x){
-      return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
+    +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
+      return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#94a3b8"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
     +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
     +'<div style="width:64px;flex-shrink:0"></div>'
@@ -1771,7 +1771,7 @@ function objBuildSubfiltro(){
   if(!META){ row.style.display='none'; return; }
   row.innerHTML=''; row.style.display='flex'; row.style.alignItems='center';
   var lbl=document.createElement('span');
-  lbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase;margin-right:6px';
+  lbl.style.cssText='font-size:9px;color:#8395ac;letter-spacing:2px;text-transform:uppercase;margin-right:6px';
   lbl.textContent='VER:';
   row.appendChild(lbl);
   var sel=document.createElement('select');
@@ -1894,7 +1894,7 @@ function _aplicarSubfiltros(jugs){
 
 function _subFiltros(cual){
   var defs = {
-    saque:     {v:SAQUE_TIPO, f:'setSaqueTipo', c:'#9094b7',
+    saque:     {v:SAQUE_TIPO, f:'setSaqueTipo', c:'#f59e0b',
                 o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
     recepcion: {v:RECEP_TIPO, f:'setRecepTipo', c:'#22c55e',
                 o:[['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']]},
@@ -1910,7 +1910,7 @@ function _subFiltros(cual){
          'padding:5px 12px;border-radius:7px;cursor:pointer;' +
          'font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;' +
          (on ? ('background:' + d.c + '22;border:1px solid ' + d.c + '66;color:' + d.c)
-             : 'background:transparent;border:1px solid rgba(255,255,255,.08);color:#64748b') +
+             : 'background:transparent;border:1px solid rgba(255,255,255,.08);color:#94a3b8') +
          '">' + d.o[i][1] + '</button>';
   }
   return h + '</div>';

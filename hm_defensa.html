@@ -6,7 +6,7 @@
 <title>ANALISIS DE DEFENSA — GELP</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#09135f;--amber:#9094b7;--green:#22C55E;--lime:#84CC16;--orange:#9094b7;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
+:root{--bg:#07080F;--card:#0D0E1A;--card2:#111220;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--red:#09135f;--amber:#F59E0B;--green:#22C55E;--lime:#84CC16;--orange:#9094b7;--indigo:#818CF8;--text:#E2E8F0;--muted:#64748B;--subtle:#475569}
 html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",sans-serif;min-height:100vh}
 .hdr{background:rgba(7,8,15,.97);border-bottom:1px solid var(--border);padding:11px 20px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:14px}
 .hdr a.back{color:var(--muted);font-size:11px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:800;white-space:nowrap}
@@ -210,7 +210,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
      demas o directamente no se contaba. */
   var RES_ORDER=['#','+','!','-','/','='];
   var RES_LABEL={'#':'Perfecta','+':'Buena','!':'Regular','-':'Mala','=':'Error'};
-  var RES_HEX={'#':'#22C55E','+':'#84CC16','!':'#9094b7','-':'#9094b7','=':'#09135f'};
+  var RES_HEX={'#':'#22C55E','+':'#84CC16','!':'#9094b7','-':'#9094b7','=':'#EF4444'};
 
   function rivalOf(m){
     if(!m) return 'Rival';
@@ -283,7 +283,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
          cuando en realidad es peor que una mala: la pelota se va al campo
          rival sin control. Ahora pesa igual que la negativa, como en el
          motor. */; }); return Math.round(s/acts.length*100); }
-  function effColor(e){ return e===null?'#475569':e>=40?'#22C55E':e>=15?'#84CC16':e>=0?'#9094b7':e>=-25?'#9094b7':'#09135f'; }
+  function effColor(e){ return e===null?'#475569':e>=40?'#22C55E':e>=15?'#84CC16':e>=0?'#9094b7':e>=-25?'#9094b7':'#EF4444'; }
   function pct(n,t){ return t>0?Math.round(n/t*100):0; }
 
   function courtSVG(origZ,destZ,total){
@@ -351,7 +351,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
     html+="<div class='scard'><div class='big' style='color:"+effColor(e)+"'>"+(e!==null?e+'%':'--')+"</div><div class='lbl'>Eficiencia</div></div>";
     html+="<div class='scard'><div class='big' style='color:#22C55E'>"+good+"%</div><div class='lbl'>Buenas (#/+)</div></div>";
     html+="<div class='scard'><div class='big' style='color:#84CC16'>"+perf+"%</div><div class='lbl'>Perfectas (#)</div></div>";
-    html+="<div class='scard'><div class='big' style='color:#09135f'>"+err+"%</div><div class='lbl'>Errores (=)</div></div>";
+    html+="<div class='scard'><div class='big' style='color:#EF4444'>"+err+"%</div><div class='lbl'>Errores (=)</div></div>";
     html+="</div>";
 
     html+="<div class='panel'><div style='display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px'>";
@@ -395,7 +395,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
       return '<button onclick="setModoDef(\'' + o[0] + '\')" style="' +
         'padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:800;' +
         'letter-spacing:1px;font-family:inherit;' +
-        (on ? 'border:1px solid rgba(9,19,95,.5);background:rgba(9,19,95,.14);color:#09135f'
+        (on ? 'border:1px solid rgba(239,68,68,.5);background:rgba(239,68,68,.14);color:#ef4444'
             : 'border:1px solid rgba(255,255,255,.12);background:transparent;color:#94a3b8') +
         '">' + o[1] + '</button>';
     }).join('');
