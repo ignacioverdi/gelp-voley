@@ -152,8 +152,13 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+<!-- El motor de video, version 0.11.
+     La 0.12 necesita que el servidor mande unas cabeceras especiales
+     (COOP y COEP) para poder usar varios nucleos. Vercel no las manda, y sin
+     ellas el motor no arranca: "ffmpeg is not loaded".
+     La 0.11 usa un solo nucleo y funciona en cualquier servidor. Tarda algo
+     mas, pero para pegar archivos sin recomprimir la diferencia no se nota. -->
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
 <script>
 var PARTES = [];        /* los archivos, en el orden en que se van a unir */
 var FF = null;          /* el motor de video: se carga una sola vez */
@@ -302,14 +307,14 @@ async function motor(){
   progreso('Preparando…<br>' +
     '<span style="color:var(--muted);font-size:12.5px">La primera vez tarda ' +
     'unos segundos. No tenés que hacer nada.</span>', 4);
-  var FFmpeg = FFmpegWASM.FFmpeg;
-  FF = new FFmpeg();
-  FF.on('progress', function(ev){
-    if(ev && ev.progress > 0) progreso('Uniendo…', 20 + ev.progress * 75);
+  FF = FFmpeg.createFFmpeg({
+    log: false,
+    corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+    progress: function(ev){
+      if(ev && ev.ratio > 0) progreso('Uniendo…', 20 + ev.ratio * 75);
+    }
   });
-  await FF.load({
-    coreURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js'
-  });
+  await FF.load();
   return FF;
 }
 
@@ -325,19 +330,19 @@ async function unir(){
 
   try{
     var ff = await motor();
-    var fetchFile = FFmpegUtil.fetchFile;
+    var fetchFile = FFmpeg.fetchFile;
 
     for(var i = 0; i < PARTES.length; i++){
       progreso('Leyendo la parte ' + (i+1) + ' de ' + PARTES.length + '…',
                5 + (i / PARTES.length) * 13);
       var ext = PARTES[i].f.name.split('.').pop().toLowerCase();
       var n = 'p' + i + '.' + ext;
-      await ff.writeFile(n, await fetchFile(PARTES[i].f));
+      ff.FS('writeFile', n, await fetchFile(PARTES[i].f));
       nombres.push(n);
     }
 
     var lista = nombres.map(function(n){ return "file '" + n + "'"; }).join('\n');
-    await ff.writeFile('lista.txt', new TextEncoder().encode(lista));
+    ff.FS('writeFile', 'lista.txt', new TextEncoder().encode(lista));
 
     progreso('Uniendo…', 20);
 
@@ -355,10 +360,10 @@ async function unir(){
                '-c:a','aac','salida.mp4'];
     }
 
-    await ff.exec(orden);
+    await ff.run.apply(ff, orden);
 
     progreso('Guardando…', 97);
-    var datos = await ff.readFile('salida.mp4');
+    var datos = ff.FS('readFile', 'salida.mp4');
     var blob = new Blob([datos.buffer], {type:'video/mp4'});
 
     /* el nombre sale de la primera parte, sin el numero del final */
@@ -395,10 +400,10 @@ async function unir(){
     /* la memoria del motor se libera igual, haya salido bien o mal */
     try{
       for(var j = 0; j < nombres.length; j++){
-        try{ await FF.deleteFile(nombres[j]); }catch(e){}
+        try{ FF.FS('unlink', nombres[j]); }catch(e){}
       }
-      try{ await FF.deleteFile('salida.mp4'); }catch(e){}
-      try{ await FF.deleteFile('lista.txt'); }catch(e){}
+      try{ FF.FS('unlink', 'salida.mp4'); }catch(e){}
+      try{ FF.FS('unlink', 'lista.txt'); }catch(e){}
     }catch(e){}
     TRABAJANDO = false;
     document.getElementById('bUnir').disabled = false;
