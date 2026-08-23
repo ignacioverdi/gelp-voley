@@ -21,7 +21,7 @@ ESTRUCTURA DE ARCHIVOS:
   recepcion_{equipo}.html — heatmap recepción por equipo (se regenera)
 """
 
-import os, re, json, argparse, shutil
+import os, re, json, argparse, shutil, glob
 from collections import defaultdict, Counter
 
 # ── NORMALIZACIÓN DE COMBOS AL CANÓNICO MUNDIAL ──────────────────────
@@ -578,6 +578,28 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
         teams_data = db.get('teams', {})
         games_log  = db.get('games', [])
         existing_dates = {g['file'] for g in games_log}
+
+        # ══ Si un partido ya no esta, la base se rehace ════════════════════
+        # La base acumula: lee los .dvw nuevos y conserva lo anterior. Pero si
+        # se SACA un partido de la carpeta —pasa al separar categorias, o al
+        # borrar uno cargado por error— sus acciones quedaban adentro para
+        # siempre.
+        #
+        # Eso deja numeros que no corresponden: jugadoras con partidos que el
+        # club ya no tiene, y en el peor caso una unificacion de dorsales
+        # apuntando a alguien que no jugo, que deja al equipo sin armador.
+        try:
+            _hay = {os.path.basename(f) for f in
+                    glob.glob(os.path.join(dvw_dir, '*.dvw'))}
+            _faltan = [g for g in games_log if g.get('file') not in _hay]
+            if _faltan:
+                print('  Faltan %d partido(s) que estaban en la base: la rehago'
+                      % len(_faltan))
+                for _g in _faltan[:3]:
+                    print('     ya no esta: %s' % _g.get('file'))
+                teams_data = {}; games_log = []; existing_dates = set()
+        except Exception:
+            pass
     else:
         teams_data = {}; games_log = []; existing_dates = set()
 
@@ -604,7 +626,12 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #    antes tienen las dos entradas —#4 y #5 de la misma persona— y como el
     #    partido "ya estaba cargado" nunca se reprocesaban: la armadora seguia
     #    apareciendo dos veces en el dashboard y en el plan de partido.
-    _ESQUEMA = 3          # subir este numero cuando el parser lea algo nuevo
+    # 4: la base guardaba la unificacion de dorsales hecha en una corrida
+    #    anterior. Si despues se saca un partido —al separar categorias, por
+    #    ejemplo— esa unificacion queda apuntando a un numero que ya no juega
+    #    y el equipo se queda sin armador. Al subir el numero se rehace con
+    #    los partidos que hay hoy.
+    _ESQUEMA = 4          # subir este numero cuando el parser lea algo nuevo
     try:
         _v = db.get('_esquema', 1)
     except Exception:
@@ -683,6 +710,19 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #
     # Se juntan por nombre y se conserva el dorsal del partido MAS RECIENTE,
     # que es el que el equipo usa hoy.
+    # ══ La unificacion NO se guarda en la base ═════════════════════════════
+    # Se guarda a cada jugadora con el dorsal que uso en cada partido, tal
+    # como vino del .dvw. La union de las que cambiaron de numero se hace
+    # DESPUES, sobre una copia, y solo para los archivos que lee la app.
+    #
+    # Antes se unificaba antes de guardar, y eso dejaba la decision grabada:
+    # si mas adelante se sacaba un partido —al separar categorias, por
+    # ejemplo— la base seguia diciendo "la 4 es la 5", apuntaba a un numero
+    # que ya no jugaba, y el equipo se quedaba sin armador.
+    #
+    # Guardando el dato crudo, cada corrida decide con los partidos que hay.
+    import copy as _copy
+    _crudo = {t: dict(j) for t, j in teams_data.items()}
     _unificar_por_nombre(teams_data)
 
     # ══ Los cambios de dorsal, a modo informativo ══════════════════════════
@@ -700,7 +740,7 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     except Exception:
         pass
 
-    db_out = {'_esquema': _ESQUEMA, 'teams': teams_data, 'games': games_log}
+    db_out = {'_esquema': _ESQUEMA, 'teams': _crudo, 'games': games_log}
     with open(db_path, 'w', encoding='utf-8') as f:
         json.dump(db_out, f, ensure_ascii=False)
 
