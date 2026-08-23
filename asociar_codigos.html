@@ -129,7 +129,21 @@
         <button id="bQuit" onclick="quitar()" title="Quitar la asociación" disabled>✕</button>
       </div>
       <div class="col">
-        <h2>Los tuyos</h2>
+        <h2 style="display:flex;align-items:center;gap:8px">
+          <span id="tit-der">Los tuyos</span>
+          <select id="selTabla" onchange="cambiarTabla()"
+            style="margin-left:auto;background:var(--card);color:var(--txt);
+            border:1px solid var(--border);border-radius:6px;padding:3px 7px;
+            font-family:inherit;font-size:11px;font-weight:700;cursor:pointer">
+            <option value="_mios">Los míos</option>
+          </select>
+          <button onclick="document.getElementById('selDestino').click()"
+            title="Usar la tabla de otro archivo .dvw"
+            style="background:var(--card);color:var(--txt);border:1px solid var(--border);
+            border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;
+            cursor:pointer;font-family:inherit">+ otra</button>
+        </h2>
+        <input type="file" id="selDestino" accept=".dvw" class="oculto">
         <div class="lista" id="der"></div>
       </div>
     </div>
@@ -200,10 +214,12 @@ function cargar(file){
     var m = TXT.match(/\[3MATCH\][^\n]*\n(?:[^;]*;){5}([^;\n]*)/);
     SCOUT = (m && m[1] ? m[1] : 'otro').replace(/[^A-Za-z0-9]/g,'').slice(0,20) || 'otro';
 
-    var propio = window.MIS_CODIGOS || null;
+    var destino = (TABLA_ACTUAL === '_mios')
+                    ? (window.MIS_CODIGOS || {})
+                    : (TABLAS_GUARDADAS[TABLA_ACTUAL] || {});
     for(var k in CLAVES){
       TABLAS[k].suyas = tablaDe(TXT, CLAVES[k]);
-      TABLAS[k].mias  = (propio && propio[k]) ? propio[k] : {};
+      TABLAS[k].mias  = destino[k] || {};
     }
 
     /* Los identicos se asocian solos: es lo unico que se da por hecho.
@@ -484,6 +500,105 @@ function generarConTablas(soloTablas){
   aviso('Listo: el archivo quedó con tus tablas. Los códigos de las acciones ' +
         'no se tocaron.', true);
 }
+
+
+/* ══ De quien son los códigos de la columna derecha ════════════════════════
+   Por defecto son los del club, sacados de su último partido. Pero la
+   herramienta sirve en las dos direcciones:
+
+     · llega un partido de otro scout  ->  se traduce a los códigos del club
+     · el club manda un partido afuera ->  se traduce a los del destinatario
+
+   Un scout argentino que mande su partido a Europa necesita traducir al revés.
+   Por eso la columna derecha se puede cambiar: se toma de cualquier .dvw y
+   queda guardada para la próxima. */
+var TABLAS_GUARDADAS = {};      /* nombre -> {atk:{}, set:{}} */
+var TABLA_ACTUAL = '_mios';
+
+function cargarGuardadas(){
+  try{
+    var g = localStorage.getItem('vb_tablas_codigos');
+    if(g) TABLAS_GUARDADAS = JSON.parse(g);
+  }catch(e){ TABLAS_GUARDADAS = {}; }
+  pintarSelector();
+}
+
+function pintarSelector(){
+  var sel = document.getElementById('selTabla');
+  if(!sel) return;
+  var o = '<option value="_mios">Los míos</option>';
+  Object.keys(TABLAS_GUARDADAS).sort().forEach(function(n){
+    o += '<option value="' + n + '"' + (TABLA_ACTUAL===n ? ' selected' : '') +
+         '>' + n + '</option>';
+  });
+  sel.innerHTML = o;
+  sel.value = TABLA_ACTUAL;
+}
+
+function cambiarTabla(){
+  var sel = document.getElementById('selTabla');
+  TABLA_ACTUAL = sel.value;
+  var t = (TABLA_ACTUAL === '_mios')
+            ? (window.MIS_CODIGOS || {})
+            : (TABLAS_GUARDADAS[TABLA_ACTUAL] || {});
+  for(var k in CLAVES){ TABLAS[k].mias = t[k] || {}; }
+
+  /* las asociaciones anteriores apuntaban a la tabla vieja: se limpian las
+     que ya no existen, para no dejar una traduccion a un codigo inventado */
+  for(var k in CLAVES){
+    for(var c in ASOC[k]){
+      var destinos = String(ASOC[k][c]).split(',').map(function(x){ return x.trim(); });
+      var validos = destinos.filter(function(d){ return TABLAS[k].mias[d]; });
+      if(validos.length) ASOC[k][c] = validos.join(', ');
+      else delete ASOC[k][c];
+    }
+    /* y se reasocian los idénticos de la tabla nueva */
+    for(var c2 in TABLAS[k].suyas){
+      if(!ASOC[k][c2] && TABLAS[k].mias[c2]) ASOC[k][c2] = c2;
+    }
+  }
+
+  document.getElementById('tit-der').textContent =
+    (TABLA_ACTUAL === '_mios') ? 'Los tuyos' : TABLA_ACTUAL;
+  SELI = null; SELD = null;
+  pintar();
+  aviso('Ahora traducís a los códigos de: ' +
+        (TABLA_ACTUAL==='_mios' ? 'tu club' : TABLA_ACTUAL), false);
+}
+
+/* Tomar la tabla de otro .dvw y guardarla con nombre */
+document.getElementById('selDestino').addEventListener('change', function(e){
+  var f = e.target.files[0];
+  if(!f) return;
+  var fr = new FileReader();
+  fr.onload = function(){
+    var t = fr.result.replace(/\r\n/g, '\n');
+    var nueva = {};
+    var n = 0;
+    for(var k in CLAVES){
+      nueva[k] = tablaDe(t, CLAVES[k]);
+      n += Object.keys(nueva[k]).length;
+    }
+    if(!n){ aviso('Ese archivo no trae tablas de códigos.', false); return; }
+
+    var nom = prompt('¿Con qué nombre guardo esta tabla?\n\n' +
+                     'Por ejemplo: "Europa", "Nafels", "Liga italiana"',
+                     f.name.replace(/\.dvw$/i,'').slice(0,20));
+    if(!nom) return;
+    TABLAS_GUARDADAS[nom] = nueva;
+    try{
+      localStorage.setItem('vb_tablas_codigos', JSON.stringify(TABLAS_GUARDADAS));
+    }catch(err){}
+    TABLA_ACTUAL = nom;
+    pintarSelector();
+    cambiarTabla();
+    aviso('Guardada la tabla "' + nom + '": ' + n + ' códigos. ' +
+          'Queda disponible para la próxima vez.', true);
+  };
+  fr.readAsText(f, 'ISO-8859-1');
+});
+
+cargarGuardadas();
 
 /* ══ Arrastrar y soltar ═══════════════════════════════════════════════════ */
 var z = document.getElementById('zona');
