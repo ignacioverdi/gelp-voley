@@ -17,7 +17,10 @@ Uso:
 """
 import os,re,sys,json,glob,unicodedata
 
-DATA_VERSION = 6
+# 7: se guarda la zona del bloqueo. Los archivos hechos con la version
+#    anterior no la tienen, y sin ella el mapa de bloqueo pone todas las
+#    acciones en el medio de la red. Al subir el numero se regeneran solos.
+DATA_VERSION = 7
 
 def fix_enc(x):
     # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.

@@ -11,7 +11,7 @@ Uso:  python gen_bloqueo.py            (auto)
       python gen_bloqueo.py video.js   (forzar archivo)
 Salida: datos_bloqueo.js  ->  window.PP_BLOCK
 """
-import os, re, sys, json, glob
+import os, re, sys, json, glob, io
 
 # ── combo -> zona de origen del ataque (universal, de game_plan.html + reglas Nacho) ──
 COMBO_ZONE = {
@@ -102,6 +102,67 @@ def _puestos_del_club():
     except Exception:
         pass
     return out
+
+
+def _sumar_tiempos_del_video(vp, out='datos_bloqueo.js'):
+    """Le pone a cada bloqueo el segundo del video, si hay video.
+
+    Los NUMEROS ya salieron del .dvw. Esto solo agrega el momento en que
+    ocurrio cada jugada, para que el doble-click abra el clip.
+
+    Si no hay video, o si un partido no lo tiene, las acciones quedan igual:
+    se ven en el mapa y se pueden filtrar, pero sin clip que reproducir. Eso
+    la pantalla ya lo avisa.
+    """
+    if not vp or not os.path.isfile(vp):
+        return
+    try:
+        VD = load_video(vp) or {}
+        ms = VD.get('matches') or {}
+        if not ms:
+            return
+
+        # (partido, dorsal, cuantos van) -> segundo
+        tiempos = {}
+        for cod, m in ms.items():
+            visto = {}
+            for a in (m.get('actions') or []):
+                if a.get('skill') != 'B':
+                    continue
+                num = str(a.get('num') or '').lstrip('0') or str(a.get('num'))
+                k = (cod, num)
+                visto[k] = visto.get(k, 0) + 1
+                tiempos[(cod, num, visto[k])] = a.get('t')
+
+        if not tiempos:
+            return
+
+        txt = io.open(out, encoding='utf-8', errors='replace').read()
+        m = re.search(r'=\s*(\{.*\})\s*;', txt, re.S)
+        if not m:
+            return
+        datos = json.loads(m.group(1))
+
+        puestos = 0
+        for _eq, jug in datos.items():
+            for j in jug:
+                num = str(j.get('num') or '').lstrip('0')
+                cuenta = {}
+                for a in (j.get('data') or []):
+                    cod = a[4] if len(a) > 4 else ''
+                    cuenta[cod] = cuenta.get(cod, 0) + 1
+                    t = tiempos.get((cod, num, cuenta[cod]))
+                    if t is not None and len(a) > 3:
+                        a[3] = t
+                        puestos += 1
+
+        io.open(out, 'w', encoding='utf-8').write(
+            'window.PP_BLOCK=' + json.dumps(datos, ensure_ascii=False,
+                                            separators=(',', ':')) + ';')
+        if puestos:
+            print('[bloqueo] %d con su minuto de video' % puestos)
+    except Exception:
+        pass      # sin tiempos igual funciona: solo no se abre el clip
 
 
 def bloqueo_desde_dvw(out='datos_bloqueo.js'):
@@ -402,31 +463,27 @@ if __name__=='__main__':
     vp = _args[0] if len(_args)>0 else autodetect_video()
 
     # ══ El video puede tener MENOS partidos que los .dvw ═════════════════════
-    # El archivo de video se arma con los partidos que alguien cargo a mano, y
-    # los .dvw son todos los que proceso el sistema. Si el video tiene menos,
-    # usarlo deja equipos enteros sin bloqueo: pasaba con un video de un solo
-    # partido y tres .dvw cargados, y los otros dos equipos desaparecian.
+    # ══ LOS NUMEROS SALEN DEL .dvw. SIEMPRE. ═══════════════════════════════
+    # El .dvw es lo que scouteo el entrenador: ahi esta cada accion con su
+    # zona, su valoracion y quien la hizo. Es la fuente, y no depende de que
+    # alguien haya cargado un video.
     #
-    # Se comparan los dos y se usa la fuente mas completa. El video es mejor
-    # cuando esta al dia —trae el segundo de cada accion— pero no cuando le
-    # faltan partidos.
-    if vp and os.path.isfile(vp):
-        try:
-            _dv = len([f for c in os.listdir('.')
-                       if os.path.isdir(c) and c.upper().startswith('DVW')
-                       and 'ENTREN' not in c.upper()
-                       for f in os.listdir(c) if f.lower().endswith('.dvw')])
-            _vd = load_video(vp) or {}
-            _nv = len(_vd.get('matches') or {})
-            if _dv > _nv:
-                print('[bloqueo] el video tiene %d partido(s) y los .dvw %d: uso los .dvw'
-                      % (_nv, _dv))
-                _n = bloqueo_desde_dvw('datos_bloqueo.js')
-                if _n:
-                    print('[bloqueo] %d bloqueos leidos de los .dvw' % _n)
-                    sys.exit(0)
-        except Exception:
-            pass
+    # El archivo de video sirve para OTRA cosa: guarda en que segundo ocurrio
+    # cada jugada, para poder abrir el clip. Eso y nada mas.
+    #
+    # Antes se leia del video cuando estaba disponible, y eso traia problemas
+    # que costaron dias: bloqueos con la zona equivocada porque el video no la
+    # guardaba, equipos enteros sin datos porque el video tenia menos partidos,
+    # y numeros que no coincidian con el .dvw. Todo por leer de una copia en
+    # vez del original.
+    #
+    # Ahora el bloqueo sale siempre de los .dvw. El video solo aporta el
+    # segundo del corte, que se busca despues por partido y jugadora.
+    n = bloqueo_desde_dvw('datos_bloqueo.js')
+    if n:
+        print('[bloqueo] %d bloqueos leidos de los .dvw' % n)
+        _sumar_tiempos_del_video(vp, 'datos_bloqueo.js')
+        sys.exit(0)
 
     if not vp or not os.path.isfile(vp):
         # ══ Sin video: se lee de los .dvw ═══════════════════════════════

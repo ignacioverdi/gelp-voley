@@ -364,26 +364,49 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         # del segundo entran igual y quedan como dos jugadoras. Una con la
         # mitad de los armados y otra con la otra mitad: la distribucion del
         # armador se ve vacia porque ninguna llega al minimo.
-        _cd = {}
-        for _t, _m in (CAMBIO_DORSAL or {}).items():
-            if _mismo_equipo(_t, s):
-                _cd = _m
-                break
-        for _viejo, _nuevo in _cd.items():
-            _v, _n = str(_viejo), str(_nuevo)
-            if _v == _n:
+        # ══ La misma jugadora con dos dorsales ═════════════════════════════
+        # Una jugadora puede cambiar de numero entre partidos: la armadora de
+        # GELP jugo con la 4 contra Banco Provincia y con la 5 contra Velez.
+        # Son la misma persona, pero el sistema las ve como dos: cada una con
+        # la mitad de sus acciones, y la distribucion del armador vacia porque
+        # ninguna llega al minimo.
+        #
+        # Se detecta por el NOMBRE, mirando solo los partidos que hay. Antes
+        # se leia un archivo con el mapa ya hecho, y eso fallaba: si el mapa
+        # decia "4 -> 5" pero en estos partidos solo jugo la 4, se traducia a
+        # un numero que no existe y el equipo quedaba sin armador.
+        #
+        # Se conserva el dorsal MAS ALTO: cuando alguien cambia de numero
+        # suele ser porque subio de categoria o le dieron uno nuevo, y ese es
+        # el que el equipo usa hoy.
+        import unicodedata as _u2
+
+        def _nom(x):
+            x = _u2.normalize('NFKD', x or '').encode('ascii', 'ignore').decode()
+            return re.sub(r'\s+', ' ', x).strip().lower()
+
+        _por_nombre = {}
+        for _k, _v2 in D['names'].items():
+            _nn = _nom(_v2)
+            if _nn:
+                _por_nombre.setdefault(_nn, []).append(str(_k))
+
+        for _nn, _nums in _por_nombre.items():
+            if len(_nums) < 2:
                 continue
-            for _k in ('atk', 'srv', 'rec', 'dig'):
-                if _v in D[_k]:
-                    D[_k].setdefault(_n, [])
-                    D[_k][_n] = list(D[_k][_n]) + list(D[_k].pop(_v))
-            if _v in D['names']:
-                D['names'].setdefault(_n, D['names'][_v])
+            # el mas alto se queda con todo
+            _nums.sort(key=lambda x: int(x) if x.isdigit() else 0)
+            _queda = _nums[-1]
+            for _v in _nums[:-1]:
+                for _k2 in ('atk', 'srv', 'rec', 'dig'):
+                    if _v in D[_k2]:
+                        D[_k2].setdefault(_queda, [])
+                        D[_k2][_queda] = list(D[_k2][_queda]) + list(D[_k2].pop(_v))
                 D['names'].pop(_v, None)
-            if _v in D['set']:
-                D['set'][_n] = D['set'].get(_n, 0) + D['set'].pop(_v)
-            if _v in D.get('app', {}):
-                D['app'][_n] = D['app'].get(_n, 0) + D['app'].pop(_v)
+                if _v in D['set']:
+                    D['set'][_queda] = D['set'].get(_queda, 0) + D['set'].pop(_v)
+                if _v in D.get('app', {}):
+                    D['app'][_queda] = D['app'].get(_queda, 0) + D['app'].pop(_v)
 
     # --- construir PP_DATA ---
     CB={'punta':{'X5','V5','X6','V6','XP'},'central':{'X1','X2','X7','XM'},'opuesto':{'X5','V5','X6','V6','X8','V8'}}
