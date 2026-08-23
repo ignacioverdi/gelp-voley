@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unir videos · GELP</title>
+<!--
+===============================================================================
+  unir_video.html — VARIOS ARCHIVOS, UN SOLO VIDEO
+-------------------------------------------------------------------------------
+  Muchas camaras cortan la grabacion cada 20 o 30 minutos, o cada 4 GB. Un
+  partido queda en cuatro o cinco archivos.
+
+  Para que los cortes de video funcionen hace falta UN solo archivo: cada
+  accion guarda el minuto en que ocurrio, y si el partido esta partido en
+  cuatro, esos minutos apuntan al lugar equivocado.
+
+  ── POR QUE NO SE UNEN ACA MISMO ────────────────────────────────────────────
+  Unir video es trabajo pesado: un partido son varios gigas. Un navegador
+  puede hacerlo, pero tarda mucho mas y a veces se queda sin memoria a mitad
+  de camino, justo cuando el entrenador ya invirtio media hora.
+
+  Se hace con un programa que corre en la computadora. Si los archivos son de
+  la misma camara —lo normal— se pegan SIN volver a comprimir: un partido de
+  dos horas tarda segundos y no pierde nada de calidad.
+===============================================================================
+-->
+<style>
+  :root{
+    --bg:#0a0c18; --card:#12142a; --card2:#171a33; --border:rgba(255,255,255,.10);
+    --txt:#e2e8f0; --muted:#94a3b8; --muted2:#8395ac; --ok:#22c55e; --ac:#09135f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font-family:'Barlow Condensed',system-ui,sans-serif;font-size:15px;line-height:1.55}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 16px 60px}
+  h1{font-size:25px;font-weight:800;letter-spacing:1px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13.5px;margin-bottom:22px}
+  .btn{padding:9px 16px;border-radius:9px;border:1px solid var(--border);
+       background:var(--card2);color:var(--txt);font-family:inherit;
+       font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px;
+       text-decoration:none;display:inline-block}
+  .btn:hover{background:rgba(255,255,255,.07)}
+
+  .caja{background:var(--card);border:1px solid var(--border);border-radius:13px;
+        padding:18px 20px;margin-bottom:14px}
+  .caja h2{margin:0 0 10px;font-size:13px;letter-spacing:1.6px;
+           text-transform:uppercase;color:var(--ac)}
+  .paso{display:flex;gap:13px;margin-bottom:15px;align-items:flex-start}
+  .paso:last-child{margin-bottom:0}
+  .num{flex:none;width:26px;height:26px;border-radius:50%;background:rgba(9,19,95,.13);
+       border:1px solid rgba(9,19,95,.3);color:var(--ac);display:flex;
+       align-items:center;justify-content:center;font-weight:800;font-size:13px}
+  .paso b{display:block;margin-bottom:2px}
+  .paso span{color:var(--muted);font-size:13.5px}
+  code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:5px;
+       font-family:ui-monospace,monospace;font-size:12.5px}
+  .nota{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.22);
+        border-radius:11px;padding:13px 16px;color:#86efac;font-size:13.5px;
+        margin-top:14px}
+  .aviso{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.22);
+         border-radius:11px;padding:13px 16px;color:#9094b7;font-size:13.5px;
+         margin-top:14px}
+  a{color:var(--ac)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a href="index.html" class="btn" style="margin-bottom:14px">&larr; VOLVER</a>
+
+  <h1>UNIR VIDEOS</h1>
+  <div class="sub">Cuando la cámara corta el partido en varios archivos, hay
+    que unirlos antes de subirlo. Si no, los cortes de cada acción apuntan al
+    minuto equivocado.</div>
+
+  <div class="caja">
+    <h2>Cómo se hace</h2>
+
+    <div class="paso">
+      <div class="num">1</div>
+      <div>
+        <b>Abrí <code>UNIR_VIDEO.py</code></b>
+        <span>Está en la carpeta del club. Doble clic y se abre solo.</span>
+      </div>
+    </div>
+
+    <div class="paso">
+      <div class="num">2</div>
+      <div>
+        <b>Arrastrá los archivos, en orden</b>
+        <span>Uno por uno, del primero al último, apretando Enter en cada uno.
+          Cuando termines, Enter solo. El orden importa: así queda el partido
+          como se jugó.</span>
+      </div>
+    </div>
+
+    <div class="paso">
+      <div class="num">3</div>
+      <div>
+        <b>Confirmá</b>
+        <span>Te muestra cuánto dura cada archivo y cuánto va a durar el
+          resultado. Si algo no cuadra, lo vas a ver antes de empezar.</span>
+      </div>
+    </div>
+
+    <div class="paso">
+      <div class="num">4</div>
+      <div>
+        <b>Subilo a YouTube y pegá el link</b>
+        <span>Como "No listado", y el link va en
+          <a href="importar_video.html">Cargar videos</a>.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota">
+    <b>Si los archivos son de la misma cámara</b> —lo normal cuando es una
+    grabación cortada— se pegan sin volver a comprimir: un partido de dos
+    horas tarda segundos y no pierde nada de calidad.
+  </div>
+
+  <div class="aviso">
+    <b>Si vienen de cámaras distintas</b>, hay que unificarlos y eso sí lleva
+    tiempo: un partido largo puede tardar veinte minutos o más. El programa
+    te avisa antes de empezar.
+  </div>
+
+  <div class="caja" style="margin-top:20px">
+    <h2>La primera vez</h2>
+    <div style="color:var(--muted);font-size:13.5px">
+      El programa necesita <b style="color:var(--txt)">ffmpeg</b>, que es
+      gratuito y lo usan casi todos los programas de video. Si no lo tenés, la
+      primera vez que abras <code>UNIR_VIDEO.py</code> te va a explicar cómo
+      conseguirlo: se baja una vez y después funciona para siempre.
+    </div>
+  </div>
+
+  <div class="caja">
+    <h2>Por qué no se hace acá mismo</h2>
+    <div style="color:var(--muted);font-size:13.5px">
+      Unir video es trabajo pesado: un partido son varios gigas. El navegador
+      puede hacerlo, pero tarda mucho más y a veces se queda sin memoria a
+      mitad de camino — justo cuando ya invertiste media hora esperando.
+      <br><br>
+      Haciéndolo en la computadora es cuestión de segundos y no falla.
+    </div>
+  </div>
+
+</div>
+
+<script src="firebase.js"></script>
+<script src="lang.js" onerror="void 0"></script>
+
+<!-- © 2025-2026 Ignacio Verdi · GELP VOLEY · Software propietario -->
+</body>
+</html>
