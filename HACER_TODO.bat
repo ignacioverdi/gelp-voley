@@ -221,6 +221,10 @@ REM ===================================================================
 REM   LAS DEMAS CATEGORIAS
 REM   Si el club tiene una sola, esto no hace nada.
 REM ===================================================================
+REM Los codigos que usa el club, para poder traducir los archivos que
+REM lleguen de otros scouts.
+if exist "gen_mis_codigos.py" python gen_mis_codigos.py
+
 if exist "CATEGORIAS.py" if not defined VB_CATEGORIA python CATEGORIAS.py
 
 echo  ================= BATERIAS =================
