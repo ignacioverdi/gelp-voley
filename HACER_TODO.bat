@@ -254,6 +254,25 @@ if exist "datos_video_*.js"      (echo      OK  datos_video [por temporada])  el
 echo  ==================================================
 echo.
 
+REM ===================================================================
+REM   CONTROL DE CALIDAD, ANTES DE PUBLICAR
+REM
+REM   Se corre aca porque es el unico momento en que los datos estan
+REM   legibles: apenas se publica quedan cifrados y ya no se pueden
+REM   revisar. Antes habia que acordarse de decir "N", correr dos
+REM   programas a mano y recien despues publicar.
+REM
+REM   AUDITAR    cuenta las acciones del .dvw y las compara con lo que
+REM              quedo en la app: si un saque bueno se leyo como punto,
+REM              lo dice. Es el error que no se ve en pantalla.
+REM   VERIFICAR  revisa que cada pantalla encuentre los datos que pide.
+REM ===================================================================
+echo.
+echo  ================= CONTROL DE CALIDAD =================
+if exist "AUDITAR.py" python AUDITAR.py --sin-pausa
+if exist "VERIFICAR_DATOS.py" python VERIFICAR_DATOS.py --sin-pausa
+echo.
+
 REM ================= CERRAR LOS DATOS =================
 if exist "LLAVE.txt" (
     echo  Protegiendo los datos antes de publicar...
@@ -277,24 +296,6 @@ REM aca confundia (dos veces la misma pregunta) y publicar desde la carpeta
 REM de la categoria no habria funcionado: ahi no esta el repositorio.
 if defined VB_CATEGORIA goto FIN_CATEGORIA
 
-REM ===================================================================
-REM   CONTROL DE CALIDAD, ANTES DE PUBLICAR
-REM
-REM   Se corre aca porque es el unico momento en que los datos estan
-REM   legibles: apenas se publica quedan cifrados y ya no se pueden
-REM   revisar. Antes habia que acordarse de decir "N", correr dos
-REM   programas a mano y recien despues publicar.
-REM
-REM   AUDITAR    cuenta las acciones del .dvw y las compara con lo que
-REM              quedo en la app: si un saque bueno se leyo como punto,
-REM              lo dice. Es el error que no se ve en pantalla.
-REM   VERIFICAR  revisa que cada pantalla encuentre los datos que pide.
-REM ===================================================================
-echo.
-echo  ================= CONTROL DE CALIDAD =================
-if exist "AUDITAR.py" python AUDITAR.py --sin-pausa
-if exist "VERIFICAR_DATOS.py" python VERIFICAR_DATOS.py --sin-pausa
-echo.
 
 set "RESP="
 set /p "RESP=Queres PUBLICAR a GitHub ahora? (S/N): "

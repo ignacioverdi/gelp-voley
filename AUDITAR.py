@@ -89,7 +89,7 @@ def plano(t):
     return re.sub(r'[^a-z0-9]', '', t.lower())
 
 
-def contar_en_dvw(carpetas, propio_plano):
+def contar_en_dvw(carpetas, propios):
     """Las acciones del club, contadas directo de los archivos."""
     total = {}
     for carp in carpetas:
@@ -102,25 +102,42 @@ def contar_en_dvw(carpetas, propio_plano):
             if len(eqs) < 2:
                 continue
             # de que lado esta el club
+            # ══ De que lado esta el club ══════════════════════════════
+            # Se prueban TODOS sus nombres, no uno solo. Un club aparece
+            # escrito distinto segun el scout y segun el patrocinador del
+            # ano: "Biogas Volley Nafels", "Volley Nafels", "Nafels".
+            #
+            # Usando un solo nombre —el mas largo— quedaban afuera los
+            # partidos donde figuraba de otra forma, y el auditor decia que
+            # faltaba la mitad de las acciones cuando en realidad estaban.
             lado = None
             for i, e in enumerate(eqs):
                 pe = plano(e)
-                if propio_plano and (propio_plano in pe or pe in propio_plano):
+                if any(pr and (pr in pe or pe in pr) for pr in propios):
                     lado = '*' if i == 0 else 'a'
                     break
             if not lado:
                 continue
             sc = t.split('[3SCOUT]')[-1]
             for letra, clave, _c, _i, _nom in FUNDAMENTOS:
+                # ══ El lado, escapado bien ═══════════════════════════════
+                # El lado es "*" cuando el club es local y "a" cuando es
+                # visitante. Escribirlo como "\%s" funciona con el asterisco
+                # —que hay que escapar— pero rompe con la "a": "\a" es el
+                # caracter de campana, no la letra.
+                #
+                # Resultado: se perdian TODOS los partidos de visitante. En
+                # Nafels eran 12 de 28, casi la mitad de la temporada, y el
+                # auditor decia que faltaban acciones que si estaban.
+                _l = re.escape(lado)
                 c = Counter(m.group(1) for m in re.finditer(
-                    r'^\%s\d\d%s.(.)' % (lado, letra), sc, re.M))
+                    r'^%s\d\d%s.(.)' % (_l, letra), sc, re.M))
                 d = total.setdefault(clave, Counter())
                 d.update(c)
             # el bloqueo va aparte: no esta en liga_data sino en su archivo
             global _bloqueos_en_dvw
             _bloqueos_en_dvw += len(re.findall(
-                r'^\%sd\d\dB' % lado, sc, re.M)) or len(re.findall(
-                r'^\%s\d\dB' % lado, sc, re.M))
+                r'^%s\d\dB' % re.escape(lado), sc, re.M))
     return total
 
 
@@ -308,8 +325,33 @@ def main():
         esperar()
         return 1
 
-    carpetas = [d for d in sorted(glob.glob(os.path.join(AQUI, 'DVW*')))
-                if os.path.isdir(d) and 'ENTREN' not in os.path.basename(d).upper()]
+    # ══ Solo la carpeta de la temporada que se esta procesando ═════════════
+    # Un club puede tener varias carpetas de partidos: una por temporada. El
+    # motor procesa SOLO la mas nueva con partidos adentro —es la temporada en
+    # curso— y las anteriores quedan archivadas.
+    #
+    # Auditando todas juntas, el auditor cuenta acciones de temporadas que la
+    # app no esta mostrando y marca diferencias que no existen. Paso en Nafels
+    # al abrir la carpeta 2027 para la temporada nueva: sumaba los 97 partidos
+    # de la 25-26 contra una app que todavia no tiene ninguno.
+    _todas = [d for d in sorted(glob.glob(os.path.join(AQUI, 'DVW*')))
+              if os.path.isdir(d) and 'ENTREN' not in os.path.basename(d).upper()]
+
+    # la mas nueva CON partidos: una carpeta vacia es la temporada que arranca
+    carpetas = []
+    for d in reversed(_todas):
+        if glob.glob(os.path.join(d, '*.dvw')):
+            carpetas = [d]
+            break
+    if not carpetas and _todas:
+        # todas vacias: se avisa en vez de fallar
+        print()
+        print('  Las carpetas de partidos estan vacias.')
+        print('  Es normal al arrancar una temporada nueva: cuando cargues el')
+        print('  primer partido, esto va a tener algo que revisar.')
+        esperar()
+        return 0
+
     if not carpetas:
         print('\n  No hay carpetas de partidos.')
         esperar()
@@ -320,8 +362,7 @@ def main():
     print('  Partidos en: %s' % ', '.join(os.path.basename(c) for c in carpetas))
 
     # el nombre largo es el que aparece en los .dvw
-    largo_plano = max(propios, key=len)
-    en_dvw = contar_en_dvw(carpetas, largo_plano)
+    en_dvw = contar_en_dvw(carpetas, propios)
     en_datos = contar_en_datos(plano(corto))
 
     if en_datos == '__CIFRADO__':

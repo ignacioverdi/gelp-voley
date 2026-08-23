@@ -56,6 +56,19 @@ def name_to_slug(name):
             kl, kc = _norm(largo), _norm(corto)
             if kl and (k == kc or k == kl or kl in k):
                 return kc
+        # ── Y al reves: el nombre que viene, adentro del configurado ──────
+        # La tabla suele tener el nombre CON el sufijo de la liga —"Chenois
+        # Geneve Volleyball (NLA Men)"— y hay .dvw que lo traen sin el. Sin
+        # esta vuelta, ese equipo entra con su nombre largo y aparece dos
+        # veces: una como "chenois" y otra como "chenoisgenevevolleyball".
+        #
+        # Se pide un largo minimo para no emparejar por casualidad: "jona"
+        # esta adentro de muchas cosas.
+        if len(k) >= 8:
+            for largo, corto in (_cc.tabla_de_equipos() or {}).items():
+                kl, kc = _norm(largo), _norm(corto)
+                if kl and k in kl:
+                    return kc
     except Exception:
         pass
     # 2) por si el .dvw ya trae el nombre corto
@@ -68,10 +81,25 @@ TYPE={'Q':'pot','T':'pot','M':'flo','H':'flo'}
 
 def read_dvw(fp):
     b=open(fp,'rb').read()
-    # Los .dvw se escriben en Windows-1252, que es la pagina de codigos de
-    # DataVolley. Leerlos como UTF-8 borra los acentos: "Atletico" queda
-    # "Atltico" y despues no coincide con el nombre configurado.
-    t=b.decode('latin-1','replace')
+    # ══ La codificacion se decide por CONTENIDO ═══════════════════════════
+    # No todos los .dvw usan la misma: DataVolley escribe en Windows-1252 y
+    # VolleyMetrics en UTF-8. Y hay archivos de VolleyMetrics que son UTF-8
+    # pero traen algun byte latin-1 suelto en un campo interno.
+    #
+    # Leerlos siempre como latin-1 duplica los acentos de los que son UTF-8:
+    # "Schonenwerd" queda "SchA¶nenwerd", ya no coincide con la tabla de
+    # equipos, y el mismo club aparece dos veces en la liga con nombres
+    # distintos.
+    #
+    # Se cuentan los acentos validos de cada lectura y gana la que mas tenga.
+    _ACENTOS = 'áéíóúàèìòùäëïöüâêîôûñçÁÉÍÓÚÄÖÜÑÇ'
+    _BASURA  = ('Ã¤','Ã¶','Ã¼','Ã©','Ã¨','Ãª','Ã¡','Ã³','Ã­','Ã±','Ã§')
+    def _punt(x):
+        return (sum(x.count(c) for c in _ACENTOS)
+                - sum(x.count(z) for z in _BASURA) * 3)
+    _u = b.decode('utf-8', 'ignore')
+    _l = b.decode('latin-1', 'replace')
+    t = _u if _punt(_u) >= _punt(_l) else _l
     return t.replace('\r\n','\n').replace('\r','\n')
 
 def load_season_map(db_path, out_dir):
@@ -492,6 +520,18 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             add("r",n,"reception",D['rec'].get(str(n),[]),("L\u00edbero." if pos.get(n)=='L\u00edbero' else "Receptor."))
         for n in defen:
             add("d",n,"defense",D['dig'].get(str(n),[]),"Defensa.")
+        # ══ Solo los equipos que jugaron ═══════════════════════════════════
+        # Un equipo entra al archivo aunque no tenga una sola accion: quedaba
+        # su ficha vacia, con el nombre y nada mas.
+        #
+        # En el selector de rival aparecian todos los equipos de la liga al
+        # empezar una temporada nueva, y al elegir cualquiera la pantalla
+        # salia en blanco. El entrenador no tiene forma de saber si es que el
+        # equipo todavia no jugo o si algo se rompio.
+        #
+        # Si no hay jugadoras con acciones, el equipo no se guarda.
+        if not any(len(p.get('data') or []) for p in players):
+            continue
         PP[slug]={"name":D['name'],"players":players,"info":D['info']}
 
     outp=os.path.join(out_dir,'plan_partido_data.js')
