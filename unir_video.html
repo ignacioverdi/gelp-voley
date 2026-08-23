@@ -152,14 +152,23 @@
 
 </div>
 
-<!-- El motor de video, version 0.11.
-     La 0.12 necesita que el servidor mande unas cabeceras especiales
-     (COOP y COEP) para poder usar varios nucleos. Vercel no las manda, y sin
-     ellas el motor no arranca: "ffmpeg is not loaded".
-     La 0.11 usa un solo nucleo y funciona en cualquier servidor. Tarda algo
-     mas, pero para pegar archivos sin recomprimir la diferencia no se nota. -->
-<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+<!-- ══ El motor de video ═══════════════════════════════════════════════════
+     Vive en la carpeta del club, no en internet.
+
+     Unir video necesita SharedArrayBuffer, y los navegadores solo lo habilitan
+     si el servidor manda dos cabeceras especiales (COOP y COEP, en
+     vercel.json). Esas cabeceras aislan la pagina: desde ahi NO se puede
+     cargar nada de otros sitios, ni siquiera de un CDN.
+
+     Por eso el motor se sirve desde el mismo club. Se baja una sola vez con
+     BAJAR_MOTOR_VIDEO.py y se publica con el resto de la app. -->
+<script src="ffmpeg/ffmpeg.min.js" onerror="motorFalta()"></script>
 <script>
+/* Si el motor no esta en la carpeta del club, la pantalla lo dice en vez de
+   fallar con un error tecnico que nadie entiende. */
+var MOTOR_OK = true;
+function motorFalta(){ MOTOR_OK = false; }
+
 var PARTES = [];        /* los archivos, en el orden en que se van a unir */
 var FF = null;          /* el motor de video: se carga una sola vez */
 var TRABAJANDO = false;
@@ -301,6 +310,9 @@ function progreso(txt, pct){
    bajarlo. Por eso se avisa: si no, parece que se colgo. */
 async function motor(){
   if(FF) return FF;
+  if(!MOTOR_OK || typeof FFmpeg === 'undefined'){
+    throw new Error('__SIN_MOTOR__');
+  }
   /* La primera vez la pagina carga el motor de video. Tarda unos segundos y
      el navegador lo guarda: no hay nada que instalar ni que apretar. Se avisa
      igual, porque si no parece que se colgo. */
@@ -309,7 +321,7 @@ async function motor(){
     'unos segundos. No tenés que hacer nada.</span>', 4);
   FF = FFmpeg.createFFmpeg({
     log: false,
-    corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+    corePath: new URL('ffmpeg/ffmpeg-core.js', location.href).href,
     progress: function(ev){
       if(ev && ev.ratio > 0) progreso('Uniendo…', 20 + ev.ratio * 75);
     }
@@ -383,7 +395,12 @@ async function unir(){
   }catch(err){
     document.getElementById('prog').classList.add('oculto');
     var d = String((err && err.message) || err);
-    if(/memory|allocat|out of/i.test(d)){
+    if(d.indexOf('__SIN_MOTOR__') >= 0){
+      msg('<b>Falta el motor de video en este club.</b><br>' +
+          'Es una descarga de 30 MB que se hace una sola vez. ' +
+          'Avisale a quien administra el sistema: tiene que correr ' +
+          '<code>BAJAR_MOTOR_VIDEO.py</code> y publicar.', 'rojo');
+    } else if(/memory|allocat|out of/i.test(d)){
       msg('<b>El navegador se quedó sin memoria.</b><br>' +
           'Los archivos son muy grandes para hacerlo de una sola vez. Probá ' +
           'unir de a dos partes: primero las dos primeras, y después ese ' +
