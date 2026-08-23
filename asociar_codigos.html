@@ -164,7 +164,7 @@ var CLAVES = { atk:'3ATTACKCOMBINATION', set:'3SETTERCALL' };
    Cada archivo trae sus tablas adentro: el codigo, la zona, el lado, el tipo
    y una descripcion en el idioma del scout. */
 function tablaDe(txt, seccion){
-  var re = new RegExp('\\\\[' + seccion + '\\\\]([\\\\s\\\\S]*?)(?=\\\\n\\\\[3|$)');
+  var re = new RegExp('\\[' + seccion + '\\]([\\s\\S]*?)(?=\\n\\[3|$)');
   var m = txt.match(re);
   var d = {};
   if(!m) return d;
