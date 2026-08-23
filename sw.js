@@ -35,7 +35,7 @@
 // PUBLICAR_EN_GITHUB.bat reemplaza {{FECHA_PUBLICACION}} por el momento de
 // cada publicacion. Al cambiar ese texto cambia el archivo, el navegador lo
 // detecta como distinto, tira la caja vieja y se queda con la nueva.
-var VERSION = 'gelp-20260823-1405';
+var VERSION = 'gelp-20260823-1422';
 var CAJA    = 'panel-' + VERSION;
 
 // Lo que hace falta para scoutear. El panel no depende de ningún archivo de
