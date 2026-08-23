@@ -133,6 +133,20 @@ def _slug_txt(t):
     t=_u.normalize('NFKD', t or '').encode('ascii','ignore').decode()
     return re.sub(r'[^A-Za-z0-9]+','', t).upper()[:12] or 'SIN'
 
+def _mismo_equipo(a, b):
+    """Si dos nombres de equipo son el mismo.
+
+    No se puede usar _slug_txt: esa devuelve MAYUSCULAS y esta pensada para
+    nombres de archivo. Los equipos se comparan sin acentos, sin simbolos y
+    sin distinguir mayusculas, que es el criterio del resto del sistema.
+    """
+    import unicodedata as _u
+    def _p(x):
+        x = _u.normalize('NFKD', x or '').encode('ascii', 'ignore').decode()
+        return re.sub(r'[^a-z0-9]', '', x.lower())
+    return _p(a) == _p(b)
+
+
 def build(fuentes, out_dir, filter_temp=None, db_path=None):
     """fuentes: lista de (carpeta, tipo) con tipo 'partido' o 'entrenamiento'.
 
@@ -156,7 +170,36 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
     DATA={s:{'name':NAMES_T[s],'atk':defaultdict(list),'srv':defaultdict(list),'rec':defaultdict(list),'dig':defaultdict(list),
              'info':{},'names':{},'lib':set(),'set':Counter(),'app':Counter()} for s in DISP_BY_SLUG}
 
-    def walk(t,pfx,mid,D):
+    # ══ Las jugadoras que cambiaron de dorsal ══════════════════════════════
+    # Los dorsales cambian: una armadora puede jugar un partido con el 4 y el
+    # siguiente con el 5. El motor las unifica bajo el numero mas reciente y
+    # deja anotado el cambio en cambios_dorsal.json.
+    #
+    # Sin leerlo, el plan de partido ve dos personas distintas: cada una con
+    # la mitad de sus armados, y la pantalla de distribucion vacia porque
+    # ninguna llega al minimo.
+    CAMBIO_DORSAL = {}
+    try:
+        _rcd = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            'cambios_dorsal.json')
+        if os.path.exists(_rcd):
+            CAMBIO_DORSAL = json.load(open(_rcd, encoding='utf-8')) or {}
+    except Exception:
+        CAMBIO_DORSAL = {}
+
+    def _dorsal(slug_equipo, n):
+        # el numero que usa hoy esa jugadora
+        if not CAMBIO_DORSAL:
+            return n
+        for _t, _m in CAMBIO_DORSAL.items():
+            if _mismo_equipo(_t, slug_equipo):
+                try:
+                    return int(_m.get(str(n), n))
+                except Exception:
+                    return n
+        return n
+
+    def walk(t,pfx,mid,D,eq_slug=''):
         sec='[3PLAYERS-H]' if pfx=='*' else '[3PLAYERS-V]'
         pm=re.search(re.escape(sec)+r'(.*?)\[3',t,re.S)
         if pm:
@@ -165,6 +208,7 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
                 if len(f)<13: continue   # 13 campos minimo; el puesto esta en el 14
                 try: num=int(f[1])
                 except: continue
+                num = _dorsal(eq_slug, num)   # si cambio de dorsal, el actual
                 D['names'][num]=f[9]
                 # ── El puesto de cada jugadora ──────────────────────────
                 # Estaba mirando el campo 12 buscando la letra "L". El puesto
@@ -187,7 +231,7 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
             sk=c[3]; team=c[0]; code=c[1:]
             try: tsv=int(f[12])
             except: tsv=0
-            try: pnum=int(code[:2])
+            try: pnum=_dorsal(eq_slug, int(code[:2]))
             except: pnum=-1
             if team==pfx and pnum>=0: D['app'][pnum]+=1
             if sk=='S':
@@ -297,7 +341,7 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
                               'info':{}, 'names':{}, 'lib':set(),
                               'set':Counter(), 'app':Counter()}
             D=DATA[slug]
-            walk(t,pfx,mid,D)
+            walk(t,pfx,mid,D,slug)
             D['info'][mid]={'opp':oppname(opp_sl,opp_raw),'date':date,'res':f"{my_s}-{opp_s}",
                             'yt':yt.get(mid,''),'tipo':TIPO}
         nf+=1
@@ -310,6 +354,36 @@ def build(fuentes, out_dir, filter_temp=None, db_path=None):
         D['dig']={str(k):v for k,v in D['dig'].items()}
         D['names']={str(k):v for k,v in D['names'].items()}
         D['set']={str(k):v for k,v in dict(D['set']).items()}
+
+        # ══ Juntar a la jugadora que cambio de dorsal ═══════════════════════
+        # Se hace ACA, cuando los partidos ya estan sumados y antes de armar
+        # las tarjetas.
+        #
+        # Traducir mientras se lee cada .dvw no alcanza: cada partido declara
+        # su plantel con el numero de ESE dia, asi que el 4 del primero y el 5
+        # del segundo entran igual y quedan como dos jugadoras. Una con la
+        # mitad de los armados y otra con la otra mitad: la distribucion del
+        # armador se ve vacia porque ninguna llega al minimo.
+        _cd = {}
+        for _t, _m in (CAMBIO_DORSAL or {}).items():
+            if _mismo_equipo(_t, s):
+                _cd = _m
+                break
+        for _viejo, _nuevo in _cd.items():
+            _v, _n = str(_viejo), str(_nuevo)
+            if _v == _n:
+                continue
+            for _k in ('atk', 'srv', 'rec', 'dig'):
+                if _v in D[_k]:
+                    D[_k].setdefault(_n, [])
+                    D[_k][_n] = list(D[_k][_n]) + list(D[_k].pop(_v))
+            if _v in D['names']:
+                D['names'].setdefault(_n, D['names'][_v])
+                D['names'].pop(_v, None)
+            if _v in D['set']:
+                D['set'][_n] = D['set'].get(_n, 0) + D['set'].pop(_v)
+            if _v in D.get('app', {}):
+                D['app'][_n] = D['app'].get(_n, 0) + D['app'].pop(_v)
 
     # --- construir PP_DATA ---
     CB={'punta':{'X5','V5','X6','V6','XP'},'central':{'X1','X2','X7','XM'},'opuesto':{'X5','V5','X6','V6','X8','V8'}}

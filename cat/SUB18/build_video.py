@@ -213,6 +213,17 @@ def parse_dvw(path, ent=False):
                 _traj=_tp[_ti] if len(_tp)>_ti else ''
                 if _traj and len(_traj)>0 and _traj[0].isdigit(): a['oz']=int(_traj[0])
                 if _traj and len(_traj)>1 and _traj[1].isdigit(): a['dz']=int(_traj[1])
+            elif sk=='B':
+                # ══ La zona del bloqueo ═══════════════════════════════════
+                # No se guardaba. Sin ella, el mapa de bloqueo ponia TODAS las
+                # acciones en el medio de la red: una sola columna, como si
+                # nadie bloqueara por los costados.
+                #
+                # El bloqueo la trae al final del codigo, despues de las
+                # tildes:  *04BT#~~~~2  es zona 2  ·  *12BH#~~~~4  es zona 4
+                _cola = code0[6:].replace('~', '')
+                if _cola and _cola[-1].isdigit():
+                    a['oz'] = int(_cola[-1])
             if sk=='A':
                 cb=code0[6:8]
                 if cb and cb[0] in 'XVPC' and '~' not in cb: a['x']=cb

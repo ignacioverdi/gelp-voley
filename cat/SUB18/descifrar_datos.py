@@ -104,7 +104,7 @@ def main():
         # tiene su propio ciclo de cifrado, con su propia corrida. Si se
         # abrieran desde aca se intentarian descifrar dos veces y el proceso
         # frenaba con "no pude abrir los datos", sin poder publicar nada.
-        dirs[:] = [d for d in dirs if d.lower() not in {'.git','__pycache__','node_modules','fotos','escudos','imagenes','cat'}
+        dirs[:] = [d for d in dirs if d.lower() not in {'.git','__pycache__','node_modules','fotos','escudos','imagenes','cat','ffmpeg'}
                    and not d.lower().startswith('dvw ')]
         for a in archivos:
             if a.endswith('.enc'):

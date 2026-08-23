@@ -337,7 +337,19 @@ def build(fuentes, out='datos_bloqueo.js'):
             if atk and bestdt<=3 and atk.get('x'):
                 combo=str(atk.get('x')).upper(); rz=zone_of(combo)
             else:
-                combo=''; rz='3'                       # bloqueo sin ataque claro
+                # ══ La zona sale del .dvw, no de una suposicion ═══════════
+                # Antes, cuando no se encontraba el ataque asociado, se ponia
+                # zona 3 para todos. Con un archivo de video que no trae ese
+                # vinculo, TODOS los bloqueos del equipo terminaban en el
+                # medio de la red: el mapa mostraba una columna y nada mas.
+                #
+                # Pero la zona ya viene en el codigo del bloqueo:
+                #     *04BT#~~~~2   ->  zona 2
+                #     *12BH#~~~~4   ->  zona 4
+                # Se usa esa. Solo si el codigo tampoco la trae se cae en 3,
+                # que es donde bloquea el central.
+                combo = ''
+                rz = str(a.get('oz') or a.get('dz') or '') or '3'
             # fase (SO/TR) por contexto del rally del equipo atacado
             Y=atk.get('tm') if atk else None
             gR=near(rec.get(Y,[]),t); gD=near(dfn.get(Y,[]),t)

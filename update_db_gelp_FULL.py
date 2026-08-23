@@ -685,6 +685,20 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # que es el que el equipo usa hoy.
     _unificar_por_nombre(teams_data)
 
+    # ══ Los cambios de dorsal, para el resto del sistema ═══════════════════
+    # La unificacion vive aca, pero los otros generadores leen los .dvw por su
+    # cuenta y ven a la jugadora con el numero de ESE partido. Sin este
+    # archivo, una armadora que jugo con el 4 y despues con el 5 aparece como
+    # dos personas en el plan de partido: cada mitad con la suya, y ninguna
+    # con el total.
+    try:
+        _ruta_cd = os.path.join(output_dir if 'output_dir' in dir() else '.',
+                                'cambios_dorsal.json')
+        with open(_ruta_cd, 'w', encoding='utf-8') as _f:
+            json.dump(CAMBIO_DORSAL, _f, ensure_ascii=False, indent=1)
+    except Exception:
+        pass
+
     db_out = {'_esquema': _ESQUEMA, 'teams': teams_data, 'games': games_log}
     with open(db_path, 'w', encoding='utf-8') as f:
         json.dump(db_out, f, ensure_ascii=False)
