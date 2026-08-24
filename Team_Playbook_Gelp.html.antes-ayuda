@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GELP — Team Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<!--
+  ══════════════════════════════════════════════════════════════════════════
+  Team_Playbook — LA IDENTIDAD DEL CLUB, ESCRITA POR EL CLUB
+
+  Antes este archivo viajaba con el playbook COMPLETO del club que escribio el
+  sistema: su sistema ofensivo, sus coberturas, sus 31 imagenes. Un cliente lo
+  abria y leia la estrategia de otro equipo —y encima no podia cambiarla,
+  porque no era editable—.
+
+  Ahora llega vacio y se escribe desde la app. Cada seccion se guarda sola en
+  la base del club, asi el entrenador lo arma de a poco sin depender de nadie.
+  ══════════════════════════════════════════════════════════════════════════
+-->
+<style>
+  body{background:var(--bg,#07080f);color:#e2e8f0;font-family:'Barlow',system-ui,sans-serif;
+       margin:0;padding:0 0 80px}
+  .pb-wrap{max-width:880px;margin:0 auto;padding:0 18px}
+  .pb-head{padding:26px 0 18px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:26px}
+  .pb-title{font-family:'Oswald',sans-serif;font-size:30px;letter-spacing:2px;margin:0}
+  .pb-sub{font-size:11px;color:#94a3b8;letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+  .pb-sec{margin-bottom:26px}
+  .pb-sec h2{font-family:'Oswald',sans-serif;font-size:19px;letter-spacing:1.5px;
+             margin:0 0 4px;color:var(--club,#09135f)}
+  .pb-ayuda{font-size:13px;color:#94a3b8;margin:0 0 8px;line-height:1.5}
+  .pb-campo{min-height:76px;background:#0f1020;border:1px solid rgba(255,255,255,.08);
+            border-radius:11px;padding:13px 15px;font-size:15px;line-height:1.6;outline:none}
+  .pb-campo:focus{border-color:rgba(255,255,255,.22)}
+  .pb-campo:empty:before{content:attr(data-ph);color:#8395ac}
+  .pb-guardado{position:fixed;right:16px;bottom:16px;background:#22c55e;color:#04120a;
+               font-size:13px;padding:8px 14px;border-radius:9px;opacity:0;
+               transition:opacity .25s;pointer-events:none;z-index:9999}
+  .pb-guardado.on{opacity:1}
+  .pb-solo{font-size:12px;color:#94a3b8;margin-top:6px}
+</style>
+<script src="firebase.js" onerror="void 0"></script>
+<script src="lang.js" onerror="void 0"></script>
+<link rel="stylesheet" href="movil.css">
+</head>
+<body>
+<div class="pb-wrap">
+  <div class="pb-head">
+    <a href="index.html" style="color:#94a3b8;text-decoration:none;font-size:12px;letter-spacing:1.5px">← INICIO</a>
+    <h1 class="pb-title">TEAM PLAYBOOK</h1>
+    <div class="pb-sub">GELP · LIGA FEMENINA</div>
+    <div class="pb-solo" id="pb-aviso"></div>
+  </div>
+
+    <section class="pb-sec" id="sec1">
+      <h2 data-t="pb_1">Quiénes somos</h2>
+      <p class="pb-ayuda">Qué nos define como equipo. Los tres o cuatro rasgos que queremos que se vean en la cancha.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec1"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+    <section class="pb-sec" id="sec2">
+      <h2 data-t="pb_2">Principios de juego</h2>
+      <p class="pb-ayuda">Las reglas que no se negocian: cómo defendemos, cómo atacamos, qué hacemos cuando el partido se pone difícil.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec2"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+    <section class="pb-sec" id="sec3">
+      <h2 data-t="pb_3">Sistema ofensivo</h2>
+      <p class="pb-ayuda">La distribución, los tiempos, las combinaciones que usamos y en qué momento.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec3"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+    <section class="pb-sec" id="sec4">
+      <h2 data-t="pb_4">Sistema defensivo</h2>
+      <p class="pb-ayuda">Las coberturas, quién toma qué zona, cómo leemos al atacante rival.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec4"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+    <section class="pb-sec" id="sec5">
+      <h2 data-t="pb_5">Bloqueo</h2>
+      <p class="pb-ayuda">Qué bloqueamos, cómo nos organizamos según el rival y sus rematadoras.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec5"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+    <section class="pb-sec" id="sec6">
+      <h2 data-t="pb_6">Saque</h2>
+      <p class="pb-ayuda">A quién le sacamos, con qué tipo de saque y en qué momento del partido.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec6"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+    <section class="pb-sec" id="sec7">
+      <h2 data-t="pb_7">Recepción</h2>
+      <p class="pb-ayuda">La formación, quién recibe, cómo nos acomodamos según el sacador.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec7"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+    <section class="pb-sec" id="sec8">
+      <h2 data-t="pb_8">Manejo del error</h2>
+      <p class="pb-ayuda">Qué hacemos después de un punto perdido. La reacción es parte del sistema.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec8"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+    <section class="pb-sec" id="sec9">
+      <h2 data-t="pb_9">Plan de partido</h2>
+      <p class="pb-ayuda">Cómo preparamos cada partido: qué miramos del rival y qué decidimos antes de entrar.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec9"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+    <section class="pb-sec" id="sec10">
+      <h2 data-t="pb_10">Lenguaje común</h2>
+      <p class="pb-ayuda">Las palabras que usamos en la cancha para entendernos rápido.</p>
+      <div class="pb-campo" contenteditable="true" data-k="sec10"
+           data-ph="Escribí acá. Se guarda solo."></div>
+    </section>
+</div>
+<div class="pb-guardado" id="pb-ok">Guardado</div>
+
+<script>
+/* Cada seccion se guarda sola en la base del club, con un respiro de 900 ms
+   despues de la ultima tecla: asi no se escribe en cada letra. */
+(function(){
+  var TIMER = {};
+  function puedeEditar(){
+    try{ return (typeof VB_PUEDE_EDITAR === 'undefined') || VB_PUEDE_EDITAR; }catch(e){ return true; }
+  }
+  function aviso(txt){ var e=document.getElementById('pb-aviso'); if(e) e.textContent = txt; }
+  function ok(){
+    var e=document.getElementById('pb-ok'); if(!e) return;
+    e.classList.add('on'); setTimeout(function(){ e.classList.remove('on'); }, 1200);
+  }
+  var campos = document.querySelectorAll('.pb-campo');
+
+  if(!puedeEditar()){
+    campos.forEach(function(c){ c.setAttribute('contenteditable','false'); });
+    aviso('Solo lectura · lo edita el cuerpo técnico');
+  }
+
+  campos.forEach(function(c){
+    var k = c.getAttribute('data-k');
+    try{
+      if(typeof fbGet === 'function'){
+        fbGet('playbook/' + k, function(v){ if(typeof v === 'string') c.innerHTML = v; });
+      }else{
+        var l = localStorage.getItem('pb_' + k); if(l) c.innerHTML = l;
+      }
+    }catch(e){}
+
+    c.addEventListener('input', function(){
+      if(!puedeEditar()) return;
+      clearTimeout(TIMER[k]);
+      TIMER[k] = setTimeout(function(){
+        var v = c.innerHTML;
+        try{
+          localStorage.setItem('pb_' + k, v);
+          if(typeof fbSet === 'function') fbSet('playbook/' + k, v);
+        }catch(e){}
+        ok();
+      }, 900);
+    });
+  });
+})();
+</script>
+<script src="volver_inicio.js" onerror="void 0"></script>
+</body>
+</html>

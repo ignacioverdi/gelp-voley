@@ -9,15 +9,11 @@
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
 <script src="game_plans.js" onerror="void 0"></script>
 <script src="objetivos_config.js" onerror="void 0"></script>
-<!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js" onerror="void 0"></script>
-<script src="selector_categoria.js" onerror="void 0"></script>
 <script src="datos_seguros.js"></script>
 <script src="filtro_tipo.js" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
-<script src="liga_data.js.enc" onerror="void 0"></script>
 <script src="datos_video_ent_25-26.js.enc" onerror="void 0"></script>
 <script src="datos_video_ent_26-27.js.enc" onerror="void 0"></script>
 <script src="datos_video_ent_27-28.js.enc" onerror="void 0"></script>
@@ -75,9 +71,9 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .acceso-desc{font-size:9px;color:var(--mut);letter-spacing:.3px;}
 .acceso-arrow{font-size:14px;color:var(--mut);opacity:.5;flex-shrink:0;}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
-.obj-sfbtn{padding:4px 11px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#94a3b8;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
+.obj-sfbtn{padding:4px 11px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
 .obj-sfbtn.on{background:rgba(9,19,95,.1);border-color:rgba(9,19,95,.35);color:#09135f}
-.obj-tfbtn{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
+.obj-tfbtn{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
 .obj-tfbtn.on.partido{background:rgba(9,19,95,.12);border-color:rgba(9,19,95,.4);color:#09135f}
 .obj-tfbtn.on.ent{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;}
@@ -115,7 +111,7 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 .hm-card:hover{transform:translateY(-2px);filter:brightness(1.15)}
 .hm-icon{font-size:28px}
 .hm-lbl{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px}
-.hm-sub{font-size:9px;color:#94a3b8;text-align:center}
+.hm-sub{font-size:9px;color:#64748b;text-align:center}
 @media(min-width:600px){.main{padding:24px 20px;}.accesos-grid{grid-template-columns:repeat(2,1fr);}.hero-badge{width:72px;height:72px;}.hero-nombre{font-size:40px;}}
 </style>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
@@ -343,10 +339,10 @@ function renderObjetivosJugador(cid, jugVals, eqVals){
   var rows=[{label:'Jugador',vals:jugVals,isJug:true},{label:'Equipo',vals:eqVals,isJug:false}];
   var html='<div style="font-family:Barlow Condensed,sans-serif;padding:4px 0 8px">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">'
-    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#94a3b8">MI PERFORMANCE VS OBJETIVO</div>'
+    +'<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#64748b">MI PERFORMANCE VS OBJETIVO</div>'
     +'<div style="display:flex;gap:10px;flex-wrap:wrap">'
     +[['#22c55e','Objetivo'],['#86efac','Cerca'],['#fbbf24','Neutro'],['#ef4444','Lejos']].map(function(x){
-      return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#94a3b8"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
+      return'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#64748b"><div style="width:7px;height:7px;border-radius:50%;background:'+x[0]+'"></div>'+x[1]+'</div>';
     }).join('')+'</div></div>'
     +'<div style="display:flex;gap:8px;width:100%;margin-bottom:4px">'
     +'<div style="width:64px;flex-shrink:0"></div>'
@@ -417,7 +413,7 @@ function objBuildSubfiltro(){
   if(!META){ row.style.display='none'; return; }
   row.innerHTML=''; row.style.display='flex'; row.style.alignItems='center';
   var lbl=document.createElement('span');
-  lbl.style.cssText='font-size:9px;color:#8395ac;letter-spacing:2px;text-transform:uppercase;margin-right:6px';
+  lbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase;margin-right:6px';
   lbl.textContent='VER:';
   row.appendChild(lbl);
   var sel=document.createElement('select');
@@ -485,11 +481,11 @@ function renderComparativaJugador(){
   function cell(v){ return (v===null||v===undefined)?'—':(v+'%'); }
   function colorEff(v){ if(v===null||v===undefined) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':'#ef4444'; }
   function diff(a,b){
-    if(a===null||a===undefined||b===null||b===undefined) return '<span style="color:#8395ac">—</span>';
+    if(a===null||a===undefined||b===null||b===undefined) return '<span style="color:#475569">—</span>';
     var d=a-b, col=d>=5?'#22c55e':d>=0?'#86efac':d>=-8?'#fbbf24':'#ef4444';
     return '<span style="color:'+col+';font-weight:800">'+(d>0?'+':'')+d+'</span>';
   }
-  var th='padding:9px 8px;font-size:9px;letter-spacing:1px;color:#94a3b8;text-transform:uppercase;text-align:center';
+  var th='padding:9px 8px;font-size:9px;letter-spacing:1px;color:#64748b;text-transform:uppercase;text-align:center';
   var td='padding:8px 8px;font-family:Bebas Neue,sans-serif;font-size:17px;text-align:center';
 
   // ════ CUADRO 1: VS EQUIPO ════
@@ -502,7 +498,7 @@ function renderComparativaJugador(){
       +'<td style="'+td+';font-size:13px">'+diff(a,b)+'</td>'
       +'</tr>';
   }).join('');
-  var html='<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#94a3b8;margin-bottom:8px">VS EQUIPO</div>'
+  var html='<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:8px">VS EQUIPO</div>'
     +'<div style="background:#0d0e1a;border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden;margin-bottom:18px">'
     +'<table style="width:100%;border-collapse:collapse;font-family:Barlow Condensed,sans-serif">'
     +'<thead><tr style="background:#0f1020">'
@@ -522,10 +518,10 @@ function renderComparativaJugador(){
     if(an===nmB) return -1; if(bn===nmB) return 1;
     return (a.num||0)-(b.num||0);
   });
-  html+='<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#94a3b8;margin-bottom:8px">DETALLE vs '+(pos||'POSICIÓN')+'</div>';
+  html+='<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:8px">DETALLE vs '+(pos||'POSICIÓN')+'</div>';
   if(mismaPos.length>1){
-    var thRot='padding:9px 6px;font-size:9px;letter-spacing:.5px;color:#94a3b8;text-transform:uppercase;text-align:center';
-    var head='<th style="padding:9px 8px;font-size:9px;letter-spacing:1px;color:#94a3b8;text-transform:uppercase;text-align:left">Jugador</th>'
+    var thRot='padding:9px 6px;font-size:9px;letter-spacing:.5px;color:#64748b;text-transform:uppercase;text-align:center';
+    var head='<th style="padding:9px 8px;font-size:9px;letter-spacing:1px;color:#64748b;text-transform:uppercase;text-align:left">Jugador</th>'
       +FUND.map(function(f){ return '<th style="'+thRot+';color:'+f.c+'">'+f.l+'</th>'; }).join('');
     var rows2=mismaPos.map(function(x){
       var xn=(x.nombre||'').replace(/^\d+\s*/,'').toLowerCase().split(' ')[0];
@@ -543,7 +539,7 @@ function renderComparativaJugador(){
       +'<table style="width:100%;border-collapse:collapse;font-family:Barlow Condensed,sans-serif;min-width:340px">'
       +'<thead><tr style="background:#0f1020">'+head+'</tr></thead><tbody>'+rows2+'</tbody></table></div>';
   } else {
-    html+='<div style="padding:14px;color:#8395ac;font-size:11px;text-align:center;background:#0d0e1a;border:1px solid rgba(255,255,255,.06);border-radius:12px">Sin compañeros de la misma posición para comparar.</div>';
+    html+='<div style="padding:14px;color:#475569;font-size:11px;text-align:center;background:#0d0e1a;border:1px solid rgba(255,255,255,.06);border-radius:12px">Sin compañeros de la misma posición para comparar.</div>';
   }
   cont.innerHTML=html;
   section.style.display='block';
@@ -652,7 +648,7 @@ function renderQuickStats(j){
       +'<div style="padding:11px 10px;display:flex;gap:14px;align-items:center;justify-content:center">';
     stats.forEach(function(s){ h+='<div style="display:flex;flex-direction:column;align-items:center;gap:2px">'
       +'<div style="font-family:Bebas Neue,sans-serif;font-size:23px;line-height:1;color:'+(s.c||'#e2e8f0')+'">'+s.v+'</div>'
-      +'<div style="font-size:9px;color:#94a3b8;letter-spacing:.5px;white-space:nowrap">'+s.l+'</div></div>'; });
+      +'<div style="font-size:9px;color:#64748b;letter-spacing:.5px;white-space:nowrap">'+s.l+'</div></div>'; });
     return h+'</div></div>';
   }
   if(!window.HISTORIAL_DATA||!window.HISTORIAL_DATA.entrenamientos||!window.HISTORIAL_DATA.entrenamientos.length){ qs.style.display='none'; return; }
@@ -808,27 +804,6 @@ function _videoTodo(){
       Object.keys(M).forEach(function(k){ VD[k] = M[k]; });
     });
   }catch(e){}
-
-  /* ══ Los partidos sin video tambien cuentan ═══════════════════════════
-     Esta parte se alimentaba SOLO del archivo de video, que se arma con los
-     partidos que alguien cargo a mano. Con un video incompleto —o sin
-     ninguno— faltaban partidos enteros y equipos que si estan procesados.
-
-     Se completan desde liga_data.js, que tiene todo lo que paso por el
-     sistema. Lo unico que falta sin video es el clip para reproducir. */
-  try{
-    if(window.LIGA_DATA && LIGA_DATA.teams){
-      Object.keys(LIGA_DATA.teams).forEach(function(slug){
-        var _t = LIGA_DATA.teams[slug] || {};
-        (_t.matches || []).forEach(function(m){
-          var _c = m.code || ('P' + (m.date||'') + '-' + slug);
-          if(!_c || VD[_c]) return;
-          VD[_c] = {date:m.date||'', home:_t.name||slug, away:m.rival||'',
-                    acciones:[], actions:[]};
-        });
-      });
-    }
-  }catch(e){}
   return VD;
 }
 </script>
@@ -843,7 +818,7 @@ function _videoTodo(){
       <a class="hm-card" href="plan_partido.html?equipo=gelp#defensa"  style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🤲</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Origen/Destino</span></a>
       <a class="hm-card" href="plan_partido.html?equipo=gelp#bloqueo"  style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#2DD4BF">BLOQUEO</span><span class="hm-sub">Dónde bloquea · Zona origen ataque</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center">División de Honor 2026</div>
+    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">División de Honor 2026</div>
   </div>
 </div>
 <script>
@@ -862,6 +837,50 @@ try{
       objSetTipo(_nom, document.getElementById('obj-tbtn-'+_nom));
   }
 }catch(e){}
+
+/* ══ LA FOTO CARGADA DESDE EL ALTA ═══════════════════════════════════════
+   Las fotos siempre vivieron en la carpeta "fotos/", llamadas por dorsal.
+   Desde el alta de jugadores ahora se pueden cargar desde la app, y quedan
+   guardadas por categoria y dorsal.
+
+   Esto NO reemplaza nada: si no hay foto cargada, todo sigue igual que
+   antes. Solo se agrega una foto cuando existe. */
+(function(){
+  function cat(){
+    try { return (window.categoriaActual && window.categoriaActual()) ||
+                 ((window.CATEGORIAS_CLUB || [])[0]) || 'Primera'; }
+    catch(e){ return 'Primera'; }
+  }
+  window.fotoDelAlta = function(num, listo){
+    if (num === null || num === undefined || !window.fbGet) { listo(null); return; }
+    var nn = String(num).padStart(2, '0');
+    try {
+      Promise.resolve(fbGet('jugador_foto/' + cat() + '/' + nn))
+        .then(function(v){ listo(typeof v === 'string' && v.indexOf('data:image') === 0 ? v : null); })
+        .catch(function(){ listo(null); });
+    } catch(e){ listo(null); }
+  };
+})();
 </script>
+<script>
+/* Si hay una foto cargada desde el alta, se pone. Si no, queda lo de siempre. */
+(function(){
+  function poner(){
+    if (!window.fotoDelAlta || typeof numJug === 'undefined') return;
+    fotoDelAlta(numJug, function(src){
+      if (!src) return;
+      var cajas = document.querySelectorAll('.avatar, .foto, #avatar, #foto');
+      for (var i = 0; i < cajas.length; i++) {
+        cajas[i].innerHTML = '<img src="' + src + '" alt="" style="width:100%;height:100%;' +
+                             'border-radius:50%;object-fit:cover">';
+        return;
+      }
+    });
+  }
+  if (document.readyState === 'complete') setTimeout(poner, 400);
+  else window.addEventListener('load', function(){ setTimeout(poner, 400); });
+})();
+</script>
+<script src="ayuda.js"></script>
 </body>
 </html>
