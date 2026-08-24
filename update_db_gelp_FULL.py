@@ -651,7 +651,12 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #    ejemplo— esa unificacion queda apuntando a un numero que ya no juega
     #    y el equipo se queda sin armador. Al subir el numero se rehace con
     #    los partidos que hay hoy.
-    _ESQUEMA = 4          # subir este numero cuando el parser lea algo nuevo
+    # 5: la base venia con las acciones duplicadas. Al guardar se hacia una
+    #    copia con dict(), que deja las MISMAS listas adentro: la unificacion
+    #    de dorsales sumaba sobre ellas y la copia crecia igual. Cada corrida
+    #    sumaba de nuevo —186, 224, 243, 292 saques— sin techo.
+    #    Al subir el numero, las bases contaminadas se rehacen solas.
+    _ESQUEMA = 5          # subir este numero cuando el parser lea algo nuevo
     try:
         _v = db.get('_esquema', 1)
     except Exception:
@@ -742,7 +747,16 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #
     # Guardando el dato crudo, cada corrida decide con los partidos que hay.
     import copy as _copy
-    _crudo = {t: dict(j) for t, j in teams_data.items()}
+    # ══ Una copia DE VERDAD, no un espejo ══════════════════════════════════
+    # dict(j) copia el diccionario pero deja las MISMAS listas de acciones
+    # adentro. Cuando la unificacion hace extend sobre una de ellas, la copia
+    # crece igual: no era una copia, era otra puerta al mismo dato.
+    #
+    # Y esa copia se guarda. En la corrida siguiente la base ya venia con las
+    # acciones sumadas, se unificaba otra vez, y crecia de nuevo: los saques
+    # de la armadora de GELP pasaron de 35 a 73 en dos corridas, y hubieran
+    # seguido subiendo para siempre.
+    _crudo = _copy.deepcopy(teams_data)
     _unificar_por_nombre(teams_data)
 
     # ══ Los cambios de dorsal, a modo informativo ══════════════════════════

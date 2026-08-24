@@ -283,6 +283,20 @@ def auditar_los_demas(en_dvw, propio_slug):
                     eq = v
                     break
             if eq:
+                # ══ Sin contar dos veces a la misma jugadora ═══════════════
+                # La base guarda a cada jugadora con el dorsal que uso en cada
+                # partido: si cambio de numero, tiene DOS entradas con el
+                # mismo nombre. Eso es a proposito —asi la union se rehace en
+                # cada corrida, con los partidos que hay— pero al sumar todo
+                # sus acciones se cuentan dos veces.
+                #
+                # En GELP eran 19 saques de mas: los del dorsal viejo de la
+                # armadora. El auditor avisaba de una diferencia que no
+                # existia.
+                # La base guarda a cada jugadora con el dorsal de cada
+                # partido. Si cambio de numero, tiene dos entradas con el
+                # mismo nombre, y el motor las une para la app: aca se suma
+                # igual, porque el total de la jugadora es la suma de las dos.
                 c = {}
                 for _n, j in eq.items():
                     for clave, campo in (('atk', 'atk'), ('srv', 'srv'),
@@ -509,11 +523,15 @@ def main():
     else:
         print('     HAY DIFERENCIAS')
         for nom, ta, tb, v in problemas[:8]:
+            # Los conteos se imprimen como texto: si alguno llegara como
+            # cadena —pasa cuando un archivo trae la cuenta ya formateada— el
+            # aviso reventaba y el auditor se cortaba justo cuando tenia algo
+            # importante que decir.
             if v:
-                print('        %s, valoracion "%s": el archivo dice %d y la app %d'
+                print('        %s, valoracion "%s": el archivo dice %s y la app %s'
                       % (nom, v, ta, tb))
             else:
-                print('        %s: el archivo tiene %d y la app %d' % (nom, ta, tb))
+                print('        %s: el archivo tiene %s y la app %s' % (nom, ta, tb))
         print()
         print('     Eso significa que algo se pierde o se lee mal al procesar.')
         print('     NO publiques hasta revisarlo.')
