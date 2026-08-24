@@ -254,6 +254,20 @@ if exist "datos_video_*.js"      (echo      OK  datos_video [por temporada])  el
 echo  ==================================================
 echo.
 
+
+REM ================= TEMPORADAS ARCHIVADAS =================
+REM Una temporada archivada esta cerrada: sus pantallas NO tienen que
+REM depender de los archivos de la carpeta principal, que es la temporada
+REM en curso. Cuando esos archivos se actualizan, la temporada vieja se
+REM rompe: muestra el plantel equivocado y no puede abrir sus videos.
+REM Paso con NAFELS: 38 pantallas de la 2025-26 cargaban firebase.js y
+REM datos_seguros.js de la raiz. Esto lo revisa en cada corrida.
+if exist "temporadas" (
+  if exist "SOLTAR_TEMPORADAS.py" (
+    python SOLTAR_TEMPORADAS.py --si
+  )
+)
+
 REM ===================================================================
 REM   CONTROL DE CALIDAD, ANTES DE PUBLICAR
 REM
