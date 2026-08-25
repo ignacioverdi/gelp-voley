@@ -13,3 +13,11 @@ LLAVE.txt
 # Herramientas de la fabrica: no son parte de la app
 _ANTES-*/
 _CONFIG.txt
+
+# copias de trabajo, no van al repositorio
+_ROTO-*/
+*.antes-suelta
+_RESPALDO-VIEJO*/
+
+# copias de trabajo, no van al repositorio
+*.antes-*

@@ -35,7 +35,23 @@
   function actual(){
     var L = cats();
     if(L.length < 2) return L[0] || 'Primera';
+
+    /* El jugador queda atado a su categoria: no sirve cambiar la direccion
+       a mano ni tocar la memoria del navegador. */
+    if(!esStaff()){
+      var mia = catDelJugador();
+      return (mia && L.indexOf(mia) >= 0) ? mia : L[0];
+    }
+
     var g = '';
+    /* la direccion manda: es la que sobrevive aunque no se pueda guardar */
+    try{
+      var q = new URL(location.href).searchParams.get('cat');
+      if(q && L.indexOf(q) >= 0){
+        try{ localStorage.setItem(GUARDA, q); }catch(e){}
+        return q;
+      }
+    }catch(e){}
     try{ g = localStorage.getItem(GUARDA) || ''; }catch(e){}
     return (g && L.indexOf(g) >= 0) ? g : L[0];
   }
@@ -126,9 +142,47 @@
      Se pone al lado del de temporada, que es donde el entrenador ya busca
      este tipo de cosas. Si esa barra no existe en la pantalla, se muestra
      flotando arriba a la derecha. */
+  /* ══ QUIEN PUEDE CAMBIAR DE CATEGORIA ════════════════════════════════════
+     El entrenador y el staff navegan entre todas: necesitan ver Primera,
+     H1L y H2L para armar los planteles y comparar.
+
+     El jugador NO. Ve solo la suya. Sin esto, un jugador de H2L podia
+     elegir Primera en el selector y leer el wellness, las cargas y el plan
+     de partido del otro equipo.
+
+     Su categoria sale de jugador_cat, que se guarda cuando se le da el alta.
+     Si no la tiene anotada —planteles cargados antes de que existiera— se
+     queda en la primera, que es como estaba antes. */
+  function esStaff(){
+    try { return !window.VB_esEditor || VB_esEditor(); }
+    catch(e){ return true; }
+  }
+
+  function catDelJugador(){
+    try {
+      var g = localStorage.getItem('vb_player_cat');
+      if (g && cats().indexOf(g) >= 0) return g;
+    } catch(e){}
+    return null;
+  }
+
+  /* Se pregunta una sola vez y queda anotada, para no consultar en cada
+     pantalla. La escribe firebase.js al iniciar sesion. */
+  function fijarCategoriaJugador(){
+    if (esStaff()) return;
+    var mia = catDelJugador();
+    var L = cats();
+    var destino = (mia && L.indexOf(mia) >= 0) ? mia : L[0];
+    try {
+      if (localStorage.getItem(GUARDA) !== destino)
+        localStorage.setItem(GUARDA, destino);
+    } catch(e){}
+  }
+
   function pintar(){
     var L = cats();
     if(L.length < 2) return;             /* una sola: no se muestra */
+    if(!esStaff()) return;               /* el jugador no elige: ve la suya */
 
     var sel = document.createElement('select');
     sel.id = 'catSelGlobal';
@@ -143,8 +197,29 @@
     }).join('');
 
     sel.addEventListener('change', function(){
-      try{ localStorage.setItem(GUARDA, sel.value); }catch(e){}
-      location.reload();                 /* los datos se cargan al abrir */
+      /* ── GUARDAR ANTES DE RECARGAR ──────────────────────────────────
+         location.reload() puede cortar la pagina antes de que el guardado
+         termine, y entonces vuelve a abrir con la categoria anterior:
+         elegis H1L y sigue diciendo Primera.
+
+         Se guarda en dos lugares y se comprueba que haya quedado. Recien
+         despues se recarga, y siempre en el siguiente turno del navegador,
+         nunca en el medio del evento. */
+      var v = sel.value;
+      var ok = false;
+      try{ localStorage.setItem(GUARDA, v);
+           ok = (localStorage.getItem(GUARDA) === v); }catch(e){}
+      if(!ok){
+        /* si el navegador no deja guardar —incognito con la memoria
+           bloqueada— se pasa por la direccion, que sobrevive a la recarga */
+        try{
+          var u = new URL(location.href);
+          u.searchParams.set('cat', v);
+          location.replace(u.toString());
+          return;
+        }catch(e){}
+      }
+      setTimeout(function(){ location.reload(); }, 0);
     });
 
     /* ══ Donde se pone ════════════════════════════════════════════════════
@@ -170,12 +245,68 @@
     document.body.appendChild(caja);
   }
 
+  fijarCategoriaJugador();
   redirigir();                           /* antes de que carguen los datos */
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', pintar);
   } else {
     pintar();
   }
+
+  /* ══ LOS DATOS DE FIREBASE, TAMBIEN POR CATEGORIA ══════════════════════
+     Los archivos .enc ya se redirigen mas arriba. Pero hay datos que no
+     viven en archivos sino en Firebase: el wellness, las cargas del
+     gimnasio, las rutinas, el partido en vivo.
+
+     Sin esto, H1L y H2L compartian el wellness y las rutinas con Primera:
+     un jugador de H2L veia la carga del plantel de Primera.
+
+     Se separa lo que es de UN EQUIPO. Lo que es del club o de la persona
+     se comparte a proposito: la cuenta de un jugador, su dorsal, su foto,
+     los codigos de scouteo y la camara del gimnasio son unicos.
+     ══════════════════════════════════════════════════════════════════════ */
+  (function(){
+    /* ── HAY QUE ESPERAR A FIREBASE ──────────────────────────────────
+       Este archivo se carga ANTES que firebase.js: va primero porque el
+       selector tiene que estar listo cuando el navegador empieza a pedir
+       los datos. Pero eso significa que fbGet todavia no existe.
+
+       Antes se hacia "if(!window.fbGet) return" y no se envolvia nunca:
+       el wellness y las rutinas seguian compartidos entre categorias.
+
+       Ahora se espera. Se revisa cada 30ms hasta que aparezca, con un
+       limite de 10 segundos por si esa pantalla no usa Firebase. */
+    var intentos = 0;
+
+    function envolver(){
+      if(window.__FB_POR_CAT) return true;   /* una sola vez */
+      if(!window.fbGet || !window.fbSet) return false;
+      window.__FB_POR_CAT = true;
+
+    /* de un equipo: cada categoria tiene lo suyo */
+    var DEL_EQUIPO = /^(wellness|pesos|rm|prep_rutinas|prep_hist|notas|notas_pf|obs|baggerone|voley_live|voley_data|pv_sesion|horarios|fixture|pendientes|calendario)(\/|$)/;
+
+    var _get = window.fbGet, _set = window.fbSet;
+
+    function ruta(p){
+      if(typeof p !== 'string') return p;
+      if(!DEL_EQUIPO.test(p)) return p;      /* del club: no se toca */
+      return carpeta() + p;                  /* Primera devuelve '' */
+    }
+
+      window.fbGet = function(p, cb){ return _get(ruta(p), cb); };
+      window.fbSet = function(p, v){ return _set(ruta(p), v); };
+      return true;
+    }
+
+    if(!envolver()){
+      var t = setInterval(function(){
+        intentos++;
+        if(envolver() || intentos > 330) clearInterval(t);
+      }, 30);
+    }
+  })();
+
 })();
 
-/* © 2025-2026 Ignacio Verdi · GELP VOLEY · Software propietario */
+/* © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario */

@@ -7,9 +7,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js" onerror="void 0"></script>
-<script src="selector_categoria.js" onerror="void 0"></script>
 <script src="datos_seguros.js"></script>
 <script src="firebase.js" onerror="void 0"></script>
 <style>
@@ -156,6 +153,9 @@
   }
 </style>
 <link rel="stylesheet" href="movil.css">
+<!-- El calendario ya no necesita redirigir: lo hace selector_categoria.js
+     para todos los datos de equipo, en un solo lugar. -->
+
 </head>
 <body>
 <div class="wrap" id="wrap">
@@ -191,7 +191,17 @@
             style="background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.4);color:#4ade80">
       <span id="cal-sub-txt">🔄 Suscribirme al calendario</span>
     </button>
-    <button class="add-btn" id="add-btn" onclick="openForm()" data-solo-editor>+ Agregar</button>
+    <!-- Del calendario al resto de la app: el proximo rival y el archivado
+     de la temporada que termino. Solo los ve el cuerpo tecnico. -->
+<button class="add-btn" onclick="usarFixture()" data-solo-editor
+        style="background:rgba(144,148,183,.14);border-color:rgba(144,148,183,.4);color:#9094b7"
+        title="Toma el proximo partido de este calendario y lo muestra en toda la app">
+  ⭐ Usar este fixture</button>
+<button class="add-btn" onclick="archivarTemporada()" data-solo-editor
+        style="background:rgba(148,163,184,.12);border-color:rgba(148,163,184,.3);color:#94a3b8"
+        title="Guarda los partidos ya jugados y deja el calendario con lo que viene">
+  📦 Archivar la temporada</button>
+<button class="add-btn" id="add-btn" onclick="openForm()" data-solo-editor>+ Agregar</button>
     <!-- El boton se esconde solo si no hay fixture cargado: ofrecer importar
          14 partidos que no existen confunde y hace pensar que algo fallo. -->
     <button class="import-btn" id="import-btn" onclick="importFixture()" data-solo-editor style="display:none">⬇️ Importar fixture</button>
@@ -347,7 +357,7 @@
   // sistema: 14 partidos contra equipos suizos, con sus canchas y sus mapas.
   // Cualquier cliente los veia como si fueran suyos. Cada club carga los
   // propios desde la pantalla del calendario.
-  var FIXTURE=[];
+  var FIXTURE_PRIMERA=[];
   /* si el club cargo un fixture propio, recien ahi aparece el boton */
   try{
     if(FIXTURE.length){
@@ -356,6 +366,38 @@
     }
   }catch(e){}
   function importFixture(){ if(window.VB_esEditor&&!VB_esEditor())return;
+  /* ── EL FIXTURE DE ESTA CATEGORIA ──────────────────────────────────
+     Cada categoria tiene su archivo: fixture_h1l.js, fixture_h2l.js.
+     La primera categoria usa el que viene escrito en esta pagina.
+
+     Antes se cargaba el archivo SOLO si no habia ningun fixture, y como
+     el de Primera estaba escrito aca adentro, nunca se llegaba a buscar
+     el de H1L ni el de H2L: se importaban siempre los 14 de Primera. */
+  var _cat = '';
+  try { _cat = (window.categoriaActual && categoriaActual()) || ''; } catch(e){}
+  var _L = (window.CATEGORIAS_CLUB || []);
+  var _esPrimera = (!_cat || !_L.length || _cat === _L[0]);
+
+  if (_esPrimera) {
+    window.FIXTURE = window.FIXTURE_PRIMERA || window.FIXTURE || [];
+  } else {
+    var _slug = _cat.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (window.__FIX_CARGADO !== _slug) {
+      var sc = document.createElement('script');
+      sc.src = 'fixture_' + _slug + '.js?v=' + Date.now();
+      sc.onload = function(){
+        window.__FIX_CARGADO = _slug;
+        importFixture();
+      };
+      sc.onerror = function(){
+        alert('No encontré el fixture de ' + _cat + '.\n\n' +
+              'Tiene que estar el archivo  fixture_' + _slug + '.js  en la ' +
+              'carpeta del club, publicado.');
+      };
+      document.head.appendChild(sc);
+      return;
+    }
+  }
     if(!FIXTURE.length){
       alert('Todavia no hay un fixture cargado para importar.\n\n'
           + 'Agrega los partidos con el boton + y quedan guardados para todo el equipo.');
@@ -849,7 +891,142 @@ window.temporadaAlCalendario = function(){
 
 </script>
 <script src="lang.js" onerror="void 0"></script>
-<script src="ayuda.js"></script>
+<script>
+/* ══ DEL CALENDARIO AL RESTO DE LA APP ═══════════════════════════════════
+   El calendario ya tiene el fixture cargado. Estas dos funciones lo usan:
+
+   usarFixture()        el proximo partido pasa a verse en toda la app
+   archivarTemporada()  los partidos jugados se guardan aparte y el
+                        calendario queda con lo que viene
+
+   Las dos piden confirmacion antes de tocar nada, y ninguna borra: lo
+   archivado queda guardado y se puede volver a ver. */
+(function(){
+  function slug(t){
+    return (t || '').toString().toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '');
+  }
+  function hoy(){
+    var d = new Date();
+    return d.getFullYear() + '-' +
+           String(d.getMonth() + 1).padStart(2, '0') + '-' +
+           String(d.getDate()).padStart(2, '0');
+  }
+  function cond(p){
+    return (p.condicion || '').toLowerCase().indexOf('vis') >= 0
+           ? 'visitante' : 'local';
+  }
+
+  /* ── El proximo rival, para toda la app ───────────────────────────── */
+  window.usarFixture = function(){
+    var h = hoy();
+    var futuros = ((window.data && data.partidos) || [])
+      .filter(function(p){ return p.fecha && p.fecha >= h && p.rival; })
+      .sort(function(a, b){ return a.fecha < b.fecha ? -1 : 1; });
+
+    if(!futuros.length){
+      alert('No hay partidos futuros cargados en el calendario.\n\n' +
+            'Agregá el fixture de la temporada y volvé a intentar.');
+      return;
+    }
+    var p = futuros[0];
+    if(!confirm('El proximo partido pasa a ser:\n\n' +
+                '   ' + p.fecha + '   vs ' + p.rival + '   (' + cond(p) + ')\n\n' +
+                'Se va a ver en el inicio y en el plan de partido.\n' +
+                'Hay ' + futuros.length + ' partido(s) por delante.\n\n' +
+                'Continuo?')) return;
+
+    var fx = {
+      proximo: { fecha: p.fecha, rival: p.rival, slug: slug(p.rival), cond: cond(p) },
+      fixture: futuros.map(function(x){
+        return { fecha: x.fecha, rival: x.rival, slug: slug(x.rival), cond: cond(x) };
+      })
+    };
+    fbSet('fixture', fx);
+    try { localStorage.setItem('vb_fixture', JSON.stringify(fx)); } catch(e){}
+    alert('Listo.\n\nProximo rival: ' + p.rival + ' (' + p.fecha + ')\n' +
+          futuros.length + ' partido(s) en el fixture.\n\n' +
+          'Si no lo ves enseguida, apreta Ctrl+Shift+R.');
+  };
+
+  /* ── Archivar lo que ya se jugo ───────────────────────────────────── */
+  window.archivarTemporada = function(){
+    var h = hoy();
+    var todos = (window.data && data.partidos) || [];
+    var viejos = todos.filter(function(p){ return p.fecha && p.fecha < h; });
+    var quedan = todos.filter(function(p){ return !p.fecha || p.fecha >= h; });
+
+    if(!viejos.length){
+      alert('No hay partidos pasados para archivar.\n' +
+            'El calendario ya tiene solo lo que viene.');
+      return;
+    }
+    if(!confirm('Se archivan ' + viejos.length + ' partido(s) ya jugado(s).\n' +
+                'Quedan ' + quedan.length + ' por delante.\n\n' +
+                'NO se borran: se guardan aparte y se pueden volver a ver.\n\n' +
+                'Continuo?')) return;
+
+    var anio = (viejos[0].fecha || '').slice(0, 4) || 'anterior';
+    fbGet('calendario/archivo_' + anio, function(previo){
+      var todo = (Array.isArray(previo) ? previo : []).concat(viejos);
+      fbSet('calendario/archivo_' + anio, todo);
+      data.partidos = quedan;
+      fbSet('calendario/partidos', quedan);
+      if(window.render) render();
+      alert('Listo.\n\n' + viejos.length + ' partido(s) archivado(s) en ' + anio +
+            '.\nEl calendario quedo con ' + quedan.length + ' por jugar.');
+    });
+  };
+})();
+</script>
+<script>
+/* ══ EL BOTON DICE CUANTOS PARTIDOS TIENE ESTA CATEGORIA ═════════════════
+   El texto decia "(14 partidos)" escrito fijo. Con varias categorias eso
+   confundia: en H1L, que tiene 20, el boton seguia diciendo 14 y parecia
+   que iba a importar los de Primera.
+
+   Ahora el numero lo pone la propia categoria, leyendo su archivo. */
+(function(){
+  function poner(){
+    var b = document.getElementById('import-btn');
+    if(!b) return;
+    var cat = '';
+    try { cat = (window.categoriaActual && categoriaActual()) || ''; } catch(e){}
+    var L = (window.CATEGORIAS_CLUB || []);
+    var primera = (!cat || !L.length || cat === L[0]);
+
+    function texto(n, etiqueta){
+      b.textContent = '⬇️ Importar fixture ' + (etiqueta ? etiqueta + ' ' : '') +
+                      (n ? '(' + n + ' partidos)' : '');
+    }
+
+    if(primera){
+      var f = window.FIXTURE_PRIMERA || window.FIXTURE || [];
+      texto(f.length, '2026/27');
+      return;
+    }
+
+    var slug = cat.toLowerCase().replace(/[^a-z0-9]/g, '');
+    b.textContent = '⬇️ Importar fixture de ' + cat;
+    var sc = document.createElement('script');
+    sc.src = 'fixture_' + slug + '.js?v=' + Date.now();
+    sc.onload = function(){
+      window.__FIX_CARGADO = slug;
+      var f = window.FIXTURE || [];
+      b.textContent = '⬇️ Importar fixture de ' + cat +
+                      (f.length ? ' (' + f.length + ' partidos)' : '');
+    };
+    sc.onerror = function(){
+      b.textContent = '⬇️ Importar fixture de ' + cat + ' (no encontrado)';
+    };
+    document.head.appendChild(sc);
+  }
+  if(document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(poner, 300); });
+  else setTimeout(poner, 300);
+})();
+</script><script src="ayuda.js"></script>
 </body></html>
 
-<!-- © 2025-2026 Volley-Stats · Ignacio Verdi · GELP VOLEY · Software propietario - Todos los derechos reservados -->
+<!-- © 2025-2026 Ignacio Verdi · GELP VOLEY · Software propietario - Todos los derechos reservados -->

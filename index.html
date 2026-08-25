@@ -1343,6 +1343,38 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 
 <script src="proximo_rival.js" onerror="window.FIXTURE_DATA=null"></script>
 <script>
+/* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
+   proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
+   que el cuerpo tecnico mantiene al dia, y ahi esta el fixture de verdad.
+
+   Si en el calendario apretaron "Usar este fixture", eso pisa lo del Excel.
+   Si no, todo sigue como siempre: no cambia nada para quien no lo use. */
+(function(){
+  function tomar(fx){
+    if(fx && fx.proximo && fx.proximo.rival){
+      window.FIXTURE_DATA = fx;
+    }
+  }
+  /* lo guardado en este dispositivo, que es instantaneo */
+  try {
+    var g = localStorage.getItem('vb_fixture');
+    if(g) tomar(JSON.parse(g));
+  } catch(e){}
+  /* y lo del club, que puede haberlo puesto otro del cuerpo tecnico */
+  try {
+    if(window.fbGet) fbGet('fixture', function(fx){
+      if(!fx || !fx.proximo) return;
+      var antes = window.FIXTURE_DATA && window.FIXTURE_DATA.proximo;
+      tomar(fx);
+      /* si llego despues de pintar, se vuelve a pintar */
+      if(!antes || antes.fecha !== fx.proximo.fecha){
+        try { if(window.pintarProximo) window.pintarProximo(); } catch(e){}
+      }
+    });
+  } catch(e){}
+})();
+</script>
+<script>
 (function(){
   try{
     var F=window.FIXTURE_DATA;

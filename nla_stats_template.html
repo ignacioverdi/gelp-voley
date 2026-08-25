@@ -150,7 +150,8 @@ tbody td.col-group-blk{border-left:1px solid rgba(144,148,183,.08)}
     <select id="f-temporada"><option value="">Todas</option><!--__TEMPORADAS__--></select>
   </div>
   <div class="filter-group">
-    <span class="filter-label">Posición</span>
+    <span class="filter-label">Posición<label style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:12px;color:#94a3b8;white-space:nowrap;margin-right:12px" title="Los rivales que se enfrentaron una sola vez, y los jugadores con muy pocas acciones, distorsionan el ranking"><input type="checkbox" id="f-liga" checked onchange="aplicarLiga(this.checked)" style="width:15px;height:15px;accent-color:#9094b7;cursor:pointer"> Solo la liga</label>
+</span>
     <select id="f-pos">
       <option value="">Todas</option>
       <option value="OUTSIDE">Punta</option>
@@ -245,9 +246,76 @@ document.getElementById('reset-btn').addEventListener('click',function(){
   render();
 });
 
+/* ══ LOS EQUIPOS DE LA LIGA ══════════════════════════════════════════════
+   En la tabla aparecian equipos de copa europea que se enfrentaron UNA vez
+   y no se vuelven a ver en la temporada. Eran 40 de 143 jugadores: casi un
+   tercio de la tabla, de rivales que ya no importan.
+
+   Se considera "de la liga" al equipo que jugo contra varios rivales
+   distintos. Un rival de copa jugo un solo partido, asi que queda afuera
+   solo, sin listas escritas a mano que haya que actualizar cada ano. */
+var _SOLO_LIGA = true;
+
+function equiposDeLiga(data){
+  var porEquipo = {};
+  data.forEach(function(p){
+    if(!porEquipo[p.team]) porEquipo[p.team] = 0;
+    porEquipo[p.team]++;
+  });
+  /* Un plantel de liga acumula acciones en muchos partidos; uno de copa,
+     las de uno solo. Se usa el volumen total de ataques del equipo. */
+  var vol = {};
+  data.forEach(function(p){
+    vol[p.team] = (vol[p.team] || 0) + (p.atk_tot || 0);
+  });
+  var vals = Object.keys(vol).map(function(k){ return vol[k]; })
+                   .sort(function(a,b){ return b-a; });
+  if(vals.length < 3) return null;
+  /* el corte: la mitad de la mediana de los equipos con mas volumen */
+  var medio = vals[Math.floor(vals.length / 2)];
+  var corte = medio * 0.45;
+  var ok = {};
+  Object.keys(vol).forEach(function(k){ if(vol[k] >= corte) ok[k] = true; });
+  return ok;
+}
+
+/* ══ MINIMO PARA ENTRAR AL RANKING ═══════════════════════════════════════
+   Asi lo resuelve la NCAA: para figurar en un ranking individual hay que
+   haber jugado lo suficiente. No se pondera ni se corrige el porcentaje —
+   simplemente, quien no llego al minimo no entra en ese ranking.
+
+   Sin esto, un jugador con 3 remates y 2 puntos aparecia arriba de uno con
+   400 remates: el numero es cierto pero no dice nada.
+
+   El minimo se calcula sobre la propia tabla, no es un numero fijo: es el
+   20% de lo que hizo el jugador con mas volumen en ese fundamento. Asi
+   funciona igual en una liga de 26 partidos que en un torneo de 3. */
+var _MIN_RANKING = true;
+
+function minimos(data){
+  var campos = ['atk_tot','srv_tot','rec_tot','blk_tot','def_tot','set_tot'];
+  var max = {};
+  campos.forEach(function(c){
+    var m = 0;
+    data.forEach(function(p){ if((p[c]||0) > m) m = p[c]||0; });
+    max[c] = m;
+  });
+  var min = {};
+  campos.forEach(function(c){ min[c] = Math.max(6, Math.round(max[c] * 0.20)); });
+  return min;
+}
+
+function llegaAlMinimo(p, campo, min){
+  if(!_MIN_RANKING || !campo || !min) return true;
+  if(!(campo in min)) return true;
+  return (p[campo] || 0) >= min[campo];
+}
+
 function filterP(data){
   var f=getF();
+  var deLiga = _SOLO_LIGA ? equiposDeLiga(data) : null;
   return data.filter(function(p){
+    if(deLiga && !f.team && !deLiga[p.team]) return false;
     if(f.team&&p.team!==f.team)return false;
     if(f.temporada&&p.temporada!==f.temporada&&p.temporada!=='all')return false;
     if(f.pos&&p.pos_label!==f.pos)return false;
@@ -306,6 +374,26 @@ function buildSkillPills(){
 }
 
 function teamSeason(){var el=document.getElementById('f-temporada');var v=el?el.value:'';return v||SEASONS[SEASONS.length-1]||'';}
+/* ══ LOS EQUIPOS DE LA LIGA, EN LA TABLA DE EQUIPOS ══════════════════════
+   Mismo criterio que en la tabla de jugadores: un rival de copa jugo un
+   solo partido, asi que su volumen de juego es una fraccion del de los
+   equipos de la liga. Se detecta por eso y no por una lista de nombres,
+   que habria que actualizar cada temporada. */
+function equiposDeLigaT(lista){
+  var vol = {};
+  lista.forEach(function(t){
+    vol[t.team] = (vol[t.team] || 0) + (t.atk_tot || 0) + (t.srv_tot || 0);
+  });
+  var vals = Object.keys(vol).map(function(k){ return vol[k]; })
+                   .sort(function(a,b){ return b-a; });
+  if(vals.length < 3) return null;
+  var medio = vals[Math.floor(vals.length / 2)];
+  var corte = medio * 0.45;
+  var ok = {};
+  Object.keys(vol).forEach(function(k){ if(vol[k] >= corte) ok[k] = true; });
+  return ok;
+}
+
 function renderTeams(){
   var f=getF();
   var season=teamSeason();
@@ -325,6 +413,11 @@ function renderTeams(){
       if(_visto[t.team]) return false;
       _visto[t.team]=1; return true;
     });
+  }
+  /* fuera los rivales de una sola vez, salvo que se los pida por nombre */
+  if(_SOLO_LIGA && !f.team){
+    var _ok = equiposDeLigaT(seasonTeams);
+    if(_ok) seasonTeams = seasonTeams.filter(function(t){ return _ok[t.team]; });
   }
   var rows=seasonTeams.filter(function(t){return !f.team||t.team===f.team;});
   // ranking-frac por columna (dentro de la temporada)
@@ -432,8 +525,12 @@ function renderPlayers(){
   var s=curSkill(), m=curMetric(), f=getF();
   var minA=parseInt(document.getElementById('f-min-atk').value)||0;
   // solo jugadores con datos en este fundamento (compara like-with-like)
-  var data=filterP(PLAYERS).filter(function(p){
-    return p[m.eff]!=null && (p[m.tot]||0)>=Math.max(minA,1);
+  var base = filterP(PLAYERS);
+  var minCalc = 0;
+  if(_MIN_RANKING){ var mm = minimos(base); minCalc = mm[m.tot] || 0; }
+  var piso = Math.max(minA, minCalc, 1);
+  var data=base.filter(function(p){
+    return p[m.eff]!=null && (p[m.tot]||0)>=piso;
   });
   data.sort(function(a,b){return (b[m.eff]) - (a[m.eff]);});
   document.getElementById('results-count').textContent=data.length+' jugadores · '+s.label+(s.subs?' ('+(curSkill().subs.filter(function(x){return x.key===(pSub[s.key]||'all');})[0].label)+')':'');
@@ -543,6 +640,14 @@ loadStats();
     document.body.appendChild(caja);
   }catch(e){}
 })();
+</script>
+<script>
+function aplicarLiga(v){
+  _SOLO_LIGA = !!v; _MIN_RANKING = !!v;
+  try { renderPlayers(); } catch(e){}
+  try { renderTeams(); } catch(e){}
+}
+window.aplicarLiga = aplicarLiga;
 </script>
 </body></html>
 

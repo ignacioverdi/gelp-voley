@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Asociar códigos · GELP</title>
+<title>Asociar códigos · NAFELS</title>
 <!--
 ===============================================================================
   asociar_codigos.html — TRADUCIR LOS CODIGOS DE OTRO SCOUT
@@ -190,17 +190,39 @@ function tablaDe(txt, seccion){
 }
 
 function descripcion(fila){
-  for(var i of [4,2]){
-    if(fila[i] && fila[i].trim()) return fila[i].trim();
+  /* ── DONDE ESTA EL NOMBRE ────────────────────────────────────────────
+     Las dos tablas del .dvw no guardan el nombre en la misma columna:
+
+       ataque    V5 -> [ V5 , 4 , R , H , "Hut" , ... ]     columna 4
+       llamada   K1 -> [ K1 ,   , "Quick ahead" , , ... ]   columna 2
+
+     En las llamadas la columna 4 tiene el COLOR de la jugada, un numero
+     como 16711680. Por eso se leia "16711680" en vez de "Quick ahead".
+
+     Se toma la primera columna con texto de verdad: un nombre nunca es
+     un numero suelto, asi que los colores quedan descartados solos.
+     Sirve para las dos tablas sin tener que saber cual es cual. */
+  for(var i of [4, 2, 3]){
+    var v = fila[i];
+    if(!v) continue;
+    v = v.trim();
+    if(!v) continue;
+    if(/^[0-9]+$/.test(v)) continue;      // es un color, no un nombre
+    return v;
   }
   return '';
 }
 
 function detalle(fila){
-  /* zona y lado ayudan a reconocer la jugada cuando la descripcion esta en
-     otro idioma */
-  if(fila.length > 3 && fila[1]) return 'z' + fila[1] + ' ' + (fila[2]||'');
-  return '';
+  /* La zona y el lado ayudan a reconocer la jugada cuando la descripcion
+     esta en otro idioma. Solo los ataques las tienen: en las llamadas la
+     columna 1 viene vacia y la 2 es el nombre, asi que no se muestra nada
+     en vez de inventar una zona que no existe. */
+  var z = fila[1] && fila[1].trim();
+  if(!z || !/^[0-9]$/.test(z)) return '';
+  var lado = (fila[2] || '').trim();
+  if(/^[0-9]+$/.test(lado)) lado = '';
+  return ('z' + z + ' ' + lado).trim();
 }
 
 /* ══ Cargar el archivo ════════════════════════════════════════════════════ */
@@ -620,14 +642,14 @@ document.getElementById('sel').addEventListener('change', function(e){
 
 <!-- La puerta de entrada: esta pantalla es del cuerpo tecnico, asi que pide
      sesion como el resto de la app. -->
-<script src="firebase.js"></script>
-<script src="lang.js" onerror="void 0"></script>
+<script src="firebase.js?v=20260824-1444"></script>
+<script src="lang.js?v=20260824-1444" onerror="void 0"></script>
 
 <!-- Los códigos del club, para la columna de la derecha. Los genera
      HACER_TODO a partir del último partido propio. -->
-<script src="mis_codigos.js" onerror="void 0"></script>
+<script src="mis_codigos.js?v=20260824-1444" onerror="void 0"></script>
 
-<!-- © 2025-2026 Volley-Stats · Ignacio Verdi · GELP VOLEY · Software propietario -->
-<script src="ayuda.js"></script>
+<!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario -->
+<script src="ayuda.js?v=20260824-1444"></script>
 </body>
 </html>

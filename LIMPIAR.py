@@ -5,7 +5,9 @@ Limpia las carpetas que quedaron sueltas de la recuperacion.
 QUE LIMPIA
   _ANTES-DE-RECUPERAR*    copias de un intento que no hacia falta
   _ROTO-2025-26*          copia de seguridad de otro intento
-  *.antes-suelta          copia de cada pantalla antes de soltarla
+  *.antes-*               copia de cada pantalla antes de cada arreglo
+                          (.antes-suelta, .antes-ayuda, .antes-encimado,
+                           .antes-fotos y cualquiera que venga despues)
   _RESPALDO               NO se borra: se renombra, ver abajo
 
 SOBRE _RESPALDO
@@ -26,7 +28,16 @@ import sys
 AQUI = os.path.dirname(os.path.abspath(__file__))
 
 PATRONES_CARPETA = ('_ANTES-DE-RECUPERAR', '_ROTO-2025-26', '_ANTES-')
-SUFIJO_PANTALLA = '.antes-suelta'
+# Cualquier copia de seguridad de una pantalla. Se usa un patron y no una
+# lista, para que no haya que tocar este programa cada vez que se agrega un
+# arreglo nuevo: paso con .antes-ayuda, que no se limpiaba porque este
+# archivo era mas viejo que esa mejora.
+import fnmatch
+PATRON_PANTALLA = '*.antes-*'
+
+
+def es_copia(nombre):
+    return fnmatch.fnmatch(nombre, PATRON_PANTALLA)
 
 
 def humano(n):
@@ -68,7 +79,7 @@ def juntar():
                 dirs.remove(d)
 
         for a in archivos:
-            if a.endswith(SUFIJO_PANTALLA):
+            if es_copia(a):
                 pantallas.append(os.path.join(raiz, a))
 
     return carpetas, pantallas, respaldos
@@ -108,7 +119,13 @@ def main():
         total += t
         print('  COPIAS DE PANTALLAS  (se borran)')
         print('  ' + '-' * 60)
-        print('     %d archivo(s) %s%s%s' % (len(pantallas), '', SUFIJO_PANTALLA, ''))
+        import collections
+        tipos = collections.Counter()
+        for x in pantallas:
+            tipos['.antes-' + x.split('.antes-')[-1]] += 1
+        print('     %d archivo(s) en total:' % len(pantallas))
+        for k in sorted(tipos):
+            print('        %-22s %d' % (k, tipos[k]))
         print('     %s en total' % humano(t))
         print('     Ya comprobaste que las pantallas andan, no hacen falta.')
         print()
@@ -178,7 +195,7 @@ def main():
 
     # que no se vuelvan a subir
     gi = os.path.join(AQUI, '.gitignore')
-    lineas = ['_ANTES-*/', '_ROTO-*/', '*.antes-suelta', '_RESPALDO-VIEJO*/']
+    lineas = ['_ANTES-*/', '_ROTO-*/', '*.antes-*', '_RESPALDO-VIEJO*/']
     try:
         actual = io.open(gi, encoding='utf-8', errors='replace').read() \
             if os.path.exists(gi) else ''

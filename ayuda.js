@@ -282,6 +282,277 @@
       }
     },
 
+
+    'calendario': {
+      es: { titulo:'Calendario',
+        que:'Los partidos y los entrenamientos de esta categoría, en un solo lugar.',
+        pasos:['Elegí arriba si querés ver partidos o entrenamientos.','Con "+ Agregar" cargás uno a mano.','"Importar fixture" carga toda la temporada de una vez.','"Usar este fixture" hace que el próximo partido se vea en toda la app.'],
+        ojo:'Cada categoría tiene su propio calendario. Si cambiás de categoría arriba, cambian los partidos.' },
+      en: { titulo:'Calendar',
+        que:'This category\u2019s matches and training sessions, all in one place.',
+        pasos:['Choose at the top whether to see matches or training.','Use "+ Add" to enter one by hand.','"Import fixture" loads the whole season at once.','"Use this fixture" makes the next match show across the app.'],
+        ojo:'Each category has its own calendar. Switch category at the top and the matches change.' },
+      de: { titulo:'Kalender',
+        que:'Spiele und Trainings dieser Kategorie an einem Ort.',
+        pasos:['Wähle oben zwischen Spielen und Trainings.','Mit "+ Hinzufügen" trägst du eines von Hand ein.','"Spielplan importieren" lädt die ganze Saison auf einmal.','"Diesen Spielplan verwenden" zeigt das nächste Spiel in der ganzen App.'],
+        ojo:'Jede Kategorie hat ihren eigenen Kalender. Wechselst du oben die Kategorie, ändern sich die Spiele.' }
+    },
+
+    'prep_fisica': {
+      es: { titulo:'Preparación Física',
+        que:'La carga del plantel: cuánto levanta cada uno y cómo viene.',
+        pasos:['Elegí el jugador para ver su historial.','Cargá los pesos y las repeticiones de la sesión.','Mirá el wellness al lado: cómo llegó al entrenamiento.'],
+        ojo:'El wellness conviene cargarlo ANTES de entrenar: sirve para decidir la sesión, no para evaluarla.' },
+      en: { titulo:'Physical Preparation',
+        que:'The squad\u2019s load: how much each player lifts and how they are tracking.',
+        pasos:['Pick the player to see their history.','Enter the weights and reps for the session.','Check the wellness beside it: how they arrived at training.'],
+        ojo:'Fill in the wellness BEFORE training: it is meant to shape the session, not to review it.' },
+      de: { titulo:'Athletiktraining',
+        que:'Die Belastung des Kaders: wie viel jeder hebt und wie er dasteht.',
+        pasos:['Wähle den Spieler, um seinen Verlauf zu sehen.','Trage Gewichte und Wiederholungen der Einheit ein.','Sieh daneben das Wellness: wie er ins Training kam.'],
+        ojo:'Wellness VOR dem Training ausfüllen: es soll die Einheit steuern, nicht bewerten.' }
+    },
+
+    'pizarron': {
+      es: { titulo:'Pizarrón',
+        que:'La cancha para dibujar jugadas y explicarlas al plantel.',
+        pasos:['Arrastrá los jugadores a su posición.','Dibujá los movimientos con el dedo o el mouse.','Guardá la jugada para volver a mostrarla.'],
+        ojo:'Sirve en la tablet del banco: se dibuja durante el partido y se muestra en el tiempo muerto.' },
+      en: { titulo:'Tactical Board',
+        que:'The court to draw plays and explain them to the squad.',
+        pasos:['Drag the players into position.','Draw the movements with your finger or the mouse.','Save the play to show it again.'],
+        ojo:'Works on the bench tablet: draw during the match and show it in the timeout.' },
+      de: { titulo:'Taktiktafel',
+        que:'Das Feld zum Zeichnen von Spielzügen und Erklären im Kader.',
+        pasos:['Ziehe die Spieler auf ihre Positionen.','Zeichne die Bewegungen mit Finger oder Maus.','Speichere den Spielzug, um ihn erneut zu zeigen.'],
+        ojo:'Funktioniert auf dem Tablet der Bank: während des Spiels zeichnen und in der Auszeit zeigen.' }
+    },
+
+    'equipo': {
+      es: { titulo:'El Plantel',
+        que:'Todos los jugadores de esta categoría, con su puesto y su dorsal.',
+        pasos:['Tocá un jugador para ver su perfil completo.','El color indica el puesto: armador, central, punta, opuesto, líbero.'],
+        ojo:'El plantel sale de los partidos scouteados. Si falta alguien, es que todavía no jugó.' },
+      en: { titulo:'The Squad',
+        que:'Every player in this category, with their position and shirt number.',
+        pasos:['Tap a player to see their full profile.','The colour shows the position: setter, middle, outside, opposite, libero.'],
+        ojo:'The squad comes from the scouted matches. If someone is missing, they have not played yet.' },
+      de: { titulo:'Der Kader',
+        que:'Alle Spieler dieser Kategorie mit Position und Trikotnummer.',
+        pasos:['Tippe auf einen Spieler für sein vollständiges Profil.','Die Farbe zeigt die Position: Zuspieler, Mitte, Aussen, Diagonal, Libero.'],
+        ojo:'Der Kader stammt aus den gescouteten Spielen. Fehlt jemand, hat er noch nicht gespielt.' }
+    },
+
+    'comparador': {
+      es: { titulo:'Comparador',
+        que:'Dos jugadores lado a lado, fundamento por fundamento.',
+        pasos:['Elegí los dos jugadores arriba.','Compará cada fundamento: quién ataca mejor, quién recibe mejor.'],
+        ojo:'Fijate el volumen además del porcentaje: 60% con 5 pelotas no dice lo mismo que 45% con 300.' },
+      en: { titulo:'Comparator',
+        que:'Two players side by side, skill by skill.',
+        pasos:['Pick the two players at the top.','Compare each skill: who attacks better, who passes better.'],
+        ojo:'Look at the volume as well as the percentage: 60% off 5 balls is not the same as 45% off 300.' },
+      de: { titulo:'Vergleich',
+        que:'Zwei Spieler nebeneinander, Element für Element.',
+        pasos:['Wähle oben die beiden Spieler.','Vergleiche jedes Element: wer greift besser an, wer nimmt besser an.'],
+        ojo:'Achte neben der Prozentzahl auf das Volumen: 60% bei 5 Bällen ist nicht wie 45% bei 300.' }
+    },
+
+    'scouting_rival': {
+      es: { titulo:'Scouting del Rival',
+        que:'El resumen del próximo rival, listo para la charla técnica.',
+        pasos:['Elegí el equipo rival.','Mirá sus jugadoras clave y por dónde atacan.','Bajalo o mostralo directo en la reunión.'],
+        ojo:'Sale de los partidos de ese rival que ya tengas scouteados. Cuantos más, más confiable.' },
+      en: { titulo:'Opponent Scouting',
+        que:'The next opponent\u2019s summary, ready for the team talk.',
+        pasos:['Pick the opposing team.','Look at their key players and where they attack.','Download it or show it straight in the meeting.'],
+        ojo:'It comes from the matches of that opponent you already scouted. The more, the more reliable.' },
+      de: { titulo:'Gegner-Scouting',
+        que:'Die Zusammenfassung des nächsten Gegners, bereit für die Besprechung.',
+        pasos:['Wähle die gegnerische Mannschaft.','Sieh dir die Schlüsselspieler an und wohin sie angreifen.','Lade sie herunter oder zeige sie direkt in der Besprechung.'],
+        ojo:'Sie stammt aus den bereits gescouteten Spielen dieses Gegners. Je mehr, desto verlässlicher.' }
+    },
+
+    'informe_equipo': {
+      es: { titulo:'Informe de Equipo',
+        que:'Cómo viene el equipo en el total de la temporada.',
+        pasos:['Mirá el cambio de saque y el break point contra lo esperado.','Compará con los partidos anteriores para ver la tendencia.'],
+        ojo:'El "esperado" es el promedio de la liga. Estar debajo en una sola cosa no es grave; estar debajo en todas, sí.' },
+      en: { titulo:'Team Report',
+        que:'How the team is tracking across the whole season.',
+        pasos:['Check side-out and break point against what is expected.','Compare with previous matches to see the trend.'],
+        ojo:'"Expected" is the league average. Being below in one area is not serious; being below in all of them is.' },
+      de: { titulo:'Mannschaftsbericht',
+        que:'Wie das Team über die ganze Saison dasteht.',
+        pasos:['Prüfe Side-out und Break Point gegenüber dem Erwartungswert.','Vergleiche mit früheren Spielen, um den Trend zu sehen.'],
+        ojo:'"Erwartet" ist der Ligadurchschnitt. In einem Bereich darunter ist nicht schlimm, in allen schon.' }
+    },
+
+    'nla_stats_table': {
+      es: { titulo:'Estadísticas de la Liga',
+        que:'Todos los jugadores de la liga, ordenables por cualquier columna.',
+        pasos:['Elegí el fundamento arriba.','Tocá una columna para ordenar por ahí.','Usá los filtros para ver un equipo o un puesto.'],
+        ojo:'"Solo la liga" deja afuera a los rivales de copa y a los de muy pocas acciones, que distorsionan el ranking.' },
+      en: { titulo:'League Statistics',
+        que:'Every player in the league, sortable by any column.',
+        pasos:['Choose the skill at the top.','Tap a column to sort by it.','Use the filters to see one team or one position.'],
+        ojo:'"League only" leaves out cup opponents and players with very few actions, which distort the ranking.' },
+      de: { titulo:'Ligastatistik',
+        que:'Alle Spieler der Liga, nach jeder Spalte sortierbar.',
+        pasos:['Wähle oben das Element.','Tippe auf eine Spalte, um danach zu sortieren.','Nutze die Filter für ein Team oder eine Position.'],
+        ojo:'"Nur Liga" blendet Pokalgegner und Spieler mit sehr wenigen Aktionen aus, die die Rangliste verzerren.' }
+    },
+
+    'game_plan': {
+      es: { titulo:'Game Plan',
+        que:'El plan escrito para el partido: lo que se decide en la semana.',
+        pasos:['Escribí las consignas por fundamento.','Guardalo y queda disponible para todo el cuerpo técnico.'],
+        ojo:'Lo ve el staff, no los jugadores. Para lo que ellos tienen que saber está el Playbook.' },
+      en: { titulo:'Game Plan',
+        que:'The written plan for the match: what gets decided during the week.',
+        pasos:['Write the instructions by skill.','Save it and it becomes available to the whole staff.'],
+        ojo:'The staff sees it, not the players. For what they need to know there is the Playbook.' },
+      de: { titulo:'Spielplan',
+        que:'Der schriftliche Matchplan: was in der Woche entschieden wird.',
+        pasos:['Schreibe die Vorgaben nach Element.','Speichere ihn und er steht dem ganzen Staff zur Verfügung.'],
+        ojo:'Der Staff sieht ihn, nicht die Spieler. Für sie gibt es das Playbook.' }
+    },
+
+    'plan_desarrollo': {
+      es: { titulo:'Plan de Desarrollo',
+        que:'En qué está trabajando cada jugador y cómo viene.',
+        pasos:['Elegí el jugador.','Definí el objetivo y las semanas.','El jugador lo ve en su propio perfil.'],
+        ojo:'Un objetivo por vez funciona mejor que cinco a la vez.' },
+      en: { titulo:'Development Plan',
+        que:'What each player is working on and how it is going.',
+        pasos:['Pick the player.','Set the goal and the number of weeks.','The player sees it in their own profile.'],
+        ojo:'One goal at a time works better than five at once.' },
+      de: { titulo:'Entwicklungsplan',
+        que:'Woran jeder Spieler arbeitet und wie es läuft.',
+        pasos:['Wähle den Spieler.','Lege das Ziel und die Wochen fest.','Der Spieler sieht es in seinem eigenen Profil.'],
+        ojo:'Ein Ziel nach dem anderen funktioniert besser als fünf gleichzeitig.' }
+    },
+
+    'horarios': {
+      es: { titulo:'Horarios',
+        que:'Los entrenamientos de la semana de esta categoría.',
+        pasos:['Cargá el día, la hora y el lugar.','Queda visible para todo el plantel.'],
+        ojo:'Cada categoría tiene sus propios horarios: si cambiás de categoría arriba, cambian.' },
+      en: { titulo:'Schedule',
+        que:'This category\u2019s training sessions for the week.',
+        pasos:['Enter the day, time and place.','It becomes visible to the whole squad.'],
+        ojo:'Each category has its own schedule: switch category at the top and it changes.' },
+      de: { titulo:'Zeitplan',
+        que:'Die Trainingseinheiten dieser Kategorie für die Woche.',
+        pasos:['Trage Tag, Uhrzeit und Ort ein.','Er wird für den ganzen Kader sichtbar.'],
+        ojo:'Jede Kategorie hat ihren eigenen Zeitplan: wechselst du oben, ändert er sich.' }
+    },
+
+    'importar_video': {
+      es: { titulo:'Cargar Videos',
+        que:'Enganchar el video de un partido para que se abran los cortes.',
+        pasos:['Elegí el partido.','Pegá el link de YouTube.','Ajustá el segundo en que empieza el primer punto.'],
+        ojo:'Si la cámara cortó el partido en varios archivos, unilos antes con Unir Videos: los cortes necesitan uno solo.' },
+      en: { titulo:'Load Videos',
+        que:'Link a match video so the clips can open.',
+        pasos:['Pick the match.','Paste the YouTube link.','Set the second where the first point starts.'],
+        ojo:'If the camera split the match into several files, merge them first: the clips need a single file.' },
+      de: { titulo:'Videos laden',
+        que:'Ein Spielvideo verknüpfen, damit die Clips sich öffnen.',
+        pasos:['Wähle das Spiel.','Füge den YouTube-Link ein.','Stelle die Sekunde ein, in der der erste Punkt beginnt.'],
+        ojo:'Hat die Kamera das Spiel geteilt, füge die Dateien vorher zusammen: die Clips brauchen eine einzige.' }
+    },
+
+    'baggerone': {
+      es: { titulo:'Baggerone',
+        que:'El juego interno del plantel: quién suma y cómo va la tabla.',
+        pasos:['Cargá los resultados de cada ronda.','La tabla se ordena sola.'],
+        ojo:'Cada categoría tiene su propia tabla.' },
+      en: { titulo:'Baggerone',
+        que:'The squad\u2019s internal game: who scores and how the table looks.',
+        pasos:['Enter the results of each round.','The table sorts itself.'],
+        ojo:'Each category has its own table.' },
+      de: { titulo:'Baggerone',
+        que:'Das interne Spiel des Kaders: wer punktet und wie die Tabelle aussieht.',
+        pasos:['Trage die Ergebnisse jeder Runde ein.','Die Tabelle sortiert sich selbst.'],
+        ojo:'Jede Kategorie hat ihre eigene Tabelle.' }
+    },
+
+    'camara': {
+      es: { titulo:'Cámara',
+        que:'Transmite lo que filma un celular a la tablet del banco, con retraso.',
+        pasos:['En el celular que filma, abrí esta pantalla y creá la sala.','En la tablet, entrá a la misma sala.','Ajustá el retraso para poder revisar la jugada que se te pasó.'],
+        ojo:'Los dos aparatos tienen que estar en la misma red. Sin wifi en el gimnasio, se puede compartir datos desde un celular.' },
+      en: { titulo:'Camera',
+        que:'Streams what a phone films to the bench tablet, with a delay.',
+        pasos:['On the filming phone, open this screen and create the room.','On the tablet, join the same room.','Set the delay so you can review the rally you missed.'],
+        ojo:'Both devices must be on the same network. With no gym wifi, you can share data from a phone.' },
+      de: { titulo:'Kamera',
+        que:'Überträgt das Handybild mit Verzögerung auf das Tablet der Bank.',
+        pasos:['Öffne auf dem filmenden Handy diesen Bildschirm und erstelle den Raum.','Tritt auf dem Tablet demselben Raum bei.','Stelle die Verzögerung ein, um verpasste Ballwechsel zu prüfen.'],
+        ojo:'Beide Geräte müssen im selben Netz sein. Ohne Hallen-WLAN kann ein Handy die Daten teilen.' }
+    },
+
+    'sesiones': {
+      es: { titulo:'Sesiones y Accesos',
+        que:'Quién entró a la app y desde qué aparato.',
+        pasos:['Revisá la lista si sospechás que alguien entró sin permiso.','Podés cerrar una sesión a distancia.'],
+        ojo:'Si un jugador se va del club, cerrale la sesión acá.' },
+      en: { titulo:'Sessions and Access',
+        que:'Who logged into the app and from which device.',
+        pasos:['Check the list if you suspect someone got in without permission.','You can close a session remotely.'],
+        ojo:'If a player leaves the club, close their session here.' },
+      de: { titulo:'Sitzungen und Zugänge',
+        que:'Wer sich in der App angemeldet hat und von welchem Gerät.',
+        pasos:['Prüfe die Liste, wenn du unbefugten Zugriff vermutest.','Du kannst eine Sitzung aus der Ferne beenden.'],
+        ojo:'Verlässt ein Spieler den Verein, beende hier seine Sitzung.' }
+    },
+
+    'panel_voley': {
+      es: { titulo:'Panel del Partido',
+        que:'El partido en vivo visto desde el banco: los números que van saliendo.',
+        pasos:['Se llena solo mientras el asistente scoutea.','Mirá las baterías y las rotaciones durante el partido.'],
+        ojo:'Necesita que alguien esté scouteando en vivo desde Scout en Vivo.' },
+      en: { titulo:'Match Panel',
+        que:'The live match seen from the bench: the numbers as they come in.',
+        pasos:['It fills itself while the assistant scouts.','Watch the target bars and rotations during the match.'],
+        ojo:'It needs someone scouting live from Live Scout.' },
+      de: { titulo:'Spiel-Panel',
+        que:'Das Livespiel von der Bank aus: die Zahlen, während sie entstehen.',
+        pasos:['Es füllt sich von selbst, während der Assistent scoutet.','Beobachte Zielbalken und Rotationen während des Spiels.'],
+        ojo:'Es braucht jemanden, der live über Live-Scouting scoutet.' }
+    },
+
+    'hm_defensa': {
+      es: { titulo:'Mapa de Defensa',
+        que:'Dónde levanta cada jugador y desde dónde le atacan.',
+        pasos:['Elegí el jugador y el rival.','Las zonas más calientes son donde más pelotas le llegan.'],
+        ojo:'Doble click en una zona abre el video de esas defensas.' },
+      en: { titulo:'Defence Map',
+        que:'Where each player digs and where the attacks come from.',
+        pasos:['Pick the player and the opponent.','The hottest zones are where most balls reach them.'],
+        ojo:'Double-click a zone to open the video of those digs.' },
+      de: { titulo:'Abwehrkarte',
+        que:'Wo jeder Spieler abwehrt und woher die Angriffe kommen.',
+        pasos:['Wähle Spieler und Gegner.','Die heissesten Zonen sind, wo die meisten Bälle ankommen.'],
+        ojo:'Doppelklick auf eine Zone öffnet das Video dieser Abwehraktionen.' }
+    },
+
+    'hm_bloqueo': {
+      es: { titulo:'Mapa de Bloqueo',
+        que:'Dónde bloquea cada jugador y con qué resultado.',
+        pasos:['Elegí el jugador.','Mirá en qué zona bloquea más y dónde le pasan.'],
+        ojo:'El bloqueo se lee siempre del archivo scouteado, no del video: los números son exactos.' },
+      en: { titulo:'Block Map',
+        que:'Where each player blocks and with what outcome.',
+        pasos:['Pick the player.','See which zone they block most and where they get beaten.'],
+        ojo:'Blocking is always read from the scouted file, not the video: the numbers are exact.' },
+      de: { titulo:'Blockkarte',
+        que:'Wo jeder Spieler blockt und mit welchem Ergebnis.',
+        pasos:['Wähle den Spieler.','Sieh, in welcher Zone er am meisten blockt und wo er überwunden wird.'],
+        ojo:'Der Block wird immer aus der gescouteten Datei gelesen, nicht aus dem Video: die Zahlen stimmen exakt.' }
+    },
+
     'plan_partido': {
       es: {
         titulo: 'Plan de Partido',

@@ -84,10 +84,34 @@ function _fbGuardarSes(s){
   FB_SES = s;
   try{ s ? localStorage.setItem('nla_sesion', JSON.stringify(s))
          : localStorage.removeItem('nla_sesion'); }catch(e){}
-  _fbSincronizarRol();
+  _fbSincronizarRol(); _fbCategoriaJugador();
 }
 /* Si la cuenta es de jugador, el rol queda atado a la cuenta y no a lo que
    haya quedado guardado en el navegador. El staff conserva su rol del inicio. */
+/* ── A QUE CATEGORIA PERTENECE EL JUGADOR ─────────────────────────────────
+   El jugador ve SOLO su categoria. Cual es sale de jugador_cat, que se
+   guarda cuando se le da el alta. Se pregunta al entrar y queda anotada,
+   asi cada pantalla no tiene que volver a consultarla.
+
+   Si no la tiene anotada —planteles cargados antes de que existieran las
+   categorias— no se toca nada y ve la primera, como siempre. */
+function _fbCategoriaJugador(){
+  try{
+    if(!FB_SES || !FB_SES.uid) return;
+    if((localStorage.getItem('vb_role') || '') !== 'player') return;
+    fbGet('jugador_cat/' + FB_SES.uid, function(c){
+      try{
+        if(c && typeof c === 'string'){
+          localStorage.setItem('vb_player_cat', c);
+          if(localStorage.getItem('vb_categoria') !== c){
+            localStorage.setItem('vb_categoria', c);
+          }
+        }
+      }catch(e){}
+    });
+  }catch(e){}
+}
+
 function _fbSincronizarRol(){
   try{
     if(!FB_SES || !FB_SES.email) return;
@@ -418,7 +442,7 @@ function _fbHayLlaveGuardada(){
 function _fbArrancar(){
   if(_fbListo) return _fbListo;
   FB_SES = _fbLeerSes();
-  _fbSincronizarRol();
+  _fbSincronizarRol(); _fbCategoriaJugador();
   _fbListo = new Promise(function(resolve){
     function pedir(){
       if(document.readyState === 'loading')
