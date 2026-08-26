@@ -1067,6 +1067,12 @@
     var p = (location.pathname || '').split('/').pop() || '';
     p = p.replace(/\.html.*$/, '').toLowerCase();
 
+    /* ── LA RAIZ ES EL INICIO ──────────────────────────────────────────
+       El link que se comparte es "gelp-voley.vercel.app/" a secas, sin
+       decir index.html. Ahi el nombre queda vacio y no aparecia el boton
+       justo en la primera pantalla que ve todo el mundo. */
+    if (!p) p = 'index';
+
     /* ── LOS ARCHIVOS QUE LLEVAN EL NOMBRE DEL CLUB ────────────────────
        Algunas pantallas se llaman con el club adentro, porque se generan
        para cada uno: "Team_Playbook_Nafels.html", "MANUAL_GELP_VOLEY.html".
