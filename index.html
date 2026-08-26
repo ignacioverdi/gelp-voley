@@ -1404,7 +1404,6 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -1473,6 +1472,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
 })();
 </script>
 <script src="ayuda.js"></script>
+<script src="app_offline.js"></script>
 </body>
 </html>
 
