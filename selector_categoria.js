@@ -79,11 +79,24 @@
      Solo se tocan los archivos de DATOS. Las pantallas, los estilos y los
      motores se comparten entre categorias: lo unico que cambia es de donde
      salen los numeros. */
-  var ES_DATO = /^(liga_data|datos_|nla_|mapa_videos|plan_partido_data|scouting_rival)/;
+  var ES_DATO = /^(liga_data|datos_|nla_|mapa_videos|plan_partido_data|scouting_rival|plantel_|objetivos|game_plans|videos\.js|proximo_rival|plan_partido_vivo)/;
   /* Estos EMPIEZAN igual que un archivo de datos pero son programa: viven una
      sola vez en la raiz y se comparten entre todas las categorias. Sin esta
      lista, la app buscaba el descifrador adentro de cat/SUB18 y no lo
      encontraba: la pantalla quedaba en blanco. */
+  /* ── QUE ARCHIVOS SON "DATOS DEL EQUIPO" ─────────────────────────────
+     Los que cambian de una categoria a otra. Faltaban cinco y por eso H1L
+     y H2L mostraban el plantel, los objetivos y el fixture de Primera:
+
+       plantel_<club>.js    el plantel
+       objetivos*.js        los objetivos del equipo
+       game_plans.js        los planes de partido
+       videos.js            los videos destacados
+       proximo_rival.js     el proximo partido
+       plan_partido_vivo.js el plan durante el partido
+
+     datos_seguros.js NO es un dato: es el programa que los abre, y es el
+     mismo para todas las categorias. */
   var NO_SON_DATOS = ['datos_seguros.js'];
 
   function rutaCat(src, pre){
@@ -305,6 +318,58 @@
         if(envolver() || intentos > 330) clearInterval(t);
       }, 30);
     }
+  })();
+
+
+  /* ══ SI LA CATEGORIA TODAVIA NO TIENE PARTIDOS ═══════════════════════════
+     H1L y H2L arrancan sin datos: sus archivos no existen hasta que se
+     scoutee el primer partido. Sin este aviso la pantalla quedaba en blanco
+     y parecia que la app estaba rota.
+
+     Se avisa una sola vez por pantalla, y solo cuando de verdad no hay
+     nada: si la categoria ya tiene datos, no aparece. */
+  (function(){
+    var cat = actual();
+    var L = cats();
+    if(L.length < 2) return;
+    if(!cat || cat === L[0]) return;          /* Primera siempre tiene */
+
+    function avisar(){
+      if(document.getElementById('cat-vacia')) return;
+      var hay = false;
+      try { hay = !!(window.LIGA_DATA && window.LIGA_DATA.teams &&
+                     Object.keys(window.LIGA_DATA.teams).length); } catch(e){}
+      try { if(!hay) hay = !!(window.__D && Object.keys(window.__D).length); } catch(e){}
+      if(hay) return;
+
+      var T = {
+        es: ['Todavía no hay partidos en ' + cat,
+             'Cuando subas el primer partido de esta categoría, acá vas a ver sus números.'],
+        en: ['No matches yet in ' + cat,
+             'Once you upload the first match for this category, its numbers will show up here.'],
+        de: ['Noch keine Spiele in ' + cat,
+             'Sobald du das erste Spiel dieser Kategorie hochlädst, erscheinen hier die Zahlen.']
+      };
+      var l = 'es';
+      try { l = (window.getLang && getLang()) || localStorage.getItem('vb_lang') || 'es'; } catch(e){}
+      var t = T[l] || T.es;
+
+      var d = document.createElement('div');
+      d.id = 'cat-vacia';
+      d.style.cssText =
+        'margin:26px auto;max-width:520px;padding:22px 24px;border-radius:14px;' +
+        'background:rgba(144,148,183,.08);border:1px solid rgba(144,148,183,.28);' +
+        'text-align:center;font-family:inherit';
+      d.innerHTML =
+        '<div style="font-size:17px;font-weight:800;margin-bottom:8px">' + t[0] + '</div>' +
+        '<div style="font-size:14px;line-height:1.55;color:#93a5c0">' + t[1] + '</div>';
+      var host = document.querySelector('main') || document.body;
+      if(host) host.insertBefore(d, host.firstChild);
+    }
+
+    /* se espera a que la pagina termine de intentar cargar sus datos */
+    if(document.readyState === 'complete') setTimeout(avisar, 1200);
+    else window.addEventListener('load', function(){ setTimeout(avisar, 1200); });
   })();
 
 })();

@@ -1,5 +1,5 @@
 window.HISTORIAL_DATA = {
-  "generado": "25/08/2026, 17:05:27",
+  "generado": "25/08/2026, 21:05:40",
   "entrenamientos": [
     {
       "fecha": "07/08/2026",

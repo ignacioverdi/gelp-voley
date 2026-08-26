@@ -283,6 +283,324 @@
     },
 
 
+
+
+    'hm_ataque': {
+      es: { titulo:'Mapa de Ataque',
+        que:'Adónde ataca cada jugador, sobre las nueve zonas del campo rival.',
+        pasos:['Elegí el jugador arriba a la izquierda.','Filtrá por rival, por partido o por combinación.','Las zonas más calientes son donde más pelotas manda.'],
+        ojo:'Doble click en una zona abre el video de esos ataques. Y "VER LOS VIDEOS" los abre todos.' },
+      en: { titulo:'Attack Map',
+        que:'Where each player attacks, across the nine zones of the opposing court.',
+        pasos:['Pick the player at the top left.','Filter by opponent, match or combination.','The hottest zones are where they send most balls.'],
+        ojo:'Double-click a zone to open the video of those attacks. "WATCH THE VIDEOS" opens them all.' },
+      de: { titulo:'Angriffskarte',
+        que:'Wohin jeder Spieler angreift, über die neun Zonen des gegnerischen Feldes.',
+        pasos:['Wähle oben links den Spieler.','Filtere nach Gegner, Spiel oder Kombination.','Die heissesten Zonen sind, wohin die meisten Bälle gehen.'],
+        ojo:'Doppelklick auf eine Zone öffnet das Video. "VIDEOS ANSEHEN" öffnet alle.' }
+    },
+
+    'hm_saque': {
+      es: { titulo:'Mapa de Saque',
+        que:'Adónde saca cada jugador y con qué resultado.',
+        pasos:['Elegí el jugador.','Mirá a qué zonas apunta y dónde le sale mejor.','Filtrá por rival para preparar el próximo partido.'],
+        ojo:'El saque se lee por punto directo, positivo y error. Un saque con muchos errores puede seguir siendo bueno si rompe la recepción.' },
+      en: { titulo:'Serve Map',
+        que:'Where each player serves and with what outcome.',
+        pasos:['Pick the player.','See which zones they aim at and where it works best.','Filter by opponent to prepare the next match.'],
+        ojo:'Serving is read by ace, positive and error. A serve with many errors can still be good if it breaks the reception.' },
+      de: { titulo:'Aufschlagkarte',
+        que:'Wohin jeder Spieler aufschlägt und mit welchem Ergebnis.',
+        pasos:['Wähle den Spieler.','Sieh, welche Zonen er anvisiert und wo es am besten klappt.','Filtere nach Gegner für die Spielvorbereitung.'],
+        ojo:'Der Aufschlag wird nach Ass, positiv und Fehler gelesen. Viele Fehler können trotzdem gut sein, wenn die Annahme bricht.' }
+    },
+
+    'hm_recepcion': {
+      es: { titulo:'Mapa de Recepción',
+        que:'Desde dónde le sacan a cada jugador y cómo responde.',
+        pasos:['Elegí el jugador.','Las zonas muestran desde dónde le llegan los saques.','Compará la calidad según la zona de origen.'],
+        ojo:'Lo que importa es la recepción positiva (#+): es la que deja armar todas las opciones.' },
+      en: { titulo:'Reception Map',
+        que:'Where each player gets served from and how they respond.',
+        pasos:['Pick the player.','The zones show where the serves reach them from.','Compare the quality by origin zone.'],
+        ojo:'What matters is positive reception (#+): that is the one that keeps every setting option open.' },
+      de: { titulo:'Annahmekarte',
+        que:'Woher jeder Spieler angeschlagen wird und wie er reagiert.',
+        pasos:['Wähle den Spieler.','Die Zonen zeigen, woher die Aufschläge kommen.','Vergleiche die Qualität nach Ursprungszone.'],
+        ojo:'Entscheidend ist die positive Annahme (#+): sie hält alle Zuspieloptionen offen.' }
+    },
+
+    'hm_armador': {
+      es: { titulo:'Mapa del Armador',
+        que:'A quién le pasa el armador en cada rotación y desde cada recepción.',
+        pasos:['Elegí el armador.','Filtrá por rotación y por tipo de recepción.','Mirá el porcentaje de distribución y el de punto.'],
+        ojo:'Sirve para los dos lados: para entender al armador rival y para revisar el propio.' },
+      en: { titulo:'Setter Map',
+        que:'Who the setter feeds in each rotation and from each reception.',
+        pasos:['Pick the setter.','Filter by rotation and reception type.','Look at the distribution and point percentages.'],
+        ojo:'Useful both ways: to read the opposing setter and to review your own.' },
+      de: { titulo:'Zuspielkarte',
+        que:'Wen der Zuspieler in jeder Rotation und aus jeder Annahme bedient.',
+        pasos:['Wähle den Zuspieler.','Filtere nach Rotation und Annahmeart.','Achte auf Verteilungs- und Punktquote.'],
+        ojo:'Nützlich in beide Richtungen: den gegnerischen Zuspieler lesen und den eigenen prüfen.' }
+    },
+
+    'ataque_jugador': {
+      es: { titulo:'Ataque del Jugador',
+        que:'Todo el ataque de un jugador: combinaciones, zonas y eficacia.',
+        pasos:['Elegí el jugador.','Mirá qué combinación usa más y cuál le rinde mejor.'],
+        ojo:'Una combinación con pocas pelotas puede mostrar un porcentaje engañoso. Fijate el volumen.' },
+      en: { titulo:'Player Attack',
+        que:'A player\u2019s full attack: combinations, zones and efficiency.',
+        pasos:['Pick the player.','See which combination they use most and which pays off best.'],
+        ojo:'A combination with few balls can show a misleading percentage. Check the volume.' },
+      de: { titulo:'Angriff des Spielers',
+        que:'Der gesamte Angriff eines Spielers: Kombinationen, Zonen und Effizienz.',
+        pasos:['Wähle den Spieler.','Sieh, welche Kombination er am meisten nutzt und welche am besten läuft.'],
+        ojo:'Eine Kombination mit wenigen Bällen kann irreführend sein. Prüfe das Volumen.' }
+    },
+
+    'saque_jugador': {
+      es: { titulo:'Saque del Jugador',
+        que:'El saque de un jugador en detalle: puntos, positivos y errores.',
+        pasos:['Elegí el jugador.','Mirá el balance entre riesgo y resultado.'],
+        ojo:'Cero errores suele significar que saca demasiado suave. El saque bueno tiene errores.' },
+      en: { titulo:'Player Serve',
+        que:'One player\u2019s serve in detail: aces, positives and errors.',
+        pasos:['Pick the player.','Look at the balance between risk and outcome.'],
+        ojo:'Zero errors usually means serving too softly. A good serve has errors.' },
+      de: { titulo:'Aufschlag des Spielers',
+        que:'Der Aufschlag eines Spielers im Detail: Asse, positive und Fehler.',
+        pasos:['Wähle den Spieler.','Achte auf das Verhältnis von Risiko und Ergebnis.'],
+        ojo:'Null Fehler heisst meist zu weich aufgeschlagen. Ein guter Aufschlag hat Fehler.' }
+    },
+
+    'recepcion_jugador': {
+      es: { titulo:'Recepción del Jugador',
+        que:'La recepción de un jugador en detalle, saque por saque.',
+        pasos:['Elegí el jugador.','Mirá su porcentaje positivo y sus errores.'],
+        ojo:'Compará contra los otros receptores del equipo, no contra un número absoluto.' },
+      en: { titulo:'Player Reception',
+        que:'One player\u2019s reception in detail, serve by serve.',
+        pasos:['Pick the player.','Look at their positive percentage and their errors.'],
+        ojo:'Compare against the team\u2019s other passers, not against an absolute number.' },
+      de: { titulo:'Annahme des Spielers',
+        que:'Die Annahme eines Spielers im Detail, Aufschlag für Aufschlag.',
+        pasos:['Wähle den Spieler.','Sieh dir seine positive Quote und seine Fehler an.'],
+        ojo:'Vergleiche mit den anderen Annahmespielern, nicht mit einem absoluten Wert.' }
+    },
+
+    'armadores': {
+      es: { titulo:'Armadores',
+        que:'La distribución de los armadores del equipo y de los rivales.',
+        pasos:['Elegí el equipo y el armador.','Filtrá por fase y por tipo de recepción.','Mirá a quién le pasa en cada rotación.'],
+        ojo:'Con recepción perfecta un armador usa todas las opciones; con recepción mala se le achica el juego. Compará las dos.' },
+      en: { titulo:'Setters',
+        que:'The distribution of your team\u2019s setters and the opponents\u2019.',
+        pasos:['Pick the team and the setter.','Filter by phase and reception type.','See who they feed in each rotation.'],
+        ojo:'With a perfect pass a setter uses every option; with a bad one the game shrinks. Compare both.' },
+      de: { titulo:'Zuspieler',
+        que:'Die Verteilung der eigenen und der gegnerischen Zuspieler.',
+        pasos:['Wähle Team und Zuspieler.','Filtere nach Phase und Annahmeart.','Sieh, wen er in jeder Rotation bedient.'],
+        ojo:'Bei perfekter Annahme nutzt ein Zuspieler alle Optionen, bei schlechter schrumpft das Spiel. Vergleiche beide.' }
+    },
+
+    'historial_voley': {
+      es: { titulo:'Historial',
+        que:'Todos los partidos jugados, con su resultado y sus números.',
+        pasos:['Tocá un partido para ver su detalle.','Compará entre partidos para ver la evolución.'],
+        ojo:'Cada categoría tiene su propio historial.' },
+      en: { titulo:'History',
+        que:'Every match played, with its result and its numbers.',
+        pasos:['Tap a match to see its detail.','Compare between matches to see the progression.'],
+        ojo:'Each category has its own history.' },
+      de: { titulo:'Verlauf',
+        que:'Alle gespielten Spiele mit Ergebnis und Zahlen.',
+        pasos:['Tippe auf ein Spiel für die Details.','Vergleiche zwischen Spielen, um die Entwicklung zu sehen.'],
+        ojo:'Jede Kategorie hat ihren eigenen Verlauf.' }
+    },
+
+    'importar_dvw': {
+      es: { titulo:'Importar Scouting',
+        que:'Cargar el archivo de un partido ya scouteado.',
+        pasos:['Arrastrá el archivo .dvw.','Elegí la categoría si el club tiene varias.','Esperá a que termine de procesar.'],
+        ojo:'Si el partido lo scouteó otra persona con sus propios códigos, pasalo antes por Asociar Códigos.' },
+      en: { titulo:'Import Scouting',
+        que:'Load the file of a match that was already scouted.',
+        pasos:['Drag in the .dvw file.','Pick the category if the club has several.','Wait for it to finish processing.'],
+        ojo:'If someone else scouted it with their own codes, run it through Match Codes first.' },
+      de: { titulo:'Scouting importieren',
+        que:'Die Datei eines bereits gescouteten Spiels laden.',
+        pasos:['Ziehe die .dvw-Datei hierher.','Wähle die Kategorie, wenn der Verein mehrere hat.','Warte, bis die Verarbeitung fertig ist.'],
+        ojo:'Hat jemand anderes mit eigenen Codes gescoutet, führe es vorher durch Codes zuordnen.' }
+    },
+
+
+    'manual': {
+      es: { titulo:'Manual del Club',
+        que:'Cómo se usa el sistema, explicado paso a paso.',
+        pasos:['Buscá el tema que necesites en el índice.','Cada sección explica una parte de la app.'],
+        ojo:'Para lo puntual de cada pantalla está este mismo botón "?" en cada una.' },
+      en: { titulo:'Club Manual',
+        que:'How the system is used, explained step by step.',
+        pasos:['Find the topic you need in the index.','Each section covers one part of the app.'],
+        ojo:'For screen-specific help, this same "?" button is on every screen.' },
+      de: { titulo:'Vereinshandbuch',
+        que:'Wie das System benutzt wird, Schritt für Schritt erklärt.',
+        pasos:['Suche das gewünschte Thema im Inhaltsverzeichnis.','Jeder Abschnitt behandelt einen Teil der App.'],
+        ojo:'Für bildschirmspezifische Hilfe gibt es diesen "?"-Knopf auf jedem Bildschirm.' }
+    },
+
+    'playbook': {
+      es: { titulo:'Playbook',
+        que:'Las jugadas del equipo, dibujadas, para que las vean los jugadores.',
+        pasos:['Tocá una jugada para verla en grande.','Está pensado para que el jugador la repase en su celular.'],
+        ojo:'Esto lo ven los jugadores. Lo que es solo del cuerpo técnico va en Game Plan.' },
+      en: { titulo:'Playbook',
+        que:'The team\u2019s plays, drawn out, for the players to see.',
+        pasos:['Tap a play to see it full size.','Meant for players to review on their phone.'],
+        ojo:'Players see this. What is staff-only goes in the Game Plan.' },
+      de: { titulo:'Playbook',
+        que:'Die Spielzüge des Teams, gezeichnet, für die Spieler.',
+        pasos:['Tippe auf einen Spielzug, um ihn gross zu sehen.','Gedacht, damit Spieler ihn am Handy durchgehen.'],
+        ojo:'Das sehen die Spieler. Was nur den Staff betrifft, steht im Game Plan.' }
+    },
+
+    'informe': {
+      es: { titulo:'Informe del Partido',
+        que:'El resumen de un partido, listo para leer o compartir.',
+        pasos:['Elegí el partido.','Mirá los números por set y por fundamento.'],
+        ojo:'Para el análisis profundo están los mapas de calor y el plan de partido.' },
+      en: { titulo:'Match Report',
+        que:'The summary of a match, ready to read or share.',
+        pasos:['Pick the match.','Look at the numbers by set and by skill.'],
+        ojo:'For deeper analysis use the heat maps and the match plan.' },
+      de: { titulo:'Spielbericht',
+        que:'Die Zusammenfassung eines Spiels, bereit zum Lesen oder Teilen.',
+        pasos:['Wähle das Spiel.','Sieh die Zahlen nach Satz und Element.'],
+        ojo:'Für tiefere Analysen gibt es die Heatmaps und den Spielplan.' }
+    },
+
+    'diagnostico': {
+      es: { titulo:'Diagnóstico',
+        que:'Revisa que los datos de la app estén completos y sin errores.',
+        pasos:['Se llena solo al abrir.','Si algo falta, lo dice con su nombre.'],
+        ojo:'Es una pantalla de servicio: si dice que todo está en orden, no hay nada que hacer.' },
+      en: { titulo:'Diagnostics',
+        que:'Checks that the app\u2019s data is complete and error-free.',
+        pasos:['It fills itself when opened.','If something is missing, it names it.'],
+        ojo:'This is a service screen: if it says everything is fine, there is nothing to do.' },
+      de: { titulo:'Diagnose',
+        que:'Prüft, ob die Daten der App vollständig und fehlerfrei sind.',
+        pasos:['Sie füllt sich beim Öffnen von selbst.','Fehlt etwas, wird es benannt.'],
+        ojo:'Ein Servicebildschirm: steht dort, dass alles in Ordnung ist, gibt es nichts zu tun.' }
+    },
+
+    'index': {
+      es: { titulo:'Inicio',
+        que:'La puerta de entrada: desde acá se llega a todo lo que hace la app.',
+        pasos:['Elegí la categoría arriba si el club tiene varias.','Tocá la tarjeta de lo que necesites.','El próximo partido aparece destacado arriba.'],
+        ojo:'Los jugadores ven solo las tarjetas que les corresponden. El cuerpo técnico ve todas.' },
+      en: { titulo:'Home',
+        que:'The way in: everything the app does is reachable from here.',
+        pasos:['Pick the category at the top if the club has several.','Tap the card for what you need.','The next match is highlighted at the top.'],
+        ojo:'Players only see the cards meant for them. The staff sees all of them.' },
+      de: { titulo:'Start',
+        que:'Der Einstieg: von hier aus ist alles erreichbar, was die App kann.',
+        pasos:['Wähle oben die Kategorie, wenn der Verein mehrere hat.','Tippe auf die Kachel, die du brauchst.','Das nächste Spiel wird oben hervorgehoben.'],
+        ojo:'Spieler sehen nur die für sie bestimmten Kacheln. Der Staff sieht alle.' }
+    },
+
+    'ranking': {
+      es: { titulo:'Ranking',
+        que:'Cómo está cada jugador del plantel comparado con los demás.',
+        pasos:['Elegí el fundamento arriba.','La lista se ordena de mejor a peor.'],
+        ojo:'Mirá el volumen además del puesto: el que jugó tres partidos no se compara con el que jugó veinte.' },
+      en: { titulo:'Ranking',
+        que:'How each player in the squad stands against the rest.',
+        pasos:['Choose the skill at the top.','The list sorts from best to worst.'],
+        ojo:'Look at the volume as well as the position: three matches does not compare with twenty.' },
+      de: { titulo:'Rangliste',
+        que:'Wie jeder Spieler des Kaders im Vergleich zu den anderen dasteht.',
+        pasos:['Wähle oben das Element.','Die Liste sortiert von best nach schlechtest.'],
+        ojo:'Achte neben der Platzierung auf das Volumen: drei Spiele sind nicht mit zwanzig vergleichbar.' }
+    },
+
+    'recepcion': {
+      es: { titulo:'Recepción',
+        que:'Quién recibe, desde dónde le sacan y con qué calidad.',
+        pasos:['Elegí el jugador o mirá el equipo completo.','Las zonas muestran desde dónde le llegan los saques.','Filtrá por rival para preparar el próximo partido.'],
+        ojo:'El porcentaje que importa es el de recepción positiva (#+): es la que deja armar.' },
+      en: { titulo:'Reception',
+        que:'Who passes, where the serves come from, and with what quality.',
+        pasos:['Pick the player or look at the whole team.','The zones show where the serves reach them from.','Filter by opponent to prepare the next match.'],
+        ojo:'The percentage that matters is positive reception (#+): that is the one that lets you set.' },
+      de: { titulo:'Annahme',
+        que:'Wer annimmt, woher aufgeschlagen wird und in welcher Qualität.',
+        pasos:['Wähle den Spieler oder sieh das ganze Team.','Die Zonen zeigen, woher die Aufschläge kommen.','Filtere nach Gegner, um das nächste Spiel vorzubereiten.'],
+        ojo:'Entscheidend ist die positive Annahme (#+): sie ermöglicht das Zuspiel.' }
+    },
+
+    'tendencias': {
+      es: { titulo:'Tendencias',
+        que:'Cómo evoluciona el equipo partido a partido.',
+        pasos:['Elegí el fundamento.','La línea muestra si sube o baja a lo largo de la temporada.'],
+        ojo:'Un partido malo no es una tendencia. Mirá la dirección de tres o cuatro seguidos.' },
+      en: { titulo:'Trends',
+        que:'How the team evolves match by match.',
+        pasos:['Choose the skill.','The line shows whether it rises or falls across the season.'],
+        ojo:'One bad match is not a trend. Look at the direction across three or four in a row.' },
+      de: { titulo:'Trends',
+        que:'Wie sich das Team von Spiel zu Spiel entwickelt.',
+        pasos:['Wähle das Element.','Die Linie zeigt, ob es über die Saison steigt oder fällt.'],
+        ojo:'Ein schlechtes Spiel ist kein Trend. Achte auf die Richtung über drei bis vier Spiele.' }
+    },
+
+    'videos': {
+      es: { titulo:'Videos Destacados',
+        que:'Las jugadas que el cuerpo técnico eligió guardar.',
+        pasos:['Tocá un video para verlo.','Sirve para la charla técnica y para mostrarle a un jugador algo puntual.'],
+        ojo:'Para buscar jugadas por acción y valoración está Cortes de Video.' },
+      en: { titulo:'Featured Videos',
+        que:'The rallies the coaching staff chose to keep.',
+        pasos:['Tap a video to watch it.','Useful for the team talk and to show a player something specific.'],
+        ojo:'To search rallies by action and grade, use Video Clips.' },
+      de: { titulo:'Ausgewählte Videos',
+        que:'Die Ballwechsel, die das Trainerteam behalten wollte.',
+        pasos:['Tippe auf ein Video, um es anzusehen.','Nützlich für die Besprechung und um einem Spieler etwas Konkretes zu zeigen.'],
+        ojo:'Um Ballwechsel nach Aktion und Bewertung zu suchen, nutze Videoclips.' }
+    },
+
+    'temporadas': {
+      es: { titulo:'Temporadas',
+        que:'Las temporadas anteriores, guardadas y consultables.',
+        pasos:['Tocá una temporada para entrar.','Adentro está todo tal como quedó al cerrarla.'],
+        ojo:'Una temporada archivada no se modifica: es una foto del momento en que se cerró.' },
+      en: { titulo:'Seasons',
+        que:'Previous seasons, stored and available to consult.',
+        pasos:['Tap a season to open it.','Inside, everything is exactly as it was when it closed.'],
+        ojo:'An archived season is never modified: it is a snapshot of the moment it was closed.' },
+      de: { titulo:'Saisons',
+        que:'Frühere Saisons, gespeichert und abrufbar.',
+        pasos:['Tippe auf eine Saison, um sie zu öffnen.','Darin ist alles genau so, wie es beim Abschluss war.'],
+        ojo:'Eine archivierte Saison wird nicht verändert: sie ist eine Momentaufnahme des Abschlusses.' }
+    },
+
+    'prep_builder': {
+      es: { titulo:'Armar Rutinas',
+        que:'La rutina de gimnasio que después ve cada jugador en su celular.',
+        pasos:['Elegí los ejercicios de la lista.','Poné series, repeticiones y carga.','Asignásela al jugador o a todo el plantel.'],
+        ojo:'Cada categoría tiene sus propias rutinas: si cambiás de categoría arriba, cambian.' },
+      en: { titulo:'Build Routines',
+        que:'The gym routine each player then sees on their phone.',
+        pasos:['Pick the exercises from the list.','Set sets, reps and load.','Assign it to a player or to the whole squad.'],
+        ojo:'Each category has its own routines: switch category at the top and they change.' },
+      de: { titulo:'Routinen erstellen',
+        que:'Die Kraftraum-Routine, die jeder Spieler danach am Handy sieht.',
+        pasos:['Wähle die Übungen aus der Liste.','Lege Sätze, Wiederholungen und Gewicht fest.','Weise sie einem Spieler oder dem ganzen Kader zu.'],
+        ojo:'Jede Kategorie hat eigene Routinen: wechselst du oben die Kategorie, ändern sie sich.' }
+    },
+
     'calendario': {
       es: { titulo:'Calendario',
         que:'Los partidos y los entrenamientos de esta categoría, en un solo lugar.',
@@ -747,8 +1065,21 @@
   /* ── Que pantalla es esta ─────────────────────────────────────────────── */
   function pantalla() {
     var p = (location.pathname || '').split('/').pop() || '';
-    return p.replace(/\.html.*$/, '').toLowerCase();
+    p = p.replace(/\.html.*$/, '').toLowerCase();
+
+    /* ── LOS ARCHIVOS QUE LLEVAN EL NOMBRE DEL CLUB ────────────────────
+       Algunas pantallas se llaman con el club adentro, porque se generan
+       para cada uno: "Team_Playbook_Nafels.html", "MANUAL_GELP_VOLEY.html".
+       El nombre cambia en cada club, asi que la clave del diccionario no
+       puede coincidir nunca.
+
+       Se reconocen por lo que tienen en comun: la palabra clave adentro. */
+    if (p.indexOf('playbook') >= 0) return 'playbook';
+    if (p.indexOf('manual') >= 0)   return 'manual';
+
+    return p;
   }
+
 
   /* ── Que idioma esta puesto ───────────────────────────────────────────── */
   function idioma() {

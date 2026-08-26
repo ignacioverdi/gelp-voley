@@ -29,7 +29,7 @@
 
 importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-var VERSION = 'v4';
+var VERSION = 'v5';
 var CAJA    = 'club-' + VERSION;
 
 /* Lo mínimo para que la app abra sin señal la primera vez. Si alguno no
@@ -104,12 +104,20 @@ self.addEventListener('fetch', function (e) {
       if (res && (res.ok || res.type === 'opaque')) {
         var copia = res.clone();
         caches.open(CAJA).then(function (c) {
-          c.put(req, copia).catch(function () {});
+          /* Se guarda SIN el ?v=... : asi cada version nueva pisa a la
+             anterior en vez de acumularse. Antes quedaban las dos y se
+             devolvia la vieja. */
+          var limpio = req.url.split('?')[0];
+          c.put(new Request(limpio), copia).catch(function () {});
         });
       }
       return res;
     }).catch(function () {
-      return caches.match(req).then(function (guardado) {
+      /* Sin red: se busca la copia. Se ignora el ?v=... al comparar, porque
+         la pagina pide "ayuda.js?v=20260825" y lo guardado puede estar con
+         otra version: sin esto no se encontraba nada y la pantalla quedaba
+         en blanco. */
+      return caches.match(req, { ignoreSearch: true }).then(function (guardado) {
         if (guardado) return guardado;
         /* una pantalla que nunca se abrió: al menos se muestra el inicio,
            en vez de la página de error del navegador */
