@@ -683,7 +683,7 @@
     h+='<div class="frow"><label class="fld">Fecha</label><input type="date" id="f-fecha" value="'+esc(entry?entry.fecha:'')+'"></div>';
     h+='<div class="frow"><label class="fld">Hora</label><input type="time" id="f-hora" value="'+esc(entry?entry.hora:'')+'"></div>';
     if(isP){
-      h+='<div class="frow"><label class="fld">Rival</label><input type="text" id="f-rival" placeholder="Ej: gelp" value="'+esc(entry?entry.rival:'')+'"></div>';
+      h+='<div class="frow"><label class="fld">Rival</label><input type="text" id="f-rival" placeholder="Nombre del rival" value="'+esc(entry?entry.rival:'')+'"></div>';
       h+='<div class="frow"><label class="fld">Escudo del rival</label><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'+
          '<div id="f-esc-prev">'+(FORM_ESCUDO?'<img src="'+FORM_ESCUDO+'" style="width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:2px">':'<span style="opacity:.5;font-size:12px">— sin escudo —</span>')+'</div>'+
          '<label class="btn save" style="cursor:pointer;margin:0">Subir foto<input type="file" accept="image/*" onchange="escudoUpload(this)" style="display:none"></label>'+
