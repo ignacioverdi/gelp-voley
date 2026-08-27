@@ -798,17 +798,29 @@
 
     'camara': {
       es: { titulo:'Cámara',
-        que:'Transmite lo que filma un celular a la tablet del banco, con retraso.',
-        pasos:['En el celular que filma, abrí esta pantalla y creá la sala.','En la tablet, entrá a la misma sala.','Ajustá el retraso para poder revisar la jugada que se te pasó.'],
-        ojo:'Los dos aparatos tienen que estar en la misma red. Sin wifi en el gimnasio, se puede compartir datos desde un celular.' },
+        que:'Transmite lo que filma un celular a donde estés scouteando, con retraso.',
+        pasos:['En el celular que filma, abrí esta pantalla y creá la sala. Te da un código.',
+               'Donde scouteás, entrá a Scout en Vivo, tocá Video y poné ese código.',
+               'El retraso se elige ahí, no en el celular: hay un deslizador de 0 a 25 segundos.',
+               'Arranca en 0 —o sea, en directo—. Subilo al empezar el partido para tener margen.',
+               '"Ver último punto" repite el rally que acaba de cerrar, sin mover el deslizador.'],
+        ojo:'Los dos aparatos tienen que estar en la misma red. Si el wifi se corta, hay que volver a poner el código de sala: el scouteo sigue igual, solo se pierde el video.' },
       en: { titulo:'Camera',
-        que:'Streams what a phone films to the bench tablet, with a delay.',
-        pasos:['On the filming phone, open this screen and create the room.','On the tablet, join the same room.','Set the delay so you can review the rally you missed.'],
-        ojo:'Both devices must be on the same network. With no gym wifi, you can share data from a phone.' },
+        que:'Streams what a phone films to wherever you are scouting, with a delay.',
+        pasos:['On the filming phone, open this screen and create the room. It gives you a code.',
+               'Where you scout, open Live Scout, tap Video and enter that code.',
+               'The delay is set there, not on the phone: a slider from 0 to 25 seconds.',
+               'It starts at 0 —live—. Raise it when the match begins so you have margin.',
+               '"Watch last point" replays the rally that just ended, without moving the slider.'],
+        ojo:'Both devices must be on the same network. If the wifi drops, you have to enter the room code again: scouting carries on, only the video is lost.' },
       de: { titulo:'Kamera',
-        que:'Überträgt das Handybild mit Verzögerung auf das Tablet der Bank.',
-        pasos:['Öffne auf dem filmenden Handy diesen Bildschirm und erstelle den Raum.','Tritt auf dem Tablet demselben Raum bei.','Stelle die Verzögerung ein, um verpasste Ballwechsel zu prüfen.'],
-        ojo:'Beide Geräte müssen im selben Netz sein. Ohne Hallen-WLAN kann ein Handy die Daten teilen.' }
+        que:'Überträgt das Handybild mit Verzögerung dorthin, wo du scoutest.',
+        pasos:['Öffne auf dem filmenden Handy diesen Bildschirm und erstelle den Raum. Du bekommst einen Code.',
+               'Öffne beim Scouten das Live-Scouting, tippe auf Video und gib den Code ein.',
+               'Die Verzögerung stellst du dort ein, nicht am Handy: ein Regler von 0 bis 25 Sekunden.',
+               'Er startet bei 0 —live—. Erhöhe ihn zu Spielbeginn, um Spielraum zu haben.',
+               '"Letzten Punkt ansehen" wiederholt den eben beendeten Ballwechsel.'],
+        ojo:'Beide Geräte müssen im selben Netz sein. Bricht das WLAN ab, muss der Raumcode neu eingegeben werden: das Scouting läuft weiter, nur das Video fehlt.' }
     },
 
     'sesiones': {
@@ -996,7 +1008,7 @@
           'Mirá las baterías y las direcciones actualizándose durante el partido.',
           'Al terminar, guardá el archivo. Abre en DataVolley sin convertir nada.'
         ],
-        ojo: 'Antes de guardar, pasá el verificador de códigos: marca lo que no cierra, mientras todavía se puede corregir.'
+        ojo: 'Tipeá la S cuando el jugador LANZA la pelota, no cuando la golpea: así lo calcula el algoritmo de sincronización y los cortes de video quedan en el segundo justo. Y antes de guardar, pasá el verificador de códigos.'
       },
       en: {
         titulo: 'Live Scout',

@@ -346,7 +346,21 @@ function crear(){
       + '</div>'
       + '<div class="aviso"><b>Avisales cómo entrar:</b> con su mail y su fecha de nacimiento '
       + 'sin barras. Por ejemplo, si nació el 01/01/1990 su clave es <b>01011990</b>. '
-      + 'El instructivo para instalar la app está en la sección de ayuda.</div></div>';
+        + 'sin puntos ni barras.</div>'
+
+        /* ── EL MENSAJE PARA EL GRUPO ──────────────────────────────────────
+           Crear las cuentas no alcanza: hay que avisarle a cada jugador cómo
+           entrar. Antes eso quedaba a cargo del DT, que lo escribía a mano.
+           Acá queda listo para copiar y pegar en el grupo. */
+        + '<label class="lbl" style="margin-top:18px">Mandales esto al grupo</label>'
+        + '<textarea id="msg-grupo" readonly spellcheck="false" style="width:100%;'
+        + 'min-height:150px;padding:12px;border-radius:10px;background:rgba(255,255,255,.04);'
+        + 'border:1px solid rgba(255,255,255,.1);color:inherit;font-size:13.5px;'
+        + 'line-height:1.55;resize:vertical">' + textoGrupo() + '</textarea>'
+        + '<div class="barra" style="margin-top:10px">'
+        + '<button type="button" class="btn" onclick="copiarMensaje(this)">Copiar el mensaje</button>'
+        + '<button type="button" class="btn sec" onclick="abrirBienvenida()">Ver el instructivo</button>'
+        + '</div></div>';
   });
 }
 
@@ -559,6 +573,53 @@ function leerFormulario(){
   } catch(e){}
 })();
 </script>
-<script src="ayuda.js"></script>
+<script src="ayuda.js">
+
+</script>
+<script>
+/* ══ EL MENSAJE PARA EL PLANTEL ══════════════════════════════════════════
+   Crear las cuentas no alcanza: hay que avisarle a cada jugador cómo entrar.
+   Acá queda el texto listo para copiar y pegar en el grupo, con el link a la
+   app y al instructivo de instalación. */
+function textoGrupo(){
+  var base = location.href.replace(/[?#].*$/, '').replace(/[^/]*$/, '');
+  var club = '';
+  try { club = ((document.getElementById('nom-club') || {}).textContent || '').trim(); } catch(e){}
+  var cat = '';
+  try {
+    if(window.CAT_ELEGIDA && (window.CATEGORIAS_CLUB || []).length > 1)
+      cat = ' (' + window.CAT_ELEGIDA + ')';
+  } catch(e){}
+
+  return 'Ya tenés tu acceso a la app' + (club ? ' de ' + club : '') + cat + '.\n\n'
+       + 'Entrá acá:\n' + base + '\n\n'
+       + 'Usuario: tu mail\n'
+       + 'Clave: tu fecha de nacimiento, 8 números sin puntos ni barras\n'
+       + '(si naciste el 01/01/1990, tu clave es 01011990)\n\n'
+       + 'Antes de entrar, mirá cómo instalarla en el celular:\n'
+       + base + 'BIENVENIDA.html\n\n'
+       + 'Se instala una sola vez y después funciona como cualquier app, '
+       + 'incluso sin internet.';
+}
+
+function copiarMensaje(btn){
+  var t = document.getElementById('msg-grupo');
+  if(!t) return;
+  t.select(); t.setSelectionRange(0, 99999);
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch(e){}
+  if(!ok && navigator.clipboard){
+    try { navigator.clipboard.writeText(t.value); ok = true; } catch(e){}
+  }
+  var antes = btn.textContent;
+  btn.textContent = ok ? 'Copiado' : 'Copialo a mano';
+  setTimeout(function(){ btn.textContent = antes; }, 1800);
+}
+
+function abrirBienvenida(){
+  var base = location.href.replace(/[?#].*$/, '').replace(/[^/]*$/, '');
+  window.open(base + 'BIENVENIDA.html', '_blank');
+}
+</script>
 </body>
 </html>
