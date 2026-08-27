@@ -129,6 +129,22 @@ textarea:focus{border-color:var(--club)}
     <!-- ══ CARGA DE A UNO ══════════════════════════════════════════════════
      Cada jugador en su fila, con todos sus datos y la foto al final.
      Se agregan filas con el boton de abajo. -->
+<!-- ── TRAER EL PLANTEL DE UN PARTIDO ────────────────────────────────
+     El .dvw ya tiene los jugadores con su dorsal y su nombre. En vez de
+     escribirlos a mano, se leen de ahi y solo hay que poner los mails. -->
+<label id="caja-dvw" style="display:block;margin-bottom:14px;padding:14px 16px;
+       border:1px dashed rgba(144,148,183,.35);border-radius:10px;cursor:pointer;
+       background:rgba(144,148,183,.05)">
+  <div style="font-size:14px;font-weight:700;margin-bottom:4px">
+    &#8681; Traer el plantel de un partido</div>
+  <div style="font-size:12.5px;color:#93a5c0;line-height:1.5">
+    Elegí un archivo .dvw ya scouteado y se cargan los jugadores con su
+    dorsal y su nombre. Vos solo completás los mails.</div>
+  <input type="file" accept=".dvw,.DVW" style="display:none"
+         onchange="traerPlantel(this)">
+</label>
+<div id="dvw-aviso"></div>
+
 <div id="form-filas"></div>
 
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
@@ -166,6 +182,7 @@ jugador3@gmail.com    9     23/08/2001</div>
 
 <script src="categorias_club.js?v=20260824-1140"></script>
 <script src="selector_categoria.js?v=20260824-1140"></script>
+<script src="plantel_desde_dvw.js"></script>
 <script src="firebase.js?v=20260824-1140"></script>
 <script>
 /* ============================================================================
@@ -620,6 +637,101 @@ function abrirBienvenida(){
   var base = location.href.replace(/[?#].*$/, '').replace(/[^/]*$/, '');
   window.open(base + 'BIENVENIDA.html', '_blank');
 }
+</script>
+<script>
+
+/* ══ TRAER EL PLANTEL DE UN PARTIDO ══════════════════════════════════════
+   Lee el .dvw, saca los jugadores del equipo del club y llena el formulario.
+   El mail y la fecha quedan vacios: son lo unico que el .dvw no tiene. */
+function traerPlantel(input){
+  var f = input.files && input.files[0];
+  if(!f) return;
+  var aviso = document.getElementById('dvw-aviso');
+  aviso.innerHTML = '<div class="aviso">Leyendo el partido…</div>';
+
+  PlantelDVW.leer(f).then(function(r){
+    var lista, deQuien;
+
+    if(r.cual === 'H'){ lista = r.local;     deQuien = r.equipos.local; }
+    else if(r.cual === 'V'){ lista = r.visitante; deQuien = r.equipos.visitante; }
+    else {
+      /* no reconocio al club: que elija el DT */
+      aviso.innerHTML =
+        '<div class="aviso">No reconocí cuál de los dos es tu club. Elegí:' +
+        '<div class="barra" style="margin-top:10px">' +
+        '<button type="button" class="btn sec" onclick="usarLado(\'H\')">' +
+        (r.equipos.local || 'Local') + ' (' + r.local.length + ')</button>' +
+        '<button type="button" class="btn sec" onclick="usarLado(\'V\')">' +
+        (r.equipos.visitante || 'Visitante') + ' (' + r.visitante.length + ')</button>' +
+        '</div></div>';
+      window.__DVW = r;
+      return;
+    }
+    volcar(lista, deQuien, aviso);
+  }).catch(function(e){
+    aviso.innerHTML = '<div class="aviso" style="border-color:rgba(9,19,95,.4)">' +
+      'No pude leer ese archivo. ¿Es un .dvw de un partido?</div>';
+  });
+  input.value = '';
+}
+
+function usarLado(lado){
+  var r = window.__DVW; if(!r) return;
+  var lista = lado === 'H' ? r.local : r.visitante;
+  var quien = lado === 'H' ? r.equipos.local : r.equipos.visitante;
+  volcar(lista, quien, document.getElementById('dvw-aviso'));
+}
+
+/* Pasa la lista del .dvw al formulario */
+function volcar(lista, deQuien, aviso){
+  if(!lista || !lista.length){
+    aviso.innerHTML = '<div class="aviso">Ese partido no trae el plantel cargado.</div>';
+    return;
+  }
+
+  /* los que ya estan escritos, para no pisarlos */
+  var yaHay = {};
+  document.querySelectorAll('.fform').forEach(function(fl){
+    var i = fl.getAttribute('data-i');
+    var n = (document.getElementById('n'+i)||{}).value;
+    var m = (document.getElementById('m'+i)||{}).value;
+    if(n && m) yaHay[n] = true;
+  });
+
+  /* se limpian las filas vacias y se agregan las del partido */
+  document.querySelectorAll('.fform').forEach(function(fl){
+    var i = fl.getAttribute('data-i');
+    var n = (document.getElementById('n'+i)||{}).value;
+    var m = (document.getElementById('m'+i)||{}).value;
+    if(!n && !m) fl.remove();
+  });
+
+  var puestos = 0, sumados = 0;
+  lista.forEach(function(j){
+    if(yaHay[String(j.num)]) return;
+    masFila();
+    var i = NFILAS - 1;
+    var cn = document.getElementById('n'+i);
+    if(cn) cn.value = j.num;
+    /* el nombre va como ayuda visual: el .dvw no trae mail */
+    var cm = document.getElementById('m'+i);
+    if(cm){
+      cm.placeholder = j.nombre + (j.puesto ? '  ·  ' + j.puesto : '');
+      cm.setAttribute('title', j.nombre);
+    }
+    if(j.puesto) puestos++;
+    sumados++;
+  });
+
+  if(!document.querySelectorAll('.fform').length) masFila();
+
+  aviso.innerHTML =
+    '<div class="aviso" style="border-color:rgba(34,197,94,.4)">' +
+    '<b>' + sumados + ' jugador(es) de ' + (deQuien || 'tu equipo') + '.</b> ' +
+    'El nombre de cada uno está en gris donde va el mail. ' +
+    'Completá el mail y la fecha de nacimiento de cada fila.</div>';
+}
+
 </script>
 </body>
 </html>

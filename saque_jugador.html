@@ -342,8 +342,8 @@ function renderPage(){
   var j=null;
   if(currentFiltro==='partido'){
     j=getJugadorPartido();
-    if(!j&&typeof Nafels_JUGADORES!=='undefined')
-      j=Nafels_JUGADORES.find(function(x){return x.num===currentNum;});
+    if(!j&&typeof PLANTEL_GELP!=='undefined')
+      j=PLANTEL_GELP.find(function(x){return x.num===currentNum;});
     if(!j){cont.innerHTML='<div class="empty">Sin datos de partido</div>';return;}
     if(!j.saques||!j.saques.length||j.saques.every(function(s){return !s.tot;})){
       cont.innerHTML='<div class="empty">Sin saques registrados</div>';return;
@@ -371,7 +371,7 @@ function renderPage(){
   renderComparativaPosicion(cont, currentNum, 'saque');
 }
 function waitAndInit(tries){
-  var ok=typeof Nafels_JUGADORES!=='undefined'||typeof PARTIDOS_JUGADORES!=='undefined'||typeof window.HISTORIAL_DATA!=='undefined';
+  var ok=typeof PLANTEL_GELP!=='undefined'||typeof PARTIDOS_JUGADORES!=='undefined'||typeof window.HISTORIAL_DATA!=='undefined';
   if(ok){
     var params=new URLSearchParams(window.location.search);
     currentNum=parseInt(params.get('num'))||0;
@@ -387,7 +387,7 @@ waitAndInit(25);
 
 // ── COMPARATIVA SAQUE VS EQUIPO ──
 function calcTeamSqAvg(){
-  var jugs = typeof PARTIDOS_JUGADORES!=='undefined'&&PARTIDOS_JUGADORES.length?PARTIDOS_JUGADORES:(typeof Nafels_JUGADORES!=='undefined'?Nafels_JUGADORES:[]);
+  var jugs = typeof PARTIDOS_JUGADORES!=='undefined'&&PARTIDOS_JUGADORES.length?PARTIDOS_JUGADORES:(typeof PLANTEL_GELP!=='undefined'?PLANTEL_GELP:[]);
   var tipos = {};
   jugs.forEach(function(j){
     (j.saques||[]).forEach(function(s){
@@ -438,7 +438,7 @@ function renderComparativaSaque(j, cont){
 
 // ── COMPARATIVA VS POSICION (usa PARTIDOS_JUGADORES: pos oficial + canchitas) ──
 function getJugadoresPosicion(currentNum){
-  var fuente = typeof PARTIDOS_JUGADORES!=='undefined'&&PARTIDOS_JUGADORES.length?PARTIDOS_JUGADORES:(typeof Nafels_JUGADORES!=='undefined'?Nafels_JUGADORES:[]);
+  var fuente = typeof PARTIDOS_JUGADORES!=='undefined'&&PARTIDOS_JUGADORES.length?PARTIDOS_JUGADORES:(typeof PLANTEL_GELP!=='undefined'?PLANTEL_GELP:[]);
   var curInfo = fuente.find(function(c){ return c.num === currentNum; });
   if(!curInfo) return {pos:'', same:[]};
   var pos = curInfo.pos || '';
@@ -458,7 +458,7 @@ function renderComparativaPosicion(cont, currentNum, type){
     if(pdm && pdm.jugadores) pjugs = pdm.jugadores;
   }
   if(!pjugs.length){
-    pjugs = typeof PARTIDOS_JUGADORES !== 'undefined' && PARTIDOS_JUGADORES.length ? PARTIDOS_JUGADORES : (typeof Nafels_JUGADORES !== 'undefined' ? Nafels_JUGADORES : []);
+    pjugs = typeof PARTIDOS_JUGADORES !== 'undefined' && PARTIDOS_JUGADORES.length ? PARTIDOS_JUGADORES : (typeof PLANTEL_GELP !== 'undefined' ? PLANTEL_GELP : []);
   }
   if(!pjugs.length) return;
   var pd = getJugadoresPosicion(currentNum);

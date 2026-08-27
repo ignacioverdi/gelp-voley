@@ -1391,7 +1391,7 @@ function renderEqObjetivos(){
 // ════════════════════════════════════════════════════════════
 function renderJugGrid(){
   var grid=document.getElementById('jug-grid');
-  var jugs = typeof Nafels_JUGADORES!=='undefined' ? Nafels_JUGADORES :
+  var jugs = typeof PLANTEL_GELP!=='undefined' ? PLANTEL_GELP :
              (EQUIPO ? EQUIPO.jugadores : (window.EQUIPO_DATA ? window.EQUIPO_DATA.jugadores : []));
   if(!jugs||!jugs.length){grid.innerHTML='<div class="empty">Sin datos de equipo</div>';return;}
   grid.innerHTML=jugs.map(function(j){
@@ -1656,7 +1656,7 @@ function renderGamePlans(){
 function buildRankingData(){
   var D = window.HISTORIAL_DATA;
   if(!D) return null;
-  var jugs = typeof Nafels_JUGADORES !== 'undefined' ? Nafels_JUGADORES :
+  var jugs = typeof PLANTEL_GELP !== 'undefined' ? PLANTEL_GELP :
              (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores ? window.EQUIPO_DATA.jugadores : []);
   var POS_COLOR = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
 

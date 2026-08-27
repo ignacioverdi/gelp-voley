@@ -220,7 +220,7 @@ var POS_COLOR={ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97
 
 // ── INIT ──────────────────────────────────────────────────────────────
 function tryInit(n){
-  var ready = (typeof Nafels_JUGADORES!=='undefined') || (typeof PARTIDOS_JUGADORES!=='undefined') || (window.EQUIPO_DATA&&window.EQUIPO_DATA.jugadores) || (window.PLANTEL_CLUB && (window.PLANTEL_CLUB.jugadores||[]).length);
+  var ready = (typeof PLANTEL_GELP!=='undefined') || (typeof PARTIDOS_JUGADORES!=='undefined') || (window.EQUIPO_DATA&&window.EQUIPO_DATA.jugadores) || (window.PLANTEL_CLUB && (window.PLANTEL_CLUB.jugadores||[]).length);
   if(ready){
     buildSelector();
     var p=new URLSearchParams(window.location.search);
@@ -251,7 +251,7 @@ function buildSelector(){
   var el=document.getElementById('jug-scroller');
   if(!el) return;
   var jugs=[];
-  if(typeof Nafels_JUGADORES!=='undefined') jugs=Nafels_JUGADORES;
+  if(typeof PLANTEL_GELP!=='undefined') jugs=PLANTEL_GELP;
   else if(typeof PARTIDOS_JUGADORES!=='undefined') jugs=PARTIDOS_JUGADORES;
   else jugs=_plantelDelClub();
   el.innerHTML=jugs.map(function(j){

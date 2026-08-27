@@ -246,13 +246,13 @@ function getJugadorPartidoRec(){
     }
     return null;
   }
-  // Acumulado: PARTIDOS_JUGADORES (recepcion por zona), fallback Nafels_JUGADORES
+  // Acumulado: PARTIDOS_JUGADORES (recepcion por zona), fallback PLANTEL_GELP
   if(typeof PARTIDOS_JUGADORES!=='undefined'){
     var j=PARTIDOS_JUGADORES.find(function(x){return x.num===currentNum;});
     if(j&&j.recepcion&&j.recepcion.flotado) return j;
   }
-  if(typeof Nafels_JUGADORES!=='undefined'){
-    var j=Nafels_JUGADORES.find(function(x){return x.num===currentNum;});
+  if(typeof PLANTEL_GELP!=='undefined'){
+    var j=PLANTEL_GELP.find(function(x){return x.num===currentNum;});
     if(j&&j.recepcion&&j.recepcion.flotado) return j;
   }
   return null;
@@ -313,7 +313,7 @@ function recEffByTipo(jug){
 }
 
 function renderComparativaRecepcion(j, cont, num){
-  var JUG = typeof PARTIDOS_JUGADORES!=='undefined'&&PARTIDOS_JUGADORES.length?PARTIDOS_JUGADORES:(typeof Nafels_JUGADORES!=='undefined'?Nafels_JUGADORES:[]);
+  var JUG = typeof PARTIDOS_JUGADORES!=='undefined'&&PARTIDOS_JUGADORES.length?PARTIDOS_JUGADORES:(typeof PLANTEL_GELP!=='undefined'?PLANTEL_GELP:[]);
   if(!JUG.length) return;
   var mio=recEffByTipo(j);
   if(!mio||!mio.total) return;
@@ -391,7 +391,7 @@ function renderComparativaRecepcion(j, cont, num){
 }
 
 function waitAndInit(tries){
-  var ok=typeof Nafels_JUGADORES!=='undefined'||typeof PARTIDOS_JUGADORES!=='undefined'||typeof window.HISTORIAL_DATA!=='undefined';
+  var ok=typeof PLANTEL_GELP!=='undefined'||typeof PARTIDOS_JUGADORES!=='undefined'||typeof window.HISTORIAL_DATA!=='undefined';
   if(ok){var params=new URLSearchParams(window.location.search);currentNum=parseInt(params.get('num'))||0;buildSubfiltro();document.fonts.ready.then(renderPage).catch(renderPage);}
   else if(tries>0){setTimeout(function(){waitAndInit(tries-1);},200);}
   else {document.getElementById('content').innerHTML='<div class="empty">No se pudieron cargar los datos.</div>';}

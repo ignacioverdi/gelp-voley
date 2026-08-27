@@ -1349,7 +1349,7 @@ function getPosJugadores(){
   // Returns {PUNTA:[...], CENTRAL:[...], OPUESTO:[...], ARMADOR:[...], LIBERO:[...]}
   var jugs = getJugadores(PARTIDO_IDX);
   var byPos = {};
-  var jugs = typeof Nafels_JUGADORES !== 'undefined' ? Nafels_JUGADORES : [];
+  var jugs = typeof PLANTEL_GELP !== 'undefined' ? PLANTEL_GELP : [];
   jugs.forEach(function(j){
     var info = jugs.find(function(c){ return c.num === j.c; });
     var pos = info ? info.pos : 'OTRO';
@@ -1366,7 +1366,7 @@ function mkThead(cols){
 }
 
 function mkRow(jug, cols, highlight){
-  var jugs = typeof Nafels_JUGADORES !== 'undefined' ? Nafels_JUGADORES : [];
+  var jugs = typeof PLANTEL_GELP !== 'undefined' ? PLANTEL_GELP : [];
   var info = jugs.find(function(c){ return c.num === jug.c; });
   var nm = info ? info.nombre.replace(/^\d+\s*/,'') : jug.n;
   var POS_COLOR = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
@@ -1467,7 +1467,7 @@ function tablaComparativa(jugs){
 
 // ── RANKINGS ──────────────────────────────────────────────────────────
 function tablaRanking(jugs){
-  var jugs = typeof Nafels_JUGADORES !== 'undefined' ? Nafels_JUGADORES : [];
+  var jugs = typeof PLANTEL_GELP !== 'undefined' ? PLANTEL_GELP : [];
   var POS_COLOR = {ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97316',LIBERO:'#06B6D4'};
 
   function rankSection(title, icon, color, jugsFilt, valFn, label, subFn, subLabel){
