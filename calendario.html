@@ -206,10 +206,8 @@
     <!-- El boton se esconde solo si no hay fixture cargado: ofrecer importar
          14 partidos que no existen confunde y hace pensar que algo fallo. -->
     <button class="import-btn" id="import-btn" onclick="importFixture()" data-solo-editor style="display:none">⬇️ Importar fixture</button>
-    <button class="import-btn" id="import-gym-btn" onclick="importGym()" data-solo-editor style="display:none">🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)</button>
     <button class="import-btn" id="import-xmas-btn" onclick="importHolidays()" data-solo-editor style="display:none">🎄 Christmas Holidays (20–25 dic)</button>
     <button class="import-btn" id="import-volley-btn" onclick="importVolley()" data-solo-editor style="display:none">🏐 Vóley (01/09 – 30/04, sin vacaciones)</button>
-    <button class="import-btn" id="import-filzbach-btn" onclick="importFilzbach()" data-solo-editor style="display:none">📍 Filzbach (19 · sep–abr)</button>
     <div id="form-wrap"></div>
     <div id="list"></div>
   </div>
@@ -366,7 +364,10 @@
       if(_b) _b.style.display='';
     }
   }catch(e){}
-  function importFixture(){ if(window.VB_esEditor&&!VB_esEditor())return;
+  /* Los botones "Gimnasio" y "Filzbach" eran de Nafels: traian direcciones de
+   Suiza y 19 fechas fijas. Se sacaron de la plantilla. Los entrenamientos se
+   cargan con "+ Agregar" o con el importador de cada club. */
+function importFixture(){ if(window.VB_esEditor&&!VB_esEditor())return;
   /* ── EL FIXTURE DE ESTA CATEGORIA ──────────────────────────────────
      Cada categoria tiene su archivo: fixture_h1l.js, fixture_h2l.js.
      La primera categoria usa el que viene escrito en esta pagina.
@@ -417,27 +418,7 @@
     render();
     alert(added+' partido(s) agregado(s)'+(added<FIXTURE.length?'. '+(FIXTURE.length-added)+' ya estaban cargados.':'.'));
   }
-  // ── Importar sesiones de gimnasio: Lun/Mié/Vie de sep–dic 2026, 10:00–11:45, Welcome Fitness ──
-  function importGym(){ if(window.VB_esEditor&&!VB_esEditor())return;
-    if(!confirm('¿Agregar las sesiones de gimnasio (Lun/Mié/Vie de sep 2026 – abr 2027, 10:00–11:45) al calendario?')) return;
-    var arr=(data.entrenamientos||[]).slice(), added=0;
-    var lugar='Welcome Fitness';
-    var mapa='https://maps.app.goo.gl/AmbXHh34SnPQbBja8?g_st=iw';
-    var _d=new Date(2026,8,1), _fin=new Date(2027,3,30);   // 1 sep 2026 -> 30 abr 2027
-    while(_d<=_fin){
-      var wd=_d.getDay();                      // 1=lunes 3=miércoles 5=viernes
-      if(wd===1||wd===3||wd===5){
-        var fecha=_d.getFullYear()+'-'+pad2(_d.getMonth()+1)+'-'+pad2(_d.getDate());
-        var dup=arr.some(function(x){ return x.fecha===fecha && (x.tipo||'')==='LIFTING SESSION'; });
-        if(!dup){ arr.push({ id:Date.now()+Math.floor(Math.random()*1000000), fecha:fecha, hora:'10:00', horaFin:'11:45', tipo:'LIFTING SESSION', lugar:lugar, mapa:mapa }); added++; }
-      }
-      _d.setDate(_d.getDate()+1);
-    }
-    data.entrenamientos=arr;
-    fbSet('calendario/entrenamientos', arr);
-    setTab('entrenamientos'); render();
-    alert(added+' sesión(es) de gimnasio agregada(s).');
-  }
+  
   function importHolidays(){ if(window.VB_esEditor&&!VB_esEditor())return;
     if(!confirm('¿Agregar CHRISTMAS HOLIDAYS (20/12 al 25/12 2026) al calendario?')) return;
     var arr=(data.entrenamientos||[]).slice();
@@ -447,35 +428,13 @@
     data.entrenamientos=arr; fbSet('calendario/entrenamientos', arr); setTab('entrenamientos'); render();
     alert('CHRISTMAS HOLIDAYS agregado (20/12 – 25/12).');
   }
-  // ── Importar entrenamientos de FILZBACH (19 sesiones · sep 2026 – abr 2027). Reemplaza lo que haya en esas fechas. ──
-  function importFilzbach(){ if(window.VB_esEditor&&!VB_esEditor())return;
-    if(!confirm('¿Cargar los 19 entrenamientos de FILZBACH (sep 2026 – abr 2027)? Reemplaza los entrenamientos que ya haya en esas fechas; los demás días quedan igual.')) return;
-    var lugar='FILZBACH', mapa='https://maps.app.goo.gl/k5vqApj5PkWGKDG2A?g_st=iw';
-    var SES=[
-      ['2026-09-22','19:30','21:30'],['2026-09-23','17:30','20:30'],['2026-09-24','18:00','20:00'],
-      ['2026-10-09','16:30','18:30'],['2026-11-04','17:30','20:30'],['2026-11-05','18:00','20:00'],
-      ['2026-11-06','16:30','18:30'],['2026-11-11','17:30','20:30'],['2026-12-04','16:30','18:30'],
-      ['2026-12-23','17:30','20:30'],['2026-12-26','10:30','12:30'],['2026-12-28','17:00','19:00'],
-      ['2026-12-29','17:00','19:00'],['2026-12-30','17:00','19:00'],['2027-01-01','17:00','19:00'],
-      ['2027-01-02','17:00','19:00'],['2027-02-17','17:30','20:30'],['2027-03-18','18:00','20:00'],
-      ['2027-04-09','16:30','18:30']
-    ];
-    var fechas={}; SES.forEach(function(s){ fechas[s[0]]=1; });
-    var prev=(data.entrenamientos||[]);
-    var arr=prev.filter(function(e){ return !fechas[e.fecha]; });   // saca lo existente en esas fechas
-    var reemplazados=prev.length-arr.length;
-    var _id=Date.now()*1000, _c=0;
-    SES.forEach(function(s){ arr.push({ id:_id+(_c++), fecha:s[0], hora:s[1], horaFin:s[2], tipo:'VOLLEYBALL SESSION', lugar:lugar, mapa:mapa }); });
-    arr.sort(function(a,b){ return String(a.fecha||'').localeCompare(String(b.fecha||'')); });
-    data.entrenamientos=arr;
-    fbSet('calendario/entrenamientos', arr);
-    setTab('entrenamientos'); render();
-    alert(SES.length+' entrenamientos de FILZBACH cargados'+(reemplazados?' ('+reemplazados+' reemplazado(s) en esas fechas).':'.'));
-  }
+  
   function importVolley(){ if(window.VB_esEditor&&!VB_esEditor())return;
     if(!confirm('¿Agregar la seguidilla de entrenamientos de vóley (01/09/26 – 30/04/27, sin vacaciones)?')) return;
     var arr=(data.entrenamientos||[]).slice(), added=0;
-    var lugar='Lintharena, Gelp', mapa='https://maps.app.goo.gl/MtXaacJWfLWZ1QKM8?g_st=iw';
+    /* El gimnasio del club. Queda vacio a proposito: el mapa de un club
+       no sirve para otro, y se completa al editar cada entrenamiento. */
+    var lugar='', mapa='';
     var SEM={ 1:[['VOLLEYBALL SESSION','17:30','19:00']],
       2:[['VOLLEYBALL SESSION','10:00','11:30'],['VOLLEYBALL SESSION','18:30','20:30']],
       3:[['VOLLEYBALL SESSION','17:00','19:00']],
