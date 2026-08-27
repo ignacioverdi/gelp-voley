@@ -88,9 +88,9 @@ tbody td.col-group-blk{border-left:1px solid rgba(144,148,183,.08)}
 #teams-table th:nth-child(2),#teams-table td:nth-child(2){text-align:left}
 #teams-table td.active-col,#teams-table th.active-col{background:rgba(59,130,246,.12)}
 #teams-table th.active-col{color:#93c5fd}
-#teams-table tbody tr.is-nafels{background:rgba(34,197,94,.09)}
-#teams-table tbody tr.is-nafels:hover{background:rgba(34,197,94,.14)}
-#teams-table tbody tr.is-nafels td{border-top:1px solid rgba(34,197,94,.25);border-bottom:1px solid rgba(34,197,94,.25)}
+#teams-table tbody tr.es-mi-club{background:rgba(34,197,94,.09)}
+#teams-table tbody tr.es-mi-club:hover{background:rgba(34,197,94,.14)}
+#teams-table tbody tr.es-mi-club td{border-top:1px solid rgba(34,197,94,.25);border-bottom:1px solid rgba(34,197,94,.25)}
 .t-name{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.5px;text-decoration:none}
 .t-rank{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#8395ac}
 .t-rank.r1{color:#9094b7}
@@ -106,9 +106,9 @@ tbody td.col-group-blk{border-left:1px solid rgba(144,148,183,.08)}
 #players-table th:nth-child(2),#players-table td:nth-child(2){text-align:left}
 #players-table td.active-col,#players-table th.active-col{background:rgba(99,102,241,.12)}
 #players-table th.active-col{color:#a5b4fc}
-#players-table tbody tr.is-nafels{background:rgba(34,197,94,.09)}
-#players-table tbody tr.is-nafels:hover{background:rgba(34,197,94,.14)}
-#players-table tbody tr.is-nafels td{border-top:1px solid rgba(34,197,94,.22);border-bottom:1px solid rgba(34,197,94,.22)}
+#players-table tbody tr.es-mi-club{background:rgba(34,197,94,.09)}
+#players-table tbody tr.es-mi-club:hover{background:rgba(34,197,94,.14)}
+#players-table tbody tr.es-mi-club td{border-top:1px solid rgba(34,197,94,.22);border-bottom:1px solid rgba(34,197,94,.22)}
 #players-table tbody tr:hover{background:rgba(255,255,255,.025)}
 </style>
 <!-- Puerta de entrada. Esta es la PLANTILLA: la tabla de liga se regenera
@@ -450,7 +450,7 @@ function renderTeams(){
   tbody.innerHTML=rows.map(function(t,i){
     var c=TEAM_COLORS[t.team]||'#3b82f6';
     var slug=t.team.toLowerCase().replace(/ /g,'_');
-    var isNaf=t.team==='Gelp';
+    var esMiClub=t.team==='Gelp';
     var cells=METRICS.map(function(m){
       var v=t[m.eff], tot=t[m.tot]||0;
       var col=v==null?'#475569':rankColor(fracByMetric[m.key][t.team]);
@@ -459,7 +459,7 @@ function renderTeams(){
         +'<span class="tval" style="color:'+col+'">'+val+'</span>'
         +'<span class="ttot">('+tot+')</span></td>';
     }).join('');
-    return '<tr class="'+(isNaf?'is-nafels':'')+'">'
+    return '<tr class="'+(esMiClub?'es-mi-club':'')+'">'
       +'<td><span class="t-rank'+(i===0?' r1':'')+'">'+(i+1)+'</span></td>'
       +'<td><span class="t-name" style="color:'+c+'">'+t.team.toUpperCase()+'</span><a class="gp-btn" href="game_plan.html?rival='+slug+'" title="Abrir game plan de '+t.team+'">📋 Plan</a></td>'
       +cells+'</tr>';
@@ -555,10 +555,10 @@ function renderPlayers(){
     var col=rankColor(frac);
     var ev=p[m.eff];
     var evs=((ev>0&&!m.rec)?'+':'')+ev.toFixed(1)+'%';
-    var isNaf=p.team==='GELP';
+    var esMiClub=p.team==='GELP';
     var rank=i+1;
     var sec=s.cols.map(function(c){return '<td>'+fmtPct(p[c.k])+'</td>';}).join('');
-    return '<tr class="'+(isNaf?'is-nafels':'')+'">'
+    return '<tr class="'+(esMiClub?'es-mi-club':'')+'">'
       +'<td><span class="t-rank'+(i===0?' r1':'')+'">'+rank+'</span></td>'
       +'<td><span style="font-weight:700;color:#94a3b8">#'+p.num+'</span> <span style="color:#e2e8f0">'+p.name+'</span></td>'
       +'<td><a href="game_plan.html?rival='+pslug+'" title="Abrir game plan de '+p.team+'" style="text-decoration:none;display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:'+tc+'22;color:'+tc+'">'+p.team+'</a><a class="gp-btn" href="game_plan.html?rival='+pslug+'" title="Abrir game plan de '+p.team+'">📋</a></td>'

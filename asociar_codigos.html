@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Asociar códigos · NAFELS</title>
+<title>Asociar códigos · GELP</title>
 <!--
 ===============================================================================
   asociar_codigos.html — TRADUCIR LOS CODIGOS DE OTRO SCOUT
@@ -606,7 +606,7 @@ document.getElementById('selDestino').addEventListener('change', function(e){
     if(!n){ aviso('Ese archivo no trae tablas de códigos.', false); return; }
 
     var nom = prompt('¿Con qué nombre guardo esta tabla?\n\n' +
-                     'Por ejemplo: "Europa", "Nafels", "Liga italiana"',
+                     'Por ejemplo: "Europa", "Copa", "Liga italiana"',
                      f.name.replace(/\.dvw$/i,'').slice(0,20));
     if(!nom) return;
     TABLAS_GUARDADAS[nom] = nueva;

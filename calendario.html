@@ -683,7 +683,7 @@
     h+='<div class="frow"><label class="fld">Fecha</label><input type="date" id="f-fecha" value="'+esc(entry?entry.fecha:'')+'"></div>';
     h+='<div class="frow"><label class="fld">Hora</label><input type="time" id="f-hora" value="'+esc(entry?entry.hora:'')+'"></div>';
     if(isP){
-      h+='<div class="frow"><label class="fld">Rival</label><input type="text" id="f-rival" placeholder="Ej: Jona" value="'+esc(entry?entry.rival:'')+'"></div>';
+      h+='<div class="frow"><label class="fld">Rival</label><input type="text" id="f-rival" placeholder="Ej: gelp" value="'+esc(entry?entry.rival:'')+'"></div>';
       h+='<div class="frow"><label class="fld">Escudo del rival</label><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'+
          '<div id="f-esc-prev">'+(FORM_ESCUDO?'<img src="'+FORM_ESCUDO+'" style="width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:2px">':'<span style="opacity:.5;font-size:12px">— sin escudo —</span>')+'</div>'+
          '<label class="btn save" style="cursor:pointer;margin:0">Subir foto<input type="file" accept="image/*" onchange="escudoUpload(this)" style="display:none"></label>'+
@@ -779,7 +779,7 @@ function _icsDe(e){
   var mm     = hora.split(':')[1] || '00';
   var hFin   = ('0' + Math.min(hh + 2, 23)).slice(-2) + ':' + mm;   /* dos horas de partido */
   var fin    = _icsFecha(e.fecha, hFin);
-  var uid    = 'nafels-' + (e.id || String(e.fecha + rival).replace(/\W/g, '')) + '@volley-nafels';
+  var uid    = 'gelp-' + (e.id || String(e.fecha + rival).replace(/\W/g, '')) + '@gelp';
   return [
     'BEGIN:VEVENT',
     'UID:' + uid,
@@ -815,7 +815,7 @@ window.alCalendario = function(id){
   var e = null;
   for(var i = 0; i < arr.length; i++){ if(String(arr[i].id) === String(id)) e = arr[i]; }
   if(!e) return;
-  _icsBajar(_icsArchivo([_icsDe(e)]), 'nafels-' + (e.fecha || 'partido') + '.ics');
+  _icsBajar(_icsArchivo([_icsDe(e)]), 'gelp-' + (e.fecha || 'partido') + '.ics');
 };
 /* Un entrenamiento no es igual a un partido: puede durar varios dias (las
    vacaciones de Navidad son un solo registro del 20 al 25) y tiene hora de fin
@@ -825,7 +825,7 @@ function _icsDeEntreno(e){
   var titulo = e.tipo || 'Entrenamiento';
   var _vb = (typeof venueBits === 'function') ? venueBits(e) : {name:''};
   var lugar = (_vb && _vb.name) || e.lugar || '';
-  var uid = 'nafels-ent-' + (e.id || String(e.fecha + titulo).replace(/\W/g,'')) + '@volley-nafels';
+  var uid = 'gelp-ent-' + (e.id || String(e.fecha + titulo).replace(/\W/g,'')) + '@gelp';
   var cab = ['BEGIN:VEVENT','UID:' + uid,
              'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z'];
   var cuerpo;
@@ -880,14 +880,14 @@ window.todoAlCalendario = function(){
   var en = ((typeof data !== 'undefined' && data.entrenamientos) ? data.entrenamientos : []).filter(function(e){ return e.fecha; });
   if(!pa.length && !en.length){ alert('Todavía no hay nada cargado en el calendario.'); return; }
   var evs = pa.map(_icsDe).concat(en.map(_icsDeEntreno));
-  _icsBajar(_icsArchivo(evs), 'nafels-calendario.ics');
+  _icsBajar(_icsArchivo(evs), 'gelp-calendario.ics');
 };
 
 window.temporadaAlCalendario = function(){
   var arr = (typeof data !== 'undefined' && data.partidos) ? data.partidos : [];
   arr = arr.filter(function(e){ return e.fecha; });
   if(!arr.length){ alert('No hay partidos cargados todavía.'); return; }
-  _icsBajar(_icsArchivo(arr.map(_icsDe)), 'nafels-temporada.ics');
+  _icsBajar(_icsArchivo(arr.map(_icsDe)), 'gelp-temporada.ics');
 };
 
 </script>

@@ -355,7 +355,7 @@ else   { w('datos_partidos.js'); w('datos_recepcion.js'); }
 // Datos cargados dinámicamente desde datos_partidos.js
 window.RECEPCION_DATA = {};
 
-function cargarRecepcionNafels(){
+function cargarRecepcionPropia(){
   if(typeof PARTIDOS_JUGADORES === 'undefined') return;
   PARTIDOS_JUGADORES.forEach(function(j){
     if(!j.recepcion || !j.recepcion.flotado) return;
@@ -448,10 +448,10 @@ function cargarRecepcionFromSource(jugadores){
     // Copy structure from PARTIDOS_JUGADORES format
     if(typeof RECEPCION_DATA !== 'undefined'){
       // Use existing conversion
-      var temp_Nafels = window.PARTIDOS_JUGADORES;
+      var temp_propio = window.PARTIDOS_JUGADORES;
       window.PARTIDOS_JUGADORES = [j];
-      cargarRecepcionNafels();
-      window.PARTIDOS_JUGADORES = temp_Nafels;
+      cargarRecepcionPropia();
+      window.PARTIDOS_JUGADORES = temp_propio;
     }
   });
 }
@@ -482,7 +482,7 @@ function defaultReceptores(){
   return [];
 }
 function initReceptores(){
-  cargarRecepcionNafels();
+  cargarRecepcionPropia();
   RECEPTORES = Object.keys(window.RECEPCION_DATA);
   if(typeof buildRivalSelector==='function') buildRivalSelector();
   if(RECEPTORES.length === 0){
@@ -838,7 +838,7 @@ function recSetTipo(tipo, btn){
   if(tipo === 'partido'){
     // Restore original GELP data
     window.RECEPCION_DATA = {};
-    cargarRecepcionNafels();
+    cargarRecepcionPropia();
     recBuildJbtns(Object.keys(window.RECEPCION_DATA));
     document.getElementById('rec-subfiltro').style.display = 'none';
   } else {
@@ -889,7 +889,7 @@ function recLoadEnt(nombre){
   var orig = window.PARTIDOS_JUGADORES;
   window.PARTIDOS_JUGADORES = src;
   window.RECEPCION_DATA = {};
-  cargarRecepcionNafels();
+  cargarRecepcionPropia();
   window.PARTIDOS_JUGADORES = orig;
   
   recBuildJbtns(Object.keys(window.RECEPCION_DATA));
