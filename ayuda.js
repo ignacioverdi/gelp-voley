@@ -649,7 +649,7 @@
     'equipo': {
       es: { titulo:'El Plantel',
         que:'Todos los jugadores de esta categoría, con su puesto y su dorsal.',
-        pasos:['Tocá un jugador para ver su perfil completo.','El color indica el puesto: armador, central, punta, opuesto, líbero.'],
+        pasos:['Tocá un jugador para ver su perfil completo.','El color indica el puesto: armador, central, punta, opuesto, líbero.','Abajo está el cuerpo técnico: tocá "+ Agregar" para sumar a alguien.'],
         ojo:'El plantel sale de los partidos scouteados. Si falta alguien, es que todavía no jugó.' },
       en: { titulo:'The Squad',
         que:'Every player in this category, with their position and shirt number.',

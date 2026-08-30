@@ -266,59 +266,10 @@
     pintar();
   }
 
-  /* ══ LOS DATOS DE FIREBASE, TAMBIEN POR CATEGORIA ══════════════════════
-     Los archivos .enc ya se redirigen mas arriba. Pero hay datos que no
-     viven en archivos sino en Firebase: el wellness, las cargas del
-     gimnasio, las rutinas, el partido en vivo.
+  /* La envoltura de Firebase por categoria vive en su propio archivo,
+     firebase_por_categoria.js, porque tiene que cargarse DESPUES de
+     firebase.js. Aca llegaba siempre tarde. */
 
-     Sin esto, H1L y H2L compartian el wellness y las rutinas con Primera:
-     un jugador de H2L veia la carga del plantel de Primera.
-
-     Se separa lo que es de UN EQUIPO. Lo que es del club o de la persona
-     se comparte a proposito: la cuenta de un jugador, su dorsal, su foto,
-     los codigos de scouteo y la camara del gimnasio son unicos.
-     ══════════════════════════════════════════════════════════════════════ */
-  (function(){
-    /* ── HAY QUE ESPERAR A FIREBASE ──────────────────────────────────
-       Este archivo se carga ANTES que firebase.js: va primero porque el
-       selector tiene que estar listo cuando el navegador empieza a pedir
-       los datos. Pero eso significa que fbGet todavia no existe.
-
-       Antes se hacia "if(!window.fbGet) return" y no se envolvia nunca:
-       el wellness y las rutinas seguian compartidos entre categorias.
-
-       Ahora se espera. Se revisa cada 30ms hasta que aparezca, con un
-       limite de 10 segundos por si esa pantalla no usa Firebase. */
-    var intentos = 0;
-
-    function envolver(){
-      if(window.__FB_POR_CAT) return true;   /* una sola vez */
-      if(!window.fbGet || !window.fbSet) return false;
-      window.__FB_POR_CAT = true;
-
-    /* de un equipo: cada categoria tiene lo suyo */
-    var DEL_EQUIPO = /^(wellness|pesos|rm|prep_rutinas|prep_hist|notas|notas_pf|obs|baggerone|voley_live|voley_data|pv_sesion|horarios|fixture|pendientes|calendario)(\/|$)/;
-
-    var _get = window.fbGet, _set = window.fbSet;
-
-    function ruta(p){
-      if(typeof p !== 'string') return p;
-      if(!DEL_EQUIPO.test(p)) return p;      /* del club: no se toca */
-      return carpeta() + p;                  /* Primera devuelve '' */
-    }
-
-      window.fbGet = function(p, cb){ return _get(ruta(p), cb); };
-      window.fbSet = function(p, v){ return _set(ruta(p), v); };
-      return true;
-    }
-
-    if(!envolver()){
-      var t = setInterval(function(){
-        intentos++;
-        if(envolver() || intentos > 330) clearInterval(t);
-      }, 30);
-    }
-  })();
 
 
   /* ══ SI LA CATEGORIA TODAVIA NO TIENE PARTIDOS ═══════════════════════════

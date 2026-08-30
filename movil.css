@@ -308,3 +308,46 @@ tr.mi-fila {
   /* los titulos no se parten letra por letra */
   h1, h2, h3, .titulo, .title { word-break: normal !important; overflow-wrap: anywhere; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOS BOTONES DE ARRIBA A LA DERECHA
+   ══════════════════════════════════════════════════════════════════════════
+
+   Los idiomas, "Temporadas", la fecha y el aviso de sistema activo viven en
+   la misma caja. Trece pantallas la tenian en position:fixed, es decir
+   FLOTANDO: no ocupa lugar, y el titulo se dibujaba debajo. Quedaban
+   encimados.
+
+   Ahora la caja ocupa su lugar como cualquier otro elemento. Esta regla es
+   el respaldo: si alguna pantalla vuelve a ponerla flotante, la baja al
+   flujo igual. Y si no entran en un renglon, bajan al siguiente en vez de
+   pisarse.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.header-right, .hdr-right, .header-actions {
+  position: static !important;
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap !important;          /* si no entran, bajan */
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+/* nada de lo que va ahi adentro se estira de mas */
+.header-right > *, .hdr-right > *, .header-actions > * {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  /* en el telefono van a su propio renglon, alineados a la izquierda */
+  .header-right, .hdr-right, .header-actions {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    margin: 10px 0 0 0 !important;
+    gap: 6px;
+  }
+  /* un poco mas chicos, para que entren de a mas por renglon */
+  .header-right *, .hdr-right * { font-size: 11.5px; }
+}
