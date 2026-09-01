@@ -1,0 +1,54 @@
+═══════════════════════════════════════════════════════════════════════════════
+   PONER AL DIA UN CLUB
+   GELP · CASLA · BOCA · y los que vengan
+═══════════════════════════════════════════════════════════════════════════════
+
+   Tres programas, en este orden. Copialos a la carpeta del club y hacé
+   doble clic en cada uno.
+
+
+   1)  ARREGLAR_ESTE_CLUB.py
+       ──────────────────────────────────────────────────────────────────
+       Aplica los 7 arreglos del 1 de septiembre al firebase.js del club.
+
+       El mas importante: hace que un JUGADOR corra el mismo camino que un
+       entrenador. Antes habia una funcion que solo se ejecutaba para
+       jugadores, y ahi estaban casi todos los problemas — invisible si
+       probabas con tu propia cuenta.
+
+       NO toca la base del club, ni su clave, ni su nombre.
+
+
+   2)  ARREGLAR_PANTALLAS_VACIAS.py
+       ──────────────────────────────────────────────────────────────────
+       Arregla las pantallas que leen sus datos antes de que lleguen y
+       quedan en blanco.
+
+       Empeora a medida que se cargan mas entrenamientos: archivos mas
+       grandes, mas tiempo para descifrar. Por eso conviene correrlo.
+
+
+   3)  REVISAR_ANTES_DE_PUBLICAR.py
+       ──────────────────────────────────────────────────────────────────
+       Revisa que no quede nada roto. Si dice TODO EN ORDEN, se publica.
+
+       >> Este corrélo SIEMPRE antes de publicar, aunque no hayas tocado
+          nada. Tarda segundos y encuentra en el acto lo que si no
+          aparece cuando un jugador no puede entrar.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+   Y DESPUES, LO QUE NO SE PUEDE SALTEAR
+═══════════════════════════════════════════════════════════════════════════════
+
+   PROBAR CON UNA CUENTA DE JUGADOR.
+
+   No con la de entrenador. Los dos caminos eran distintos y por eso los
+   problemas se veian solo del lado de los jugadores. Ahora corren el mismo
+   codigo, pero la prueba se hace igual.
+
+       ventana de incognito  →  entrar con un jugador
+       pasar por: prep fisica · calendario · wellness · equipo
+       mirar la consola (F12): si no hay rojo, esta bien
+
+═══════════════════════════════════════════════════════════════════════════════

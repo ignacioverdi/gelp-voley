@@ -649,6 +649,28 @@ var AN_SESION    = null;
 var JUG_ACTUAL   = null;
 var JUG_TAB      = 'acum';
 var DATA         = window.HISTORIAL_DATA || null;
+
+/* ── LOS DATOS PUEDEN LLEGAR DESPUES ────────────────────────────────────
+   La linea de arriba corre UNA vez al cargar. Si el archivo cifrado
+   todavia no termino de descifrarse, la pantalla quedaba vacia para
+   siempre, aunque los datos llegaran un instante despues.
+
+   Este vigia mira la variable cada 200 ms. Apenas aparece, la actualiza,
+   redibuja la pantalla y se apaga. A los 8 segundos se rinde solo. */
+(function esperarDatos(){
+  var _i = 0, _t = setInterval(function(){
+    if(++_i > 40){ clearInterval(_t); return; }
+    if(window.HISTORIAL_DATA && window.HISTORIAL_DATA !== DATA){
+      DATA = window.HISTORIAL_DATA;
+      clearInterval(_t);
+      try{ if(typeof render==='function') render();
+           else if(typeof pintar==='function') pintar();
+           else if(typeof dibujar==='function') dibujar();
+           else if(typeof cargar==='function') cargar();
+           else if(typeof init==='function') init(); }catch(e){}
+    }
+  }, 200);
+})();
 var EQUIPO       = window.EQUIPO_DATA    || null;
 
 var POS_COLOR = {

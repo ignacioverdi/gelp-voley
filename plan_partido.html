@@ -483,6 +483,28 @@ function bkt(m){return m<=8?'b1':(m<=16?'b2':'b3');}
 function passes(a,cfg,vals){for(var i=0;i<cfg.filters.length;i++){var fl=cfg.filters[i],v=vals[i];if(v==='all')continue;if(Array.isArray(v)){if(v.indexOf(String(a[fl.idx]))<0)return false;continue;}if(fl.range){if(bkt(a[fl.idx])!==v)return false;}else if(String(a[fl.idx])!==v)return false;}return true;}
 /* ===== ARMADOR (distribución — lógica exacta del Game Plan) ===== */
 var GPL=window.LIGA_DATA||{teams:{},combos:[],calls:[]};
+
+/* ── LOS DATOS PUEDEN LLEGAR DESPUES ────────────────────────────────────
+   La linea de arriba corre UNA vez al cargar. Si el archivo cifrado
+   todavia no termino de descifrarse, la pantalla quedaba vacia para
+   siempre, aunque los datos llegaran un instante despues.
+
+   Este vigia mira la variable cada 200 ms. Apenas aparece, la actualiza,
+   redibuja la pantalla y se apaga. A los 8 segundos se rinde solo. */
+(function esperarDatos(){
+  var _i = 0, _t = setInterval(function(){
+    if(++_i > 40){ clearInterval(_t); return; }
+    if(window.LIGA_DATA && window.LIGA_DATA !== GPL){
+      GPL = window.LIGA_DATA;
+      clearInterval(_t);
+      try{ if(typeof render==='function') render();
+           else if(typeof pintar==='function') pintar();
+           else if(typeof dibujar==='function') dibujar();
+           else if(typeof cargar==='function') cargar();
+           else if(typeof init==='function') init(); }catch(e){}
+    }
+  }, 200);
+})();
 var GP_COMBOS=GPL.combos||[];
 var GP_FRONT_POS=[4,3,2];
 var RESARM=["#","/","+","!","=","-"];
