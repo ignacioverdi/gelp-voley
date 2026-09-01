@@ -14,7 +14,7 @@
 var FB_URL  = 'https://volley-stats-82924-default-rtdb.firebaseio.com';
 var FB_KEY  = 'AIzaSyCXtJ9detuBeWBhf1WlBdDpyRBv3apMyKY';   // clave pública del proyecto
 var FB_DOM  = 'gelp.app';       // dominio interno de las cuentas de jugadores
-var FB_CLUB = 'NÄFELS';
+var FB_CLUB = 'GELP';
 
 function fbKey(path){
   return 'fb_' + path.replace(/[^a-zA-Z0-9]/g, '_');
