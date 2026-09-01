@@ -76,8 +76,12 @@
 
     var d = document.createElement('div');
     d.id = 'lic-aviso';
+    /* Abajo a la izquierda ya viven el escudo del club y el selector de
+       categoria, con z-index mas alto. El aviso iba justo ahi y quedaba
+       tapado: se leia media frase. Va arriba, al lado de los idiomas, donde
+       no compite con nada. */
     d.style.cssText =
-      'position:fixed;left:12px;bottom:12px;z-index:9990;max-width:340px;' +
+      'position:fixed;right:12px;top:96px;z-index:9990;max-width:320px;' +
       'padding:' + (urgente ? '12px 15px' : '9px 13px') + ';border-radius:10px;' +
       'background:rgba(14,18,32,.96);border:1px solid ' +
       (urgente ? 'rgba(251,191,36,.45)' : 'rgba(255,255,255,.12)') + ';' +
