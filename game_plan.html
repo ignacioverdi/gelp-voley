@@ -279,6 +279,14 @@ select, select option {
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
 <script src="categorias_club.js" onerror="void 0"></script>
 <script src="selector_categoria.js" onerror="void 0"></script>
+<script>
+/* Esta pantalla necesita sus datos completos apenas abre: si se dibuja
+   antes de que terminen de descifrarse, sale vacia.
+   Es una pantalla de escritorio, del cuerpo tecnico: un segundo de
+   espera no molesta. Las pantallas de las jugadoras no llevan esta
+   marca, asi que siguen abriendo en segundo plano. */
+window.__DESCIFRAR_SINCRONO = true;
+</script>
 <script src="datos_seguros.js"></script>
 <script src="liga_data.js.enc"></script>
 <script src="firebase.js" onerror="void 0"></script>
