@@ -138,7 +138,16 @@ window.__DESCIFRAR_SINCRONO = true;
   try{ document.title='Armador — '+td.name; }catch(e){}
   window.__TEAM_NAME=td.name; window.__TEAM_SLUG=equipo;
   var setters={};
-  if(td.setter && td.setter.num){ setters[String(td.setter.num)]={name:td.setter.name,num:td.setter.num,s:td.setter.s}; }
+      /* Las armadoras estan en td.setters (plural). Antes se leia td.setter
+         —el titular, en singular— y por eso aparecia una sola aunque el
+         motor generara las tres. */
+      if(td.setters && td.setters.length){
+        td.setters.forEach(function(sx){
+          if(sx && sx.num!=null) setters[String(sx.num)]={name:sx.name,num:sx.num,s:sx.s};
+        });
+      } else if(td.setter && td.setter.num){
+        setters[String(td.setter.num)]={name:td.setter.name,num:td.setter.num,s:td.setter.s};
+      }; }
   return { rivals:td.rivals, games:(td.matches||td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})), atk_combos:L.combos, setters:setters };
 })();
 
