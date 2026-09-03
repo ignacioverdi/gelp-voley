@@ -227,7 +227,7 @@ function roster(){
      la pantalla quedaba sin jugadoras en todos los clubes nuevos. */
   var e = (window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores) || null;
   if(e && e.length) return e;
-  return (window.PLANTEL_CLUB && window.PLANTEL_CLUB.jugadores) || [];
+  return ((window.PLANTEL_GELP || window.PLANTEL_CLUB) && (window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores) || [];
 }
 function pname(j){
   /* El plantel viejo traia el apellido en 'ap' y el nombre aparte, y esta

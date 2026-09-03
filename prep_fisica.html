@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>PREPARACIÓN FÍSICA — GELP VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="plantel_club.js" onerror="void 0"></script>
+<script src="plantel_gelp.js" onerror="void 0"></script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
 <script src="categorias_club.js" onerror="void 0"></script>
 <script src="selector_categoria.js" onerror="void 0"></script>
@@ -369,8 +369,8 @@ var DATA = {jugadores:[]};
 function construirData(){
   // Plantel: fuente maestra PLANTEL_CLUB (apellido) → fallback EQUIPO_DATA → demo
   var plantel;
-  if(window.PLANTEL_CLUB && window.PLANTEL_CLUB.jugadores && window.PLANTEL_CLUB.jugadores.length){
-    plantel = window.PLANTEL_CLUB.jugadores.map(function(j){
+  if((window.PLANTEL_GELP || window.PLANTEL_CLUB) && (window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores && (window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores.length){
+    plantel = (window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores.map(function(j){
       return { num:j.num, nombre:j.ap||j.nombre, pos:j.pos||'', foto:j.foto||null };
     });
   } else if(window.EQUIPO_DATA && window.EQUIPO_DATA.jugadores && window.EQUIPO_DATA.jugadores.length){

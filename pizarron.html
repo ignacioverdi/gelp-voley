@@ -6,7 +6,7 @@
 <title>PIZARRÓN — GELP VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="utils.js" onerror="void 0"></script>
-<script src="plantel_club.js" onerror="void 0"></script>
+<script src="plantel_gelp.js" onerror="void 0"></script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
 <script src="categorias_club.js" onerror="void 0"></script>
 <script src="selector_categoria.js" onerror="void 0"></script>
@@ -331,7 +331,7 @@ function ejNombre(id, fallback){
 }
 
 function armarPrep(mes){
-  var roster = (window.PLANTEL_CLUB && window.PLANTEL_CLUB.jugadores) || [];
+  var roster = ((window.PLANTEL_GELP || window.PLANTEL_CLUB) && (window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores) || [];
   var jugs = roster.map(function(j){
     var r = RUTINAS_RAW[j.num] && RUTINAS_RAW[j.num][mes];
     return { num:j.num, nombre:(j.ap||j.nombre||('#'+j.num)), pos:j.pos||'', semanas:(r&&r.semanas)?r.semanas:[] };
@@ -427,7 +427,7 @@ function cargarEquipo(){
   } else {
     // sin Firebase: intentar localStorage (rutinas guardadas en este dispositivo)
     RUTINAS_RAW = {};
-    var roster=(window.PLANTEL_CLUB&&window.PLANTEL_CLUB.jugadores)||[];
+    var roster=((window.PLANTEL_GELP || window.PLANTEL_CLUB)&&(window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores)||[];
     try{
       roster.forEach(function(j){ var pre='prep_rutina_'+j.num+'_';
         for(var i=0;i<localStorage.length;i++){ var key=localStorage.key(i);

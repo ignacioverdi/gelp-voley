@@ -13,7 +13,7 @@
   <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
   <!-- El plantel maestro del club. Es la fuente unica: cuando entra un jugador
        nuevo se agrega ahi y aparece en todas las pantallas. -->
-  <script src="plantel_club.js" onerror="void 0"></script>
+  <script src="plantel_gelp.js" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -328,7 +328,7 @@ function getJugadores(){
   var porNum = {};
 
   try{
-    var P = window.PLANTEL_CLUB;
+    var P = (window.PLANTEL_GELP || window.PLANTEL_CLUB);
     var lista = P && (P.jugadores || (P.length ? P : null));
     if(lista) lista.forEach(function(j){
       var n = parseInt(j.num, 10);

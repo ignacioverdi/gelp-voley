@@ -4,7 +4,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="firebase.js" onerror="void 0"></script>
 <script src="firebase_por_categoria.js"></script>
-<script src="plantel_club.js" onerror="void 0"></script>
+<script src="plantel_gelp.js" onerror="void 0"></script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
 <script src="categorias_club.js" onerror="void 0"></script>
 <script src="selector_categoria.js" onerror="void 0"></script>
@@ -168,7 +168,7 @@ var BLOQUES=[
   {nombre:'PREVENTIVOS',icon:'🛡️',color:'#06b6d4'},
   {nombre:'MOVILIDAD',icon:'🧘',color:'#2dd4bf'}
 ];
-function roster(){ return (window.PLANTEL_CLUB&&window.PLANTEL_CLUB.jugadores)||[]; }
+function roster(){ return ((window.PLANTEL_GELP || window.PLANTEL_CLUB)&&(window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores)||[]; }
 function catalogo(){ return (window.EJERCICIOS_DATA&&window.EJERCICIOS_DATA.grupos)||[]; }
 function pname(j){ return '#'+j.num+'  '+(j.ap||j.nombre); }
 function ejById(id){ var g=catalogo(); for(var i=0;i<g.length;i++){var e=g[i].ejercicios.find(function(x){return x.id===id;});if(e)return e;} return null; }

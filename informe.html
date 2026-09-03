@@ -416,7 +416,7 @@ function plantel(lado, num){
     if(P && P[num] && P[num].nombre) return P[num].nombre;
   }catch(e){}
   try{
-    var L = window.PLANTEL || window.PLANTEL_DATA || window.PLANTEL_CLUB || null;
+    var L = window.PLANTEL || window.PLANTEL_DATA || (window.PLANTEL_GELP || window.PLANTEL_CLUB) || null;
     if(L && L.length){
       for(var i=0;i<L.length;i++)
         if(Number(L[i].num)===Number(num)) return L[i].nombre || L[i].apellido || ('#'+num);

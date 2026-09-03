@@ -197,7 +197,7 @@ function batGet(nombre, partido){
 
 function _plantelNormalizado(){
   try{
-    var P = (window.PLANTEL_CLUB && window.PLANTEL_CLUB.jugadores) || [];
+    var P = ((window.PLANTEL_GELP || window.PLANTEL_CLUB) && (window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores) || [];
     if(P.length) return P.map(function(j){
       return {num:j.num, nombre:(j.ap || j.nombre || ''), pos:j.pos, foto:j.foto};
     });

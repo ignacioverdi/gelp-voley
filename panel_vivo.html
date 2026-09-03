@@ -1189,7 +1189,7 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_club.js" onerror="void 0"></script>
+<script src="plantel_gelp.js" onerror="void 0"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -2579,7 +2579,7 @@ function plNorm(t){
    esto solo completa lo que ese no tenga. */
 function plantelClub(){
   var P = null;
-  var CANDIDATAS = ['PLANTEL_CLUB','PLANTEL_CLUB','PLANTEL_CLUB','PLANTEL','PLANTEL_DATA'];
+  var CANDIDATAS = ['PLANTEL_GELP','PLANTEL_CLUB','PLANTEL_GELP','PLANTEL_CLUB','PLANTEL_GELP','PLANTEL_CLUB','PLANTEL','PLANTEL_DATA'];
   for(var i=0;i<CANDIDATAS.length && !P;i++){
     try{ if(typeof window!=='undefined' && window[CANDIDATAS[i]]) P = window[CANDIDATAS[i]]; }catch(e){}
   }
