@@ -952,7 +952,15 @@ function buildEjercicio(j, ej, num){
   pesosDiv.className = 'pesos-section';
   var pesosLabel = document.createElement('div');
   pesosLabel.className = 'pesos-label';
-  pesosLabel.textContent = tP('registra');
+  var _nom2 = (ej.nombre2 && ej.id2) ? ej.nombre2 : null;
+  if(_nom2){
+    /* Superserie: la fila lleva el nombre del primer movimiento. */
+    pesosLabel.innerHTML = '<span style="color:#2dd4bf;font-weight:700">' +
+      (ej.nombre || '') + '</span><span style="opacity:.55"> · ' +
+      tP('registra') + '</span>';
+  } else {
+    pesosLabel.textContent = tP('registra');
+  }
   pesosDiv.appendChild(pesosLabel);
   var pesosGrid = document.createElement('div');
   pesosGrid.className = 'pesos-grid';
@@ -983,6 +991,46 @@ function buildEjercicio(j, ej, num){
   }
   pesosDiv.appendChild(pesosGrid);
   card.appendChild(pesosDiv);
+
+  /* La segunda fila, para el otro movimiento. Usa el id2 que ya trae la
+     rutina, asi el peso se guarda igual que si fuera un ejercicio suelto. */
+  if(_nom2){
+    var pesos2 = document.createElement('div');
+    pesos2.className = 'pesos-section';
+    pesos2.style.borderTop = '1px dashed rgba(255,255,255,.10)';
+    var label2 = document.createElement('div');
+    label2.className = 'pesos-label';
+    label2.innerHTML = '<span style="color:#a5b4fc;font-weight:700">' + _nom2 +
+      '</span><span style="opacity:.55"> · ' + tP('registra') + '</span>';
+    pesos2.appendChild(label2);
+    var grid2 = document.createElement('div');
+    grid2.className = 'pesos-grid';
+    for(var s2 = 1; s2 <= ej.series; s2++){
+      (function(nSerie){
+        var k2 = storageKey(j.num, ej.id2, nSerie);
+        var item = document.createElement('div');
+        item.className = 'serie-item';
+        var lab = document.createElement('div');
+        lab.className = 'serie-num';
+        lab.textContent = tP('serie') + ' ' + nSerie;
+        var inp2 = document.createElement('input');
+        inp2.type = 'number';
+        inp2.className = 'peso-input';
+        inp2.placeholder = '\u2014 kg';
+        inp2.min = '0'; inp2.max = '500'; inp2.step = '0.5';
+        inp2.value = localStorage.getItem(k2) || '';
+        inp2.addEventListener('change', function(){
+          var v = inp2.value.trim();
+          try{ localStorage.setItem(k2, v); }catch(e){}
+          try{ if(typeof fbSet !== 'undefined') fbSet('pesos/' + k2, v === '' ? null : v); }catch(e){}
+        });
+        item.appendChild(lab); item.appendChild(inp2);
+        grid2.appendChild(item);
+      })(s2);
+    }
+    pesos2.appendChild(grid2);
+    card.appendChild(pesos2);
+  }
 
   // Observación
   var obsDiv = document.createElement('div');

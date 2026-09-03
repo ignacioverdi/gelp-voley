@@ -127,7 +127,15 @@
       <div class="card-ti">👥 Estado del equipo</div>
       <div class="card-sub">Quién llega bien y quién necesita atención</div>
       <div class="row2" style="margin-bottom:16px;max-width:420px">
-        <div><label class="fld">Día</label><input type="date" id="eqFecha"></div>
+        <div><label class="fld">Hasta el día</label><input type="date" id="eqFecha"></div>
+          <div><label class="fld">Período</label>
+            <select id="eqPeriodo">
+              <option value="1">Solo ese día</option>
+              <option value="7">Última semana</option>
+              <option value="15">Última quincena</option>
+              <option value="30">Último mes</option>
+            </select>
+          </div>
         <div><label class="fld">Sesión</label><select id="eqSes">
           <option value="">Todas</option><option>Pelota</option><option>Pesas</option><option>Partido</option></select></div>
       </div>
@@ -335,9 +343,22 @@ function renderTeam(){
   // promedio personal (todos los días) para calcular tendencia
   var byNum={}; all.forEach(function(e){ (byNum[e.num]=byNum[e.num]||[]).push(e); });
   // registros del día (uno por jugador: si hay varias sesiones, promedio o la filtrada)
+  /* El periodo elegido: promedia todas las encuestas de cada jugador
+     en ese rango, en vez de mostrar un solo dia. */
+  var dias = parseInt(document.getElementById('eqPeriodo').value, 10) || 1;
+  var hasta = new Date(date + 'T12:00:00');
+  var desde = new Date(hasta);
+  desde.setDate(desde.getDate() - (dias - 1));
+  function enRango(f){
+    var d = new Date(f + 'T12:00:00');
+    return d >= desde && d <= hasta;
+  }
+
   var dayRows=[];
   roster().forEach(function(j){
-    var es=all.filter(function(e){ return e.num===j.num && e.date===date && (!ses||e.sesion===ses); });
+    var es=all.filter(function(e){
+      return e.num===j.num && enRango(e.date) && (!ses||e.sesion===ses);
+    });
     if(!es.length) return;
     var pct=Math.round(avg(es.map(function(e){return e.pct;})));
     var rpe=Math.round(avg(es.map(function(e){return e.rpe;})));
@@ -355,7 +376,9 @@ function renderTeam(){
   avgEl.innerHTML='<div><div class="muted" style="font-size:10px;letter-spacing:1px;text-transform:uppercase">Promedio del equipo</div>'
     +'<div class="n" style="color:'+colFor(tavg)+'">'+tavg+'%</div></div>'
     +'<div class="muted" style="font-size:13px">'+dayRows.length+' respondieron'+(alerta?' · <span style="color:var(--red);font-weight:700">'+alerta+' en alerta</span>':'')+'</div>';
-  var h='<table><thead><tr><th>Jugador</th><th>Pos</th><th>RPE</th><th>vs prom</th><th>Wellness</th><th></th></tr></thead><tbody>';
+  var h='<table><thead><tr><th>Jugador</th><th>Pos</th>'
+    + (dias>1 ? '<th>Cargó</th>' : '')
+    + '<th>RPE</th><th>vs prom</th><th>Wellness</th><th></th></tr></thead><tbody>';
   dayRows.forEach(function(r){
     var c=colFor(r.pct), diff=r.pct-r.prom;
     var tr = diff<=-8?'<span class="trend" style="color:var(--red)">▼ '+diff+'</span>'
@@ -363,6 +386,11 @@ function renderTeam(){
            : '<span class="trend muted">≈</span>';
     h+='<tr><td><span class="dot" style="background:'+c+'"></span><b>'+r.j.ap+'</b></td>'
       +'<td class="muted">'+(POSAB[r.j.pos]||r.j.pos)+'</td>'
+      + (dias>1
+          ? '<td class="muted" style="white-space:nowrap"><b style="color:'
+            + (r.cuantas>=dias*0.6?'var(--green)':r.cuantas>=dias*0.3?'var(--orange)':'var(--red)')
+            + '">' + r.cuantas + '</b><span style="opacity:.5"> de ' + dias + '</span></td>'
+          : '')
       +'<td style="color:var(--orange);font-weight:700">'+r.rpe+'</td>'
       +'<td>'+tr+'</td>'
       +'<td class="pctcell" style="color:'+c+'">'+r.pct+'%</td>'
@@ -429,6 +457,7 @@ function jugadorConectado(){
   sel.onchange=function(){ renderHist(); maybeLoadExisting(); };
   document.getElementById('selFecha').onchange=maybeLoadExisting;
   document.getElementById('eqFecha').onchange=renderTeam;
+  document.getElementById('eqPeriodo').onchange=renderTeam;
   document.getElementById('eqSes').onchange=renderTeam;
   WStore.init(function(){                     // local primero; cuando llega la nube, vuelve a entrar y re-dibuja
     renderHist(); maybeLoadExisting();

@@ -1,54 +1,86 @@
 ═══════════════════════════════════════════════════════════════════════════════
-   PONER AL DIA UN CLUB
-   GELP · CASLA · BOCA · y los que vengan
+   MEJORAS DEL 2 DE SEPTIEMBRE
+   Para GELP, para la PLANTILLA y para cualquier club
 ═══════════════════════════════════════════════════════════════════════════════
 
-   Tres programas, en este orden. Copialos a la carpeta del club y hacé
-   doble clic en cada uno.
+   Cuatro mejoras que ya están en NÄFELS y que conviene tener en todos lados.
 
 
-   1)  ARREGLAR_ESTE_CLUB.py
-       ──────────────────────────────────────────────────────────────────
-       Aplica los 7 arreglos del 1 de septiembre al firebase.js del club.
+   1) EQUIPO — el plantel completo y con nombres
+      ─────────────────────────────────────────────────────────────────────
+      La pantalla mostraba SOLO a los jugadores que ya jugaron, porque leía
+      el archivo que se genera al procesar los .dvw.
 
-       El mas importante: hace que un JUGADOR corra el mismo camino que un
-       entrenador. Antes habia una funcion que solo se ejecutaba para
-       jugadores, y ahi estaban casi todos los problemas — invisible si
-       probabas con tu propia cuenta.
+      Un jugador nuevo no aparecía hasta su debut, aunque tuviera cuenta y
+      cargara wellness. Y si se lo agregaba a mano, el siguiente HACER_TODO
+      lo borraba.
 
-       NO toca la base del club, ni su clave, ni su nombre.
-
-
-   2)  ARREGLAR_PANTALLAS_VACIAS.py
-       ──────────────────────────────────────────────────────────────────
-       Arregla las pantallas que leen sus datos antes de que lleguen y
-       quedan en blanco.
-
-       Empeora a medida que se cargan mas entrenamientos: archivos mas
-       grandes, mas tiempo para descifrar. Por eso conviene correrlo.
+      Ahora la base es el plantel del club, que es la lista real y nadie la
+      pisa. Además se ve el nombre de pila debajo del apellido.
 
 
-   3)  REVISAR_ANTES_DE_PUBLICAR.py
-       ──────────────────────────────────────────────────────────────────
-       Revisa que no quede nada roto. Si dice TODO EN ORDEN, se publica.
+   2) PREPARACIÓN FÍSICA — los dos pesos de una superserie
+      ─────────────────────────────────────────────────────────────────────
+      Un "Banco Plano + Fondos" son dos ejercicios con pesos muy distintos.
+      Había una sola fila y no se sabía cuál era cuál.
 
-       >> Este corrélo SIEMPRE antes de publicar, aunque no hayas tocado
-          nada. Tarda segundos y encuentra en el acto lo que si no
-          aparece cuando un jugador no puede entrar.
+
+   3) PIZARRÓN — las dos columnas de una superserie
+      ─────────────────────────────────────────────────────────────────────
+      Lo mismo en la tabla del profe: cada serie lleva dos casilleros, con
+      el nombre de cada movimiento arriba.
+
+
+   4) WELLNESS — ver por semana, quincena o mes
+      ─────────────────────────────────────────────────────────────────────
+      La tabla del equipo mostraba UN día. Para ver cómo viene el plantel
+      eso no alcanza: un mal día no significa nada, pero venir cayendo dos
+      semanas sí.
+
+      Ahora se elige el período y promedia, mostrando además cuántos días
+      cargó cada uno — con color, porque un promedio de una sola carga no
+      dice mucho.
 
 
 ═══════════════════════════════════════════════════════════════════════════════
-   Y DESPUES, LO QUE NO SE PUEDE SALTEAR
+   CÓMO SE USA
 ═══════════════════════════════════════════════════════════════════════════════
 
-   PROBAR CON UNA CUENTA DE JUGADOR.
+   Copiar los dos programas a la carpeta y hacer doble clic, en este orden:
 
-   No con la de entrenador. Los dos caminos eran distintos y por eso los
-   problemas se veian solo del lado de los jugadores. Ahora corren el mismo
-   codigo, pero la prueba se hace igual.
+       1. MEJORAS_2_SEPTIEMBRE.py        →  S
+       2. REVISAR_ANTES_DE_PUBLICAR.py   →  TODO EN ORDEN
+       3. publicar
 
-       ventana de incognito  →  entrar con un jugador
-       pasar por: prep fisica · calendario · wellness · equipo
-       mirar la consola (F12): si no hay rojo, esta bien
+   Sirve para:
+
+       CLIENTE VOLEY STATS\PLANTILLA\      ← para los clientes nuevos
+       CLIENTE VOLEY STATS\CLUBES\gelp\    ← para GELP
+
+   De cada pantalla tocada queda una copia .antes-mejoras
+
+
+═══════════════════════════════════════════════════════════════════════════════
+   QUÉ ESPERAR
+═══════════════════════════════════════════════════════════════════════════════
+
+   Cada mejora puede decir:
+
+       listo          se aplicó
+       ya estaba      esa pantalla ya la tenía
+       no la toco     la pantalla es distinta de lo esperado
+
+   Ese último caso NO es un error: el programa prefiere no tocar antes que
+   romper algo. Si aparece, avisá y se hace a mano esa pantalla.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+   Y DESPUÉS
+═══════════════════════════════════════════════════════════════════════════════
+
+   PROBAR CON UNA CUENTA DE JUGADOR, no con la de entrenador.
+
+   Es la regla que costó ocho horas el 1 de septiembre: los dos caminos
+   eran distintos y los problemas solo se veían del lado del jugador.
 
 ═══════════════════════════════════════════════════════════════════════════════
