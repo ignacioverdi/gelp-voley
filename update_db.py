@@ -24,6 +24,43 @@ ESTRUCTURA DE ARCHIVOS:
 import os, re, json, argparse, shutil
 from collections import defaultdict, Counter
 
+# ── NOMBRES CORTOS DE LOS CLUBES ──────────────────────────────────────────
+# Los .dvw traen el nombre completo —"Club Social, Deportivo y Cultural
+# Argentino de Castelar"— que no entra en pantalla y se lee mal.
+# Aca esta como lo llama todo el mundo.
+NOMBRE_CORTO = {
+    'club social, deportivo y cultural argentino de castelar': 'Castelar',
+    'club atletico san lorenzo de almagro':                    'San Lorenzo',
+    'club atlético san lorenzo de almagro':                    'San Lorenzo',
+    'club ferro carril oeste':                                 'Ferro',
+    'club atletico boca juniors':                              'Boca',
+    'club atlético boca juniors':                              'Boca',
+    'club atletico river plate':                               'River',
+    'club atlético river plate':                               'River',
+    'club gimnasia y esgrima la plata':                        'GELP',
+    'club banco provincia':                                    'Banco Provincia',
+    'universidad nacional de la matanza':                      'UNLaM',
+    'universidad nacional de tres de febrero':                 'Untref',
+    'instituto educativo san gregorio "el iluminador"':        'San Gregorio',
+    'instituto educativo san gregorio el iluminador':          'San Gregorio',
+    'club atletico velez sarsfield':                           'Velez',
+    'club atlético vélez sarsfield':                           'Velez',
+    'club estudiantes de la plata':                            'Estudiantes',
+}
+
+
+def nombre_corto(nombre):
+    """Devuelve el nombre corto del club, o el original si no esta en la tabla."""
+    if not nombre:
+        return nombre
+    n = NOMBRE_CORTO.get(nombre.strip().lower())
+    if n:
+        return n
+    # Si no esta en la tabla, al menos sacamos el "Club " del principio
+    limpio = re.sub(r'^(club|instituto|universidad nacional)\s+', '', nombre.strip(), flags=re.I)
+    return limpio if limpio else nombre
+
+
 # ── NORMALIZACIÓN DE COMBOS AL CANÓNICO MUNDIAL ──────────────────────
 # Equivalencias argentino → canónico (mismo ataque, distinto idioma de scout)
 COMBO_EQUIV = {
@@ -549,7 +586,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             team_libs = liberos_by_team.get(team, set())
             psec = '[3PLAYERS-H]' if pfx=='*' else '[3PLAYERS-V]'
             team_pos = _get_positions(content, psec)
-            setters = detectar_armadores(content, pfx, 2, team_libs, team_pos)
+            setters = detectar_armadores(content, pfx, 4, team_libs, team_pos)
             for sn in setters:
                 setters_detected.setdefault(team, set()).add(sn)
                 r = parse_setter_rallies(content, pfx, rpfx, ishome, sn, date, rival, code)
