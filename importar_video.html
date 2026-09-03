@@ -380,6 +380,48 @@
 <script src="lang.js" onerror="void 0"></script>
 <script src="ayuda.js"></script>
 <script src="licencia.js"></script>
+
+<script>
+/* ── ESPERAR A QUE LLEGUEN LOS DATOS ──────────────────────────────────────
+   Los archivos cifrados pueden tardar en abrirse. Si esta pantalla se
+   dibuja antes, la lista de partidos queda vacia para siempre: por eso
+   con 19 partidos no aparecia ninguno.
+
+   Aca no se toca como dibuja: si al abrir no habia datos, se espera a que
+   lleguen y se recarga UNA sola vez. La segunda vez ya estan en el
+   navegador y la lista sale completa.
+
+   La marca en sessionStorage evita que se recargue en bucle. */
+(function esperarVideoData(){
+  function hayDatos(){
+    try{
+      var d = (typeof MODO !== 'undefined' && MODO === 'ent')
+                ? window.VIDEO_DATA_ENT : window.VIDEO_DATA;
+      return !!(d && d.matches && Object.keys(d.matches).length);
+    }catch(e){ return false; }
+  }
+  if(hayDatos()) return;                       /* ya estaban: nada que hacer */
+  if(sessionStorage.getItem('vid_recarga')) return;   /* ya se recargo una vez */
+
+  var intentos = 0;
+  var t = setInterval(function(){
+    intentos++;
+    if(intentos > 50){ clearInterval(t); return; }    /* 10 segundos y basta */
+    if(hayDatos()){
+      clearInterval(t);
+      try{ sessionStorage.setItem('vid_recarga','1'); }catch(e){}
+      location.reload();
+    }
+  }, 200);
+
+  try{ window.addEventListener('datos-listos', function(){
+    if(hayDatos() && !sessionStorage.getItem('vid_recarga')){
+      try{ sessionStorage.setItem('vid_recarga','1'); }catch(e){}
+      location.reload();
+    }
+  }); }catch(e){}
+})();
+</script>
 </body>
 </html>
 
