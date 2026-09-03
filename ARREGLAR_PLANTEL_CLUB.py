@@ -75,9 +75,14 @@ def main():
     for ruta in sorted(glob.glob(os.path.join(AQUI, '*.html'))):
         f = os.path.basename(ruta)
         s = io.open(ruta, encoding='utf-8', errors='replace').read()
-        if variable in s:
-            continue
-        if 'PLANTEL_CLUB' in s or 'plantel_club.js' in s:
+
+        # Una pantalla puede MENCIONAR la variable correcta y aun asi cargar
+        # el archivo equivocado. Es lo que pasaba en historial_voley: esperaba
+        # PLANTEL_GELP pero cargaba plantel_club.js, que no existe.
+        # Por eso se miran las dos cosas por separado.
+        carga_mal = 'plantel_club.js' in s
+        busca_mal = 'PLANTEL_CLUB' in s and variable not in s
+        if carga_mal or busca_mal:
             pendientes.append(f)
 
     if not pendientes:

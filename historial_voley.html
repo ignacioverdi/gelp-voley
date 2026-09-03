@@ -18,7 +18,7 @@
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <!-- El plantel del club. La lista de jugadores sale de EQUIPO_DATA, que
        viene cifrado y a veces no llega: sin eso la pagina queda en blanco. -->
-  <script src="plantel_club.js" onerror="void 0"></script>
+  <script src="plantel_gelp.js" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <!-- VB: selector PARTIDO/ENTRENAMIENTO - carga los datos segun el modo elegido -->
 <script>(function(){var ent=false;try{ent=(localStorage.getItem('vb_modo')||'partido')==='entrenamiento';}catch(e){}
@@ -221,7 +221,7 @@ var POS_COLOR={ARMADOR:'#F59E0B',OPUESTO:'#F97316',PUNTA:'#22C55E',CENTRAL:'#F97
 
 // ── INIT ──────────────────────────────────────────────────────────────
 function tryInit(n){
-  var ready = (typeof PLANTEL_GELP!=='undefined') || (typeof PARTIDOS_JUGADORES!=='undefined') || (window.EQUIPO_DATA&&window.EQUIPO_DATA.jugadores) || (window.PLANTEL_CLUB && (window.PLANTEL_CLUB.jugadores||[]).length);
+  var ready = (typeof PLANTEL_GELP!=='undefined') || (typeof PARTIDOS_JUGADORES!=='undefined') || (window.EQUIPO_DATA&&window.EQUIPO_DATA.jugadores) || ((window.PLANTEL_GELP || window.PLANTEL_CLUB) && ((window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores||[]).length);
   if(ready){
     buildSelector();
     var p=new URLSearchParams(window.location.search);
@@ -1037,7 +1037,7 @@ function _plantelDelClub(){
       return window.EQUIPO_DATA.jugadores;
   }catch(e){}
   try{
-    var P = (window.PLANTEL_CLUB && window.PLANTEL_CLUB.jugadores) || [];
+    var P = ((window.PLANTEL_GELP || window.PLANTEL_CLUB) && (window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores) || [];
     if(P.length) return P.map(function(j){
       return {num:j.num, nombre:(j.ap || j.nombre || ''), pos:j.pos, foto:j.foto};
     });

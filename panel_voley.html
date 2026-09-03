@@ -1256,7 +1256,7 @@ function calcFaseKPIs(codes, side){
   side = side || '*';
   var ROL={};
   try{
-    var P=(window.PLANTEL_GELP || window.PLANTEL_CLUB);
+    var P=(window.PLANTEL_GELP || (window.PLANTEL_GELP || window.PLANTEL_CLUB));
     var arr=(P&&P.jugadores)?P.jugadores:(P&&P.lista)?P.lista:(Array.isArray(P)?P:[]);
     arr.forEach(function(j){ var n=(j.num!=null?j.num:j.c); var pos=((j.pos||j.rol||'')+'').toUpperCase(); if(n!=null) ROL[parseInt(n,10)]=pos; });
   }catch(e){}
@@ -1848,8 +1848,8 @@ function showJugDetail(nombre, num){
 
   // Datos del jugador (posición) desde el PLANTEL
   // Plantel Gelp — lee de plantel_club.js (fuente única); respaldo abajo
-  var PLANTEL = ((window.PLANTEL_GELP || window.PLANTEL_CLUB) && (window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores)
-    ? (window.PLANTEL_GELP || window.PLANTEL_CLUB).jugadores.map(function(j){ return {num:j.num, nombre:j.ap, pos:j.pos}; })
+  var PLANTEL = ((window.PLANTEL_GELP || (window.PLANTEL_GELP || window.PLANTEL_CLUB)) && (window.PLANTEL_GELP || (window.PLANTEL_GELP || window.PLANTEL_CLUB)).jugadores)
+    ? (window.PLANTEL_GELP || (window.PLANTEL_GELP || window.PLANTEL_CLUB)).jugadores.map(function(j){ return {num:j.num, nombre:j.ap, pos:j.pos}; })
     : [
   ];
   var jugInfo = null;

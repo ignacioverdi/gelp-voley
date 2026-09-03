@@ -328,7 +328,7 @@ function getJugadores(){
   var porNum = {};
 
   try{
-    var P = (window.PLANTEL_GELP || window.PLANTEL_CLUB);
+    var P = (window.PLANTEL_GELP || (window.PLANTEL_GELP || window.PLANTEL_CLUB));
     var lista = P && (P.jugadores || (P.length ? P : null));
     if(lista) lista.forEach(function(j){
       var n = parseInt(j.num, 10);
