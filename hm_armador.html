@@ -147,7 +147,7 @@ window.__DESCIFRAR_SINCRONO = true;
         });
       } else if(td.setter && td.setter.num){
         setters[String(td.setter.num)]={name:td.setter.name,num:td.setter.num,s:td.setter.s};
-      }; }
+      }
   return { rivals:td.rivals, games:(td.matches||td.games||td.rivals.map(function(r,i){return {idx:i,rival:r,date:''};})), atk_combos:L.combos, setters:setters };
 })();
 
