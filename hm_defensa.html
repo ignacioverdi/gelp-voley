@@ -231,7 +231,14 @@ window.__DESCIFRAR_SINCRONO = true;
   var ALL=[];
   Object.keys(VD).forEach(function(c){ var m=VD[c]; (m.actions||[]).forEach(function(a){ if(a.sk==='Defensa' && a.tm===EQ){ var o={}; for(var k in a)o[k]=a[k]; o.opp=rivalOf(m); o.code=c; o.date=m.date||''; ALL.push(o); } }); });
   var PLAYERS={};
-  ALL.forEach(function(a){ if(!PLAYERS[a.num])PLAYERS[a.num]={num:a.num,name:a.name,acts:[]}; PLAYERS[a.num].acts.push(a); });
+  ALL.forEach(function(a){ /* El dorsal puede venir como "6" o como "06" segun el .dvw. Sin
+           normalizarlo, la misma jugadora aparecia dos veces en la lista.
+           Se agrupa por numero, y se queda el nombre mas completo. */
+        var _n = parseInt(a.num, 10);
+        if(isNaN(_n)) _n = a.num;
+        if(!PLAYERS[_n]) PLAYERS[_n]={num:_n, name:a.name, acts:[]};
+        else if((a.name||'').length > (PLAYERS[_n].name||'').length) PLAYERS[_n].name = a.name;
+        PLAYERS[_n].acts.push(a); });
   var RIVALS=[]; ALL.forEach(function(a){ if(RIVALS.indexOf(a.opp)<0)RIVALS.push(a.opp); }); RIVALS.sort();
   var NAME=EQ.toUpperCase();
   (function(){ for(var _k in VD){ var _m=VD[_k]; if(_m.home===EQ){ NAME=_m.homeName||NAME; break; } if(_m.away===EQ){ NAME=_m.awayName||NAME; break; } } })();
