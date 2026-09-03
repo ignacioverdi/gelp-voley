@@ -1,86 +1,58 @@
 ═══════════════════════════════════════════════════════════════════════════════
-   MEJORAS DEL 2 DE SEPTIEMBRE
-   Para GELP, para la PLANTILLA y para cualquier club
+   PUBLICAR.bat  —  el atajo de todos los días
 ═══════════════════════════════════════════════════════════════════════════════
 
-   Cuatro mejoras que ya están en NÄFELS y que conviene tener en todos lados.
+   Copialo a la carpeta de cada club:
+
+       STATS VOLEY APP\VOLLEY_NAFELS\
+       CLIENTE VOLEY STATS\CLUBES\gelp\
+
+   Se vale por sí solo: no necesita ningún otro .bat.
 
 
-   1) EQUIPO — el plantel completo y con nombres
-      ─────────────────────────────────────────────────────────────────────
-      La pantalla mostraba SOLO a los jugadores que ya jugaron, porque leía
-      el archivo que se genera al procesar los .dvw.
+── TE QUEDAN DOS, Y ES FÁCIL ELEGIR ──────────────────────────────────────────
 
-      Un jugador nuevo no aparecía hasta su debut, aunque tuviera cuenta y
-      cargara wellness. Y si se lo agregaba a mano, el siguiente HACER_TODO
-      lo borraba.
+   ¿Agregaste un partido .dvw?
 
-      Ahora la base es el plantel del club, que es la lista real y nadie la
-      pisa. Además se ve el nombre de pila debajo del apellido.
+       SÍ   →   HACER_TODO.bat      reprocesa todo · tarda
+       NO   →   PUBLICAR.bat        cifra y publica · segundos
 
 
-   2) PREPARACIÓN FÍSICA — los dos pesos de una superserie
-      ─────────────────────────────────────────────────────────────────────
-      Un "Banco Plano + Fondos" son dos ejercicios con pesos muy distintos.
-      Había una sola fila y no se sabía cuál era cuál.
+   PUBLICAR.bat sirve para todo lo demás:
+
+       links de video       cargados desde "Cargar videos"
+       el plantel           plantel_<club>.js editado a mano
+       una pantalla         un .html corregido
+       el calendario        fixture actualizado
 
 
-   3) PIZARRÓN — las dos columnas de una superserie
-      ─────────────────────────────────────────────────────────────────────
-      Lo mismo en la tabla del profe: cada serie lleva dos casilleros, con
-      el nombre de cada movimiento arriba.
+── ¿PUEDO BORRAR PUBLICAR_EN_GITHUB.bat? ─────────────────────────────────────
+
+   Sí. PUBLICAR.bat ya hace todo lo que hacía ese, y además:
+
+       · corre el verificador antes, y FRENA si algo está roto
+       · cifra los datos, que era el paso que se olvidaba
+
+   HACER_TODO.bat NO lo borres: sigue siendo el que procesa partidos.
 
 
-   4) WELLNESS — ver por semana, quincena o mes
-      ─────────────────────────────────────────────────────────────────────
-      La tabla del equipo mostraba UN día. Para ver cómo viene el plantel
-      eso no alcanza: un mal día no significa nada, pero venir cayendo dos
-      semanas sí.
+── QUÉ HACE, EN ORDEN ────────────────────────────────────────────────────────
 
-      Ahora se elige el período y promedia, mostrando además cuántos días
-      cargó cada uno — con color, porque un promedio de una sola carga no
-      dice mucho.
+   1. Verificador. Si encuentra algo roto, frena y no publica.
+   2. Cifra los datos.
+   3. Publica en GitHub.
 
-
-═══════════════════════════════════════════════════════════════════════════════
-   CÓMO SE USA
-═══════════════════════════════════════════════════════════════════════════════
-
-   Copiar los dos programas a la carpeta y hacer doble clic, en este orden:
-
-       1. MEJORAS_2_SEPTIEMBRE.py        →  S
-       2. REVISAR_ANTES_DE_PUBLICAR.py   →  TODO EN ORDEN
-       3. publicar
-
-   Sirve para:
-
-       CLIENTE VOLEY STATS\PLANTILLA\      ← para los clientes nuevos
-       CLIENTE VOLEY STATS\CLUBES\gelp\    ← para GELP
-
-   De cada pantalla tocada queda una copia .antes-mejoras
+   Si algo falla en el medio, se detiene. Es a propósito: mejor frenar que
+   subir algo roto.
 
 
-═══════════════════════════════════════════════════════════════════════════════
-   QUÉ ESPERAR
-═══════════════════════════════════════════════════════════════════════════════
+── POR QUÉ HACÍA FALTA ───────────────────────────────────────────────────────
 
-   Cada mejora puede decir:
+   El paso de cifrar no se puede saltear: la app lee los datos cifrados, así
+   que un archivo suelto en texto plano no lo ve nadie. Fue lo que pasó con
+   mapa_videos.js — estaba bien, pero sin cifrar la app no lo tomaba.
 
-       listo          se aplicó
-       ya estaba      esa pantalla ya la tenía
-       no la toco     la pantalla es distinta de lo esperado
-
-   Ese último caso NO es un error: el programa prefiere no tocar antes que
-   romper algo. Si aparece, avisá y se hace a mano esa pantalla.
-
-
-═══════════════════════════════════════════════════════════════════════════════
-   Y DESPUÉS
-═══════════════════════════════════════════════════════════════════════════════
-
-   PROBAR CON UNA CUENTA DE JUGADOR, no con la de entrenador.
-
-   Es la regla que costó ocho horas el 1 de septiembre: los dos caminos
-   eran distintos y los problemas solo se veían del lado del jugador.
+   HACER_TODO ya lo hacía al final, pero corre 17 pasos antes. Para un cambio
+   chico es al pedo, y además reprocesa cosas que ya estaban bien.
 
 ═══════════════════════════════════════════════════════════════════════════════

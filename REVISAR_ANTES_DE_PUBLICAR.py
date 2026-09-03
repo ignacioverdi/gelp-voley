@@ -111,6 +111,15 @@ def revisar():
             avisos.append('%s pide "%s" y no existe' % (f, a))
 
     # ── 5. pantallas demasiado pesadas ───────────────────────────────────
+    # Descifrar es lento, y hasta hace poco se hacia todo de un tiron: un
+    # archivo grande dejaba el telefono tildado varios segundos.
+    #
+    # Con el descifrado POR PEDAZOS eso ya no pasa: la pantalla responde
+    # mientras trabaja, sin importar el tamano. Por eso el limite solo
+    # aplica cuando el club todavia no lo tiene puesto.
+    ds = leer('datos_seguros.js') or ''
+    por_pedazos = 'descifrarDeAPoco' in ds
+
     for f in pantallas():
         s = leer(os.path.join(AQUI, f))
         total = 0
@@ -118,8 +127,13 @@ def revisar():
             p = os.path.join(AQUI, a)
             if os.path.exists(p):
                 total += os.path.getsize(p)
-        if total > 3 * 1024 * 1024:
-            fallas.append('%s descifra %.1f MB: puede colgar un celular'
+
+        if total > 3 * 1024 * 1024 and not por_pedazos:
+            fallas.append('%s descifra %.1f MB y el descifrado es de un tiron: '
+                          'correr PASAR_DESCIFRADO.py'
+                          % (f, total / 1024.0 / 1024))
+        elif total > 25 * 1024 * 1024:
+            avisos.append('%s descifra %.1f MB: mucho, pero no cuelga'
                           % (f, total / 1024.0 / 1024))
 
     return fallas, avisos
