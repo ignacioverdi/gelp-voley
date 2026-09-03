@@ -159,7 +159,14 @@
 
     for(var nombre in window.__D){
       var b64 = window.__D[nombre];
-      if(b64 && b64.length > CHICO) { pendientes.push(nombre); continue; }
+/* Una pantalla puede pedir que los archivos grandes se abran DE UNA
+         en vez de en segundo plano. Lo usa "Cargar videos", que es una
+         herramienta de escritorio: ahi un segundo de espera no molesta,
+         y a cambio la lista sale completa a la primera.
+
+         Las pantallas de los jugadores no ponen esa marca, asi que siguen
+         abriendo en segundo plano y no se les cuelga el telefono. */
+      if(b64 && b64.length > CHICO && !window.__DESCIFRAR_SINCRONO) { pendientes.push(nombre); continue; }
       try{
         (0, eval)(descifrar(b64, claveArchivo(llave, nombre)));
         abiertos++;

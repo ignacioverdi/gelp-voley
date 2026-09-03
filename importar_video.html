@@ -88,6 +88,11 @@
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
 <script src="categorias_club.js" onerror="void 0"></script>
 <script src="selector_categoria.js" onerror="void 0"></script>
+<script>
+/* Esta pantalla necesita la lista de partidos completa apenas abre.
+   Con los datos abriendose en segundo plano, se dibujaba vacia. */
+window.__DESCIFRAR_SINCRONO = true;
+</script>
 <script src="datos_seguros.js"></script>
   <script src="datos_video_25-26.js.enc?v=3" onerror="void 0"></script>
   <!-- Los datos del club se publican CIFRADOS: el archivo real se llama
