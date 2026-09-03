@@ -1385,7 +1385,7 @@ def _build_armador_page(team, slug, display, rivals_list, SUBS, template_dir, ou
         return 0  # 'early' por defecto (no usamos momento)
     setters_raw = {}
     # top-2 por volumen
-    ranked = sorted(rallies.items(), key=lambda x:-len(x[1]))[:2]
+    ranked = sorted(rallies.items(), key=lambda x:-len(x[1]))[:3]
     for sn, rl in ranked:
         rows = []
         for r in rl:
