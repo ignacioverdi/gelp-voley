@@ -271,7 +271,15 @@ function objGetVals(nombre){
   var partido = window._objPartido;
   var ent     = (tipo==='entrenamiento');
 
-  if(!ent && window.BAT_PARTIDOS){ return batGet(nombre, partido); }
+  /* Antes decia (!ent && ...): con el filtro en Entrenamientos NO entraba aca
+     y se iba por el camino viejo, que busca ENTRENAMIENTOS_JUGADORES,
+     ENTRENAMIENTOS_INDIVIDUAL, ENTRENAMIENTOS_EQUIPO_OBJ y ENTRENAMIENTOS_META.
+     Esas cuatro ya no existen en ninguna pagina. Resultado: todas las baterias
+     en cero, con los datos bien cargados.
+
+     batGet YA sabe separar por tipo —usa batTipoActual() y B.porTipo—, asi que
+     sirve para los dos casos. */
+  if(window.BAT_PARTIDOS){ return batGet(nombre, partido); }
 
   var JUG = ent ? (typeof ENTRENAMIENTOS_JUGADORES!=='undefined'?ENTRENAMIENTOS_JUGADORES:null)
                 : (typeof PARTIDOS_JUGADORES!=='undefined'?PARTIDOS_JUGADORES:null);
@@ -429,12 +437,29 @@ function objBuildSubfiltro(){
   row.appendChild(lbl);
   var sel=document.createElement('select');
   sel.style.cssText='background:#fff;color:#111;border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:inherit;font-weight:700;font-size:12px;max-width:270px';
+  /* En ENTRENAMIENTO el rival es el propio club, asi que el desplegable
+     mostraba el mismo texto en todas las opciones y no se podia elegir nada.
+     Lo que distingue una practica de otra es la FECHA, y es lo que el jugador
+     busca. En PARTIDO manda el rival, como estaba. */
+  function _fCorta(f){
+    if(!f) return '';
+    var q=String(f).split('-');
+    return q.length===3 ? (q[2]+'/'+q[1]+'/'+q[0].slice(2)) : String(f);
+  }
   var __cuenta={};META.forEach(function(m){var r=m.rival||m.nombre;__cuenta[r]=(__cuenta[r]||0)+1;});
+  var __cuentaF={};META.forEach(function(m){var d=_fCorta(m.fecha);if(d)__cuentaF[d]=(__cuentaF[d]||0)+1;});
   var opts='<option value="acumulado">Acumulado</option>';
   META.forEach(function(m){
-    var rival=m.rival||m.nombre;var label=rival;
-    if(__cuenta[rival]>1 && m.fecha) label+=' '+m.fecha;
-    if(m.resultado) label+=' ('+m.resultado+')';
+    var rival=m.rival||m.nombre;var label;
+    if(ent){
+      var d=_fCorta(m.fecha);
+      label = d || rival;
+      if(d && __cuentaF[d]>1) label += ' \u00b7 ' + rival;
+    }else{
+      label=rival;
+      if(__cuenta[rival]>1 && m.fecha) label+=' '+m.fecha;
+      if(m.resultado) label+=' ('+m.resultado+')';
+    }
     opts+='<option value="'+(m.id||m.nombre)+'">'+label+'</option>';
   });
   sel.innerHTML=opts;

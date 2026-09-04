@@ -154,6 +154,30 @@ function effColor(v){
 
 
 // ── Acumular jugadores de múltiples sesiones ─────────────────
+/* ── Los desgloses se acumulan igual que los numeros ────────────────────────
+   sFlo/sPot, rFlo/rPot y aSo/aTr son objetos, no numeros. Las listas de
+   campos que hay mas abajo solo copian numeros, asi que al acumular varias
+   sesiones los desgloses se perdian: en Acumulado, SAQUE FLOTADO y RECEPCION
+   DE POTENCIA daban cero con los totales bien. Al elegir UNA sesion no se
+   notaba, porque ahi se devuelve el jugador original con todo adentro.
+
+   Eff queda afuera a proposito: es un porcentaje y sumarlo no significa nada.
+   Quien lo necesita lo vuelve a calcular con los totales ya sumados.
+
+   Hay CUATRO funciones distintas que acumulan jugadores (acumJugadores,
+   getJugadores, renderIndividualNew y acumJug). Se arregla en una sola y las
+   cuatro la llaman, para no volver a arreglar lo mismo tres veces. */
+function _acumSubs(dst, j){
+  if(!dst || !j) return;
+  ['sFlo','sPot','rFlo','rPot','aSo','aTr'].forEach(function(sub){
+    var src=j[sub]; if(!src) return;
+    if(!dst[sub]) dst[sub]={};
+    for(var kk in src){
+      if(kk==='Eff') continue;
+      if(typeof src[kk]==='number') dst[sub][kk]=(dst[sub][kk]||0)+src[kk];
+    }
+  });
+}
 function acumJugadores(sesiones){
   var acum={};
   (sesiones||[]).forEach(function(s){
@@ -170,6 +194,7 @@ function acumJugadores(sesiones){
        'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
        'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr',
        'bT','bPt','bPtPos'].forEach(function(k){ a[k]+=(j[k]||0); });
+        _acumSubs(a, j);
       if(j.dv4) Object.keys(j.dv4).forEach(function(cod){
         if(!a.dv4[cod]) a.dv4[cod]={tot:0,pt:0,err:0,orig:j.dv4[cod].orig||0};
         a.dv4[cod].tot+=j.dv4[cod].tot||0;
@@ -562,6 +587,7 @@ function getJugadores(idx){
         ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
          'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
          'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){s[k]+=(j[k]||0);});
+        _acumSubs(s, j);
       });
     });
     Object.values(acum).forEach(function(s){
@@ -773,6 +799,7 @@ function renderIndividualNew(num){
     ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr',
      'rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
      'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){acum[k]+=(j[k]||0);});
+        _acumSubs(acum, j);
     if(j.dv4) Object.keys(j.dv4).forEach(function(c){
       if(!acum.dv4[c]) acum.dv4[c]={tot:0,pt:0,err:0,orig:j.dv4[c].orig,dest:j.dv4[c].dest};
       acum.dv4[c].tot+=j.dv4[c].tot||0; acum.dv4[c].pt+=j.dv4[c].pt||0; acum.dv4[c].err+=j.dv4[c].err||0;
@@ -960,6 +987,7 @@ function renderCompar(){
     ps.forEach(function(p){var j=p.jugadores.find(function(x){return x.c===num;});if(!j)return;a.n=j.n;
       ['sT','sPunto','sPos','sAdm','sNeg','sVend','sErr','rT','rPunto','rPos','rAdm','rNeg','rVend','rErr',
        'aT','aPunto','aPos','aAdm','aNeg','aVend','aErr','bT','bPt','bPtPos'].forEach(function(k){a[k]+=(j[k]||0);});});
+        _acumSubs(a, j);
     return a;
   }
   var A=acumJug(numA),B=acumJug(numB);

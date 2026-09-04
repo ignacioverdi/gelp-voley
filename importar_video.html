@@ -83,6 +83,12 @@
     <span id="msg"></span>
   </div>
 
+  <!-- Aviso de links cargados en la pantalla pero TODAVIA NO publicados. Sin
+       esto la pantalla se ve toda en verde -barra al 100%, miniatura, tilde-
+       estando el link solo en este navegador, y no hay forma de darse cuenta. -->
+  <div id="sinpublicar" style="display:none;margin:0 0 14px;padding:12px 14px;border-radius:10px;
+       background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.45);
+       color:#f6c667;font-size:13px;line-height:1.5"></div>
   <div id="list"></div>
 
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
@@ -326,6 +332,31 @@ window.__DESCIFRAR_SINCRONO = true;
       inputs.forEach(function(i){ if(ytId(i.value.trim())) n++; });
       document.getElementById('nok').textContent = n;
       document.getElementById('progbar').style.width = (inputs.length? Math.round(n/inputs.length*100):0)+'%';
+      avisarSinPublicar();
+    }
+
+    /* Lo que hay en pantalla contra lo que hay PUBLICADO ────────────────────
+       MAP es el mapa que vino del servidor; los inputs son lo que ves ahora.
+       Todo lo que este en pantalla y no en MAP vive unicamente en este
+       navegador: si cambias de maquina o limpias el cache, se pierde. */
+    function avisarSinPublicar(){
+      var caja = document.getElementById('sinpublicar');
+      if(!caja) return;
+      var faltan = [];
+      list.querySelectorAll('input').forEach(function(i){
+        var v = i.value.trim();
+        if(!v || !ytId(v)) return;
+        if(cleanUrl(MAP[i.dataset.code]||'') !== cleanUrl(v)) faltan.push(i.dataset.code);
+      });
+      if(!faltan.length){ caja.style.display='none'; return; }
+      caja.style.display='block';
+      caja.innerHTML =
+        '<b>\u26a0\ufe0f '+faltan.length+' link'+(faltan.length>1?'s':'')+' sin publicar todav\u00eda.</b><br>'+
+        'Est'+(faltan.length>1?'\u00e1n':'\u00e1')+' guardad'+(faltan.length>1?'os':'o')+
+        ' en este navegador, pero el archivo del servidor no los tiene. '+
+        'Apret\u00e1 <b>\u201cGenerar archivo de links\u201d</b>, pon\u00e9 <code>'+OUTFILE+
+        '</code> en la carpeta y public\u00e1.<br>'+
+        '<span style="opacity:.75">C\u00f3digos: '+faltan.join(', ')+'</span>';
     }
     list.addEventListener('input', function(e){
       if(e.target.tagName==='INPUT'){ renderRow(e.target.closest('.row')); refresh(); saveDraft(); }
