@@ -2104,7 +2104,7 @@ function renderArmador(){
     if(!arm) return;
     var color=tipo==='titular'?'#f59e0b':'#818cf8';
     var btn=document.createElement('button');
-    btn.style.cssText='padding:9px 18px;border-radius:10px 10px 0 0;border:1px solid rgba(255,255,255,.08);border-bottom:none;background:'+(tipo===activeType?'rgba(255,255,255,.04)':'rgba(255,255,255,.01)')+';color:'+(tipo===activeType?color:'#475569')+';font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:all .2s;text-transform:uppercase';
+    btn.style.cssText='padding:9px 18px;border-radius:10px 10px 0 0;border:1px solid rgba(255,255,255,.08);border-bottom:none;background:'+(tipo===activeType?'rgba(255,255,255,.04)':'rgba(255,255,255,.01)')+';color:'+(tipo===activeType?color:'#94a3b8')+';font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;cursor:pointer;transition:all .2s;text-transform:uppercase';
     btn.textContent=arm.nombre;
     btn.dataset.tipo=tipo;
     btn.addEventListener('click',function(){

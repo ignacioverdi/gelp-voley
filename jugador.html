@@ -380,10 +380,10 @@ function renderObjetivosJugador(cid, jugVals, eqVals){
         var cls,objLine;
         if(row.isJug){
           var eq=eqVals[id]!==undefined?eqVals[id]:null;
-          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=eq!==null?eq:m.obj;
         } else {
-          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
         }
         return objSingleBat(id,val,m,cls,objLine);
@@ -718,7 +718,7 @@ function renderAccesos(j){
   var grid=document.getElementById('accesos-grid');
   var items=[
     {icon:'📈',title:'Historial',desc:'Mis estadísticas',url:'historial_voley.html?player='+encodeURIComponent(j.nombre),color:'#818cf8'},
-    {icon:'💪',title:'Rutina',desc:'Mi preparación física',url:'prep_fisica.html?player='+encodeURIComponent(j.nombre),color:'#09135f'},
+    {icon:'💪',title:'Rutina',desc:'Mi preparación física',url:'prep_fisica.html?player='+encodeURIComponent(j.nombre),color:'#ffffff'},
     {icon:'🚀',title:'Plan de Desarrollo',desc:'Mis objetivos técnicos a mejorar',url:'plan_desarrollo.html?num='+j.num+'&n='+encodeURIComponent(j.nombre),color:'#a78bfa'},
     {icon:'🎯',title:'Plan de Partido',desc:'Plan del próximo partido',url:'plan_partido.html',color:'#f59e0b'},
     {icon:'📊',title:'Panel en Vivo',desc:'Sesión actual',url:'panel_voley.html',color:'#22c55e'},
@@ -780,7 +780,7 @@ function renderStats(j){
       '<div class="stat-row"><span class="stat-row-lbl">Puntos</span><span class="stat-row-val" style="color:#22c55e">'+a.aPunto+'</span></div>'+
       '<div class="stat-row"><span class="stat-row-lbl">EFF</span><span class="stat-row-val">'+(a.aT>0?Math.round(a.aEff/a.aT)+'%':'—')+'</span></div></div>';
   }
-  grid.innerHTML=makeCards(acc.P,'🏆 PARTIDOS','#09135f')+makeCards(acc.E,'🏋️ ENTRENAMIENTOS','#22c55e');
+  grid.innerHTML=makeCards(acc.P,'🏆 PARTIDOS','#ffffff')+makeCards(acc.E,'🏋️ ENTRENAMIENTOS','#22c55e');
 }
 
 function renderRutina(j){

@@ -198,10 +198,10 @@ function renderBaterias(containerId, jugVals, eqVals, titulo, rivalVals){
         var cls, objLine;
         if(row.isJug){
           var eq=(eqVals&&eqVals[id]!==undefined&&eqVals[id]!==null)?eqVals[id]:null;
-          cls=val!==null?objClassifyVsTeam(val,eq):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          cls=val!==null?objClassifyVsTeam(val,eq):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=eq!==null?eq:m.obj;
         } else {
-          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
         }
         return objSingleBat(id,val,m,cls,objLine);

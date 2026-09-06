@@ -60,7 +60,7 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .partido-btn.acum{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.06);}
 .partido-btn.acum.activo{border-color:rgba(129,140,248,.6);background:rgba(129,140,248,.12);}
 .pb-fecha{font-size:11px;color:var(--mut);letter-spacing:1px;margin-bottom:4px;}
-.pb-rival{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;margin-bottom:6px;}
+.pb-rival{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;margin-bottom:6px;color:#ffffff}
 .pb-res{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;}
 .pb-sets{font-size:10px;color:var(--mut);margin-top:4px;line-height:1.4;}
 .res-win{color:var(--green);}.res-loss{color:#ffffff;}
@@ -1774,10 +1774,10 @@ function renderObjetivosJugador(cid, jugVals, eqVals){
         var cls,objLine;
         if(row.isJug){
           var eq=eqVals[id]!==undefined?eqVals[id]:null;
-          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=eq!==null?eq:m.obj;
         } else {
-          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
         }
         return objSingleBat(id,val,m,cls,objLine);

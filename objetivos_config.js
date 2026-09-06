@@ -264,7 +264,7 @@ function renderObjetivos(cid,extra){
     +'</div><div style="display:flex;gap:8px;width:100%">'
     +Object.keys(metas).map(function(id){
       var m=metas[id],val=vals[id]!==undefined?vals[id]:null;
-      var cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+      var cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
       return objSingleBat(id,val,m,cls,m.obj);
     }).join('')+'</div></div>';
   el.innerHTML=html;
@@ -315,7 +315,7 @@ function renderObjetivos(cid,extra){
     +'</div><div style="display:flex;gap:8px;width:100%">'
     +Object.keys(metas).map(function(id){
       var m=metas[id],val=vals[id]!==undefined?vals[id]:null;
-      var cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+      var cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
       return objSingleBat(id,val,m,cls,m.obj);
     }).join('')+'</div></div>';
   el.innerHTML=html;
@@ -351,10 +351,10 @@ function renderObjetivosJugador(cid,nombre,extra){
         var cls,objLine;
         if(row.isJug){
           var eq=eqVals[id]!==undefined?eqVals[id]:null;
-          cls=val!==null?objClassifyVsTeam(val,eq):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          cls=val!==null?objClassifyVsTeam(val,eq):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=eq!==null?eq:m.obj;
         } else {
-          cls=val!==null?objClassify(id,val):{color:'#334155',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
+          cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
         }
         return objSingleBat(id,val,m,cls,objLine);

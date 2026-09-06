@@ -1061,7 +1061,7 @@ function calcularRM(){
   if(!peso || !reps || peso <= 0 || reps <= 0){ alert('Ingresá peso y reps válidos.'); return; }
   var rm1 = formula === 'epley' ? peso*(1+reps/30) : formula === 'brzycki' ? peso*(36/(37-reps)) : peso/(1.013-0.0267123*reps);
   rm1 = Math.round(rm1*2)/2;
-  var pcts = [{pct:100,label:'1RM',color:'#09135f'},{pct:95,label:'95%',color:'#9094b7'},{pct:90,label:'90%',color:'#f59e0b'},{pct:85,label:'85%',color:'#9094b7'},{pct:80,label:'80%',color:'#22c55e'},{pct:75,label:'75%',color:'#22c55e'},{pct:70,label:'70%',color:'#818cf8'},{pct:60,label:'60%',color:'#818cf8'}];
+  var pcts = [{pct:100,label:'1RM',color:'#ffffff'},{pct:95,label:'95%',color:'#9094b7'},{pct:90,label:'90%',color:'#f59e0b'},{pct:85,label:'85%',color:'#9094b7'},{pct:80,label:'80%',color:'#22c55e'},{pct:75,label:'75%',color:'#22c55e'},{pct:70,label:'70%',color:'#818cf8'},{pct:60,label:'60%',color:'#818cf8'}];
   var res = document.getElementById('calc-results');
   res.innerHTML = '';
   res.style.display = 'grid';
