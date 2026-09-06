@@ -51,7 +51,7 @@ window.__DESCIFRAR_SINCRONO = true;
   --bg:#07080f;--card:#0d0e1a;--card2:#111220;
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
   --red:#09135f;--green:#22c55e;--amber:#f59e0b;
-  --indigo:#818cf8;--orange:#9094b7;--mut:#475569;--txt:#e2e8f0;
+  --indigo:#818cf8;--orange:#9094b7;--mut:#94a3b8;--txt:#e2e8f0;
 }
 body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--txt);min-height:100vh;}
 .page-header{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(7,8,15,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;}
@@ -83,9 +83,9 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .acceso-arrow{font-size:14px;color:var(--mut);opacity:.5;flex-shrink:0;}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px;}
 .obj-sfbtn{padding:4px 11px;border-radius:6px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
-.obj-sfbtn.on{background:rgba(9,19,95,.1);border-color:rgba(9,19,95,.35);color:#09135f}
-.obj-tfbtn{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#475569;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
-.obj-tfbtn.on.partido{background:rgba(9,19,95,.12);border-color:rgba(9,19,95,.4);color:#09135f}
+.obj-sfbtn.on{background:rgba(9,19,95,.1);border-color:rgba(9,19,95,.35);color:#ffffff}
+.obj-tfbtn{padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#94a3b8;font-size:11px;font-weight:800;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase;transition:all .15s;font-family:'Barlow Condensed',sans-serif}
+.obj-tfbtn.on.partido{background:rgba(9,19,95,.12);border-color:rgba(9,19,95,.4);color:#ffffff}
 .obj-tfbtn.on.ent{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;}
 .stat-card-title{font-size:8px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
@@ -96,7 +96,7 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .rutina-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:24px;}
 .rutina-ej{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
 .rutina-ej:last-child{border:none;}
-.rutina-ej-num{width:20px;height:20px;border-radius:5px;flex-shrink:0;background:rgba(9,19,95,.1);border:1px solid rgba(9,19,95,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--red);}
+.rutina-ej-num{width:20px;height:20px;border-radius:5px;flex-shrink:0;background:rgba(9,19,95,.1);border:1px solid rgba(9,19,95,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#ffffff;}
 .rutina-ej-nombre{font-weight:700;font-size:12px;flex:1;}
 .rutina-ej-meta{font-size:10px;color:var(--mut);}
 .estado-msg{text-align:center;padding:32px 20px;color:var(--mut);}
@@ -107,7 +107,7 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 .next-match-dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0;box-shadow:0 0 8px var(--red);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .next-match-info{flex:1;}
-.next-match-label{font-size:8px;color:var(--red);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;}
+.next-match-label{font-size:8px;color:#ffffff;letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;}
 .next-match-rival{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;}
 .next-match-sub{font-size:9px;color:var(--mut);}
 select, select option{color:#111 !important;background-color:#fff !important;}
@@ -432,7 +432,7 @@ function objBuildSubfiltro(){
   if(!META){ row.style.display='none'; return; }
   row.innerHTML=''; row.style.display='flex'; row.style.alignItems='center';
   var lbl=document.createElement('span');
-  lbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase;margin-right:6px';
+  lbl.style.cssText='font-size:9px;color:#94a3b8;letter-spacing:2px;text-transform:uppercase;margin-right:6px';
   lbl.textContent='VER:';
   row.appendChild(lbl);
   var sel=document.createElement('select');
@@ -517,7 +517,7 @@ function renderComparativaJugador(){
   function cell(v){ return (v===null||v===undefined)?'—':(v+'%'); }
   function colorEff(v){ if(v===null||v===undefined) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':'#ef4444'; }
   function diff(a,b){
-    if(a===null||a===undefined||b===null||b===undefined) return '<span style="color:#475569">—</span>';
+    if(a===null||a===undefined||b===null||b===undefined) return '<span style="color:#94a3b8">—</span>';
     var d=a-b, col=d>=5?'#22c55e':d>=0?'#86efac':d>=-8?'#fbbf24':'#ef4444';
     return '<span style="color:'+col+';font-weight:800">'+(d>0?'+':'')+d+'</span>';
   }
@@ -575,7 +575,7 @@ function renderComparativaJugador(){
       +'<table style="width:100%;border-collapse:collapse;font-family:Barlow Condensed,sans-serif;min-width:340px">'
       +'<thead><tr style="background:#0f1020">'+head+'</tr></thead><tbody>'+rows2+'</tbody></table></div>';
   } else {
-    html+='<div style="padding:14px;color:#475569;font-size:11px;text-align:center;background:#0d0e1a;border:1px solid rgba(255,255,255,.06);border-radius:12px">Sin compañeros de la misma posición para comparar.</div>';
+    html+='<div style="padding:14px;color:#94a3b8;font-size:11px;text-align:center;background:#0d0e1a;border:1px solid rgba(255,255,255,.06);border-radius:12px">Sin compañeros de la misma posición para comparar.</div>';
   }
   cont.innerHTML=html;
   section.style.display='block';
@@ -656,7 +656,7 @@ function renderHero(j){
       '<div class="hero-sub">'+(j.pais||'🇦🇷')+' GELP VOLEY · Temporada '+_curSeason()+'/'+String(_curSeason()+1).slice(2)+(j.altura?' · 📏 '+j.altura:'')+'</div>'+
       '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">'+
         '<a href="historial_voley.html" style="padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">📈 STATS</a>'+
-        '<a href="prep_fisica.html" style="padding:6px 14px;border-radius:8px;background:rgba(9,19,95,.12);border:1px solid rgba(9,19,95,.25);color:#09135f;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">💪 RUTINA</a>'+
+        '<a href="prep_fisica.html" style="padding:6px 14px;border-radius:8px;background:rgba(9,19,95,.12);border:1px solid rgba(9,19,95,.25);color:#ffffff;font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:1.5px;text-decoration:none;">💪 RUTINA</a>'+
       '</div>'+
     '</div>'+
     (j.foto?'<img src="'+j.foto+'" alt="'+j.nombre+'" onerror="this.style.display=\'none\'" style="width:72px;height:94px;object-fit:cover;object-position:top;border-radius:12px;flex-shrink:0;border:2px solid '+color+'40;box-shadow:0 4px 14px rgba(0,0,0,.45)">':'');
@@ -793,7 +793,7 @@ function renderRutina(j){
   var html='<div style="font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">'+sem.label+'</div>';
   var n=0;
   sem.bloques.forEach(function(b){ (b.ejercicios||[]).forEach(function(ej){ if(n>=5) return; html+='<div class="rutina-ej"><div class="rutina-ej-num">'+(n+1)+'</div><div class="rutina-ej-nombre">'+ej.nombre+'</div><div class="rutina-ej-meta">'+ej.series+'×'+ej.reps+'</div></div>'; n++; }); });
-  if(n>0){ html+='<a href="prep_fisica.html?player='+encodeURIComponent(j.nombre)+'" style="display:block;text-align:center;margin-top:12px;font-size:10px;color:var(--red);letter-spacing:1px;text-decoration:none;">VER RUTINA COMPLETA →</a>'; card.innerHTML=html; }
+  if(n>0){ html+='<a href="prep_fisica.html?player='+encodeURIComponent(j.nombre)+'" style="display:block;text-align:center;margin-top:12px;font-size:10px;color:#ffffff;letter-spacing:1px;text-decoration:none;">VER RUTINA COMPLETA →</a>'; card.innerHTML=html; }
 }
 
 function showHeatmapMenu(){
@@ -854,7 +854,7 @@ function _videoTodo(){
       <a class="hm-card" href="plan_partido.html?equipo=gelp#defensa"  style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🤲</span><span class="hm-lbl" style="color:#EF4444">DEFENSA</span><span class="hm-sub">EFF · Zonas · Origen/Destino</span></a>
       <a class="hm-card" href="plan_partido.html?equipo=gelp#bloqueo"  style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#2DD4BF">BLOQUEO</span><span class="hm-sub">Dónde bloquea · Zona origen ataque</span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center">División de Honor 2026</div>
+    <div style="margin-top:14px;font-size:10px;color:#94a3b8;text-align:center">División de Honor 2026</div>
   </div>
 </div>
 <script>

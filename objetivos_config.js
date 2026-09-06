@@ -372,7 +372,7 @@ function buildObjSubfiltro(nombreJugador){
 
   // Label
   var lbl = document.createElement('span');
-  lbl.style.cssText = 'font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase;align-self:center;margin-right:4px';
+  lbl.style.cssText = 'font-size:9px;color:#94a3b8;letter-spacing:2px;text-transform:uppercase;align-self:center;margin-right:4px';
   lbl.textContent = 'VER:';
   row.appendChild(lbl);
 

@@ -33,7 +33,7 @@
     a.style.cssText =
       'display:inline-flex;align-items:center;gap:6px;text-decoration:none;'+
       "font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;"+
-      'color:#09135f;background:rgba(9,19,95,.10);border:1px solid rgba(9,19,95,.30);'+
+      'color:#ffffff;background:rgba(9,19,95,.10);border:1px solid rgba(9,19,95,.30);'+
       'padding:6px 12px;border-radius:8px;white-space:nowrap;margin-left:8px;cursor:pointer;transition:background .15s;';
     a.addEventListener('mouseover', function(){ a.style.background='rgba(9,19,95,.20)'; });
     a.addEventListener('mouseout',  function(){ a.style.background='rgba(9,19,95,.10)'; });

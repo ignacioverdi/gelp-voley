@@ -26,7 +26,7 @@
   .back-btn{padding:6px 13px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut2);font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;white-space:nowrap}
   .back-btn:hover{border-color:rgba(255,255,255,.2);color:#fff}
   .hdr-t{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;line-height:1}
-  .hdr-t span{color:var(--red)}
+  .hdr-t span{color:#ffffff}
   .hdr-s{font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase}
 
   .teamsel{display:flex;gap:8px;flex-wrap:wrap;padding:18px 22px 4px}
@@ -34,9 +34,9 @@
     font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;
     transition:all .15s;display:flex;align-items:center;gap:8px;white-space:nowrap}
   .tbtn:hover{border-color:rgba(255,255,255,.22);transform:translateY(-1px)}
-  .tbtn.on{border-color:var(--red);background:rgba(13,13,91,.12);color:#fff;box-shadow:0 4px 18px rgba(13,13,91,.18)}
+  .tbtn.on{border-color:#ffffff;background:rgba(13,13,91,.12);color:#fff;box-shadow:0 4px 18px rgba(13,13,91,.18)}
   .tbtn .mc{font-size:10px;color:var(--mut);font-weight:600}
-  .tbtn.on .mc{color:#09135f}
+  .tbtn.on .mc{color:#ffffff}
 
   .dossier{padding:14px 22px 60px;max-width:1280px;margin:0 auto}
   .empty-st{padding:80px 20px;text-align:center;color:var(--mut)}
@@ -49,7 +49,7 @@
   @media print{.dteam-act{display:none!important}}
   .dteam-name{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:2px;line-height:.95}
   .dteam-sub{font-size:12px;color:var(--mut2);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
-  .dteam-sub b{color:var(--red)}
+  .dteam-sub b{color:#ffffff}
 
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
   @media(max-width:880px){.grid{grid-template-columns:1fr}}
@@ -79,13 +79,13 @@
   .star{color:var(--ataque)}
   .posbadge{font-size:10px;font-weight:800;letter-spacing:.5px;padding:2px 8px;border-radius:6px;text-transform:uppercase}
   .pb-pu{background:rgba(34,197,94,.15);color:#4ade80}
-  .pb-op{background:rgba(9,19,95,.15);color:#09135f}
+  .pb-op{background:rgba(9,19,95,.15);color:#ffffff}
   .pb-ce{background:rgba(6,182,212,.15);color:#22d3ee}
   .pb-x{background:rgba(148,163,184,.12);color:#94a3b8}
   .rotgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(172px,1fr));gap:10px}
   .rotcard{background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:12px 13px}
   .rothd{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;min-height:24px}
-  .rotnum{font-family:'Bebas Neue',sans-serif;font-size:23px;letter-spacing:2px;color:#09135f}
+  .rotnum{font-family:'Bebas Neue',sans-serif;font-size:23px;letter-spacing:2px;color:#ffffff}
   .rottag{font-size:9px;font-weight:800;padding:2px 7px;border-radius:6px;letter-spacing:.5px}
   .rotso{font-size:12px;color:var(--mut2);margin-bottom:8px}
   .rotlb{font-size:9px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin:8px 0 3px}
@@ -226,7 +226,7 @@ function renderRotations(t){
   // prioridad de saque: más flojo en side-out = 1ª prioridad
   var ranked=withSO.slice().sort(function(a,b){return a.so_eff-b.so_eff;});
   var prio={}; ranked.forEach(function(r,i){prio[r.r]=i+1;});
-  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🔄</span><span class="sec-ti" style="color:#09135f">Por rotación — prioridad de saque (orden P1·P6·P5·P4·P3·P2)</span></div><div class="sec-bd">';
+  var h='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🔄</span><span class="sec-ti" style="color:#ffffff">Por rotación — prioridad de saque (orden P1·P6·P5·P4·P3·P2)</span></div><div class="sec-bd">';
   h+='<div class="rotgrid">';
   rots.forEach(function(r){
     var p=prio[r.r]||null;
@@ -241,11 +241,11 @@ function renderRotations(t){
     h+='<div class="rotso">Side-out <b style="color:'+soCol+'">'+soTxt+'</b> · eff ataque '+r.eff+'%</div>';
     h+='<div class="rotlb">En red</div><div class="rotfr">'+(r.front||[]).join(' · ')+'</div>';
     h+='<div class="rotlb">Armador distribuye a</div>';
-    (r.dist||[]).forEach(function(d){ h+='<div class="rotdist"><span>'+d.name+'</span><span style="color:#09135f;font-weight:800">'+d.pct+'%</span></div>'; });
+    (r.dist||[]).forEach(function(d){ h+='<div class="rotdist"><span>'+d.name+'</span><span style="color:#ffffff;font-weight:800">'+d.pct+'%</span></div>'; });
     h+='</div>';
   });
   h+='</div>';
-  h+='<div style="font-size:10px;color:var(--mut);margin-top:10px;line-height:1.5">Orden de rotación real: <b style="color:var(--mut2)">P1·P6·P5·P4·P3·P2</b> (P = zona del armador). La <b style="color:#09135f">prioridad de saque</b> ordena las 6 rotaciones de la más floja en side-out (1ª) a la más fuerte: apretá el saque en las primeras. "En red" = sus 3 jugadores en zona de ataque.</div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:10px;line-height:1.5">Orden de rotación real: <b style="color:var(--mut2)">P1·P6·P5·P4·P3·P2</b> (P = zona del armador). La <b style="color:#ffffff">prioridad de saque</b> ordena las 6 rotaciones de la más floja en side-out (1ª) a la más fuerte: apretá el saque en las primeras. "En red" = sus 3 jugadores en zona de ataque.</div>';
   h+='</div></div>';
   return h;
 }
@@ -274,7 +274,7 @@ function renderSistema(t){
     var top2=(out.dist||[]).slice(0,2);
     var names=top2.map(function(d){return d.name;}).join(' + ');
     var sumpct=top2.reduce(function(a,d){return a+d.pct;},0);
-    h+='<div class="sysnote">Rompiéndoles la recepción, su eficacia cae <b style="color:#09135f">'+drop+' puntos</b> ('+inn.eff+'% → '+out.eff+'%) y el ataque se concentra en <b style="color:#fff">'+names+'</b> (~'+sumpct+'% entre los dos), casi todo pelota alta. <b>Sacar fuerte y cargar el bloqueo a ellos.</b></div>';
+    h+='<div class="sysnote">Rompiéndoles la recepción, su eficacia cae <b style="color:#ffffff">'+drop+' puntos</b> ('+inn.eff+'% → '+out.eff+'%) y el ataque se concentra en <b style="color:#fff">'+names+'</b> (~'+sumpct+'% entre los dos), casi todo pelota alta. <b>Sacar fuerte y cargar el bloqueo a ellos.</b></div>';
   }
   h+='<div style="font-size:10px;color:var(--mut);margin-top:9px;line-height:1.5">En sistema = recepción positiva (#/+), el armador tiene todas las opciones. Fuera de sistema = recepción rota (−//), el armador queda condicionado. Solo cuenta el ataque de side-out.</div>';
   h+='</div></div>';
@@ -376,8 +376,8 @@ function renderAtkTab(m){
     else {combos=p.combos;eff=p.eff;n=p.tot;}
     var juego=(combos||[]).map(function(c){
       var dz=(c.dest||[]).map(function(d){return 'Z'+d.z+' '+d.pct+'%';}).join(' · ');
-      return '<span style="white-space:nowrap"><b style="color:var(--ataque);font-size:16px">'+c.k+'</b> <span style="color:var(--mut2);font-size:13px">'+c.pct+'%</span> <span style="color:#475569">→</span> <span style="color:var(--bloqueo,#06B6D4);font-size:13px">'+(dz||'—')+'</span></span>';
-    }).join('<span style="color:#334155;margin:0 9px">|</span>')||'<span style="color:#475569">—</span>';
+      return '<span style="white-space:nowrap"><b style="color:var(--ataque);font-size:16px">'+c.k+'</b> <span style="color:var(--mut2);font-size:13px">'+c.pct+'%</span> <span style="color:#94a3b8">→</span> <span style="color:var(--bloqueo,#06B6D4);font-size:13px">'+(dz||'—')+'</span></span>';
+    }).join('<span style="color:#64748b;margin:0 9px">|</span>')||'<span style="color:#94a3b8">—</span>';
     var low=n<25;
     h+='<tr><td style="font-size:15px;font-weight:700">'+(i===0?'<span class="star">★</span> ':'')+p.name+'</td>'
       +'<td style="text-align:left"><span class="posbadge '+posClass(p.pos)+'">'+p.pos+'</span></td>'
@@ -460,7 +460,7 @@ function pickReceiver(i){
       +col('Cuando lo rompés', ou, '#09135f')+'</div>';
     if(ins.n && ou.n){
       var drop=ins.eff-ou.eff, o1=(ou.dist||[])[0];
-      if(drop>=8 && o1) h+='<div class="sysnote">Sacándole fuerte a <b style="color:#fff">'+r.name+'</b>, su eficacia cae a <b style="color:#09135f">'+ou.eff+'%</b> y el armador va a <b style="color:#fff">'+o1.name+'</b> ('+o1.pct+'%). Ahí cargás el bloqueo.</div>';
+      if(drop>=8 && o1) h+='<div class="sysnote">Sacándole fuerte a <b style="color:#fff">'+r.name+'</b>, su eficacia cae a <b style="color:#ffffff">'+ou.eff+'%</b> y el armador va a <b style="color:#fff">'+o1.name+'</b> ('+o1.pct+'%). Ahí cargás el bloqueo.</div>';
     }
   } else {
     var b=rf[rq+'|'+ph]||{n:0};
@@ -519,7 +519,7 @@ function renderRecentFund(fk){
     var recTxt=p.recent_val===null?'—':p.recent_val+'%';
     var arrow='';
     if(p.recent_val!==null&&p.season_val!==null){var dd=p.recent_val-p.season_val;
-      if(dd>=8)arrow=' <span style="color:#22c55e">▲</span>'; else if(dd<=-8)arrow=' <span style="color:#09135f">▼</span>';}
+      if(dd>=8)arrow=' <span style="color:#22c55e">▲</span>'; else if(dd<=-8)arrow=' <span style="color:#ffffff">▼</span>';}
     body+='<tr'+(p.starter?'':' style="opacity:.72"')+'>'
       +'<td style="text-align:left"><b>'+(p.starter?'★ ':'')+p.name+'</b></td>'
       +'<td style="color:var(--mut2);font-size:11px">'+p.pos+'</td>'
@@ -534,7 +534,7 @@ function renderRecentFund(fk){
   } else {
     h+='<div style="color:var(--mut);font-size:12px;padding:10px 0">Pocos datos de este fundamento en las últimas fechas.</div>';
   }
-  h+='<div style="font-size:10px;color:var(--mut);margin-top:10px;line-height:1.6">★ = lo hizo en el último partido. <b style="color:#22c55e">EN ALZA</b> / <b style="color:#09135f">EN BAJA</b> = su número de las últimas fechas cambió ±8 pts vs su promedio de temporada (▲▼). <b style="color:#9292b5">NUEVO TITULAR</b> = está jugando aunque no era regular. <b style="color:#94a3b8">AUSENTE</b> = habitual que no jugó las últimas fechas (lesión/banco). Partido a partido: atenuado = poco volumen ese partido. /N = volumen.</div>';
+  h+='<div style="font-size:10px;color:var(--mut);margin-top:10px;line-height:1.6">★ = lo hizo en el último partido. <b style="color:#22c55e">EN ALZA</b> / <b style="color:#ffffff">EN BAJA</b> = su número de las últimas fechas cambió ±8 pts vs su promedio de temporada (▲▼). <b style="color:#9292b5">NUEVO TITULAR</b> = está jugando aunque no era regular. <b style="color:#94a3b8">AUSENTE</b> = habitual que no jugó las últimas fechas (lesión/banco). Partido a partido: atenuado = poco volumen ese partido. /N = volumen.</div>';
   var out=document.getElementById('recentOut'); if(out) out.innerHTML=h;
 }
 var CUR_ROT='so';
@@ -594,7 +594,7 @@ function renderDossier(n){
   h+='<div class="kpis" style="max-width:440px">'
     +'<div class="kpi"><div class="v" style="color:'+pctColor(t.serve.acepct*3)+'">'+t.serve.acepct+'%</div><div class="l">Aces</div></div>'
     +'<div class="kpi"><div class="v" style="color:#84cc16">'+(t.serve.venpct||0)+'%</div><div class="l">Vendida (/)</div></div>'
-    +'<div class="kpi"><div class="v" style="color:#09135f">'+t.serve.errpct+'%</div><div class="l">Error</div></div>'
+    +'<div class="kpi"><div class="v" style="color:#ffffff">'+t.serve.errpct+'%</div><div class="l">Error</div></div>'
     +'<div class="kpi"><div class="v" style="color:var(--mut2)">'+t.serve.tot+'</div><div class="l">Total</div></div></div>';
   if(t.serve.servers && t.serve.servers.length){
     h+='<div style="overflow-x:auto;display:flex;justify-content:center"><table style="width:auto;min-width:90%;margin:0 auto"><thead><tr><th>Sacador</th><th>Saques</th><th>Ace%</th><th>Err%</th><th style="text-align:left">Tipo</th><th style="text-align:left">Desde</th><th style="text-align:left">Hacia dónde lo pone</th></tr></thead><tbody>';
@@ -649,7 +649,7 @@ function renderDossier(n){
     +'<div class="kpi"><div class="v" style="font-size:34px;color:'+effColor(t.attack.eff)+'">'+t.attack.eff+'%</div><div class="l">Eficiencia</div></div>'
     +'<div class="kpi"><div class="v" style="font-size:34px;color:#22c55e">'+t.attack.killpct+'%</div><div class="l">Punto</div></div>'
     +'<div class="kpi"><div class="v" style="font-size:34px;color:#06b6d4">'+t.attack.blkpct+'%</div><div class="l">Bloqueados</div></div>'
-    +'<div class="kpi"><div class="v" style="font-size:34px;color:#09135f">'+t.attack.errpct+'%</div><div class="l">Error</div></div>'
+    +'<div class="kpi"><div class="v" style="font-size:34px;color:#ffffff">'+t.attack.errpct+'%</div><div class="l">Error</div></div>'
     +'<div class="kpi"><div class="v" style="font-size:34px;color:var(--ataque)">'+t.attack.tot+'</div><div class="l">Total</div></div></div>';
   h+='<div class="atktabs"><button class="atktab on" data-m="gen" onclick="renderAtkTab(\'gen\')">General</button>'
     +'<button class="atktab" data-m="so" onclick="renderAtkTab(\'so\')">Side-out (recepción +)</button>'
@@ -662,7 +662,7 @@ function renderDossier(n){
   h+='<div class="sec" style="grid-column:1/-1"><div class="sec-hd"><span class="sec-ic">🛡</span><span class="sec-ti" style="color:var(--recep)">Recepción — dónde atacarlos con el saque</span></div><div class="sec-bd">';
   h+='<div class="kpis" style="max-width:340px">'
     +'<div class="kpi"><div class="v" style="color:'+pctColor(t.recep.pospct)+'">'+t.recep.pospct+'%</div><div class="l">Positiva (#+)</div></div>'
-    +'<div class="kpi"><div class="v" style="color:#09135f">'+t.recep.errpct+'%</div><div class="l">Error</div></div>'
+    +'<div class="kpi"><div class="v" style="color:#ffffff">'+t.recep.errpct+'%</div><div class="l">Error</div></div>'
     +'<div class="kpi"><div class="v" style="color:var(--mut2)">'+t.recep.tot+'</div><div class="l">Total</div></div></div>';
   var rd=(t.recep.detail && t.recep.detail.length)?t.recep.detail:null;
   var tgtName=(t.recep.target&&t.recep.target.name)||'';
@@ -676,7 +676,7 @@ function renderDossier(n){
       var spinCell='<span style="color:'+pctColor(spin.pospct)+';font-weight:'+(serveType==='potencia'?'800':'400')+'">'+(spin.n?spin.pospct+'%':'—')+'</span>';
       var wz=(w.weakzones||[]).map(function(z){return 'Z'+z.zone+' ('+z.pospct+'%)';}).join(' · ');
       var isTgt=w.name===tgtName;
-      h+='<tr'+(isTgt?' style="background:rgba(9,19,95,.07)"':'')+'><td>'+(isTgt?'<span style="color:var(--red)">🎯</span> ':'')+w.name+'</td>'
+      h+='<tr'+(isTgt?' style="background:rgba(9,19,95,.07)"':'')+'><td>'+(isTgt?'<span style="color:#ffffff">🎯</span> ':'')+w.name+'</td>'
         +'<td style="color:var(--mut2)">'+w.n+'</td>'
         +'<td style="font-weight:800;color:'+pctColor(w.pospct)+'">'+w.pospct+'%</td>'
         +'<td>'+floCell+'</td><td>'+spinCell+'</td>'
@@ -687,7 +687,7 @@ function renderDossier(n){
   } else if(t.recep.weak && t.recep.weak.length){
     h+='<table style="margin-top:6px"><thead><tr><th>Receptor (de + débil a + fuerte)</th><th>Rec.</th><th>Positiva%</th><th>Error%</th></tr></thead><tbody>';
     t.recep.weak.forEach(function(w,i){
-      h+='<tr><td>'+(i===0?'<span style="color:var(--red)">🎯</span> ':'')+w.name+'</td><td style="color:var(--mut2)">'+w.tot+'</td>'
+      h+='<tr><td>'+(i===0?'<span style="color:#ffffff">🎯</span> ':'')+w.name+'</td><td style="color:var(--mut2)">'+w.tot+'</td>'
         +'<td style="font-weight:800;color:'+pctColor(w.pospct)+'">'+w.pospct+'%</td>'
         +'<td style="color:#9094b7">'+w.errpct+'%</td></tr>';
     });

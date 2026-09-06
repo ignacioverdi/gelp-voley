@@ -340,7 +340,7 @@
       '#sv-bar .row{display:flex;gap:8px;align-items:center;max-width:1100px;margin:0 auto;flex-wrap:wrap}'+
       '#sv-input{flex:1;min-width:180px;background:#0d0e1a;border:1px solid rgba(255,255,255,.18);color:#fff;'+
       'border-radius:9px;padding:11px 14px;font-size:18px;font-weight:700;letter-spacing:1px;outline:none}'+
-      '#sv-input:focus{border-color:#09135f}'+
+      '#sv-input:focus{border-color:#ffffff}'+
       '#sv-bar button{border:none;cursor:pointer;border-radius:9px;padding:10px 14px;font-family:inherit;'+
       'font-weight:800;letter-spacing:1px;font-size:13px}'+
       '.sv-undo{background:rgba(148,163,184,.15);color:#cbd5e1}'+
@@ -407,7 +407,7 @@
       '#sv-guia .gclose{background:rgba(255,255,255,.08);color:#cbd5e1;border:none;border-radius:8px;cursor:pointer;font-size:15px;font-weight:800;padding:7px 13px}'+
       '#sv-guia .gbody{padding:8px 20px 20px}'+
       '#sv-guia .sec{margin-top:18px}'+
-      '#sv-guia .sec h3{color:#09135f;font-size:15px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 6px}'+
+      '#sv-guia .sec h3{color:#ffffff;font-size:15px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 6px}'+
       '#sv-guia .sec p{color:#cbd5e1;font-size:15px;margin:4px 0;line-height:1.5}'+
       '#sv-guia code{font-family:ui-monospace,Menlo,Consolas,monospace;background:#070710;border:1px solid rgba(255,255,255,.12);color:#7dd3fc;padding:2px 7px;border-radius:6px;font-size:14px}'+
       '#sv-guia .ej{font-family:ui-monospace,Menlo,Consolas,monospace;background:#070710;border:1px solid rgba(34,197,94,.3);color:#22c55e;padding:2px 7px;border-radius:6px;font-size:14px;font-weight:700}'+
@@ -417,7 +417,7 @@
       '#sv-guia .sv-g-chip{display:inline-block;font-family:monospace;font-size:13px;font-weight:700;background:#11121f;'+
       'border:1px solid rgba(255,255,255,.12);color:#e2e8f0;border-radius:6px;padding:3px 8px;margin:3px}'+
       '#sv-guia .note{background:rgba(9,19,95,.08);border:1px solid rgba(9,19,95,.3);border-radius:10px;'+
-      'padding:10px 14px;margin-top:8px;color:#09135f;font-size:14px;line-height:1.6}';
+      'padding:10px 14px;margin-top:8px;color:#ffffff;font-size:14px;line-height:1.6}';
     document.head.appendChild(css);
 
     var hr=document.querySelector('header .hright')||document.querySelector('.hright');
@@ -445,8 +445,8 @@
             '<span class="vchip"><b style="color:#86efac">i</b> + positivo</span>'+
             '<span class="vchip"><b style="color:#f59e0b">p</b> ! neutral</span>'+
             '<span class="vchip"><b style="color:#9094b7">o</b> - negativo</span>'+
-            '<span class="vchip"><b style="color:#09135f">j</b> / vendida o bloqueada</span>'+
-            '<span class="vchip"><b style="color:#09135f">k</b> = error</span>'+
+            '<span class="vchip"><b style="color:#ffffff">j</b> / vendida o bloqueada</span>'+
+            '<span class="vchip"><b style="color:#ffffff">k</b> = error</span>'+
           '</div></div>'+
         '<div class="sec"><h3>Saque</h3>'+
           '<p><code>s + tipo + camiseta + zona-origen + zona-destino</code></p>'+

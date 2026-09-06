@@ -36,7 +36,7 @@ var CSS = [
   '.vb-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0;background:rgba(0,0,0,.2)}',
   '#vb-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#e2e8f0;padding:9px 12px;border-radius:12px;font-family:"Barlow Condensed","Segoe UI",sans-serif;font-size:13px;outline:none;transition:border-color .15s;resize:none;height:40px;min-height:40px;max-height:110px}',
   '#vb-input:focus{border-color:rgba(37,99,235,.5)}',
-  '#vb-input::placeholder{color:#475569}',
+  '#vb-input::placeholder{color:#94a3b8}',
   '#vb-send{width:40px;height:40px;border-radius:12px;border:none;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}',
   '#vb-send:hover{transform:scale(1.05)}',
   '#vb-send:disabled{opacity:.38;cursor:not-allowed;transform:none}'
