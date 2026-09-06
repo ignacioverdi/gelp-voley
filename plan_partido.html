@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07080f;--card:#0d0e1a;--card2:#12132a;--border:rgba(255,255,255,.07);--red:#09135f;--txt:#e2e8f0;--mut:#8791a3;--faint:#5b6474;--h0:#171826;--h1:#5c2531;--h2:#a02335;--h3:#e8192c}
+:root{--bg:#07080f;--card:#0d0e1a;--card2:#12132a;--border:rgba(255,255,255,.07);--red:#09135f;--txt:#e2e8f0;--mut:#8791a3;--faint:#7a8598;--h0:#171826;--h1:#5c2531;--h2:#a02335;--h3:#e8192c}
 *{box-sizing:border-box}
 html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;font-size:15px;line-height:1.4;font-variant-numeric:tabular-nums}
@@ -194,7 +194,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 </style>
 <style>
 .tabsbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 12px 0;align-items:center}
-.tabteam{font-weight:800;font-size:15px;color:var(--red,#09135f);margin-right:6px;padding:6px 10px;background:rgba(9,19,95,.1);border-radius:8px;letter-spacing:.3px}
+.tabteam{font-weight:800;font-size:15px;color:#ffffff;margin-right:6px;padding:6px 10px;background:rgba(9,19,95,.1);border-radius:8px;letter-spacing:.3px}
 .ptab{background:var(--card,#151521);color:var(--mut,#8a8aa0);border:1px solid var(--b,#2a2a3a);border-radius:9px;padding:9px 15px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;letter-spacing:.3px}
 .ptab.active{background:var(--red,#09135f);color:#fff;border-color:var(--red,#09135f)}
 .teambtns{display:inline-flex;gap:6px;margin-right:8px}
@@ -411,13 +411,23 @@ function ppPintarTipo(){
       _mb.parentNode.childNodes[0].nodeValue = _txt+' ';
     }
   }catch(e){}
+  /* El seleccionado se marcaba con un relleno al 18% de un azul que ya es casi
+     negro, sobre una tarjeta tambien oscura: mirando rapido no se distinguia
+     cual estaba elegido.
+
+     Se usa el mismo lenguaje que las solapas de abajo (.ptab.active), que si
+     se lee de un vistazo: relleno SOLIDO del color del club, texto blanco y
+     el borde del mismo color. Al ser el patron que la app ya usa para "esto
+     esta seleccionado", no hay que aprender nada nuevo. */
   var t=ppTipoActual();
   var bs=document.querySelectorAll('[data-pptipo]');
   for(var i=0;i<bs.length;i++){
     var on = bs[i].getAttribute('data-pptipo')===t;
-    bs[i].style.background  = on ? 'rgba(9,19,95,.18)' : '';
-    bs[i].style.borderColor = on ? 'rgba(9,19,95,.55)' : '';
+    bs[i].style.background  = on ? '#09135f' : '';
+    bs[i].style.borderColor = on ? '#09135f' : '';
+    bs[i].style.color       = on ? '#ffffff' : '';
     bs[i].style.fontWeight  = on ? '800' : '';
+    bs[i].style.boxShadow   = on ? '0 2px 10px rgba(9,19,95,.55)' : '';
   }
 }
 
