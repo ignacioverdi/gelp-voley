@@ -157,13 +157,29 @@
 
 <script src="datos_seguros.js"></script>
   <script src="scouting_rival.js.enc" onerror="void 0"></script>
-  <script>abrirDatos();</script>
+  <script src="objetivos_config.js?v=20260908-1700"></script>
+<script>abrirDatos();</script>
 <script>
 var SC = window.SCOUTING_RIVAL || {};
 var CUR = null;
 
 // === colores / helpers ===
-function effColor(v){ return v>=35?'#22c55e':v>=25?'#84cc16':v>=15?'#9094b7':v>=5?'#9094b7':'#09135f'; }
+function effColor(v, meta){
+  /* Usa los mismos cortes que los objetivos. Antes eran fijos (verde arriba
+     de 40) y servian para la escala vieja: en la de 0 a 100 quedaba TODO
+     verde y el color no informaba nada. Sin clave, o si ese fundamento no
+     tiene objetivo cargado, se comporta como antes. */
+  if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(v >= _m.g2) return '#22c55e';
+    if(v >= _m.g1) return '#86efac';
+    if(v >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
+}
 function pctColor(v){ return v>=55?'#22c55e':v>=40?'#9094b7':v>=25?'#9094b7':'#09135f'; }
 function ZN(z){ return 'Z'+z; }
 

@@ -6551,13 +6551,13 @@ function calcObjetivos(D){
     }
   });
   // Eff Saque: (1×# + 0.5×/ + 0.25×+ - 1×=) / total
-  const effS=sT[6]?Math.round((sT[0]*1+sT[4]*0.5+sT[1]*0.25-sT[5]*1)/sT[6]*100):null;
+  const effS=sT[6]?VB_EFF.saque({T:sT[6],Punto:sT[0],Vend:sT[4],Pos:sT[1],Adm:sT[2]||0,Neg:sT[3]||0}):null;
   // Eff Rec: (1×# + 0.5×+ - 0.5×/ - 1×=) / total
-  const effR=rT[6]?Math.round((rT[0]*1+rT[1]*0.5-rT[4]*0.5-rT[5]*1)/rT[6]*100):null;
+  const effR=rT[6]?VB_EFF.recepcion({T:rT[6],Punto:rT[0],Pos:rT[1],Adm:rT[2]||0,Neg:rT[3]||0,Vend:rT[4]}):null;
   // Bloqueo #+%: (# + +) / total
   const effB=bT[6]?Math.round((bT[0]+bT[1])/bT[6]*100):null;
   // Eff Ataque Alta: (# - / - =) / total altas
-  const effA=aV[6]?Math.round((aV[0]-aV[4]-aV[5])/aV[6]*100):null;
+  const effA=aV[6]?VB_EFF.ataque({T:aV[6],Punto:aV[0],Vend:aV[4],Err:aV[5]}):null;
   // Toques
   const tcq=aTT[6]||0;
   // Manos y afuera: bloqueos = del equipo rival = bT[5]

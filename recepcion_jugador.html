@@ -171,7 +171,7 @@ function renderPanelRecepcion(j, container){
         T.med+=c.med||0; T.ovp+=c.ovp||0; T.err+=c.err||0;
       });
       if(T.tot>0){
-        T.eff=Math.round((T.pt*1+T.mas*0.5-T.ovp*0.5-T.err)/T.tot*100);
+        T.eff=VB_EFF.recepcion({T:T.tot,Punto:T.pt,Pos:T.mas,Adm:T.ntr||0,Neg:T.neg||0,Vend:T.ovp});
         T.pos=Math.round((T.pt+T.mas)/T.tot*100);
         T.neg=Math.round((T.ovp+T.err)/T.tot*100);
       }
@@ -180,7 +180,7 @@ function renderPanelRecepcion(j, container){
     var P5=suma('P5'),P6=suma('P6'),P1=suma('P1');
     var tot={tot:0,eff:0,pos:0,neg:0,pt:0,mas:0,neu:0,med:0,ovp:0,err:0};
     [P5,P6,P1].forEach(function(c){tot.tot+=c.tot;tot.pt+=c.pt;tot.mas+=c.mas;tot.neu+=c.neu;tot.med+=c.med;tot.ovp+=c.ovp;tot.err+=c.err;});
-    if(tot.tot>0){tot.eff=Math.round((tot.pt*1+tot.mas*0.5-tot.ovp*0.5-tot.err)/tot.tot*100);tot.pos=Math.round((tot.pt+tot.mas)/tot.tot*100);tot.neg=Math.round((tot.ovp+tot.err)/tot.tot*100);}
+    if(tot.tot>0){tot.eff=VB_EFF.recepcion({T:tot.tot,Punto:tot.pt,Pos:tot.mas,Adm:tot.ntr||0,Neg:tot.neg||0,Vend:tot.ovp});tot.pos=Math.round((tot.pt+tot.mas)/tot.tot*100);tot.neg=Math.round((tot.ovp+tot.err)/tot.tot*100);}
     return {P5:P5,P6:P6,P1:P1,total:tot};
   }
   var types=[{key:'flotado', label:'SAQUE FLOTADO', color:'#818cf8'},{key:'potencia',label:'SAQUE POTENCIA', color:'#9094b7'}];

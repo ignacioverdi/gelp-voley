@@ -136,20 +136,32 @@ body{background:var(--bg);font-family:'Barlow Condensed',sans-serif;color:var(--
 
 // ── Eficiencias ──────────────────────────────────────────────
 function effSaque(j){
-  return j.sT>0 ? Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100) : null;
+  return j.sT>0 ? VB_EFF.saque(j) : null;
 }
 function effRecepcion(j){
-  return j.rT>0 ? Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100) : null;
+  return j.rT>0 ? VB_EFF.recepcion(j) : null;
 }
 function effAtaque(j){
-  return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
+  return j.aT>0 ? VB_EFF.ataque(j) : null;
 }
 function effBloqueo(j){
   return j.bT>0 ? Math.round((j.bPt+j.bPtPos)/j.bT*100) : null;
 }
-function effColor(v){
+function effColor(v, meta){
+  /* Usa los mismos cortes que los objetivos. Antes eran fijos (verde arriba
+     de 40) y servian para la escala vieja: en la de 0 a 100 quedaba TODO
+     verde y el color no informaba nada. Sin clave, o si ese fundamento no
+     tiene objetivo cargado, se comporta como antes. */
   if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
-  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#9094b7':'#ef4444';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(v >= _m.g2) return '#22c55e';
+    if(v >= _m.g1) return '#86efac';
+    if(v >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
 
 
@@ -219,7 +231,14 @@ var POS_COLOR={
 };
 
 // ── Objetivos config ─────────────────────────────────────────
-window.OBJETIVOS_CONFIG={metas:{
+/* RESPALDO: la configuracion buena vive en objetivos_config.js.
+   Esta copia solo se usa si ese archivo no cargo, para que la pantalla no
+   quede sin colores. Antes se asignaba directo y PISABA a la buena, porque
+   se carga despues.
+   Ojo: la condicion mira si hay METAS, no si el objeto existe: hay archivos
+   que dejan un objeto vacio y con un || simple el respaldo nunca entraria. */
+window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+                          ? window.OBJETIVOS_CONFIG : {metas:{
   sq:   {label:'% Saque',   obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
   rec:  {label:'% Recep.',  obj:36, min:20, max:44, g2:36, g1:30, y:25},
   bqpos:{label:'Blq #+',    obj:43, min:25, max:52, g2:43, g1:37, y:30},
@@ -591,9 +610,9 @@ function getJugadores(idx){
       });
     });
     Object.values(acum).forEach(function(s){
-      if(s.sT>0) s.sEff=Math.round((s.sPunto*1+s.sVend*0.5+s.sPos*0.25-s.sErr*1)/s.sT*100);
-      if(s.rT>0) s.rEff=Math.round((s.rPunto*1+s.rPos*0.5-s.rVend*0.5-s.rErr*1)/s.rT*100);
-      if(s.aT>0) s.aEff=Math.round((s.aPunto-s.aVend-s.aErr)/s.aT*100);
+      if(s.sT>0) s.sEff=VB_EFF.saque(s);
+      if(s.rT>0) s.rEff=VB_EFF.recepcion(s);
+      if(s.aT>0) s.aEff=VB_EFF.ataque(s);
     });
     return Object.values(acum).sort(function(a,b){return a.c-b.c;});
   } else {
@@ -601,10 +620,25 @@ function getJugadores(idx){
   }
 }
 
-function effColor(v){ return v===null||isNaN(v)?'var(--mut)':v>20?'#22c55e':v>0?'#86efac':v===0?'var(--mut)':'#ef4444'; }
-function sEff(j){ return j.sT>0?Math.round((j.sPunto*1+j.sVend*0.5+j.sPos*0.25-j.sErr*1)/j.sT*100):null; }
-function rEff(j){ return j.rT>0?Math.round((j.rPunto*1+j.rPos*0.5-j.rVend*0.5-j.rErr*1)/j.rT*100):null; }
-function aEff(j){ return j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null; }
+function effColor(v, meta){
+  /* Usa los mismos cortes que los objetivos. Antes eran fijos (verde arriba
+     de 40) y servian para la escala vieja: en la de 0 a 100 quedaba TODO
+     verde y el color no informaba nada. Sin clave, o si ese fundamento no
+     tiene objetivo cargado, se comporta como antes. */
+  if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(v >= _m.g2) return '#22c55e';
+    if(v >= _m.g1) return '#86efac';
+    if(v >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
+}
+function sEff(j){ return j.sT>0?VB_EFF.saque(j):null; }
+function rEff(j){ return j.rT>0?VB_EFF.recepcion(j):null; }
+function aEff(j){ return j.aT>0?VB_EFF.ataque(j):null; }
 function bEff(j){ return j.bT>0?Math.round((j.bPt+j.bPtPos)/j.bT*100):null; }
 function td(v,cls){ return '<td class="'+(cls||'')+'">'+(v!==undefined&&v!==null?v:'-')+'</td>'; }
 function effTd(v){ return '<td style="font-weight:800;color:'+effColor(v)+'">'+(v!==null&&v!==undefined?v+'%':'--')+'</td>'; }
@@ -639,7 +673,7 @@ function tablaSaque(jugs){
     if(isAcum) h+=td(j.PJ,'val-mut');
     h+=effTd(e)+td(j.sT,'val-tot')+td(j.sPunto,'val-perf')+td(j.sPos,'val-pos')+td(j.sAdm,'val-adm')+td(j.sNeg,'val-neg')+td(j.sErr,'val-err')+'</tr>';
   });
-  var tE=tT>0?Math.round((tPt*1+tVend*0.5+tPos*0.25-tErr*1)/tT*100):null;
+  var tE=tT>0?VB_EFF.saque({T:tT,Punto:tPt,Vend:tVend,Pos:tPos,Adm:(typeof tAdm!=="undefined"?tAdm:0),Neg:(typeof tNeg!=="undefined"?tNeg:0)}):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
   if(isAcum) h+='<td></td>';
   h+=effTd(tE)+td(tT,'val-tot')+td(tPt,'val-perf')+td(tPos,'val-pos')+td(tAdm,'val-adm')+td(tNeg,'val-neg')+td(tErr,'val-err')+'</tr>';
@@ -669,7 +703,7 @@ function tablaRecepcion(jugs){
     if(isAcum) h+=td(j.PJ,'val-mut');
     h+=effTd(e)+td(j.rT,'val-tot')+td(j.rPunto,'val-perf')+td(j.rPos,'val-pos')+td(j.rAdm,'val-adm')+td(j.rNeg,'val-neg')+td(j.rVend,'val-vend')+td(j.rErr,'val-err')+'</tr>';
   });
-  var tE=tT>0?Math.round((tPt*1+tPos*0.5-tVend*0.5-tErr*1)/tT*100):null;
+  var tE=tT>0?VB_EFF.recepcion({T:tT,Punto:tPt,Pos:tPos,Adm:(typeof tAdm!=="undefined"?tAdm:0),Neg:(typeof tNeg!=="undefined"?tNeg:0),Vend:tVend}):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
   if(isAcum) h+='<td></td>';
   h+=effTd(tE)+td(tT,'val-tot')+td(tPt,'val-perf')+td(tPos,'val-pos')+td(tAdm,'val-adm')+td(tNeg,'val-neg')+td(tVend,'val-vend')+td(tErr,'val-err')+'</tr>';
@@ -813,9 +847,9 @@ function renderIndividualNew(num){
     }
   });
   // Calcular eficiencias
-  var se=acum.sT>0?Math.round((acum.sPunto*1+acum.sVend*0.5+acum.sPos*0.25-acum.sErr*1)/acum.sT*100):null;
-  var re=acum.rT>0?Math.round((acum.rPunto*1+acum.rPos*0.5-acum.rVend*0.5-acum.rErr*1)/acum.rT*100):null;
-  var ae=acum.aT>0?Math.round((acum.aPunto-acum.aVend-acum.aErr)/acum.aT*100):null;
+  var se=acum.sT>0?VB_EFF.saque(acum):null;
+  var re=acum.rT>0?VB_EFF.recepcion(acum):null;
+  var ae=acum.aT>0?VB_EFF.ataque(acum):null;
   var be=acum.bT>0?Math.round((acum.bPt+acum.bPtPos)/acum.bT*100):null;
   // Direcciones de saque
   var totalDestsS=Object.values(destMapS).reduce(function(a,b){return a+b;},0);
@@ -942,9 +976,9 @@ function renderIndividualNew(num){
     evol+='<th style="color:#818cf8">A</th><th style="color:#818cf8">A%</th><th style="color:#06b6d4">B</th>';
     evol+='</tr></thead><tbody>';
     hist_jug.forEach(function(j,ri){
-      var se2=j.sT>0?Math.round((j.sPunto*1+j.sVend*0.5+j.sPos*0.25-j.sErr*1)/j.sT*100):null;
-      var re2=j.rT>0?Math.round((j.rPunto*1+j.rPos*0.5-j.rVend*0.5-j.rErr*1)/j.rT*100):null;
-      var ae2=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
+      var se2=j.sT>0?VB_EFF.saque(j):null;
+      var re2=j.rT>0?VB_EFF.recepcion(j):null;
+      var ae2=j.aT>0?VB_EFF.ataque(j):null;
       var res=j.resultado||{},gan=setsDelClub(res) > setsDelRival(res);
       var bg=ri%2===0?'transparent':'rgba(255,255,255,.015)';
       evol+='<tr style="background:'+bg+'"><td class="left" style="padding:8px 12px">';
@@ -991,12 +1025,12 @@ function renderCompar(){
     return a;
   }
   var A=acumJug(numA),B=acumJug(numB);
-  var seA=A.sT>0?Math.round((A.sPunto*1+A.sVend*0.5+A.sPos*0.25-A.sErr*1)/A.sT*100):0;
-  var seB=B.sT>0?Math.round((B.sPunto*1+B.sVend*0.5+B.sPos*0.25-B.sErr*1)/B.sT*100):0;
-  var reA=A.rT>0?Math.round((A.rPunto*1+A.rPos*0.5-A.rVend*0.5-A.rErr*1)/A.rT*100):0;
-  var reB=B.rT>0?Math.round((B.rPunto*1+B.rPos*0.5-B.rVend*0.5-B.rErr*1)/B.rT*100):0;
-  var aeA=A.aT>0?Math.round((A.aPunto-A.aVend-A.aErr)/A.aT*100):0;
-  var aeB=B.aT>0?Math.round((B.aPunto-B.aVend-B.aErr)/B.aT*100):0;
+  var seA=A.sT>0?VB_EFF.saque(A):0;
+  var seB=B.sT>0?VB_EFF.saque(B):0;
+  var reA=A.rT>0?VB_EFF.recepcion(A):0;
+  var reB=B.rT>0?VB_EFF.recepcion(B):0;
+  var aeA=A.aT>0?VB_EFF.ataque(A):0;
+  var aeB=B.aT>0?VB_EFF.ataque(B):0;
   var beA=A.bT>0?Math.round((A.bPt+A.bPtPos)/A.bT*100):0;
   var beB=B.bT>0?Math.round((B.bPt+B.bPtPos)/B.bT*100):0;
   function compRow(lbl,vA,vB,suffix){
@@ -1908,21 +1942,21 @@ function _aplicarSubfiltros(jugs){
       var S = (SAQUE_TIPO==='flotado') ? j.sFlo : j.sPot;
       if(S){ c.sT=S.T||0; c.sPunto=S.Punto||0; c.sPos=S.Pos||0; c.sAdm=S.Adm||0;
              c.sAdm=S.Adm||0; c.sNeg=S.Neg||0; c.sErr=S.Err||0; c.sVend=S.Vend||0;
-             c.sEff = c.sT ? Math.round((c.sPunto - c.sErr)/c.sT*100) : null; }
+             c.sEff = c.sT ? VB_EFF.saque(c) : null; }
       else { c.sT=0; c.sEff=null; }
     }
     if(RECEP_TIPO!=='total'){
       var R = (RECEP_TIPO==='flotado') ? j.rFlo : j.rPot;
       if(R){ c.rT=R.T||0; c.rPunto=R.Punto||0; c.rPos=R.Pos||0; c.rAdm=R.Adm||0;
              c.rAdm=R.Adm||0; c.rNeg=R.Neg||0; c.rErr=R.Err||0; c.rVend=R.Vend||0;
-             c.rEff = c.rT ? Math.round((c.rPunto - c.rErr)/c.rT*100) : null; }
+             c.rEff = c.rT ? VB_EFF.recepcion(c) : null; }
       else { c.rT=0; c.rEff=null; }
     }
     if(ATK_FASE!=='total'){
       var A = (ATK_FASE==='so') ? j.aSo : j.aTr;
       if(A){ c.aT=A.T||0; c.aPunto=A.Punto||0; c.aPos=A.Pos||0; c.aAdm=A.Adm||0;
              c.aAdm=A.Adm||0; c.aNeg=A.Neg||0; c.aErr=A.Err||0; c.aVend=A.Vend||0;
-             c.aEff = c.aT ? Math.round((c.aPunto - c.aErr)/c.aT*100) : null; }
+             c.aEff = c.aT ? VB_EFF.ataque(c) : null; }
       else { c.aT=0; c.aEff=null; }
     }
     return c;

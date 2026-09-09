@@ -8,6 +8,7 @@
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
 <script src="categorias_club.js" onerror="void 0"></script>
 <script src="selector_categoria.js" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260908-1700"></script>
 <script>
 /* Esta pantalla necesita sus datos completos apenas abre: si se dibuja
    antes de que terminen de descifrarse, sale vacia.
@@ -99,7 +100,22 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 </div>
 <script>
 var POS_COLOR={'ARMADOR':'#f59e0b','OPUESTO':'#f97316','PUNTA':'#818cf8','CENTRAL':'#22c55e','LIBERO':'#06b6d4'};
-function effColor(v){ if(v===null||v===undefined||isNaN(v)) return '#475569'; return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'#e2e8f0':v>=-20?'#9094b7':'#ef4444'; }
+function effColor(v, meta){
+  /* Usa los mismos cortes que los objetivos. Antes eran fijos (verde arriba
+     de 40) y servian para la escala vieja: en la de 0 a 100 quedaba TODO
+     verde y el color no informaba nada. Sin clave, o si ese fundamento no
+     tiene objetivo cargado, se comporta como antes. */
+  if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(v >= _m.g2) return '#22c55e';
+    if(v >= _m.g1) return '#86efac';
+    if(v >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
+}
 function calcPct(a,b){ return b>0?Math.round(a*100/b):0; }
 
 function drawWood(ctx,x,y,w,h,c1,c2){
@@ -291,7 +307,7 @@ function buildSaqueFromHistorial(num){
   if(!sm.tot) return null;
   var totDest=Object.values(sm.destCounts).reduce(function(s,v){return s+v;},0)||1;
   var destinos=Object.entries(sm.destCounts).filter(function(e){return e[1]>0;}).sort(function(a,b){return b[1]-a[1];}).slice(0,6).map(function(e){return {z:parseInt(e[0]),pct:Math.round(e[1]/totDest*100)};});
-  var eff=Math.round((sm.pt+0.5*sm.pos-sm.neg-sm.err)/sm.tot*100);
+  var eff=VB_EFF.saque({T:sm.tot,Punto:sm.pt,Vend:sm.vend||0,Pos:sm.pos,Adm:sm.ntr||0,Neg:sm.neg});
   var pos=CASLA_POS_SQ[num]||'';
   var color=POS_COLOR[pos]||'#64748b';
   return {num:num, nombre:num+' '+jNombre, pos:pos, color:color,

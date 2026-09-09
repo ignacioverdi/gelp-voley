@@ -308,20 +308,32 @@ select, select option { color: #111111 !important; background-color: #ffffff !im
 
 // ── Eficiencias ──────────────────────────────────────────────
 function effSaque(j){
-  return j.sT>0 ? Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100) : null;
+  return j.sT>0 ? VB_EFF.saque(j) : null;
 }
 function effRecepcion(j){
-  return j.rT>0 ? Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100) : null;
+  return j.rT>0 ? VB_EFF.recepcion(j) : null;
 }
 function effAtaque(j){
-  return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
+  return j.aT>0 ? VB_EFF.ataque(j) : null;
 }
 function effBloqueo(j){
   return j.bT>0 ? Math.round((j.bPt+j.bPtPos)/j.bT*100) : null;
 }
-function effColor(v){
+function effColor(v, meta){
+  /* Usa los mismos cortes que los objetivos. Antes eran fijos (verde arriba
+     de 40) y servian para la escala vieja: en la de 0 a 100 quedaba TODO
+     verde y el color no informaba nada. Sin clave, o si ese fundamento no
+     tiene objetivo cargado, se comporta como antes. */
   if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
-  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#9094b7':'#ef4444';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(v >= _m.g2) return '#22c55e';
+    if(v >= _m.g1) return '#86efac';
+    if(v >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
 function fmtEff(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 
@@ -366,7 +378,14 @@ var POS_COLOR={
 };
 
 // ── Objetivos config ─────────────────────────────────────────
-window.OBJETIVOS_CONFIG={metas:{
+/* RESPALDO: la configuracion buena vive en objetivos_config.js.
+   Esta copia solo se usa si ese archivo no cargo, para que la pantalla no
+   quede sin colores. Antes se asignaba directo y PISABA a la buena, porque
+   se carga despues.
+   Ojo: la condicion mira si hay METAS, no si el objeto existe: hay archivos
+   que dejan un objeto vacio y con un || simple el respaldo nunca entraria. */
+window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+                          ? window.OBJETIVOS_CONFIG : {metas:{
   sq:   {label:'% Saque',   obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
   rec:  {label:'% Recep.',  obj:36, min:20, max:44, g2:36, g1:30, y:25},
   bqpos:{label:'Blq #+',    obj:43, min:25, max:52, g2:43, g1:37, y:30},
@@ -406,8 +425,8 @@ function objCalcVals(nombreJugador){
     });
   });
   var v={};
-  v.sq   =a.sT>0?Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100):null;
-  v.rec  =a.rT>0?Math.round((a.rPunto+0.5*a.rPos-0.5*a.rVend-a.rErr)/a.rT*100):null;
+  v.sq   =a.sT>0?VB_EFF.saque(a):null;
+  v.rec  =a.rT>0?VB_EFF.recepcion(a):null;
   v.bqpos=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
   v.bqpt =a.bT>0?Math.round(a.bPt/a.bT*100):null;
   v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;
@@ -820,16 +839,16 @@ function getFD(p,k){if(k==='R')return p.rT;if(k==='S')return p.sT;if(k==='A')ret
   if(k==='F')return p.fT||[0,0,0,0,0,0,0];
   return [0,0,0,0,0,0,0];}
 // Eficiencia Saque: (1×# + 0.5×/ + 0.25×+ - 1×=) / total
-function efS(d){if(!d||!d[6])return null;return Math.round((d[0]*1 + d[4]*0.5 + d[1]*0.25 - d[5]*1)/d[6]*100);}
+function efS(d){if(!d||!d[6])return null;return VB_EFF.saque({T:d[6],Punto:d[0],Vend:d[4],Pos:d[1],Adm:d[2]||0,Neg:d[3]||0});}
 // Eficiencia Recepcion: (1×# + 0.5×+ - 0.5×/ - 1×=) / total
-function efR(d){if(!d||!d[6])return null;return Math.round((d[0]*1 + d[1]*0.5 - d[4]*0.5 - d[5]*1)/d[6]*100);}
+function efR(d){if(!d||!d[6])return null;return VB_EFF.recepcion({T:d[6],Punto:d[0],Pos:d[1],Adm:d[2]||0,Neg:d[3]||0,Vend:d[4]});}
 // Eficiencia Ataque: (# - / - =) / total
-function efA(d){if(!d||!d[6])return null;return Math.round((d[0] - d[4] - d[5])/d[6]*100);}
+function efA(d){if(!d||!d[6])return null;return VB_EFF.ataque({T:d[6],Punto:d[0],Vend:d[4],Err:d[5]});}
 // Eficiencia Bloqueo: (# + 0.5×+) / total
 function efB(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1]*0.5)/d[6]*100);}
 // Defensa y Freeball: positividad (# y +). Armado: eficiencia (# menos = y /). Manual DV4 2.3.4.4
 function efD(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1])/d[6]*100);}
-function efE(d){if(!d||!d[6])return null;return Math.round((d[0] - d[4] - d[5])/d[6]*100);}
+function efE(d){if(!d||!d[6])return null;return VB_EFF.ataque({T:d[6],Punto:d[0],Vend:d[4],Err:d[5]});}
 function efFB(d){if(!d||!d[6])return null;return Math.round((d[0] + d[1])/d[6]*100);}
 function efF(d,k){if(k==='R')return efR(d);if(k==='S')return efS(d);if(k==='A')return efA(d);if(k==='B')return efB(d);
   if(k==='D')return efD(d);if(k==='E')return efE(d);if(k==='F')return efFB(d);
@@ -1060,7 +1079,7 @@ function renderTabla(){
 
     // SAQUE
     const s=p.sT; const sT=s[6]||0;
-    const sEff=sT?Math.round((s[0]*1+s[4]*0.5+s[1]*0.25-s[5]*1)/sT*100):null;
+    const sEff=sT?VB_EFF.saque({T:sT,Punto:s[0],Vend:s[4],Pos:s[1],Adm:s[2]||0,Neg:s[3]||0}):null;
     const sPt=sT?Math.round(s[0]/sT*100):null;
     const sVend=sT?Math.round(s[4]/sT*100):null;
     const sPos=sT?Math.round(s[1]/sT*100):null;
@@ -1068,7 +1087,7 @@ function renderTabla(){
 
     // RECEPCION
     const r=p.rT; const rT=r[6]||0;
-    const rEff=rT?Math.round((r[0]*1+r[1]*0.5-r[4]*0.5-r[5]*1)/rT*100):null;
+    const rEff=rT?VB_EFF.recepcion({T:rT,Punto:r[0],Pos:r[1],Adm:r[2]||0,Neg:r[3]||0,Vend:r[4]}):null;
     const rPt=rT?Math.round(r[0]/rT*100):null;
     const rPos=rT?Math.round(r[1]/rT*100):null;
     const rNeg=rT?Math.round(r[3]/rT*100):null;
@@ -1077,7 +1096,7 @@ function renderTabla(){
 
     // ATAQUE
     const a=p.aT; const aT=a[6]||0;
-    const aEff=aT?Math.round((a[0]-a[4]-a[5])/aT*100):null;
+    const aEff=aT?VB_EFF.ataque({T:aT,Punto:a[0],Vend:a[4],Err:a[5]}):null;
     const aPt=aT?Math.round(a[0]/aT*100):null;
     const aVend=aT?Math.round(a[4]/aT*100):null;
     const aErr=aT?Math.round(a[5]/aT*100):null;
@@ -1243,13 +1262,13 @@ function calcObjetivos(D){
     }
   });
   // Eff Saque: (1×# + 0.5×/ + 0.25×+ - 1×=) / total
-  const effS=sT[6]?Math.round((sT[0]*1+sT[4]*0.5+sT[1]*0.25-sT[5]*1)/sT[6]*100):null;
+  const effS=sT[6]?VB_EFF.saque({T:sT[6],Punto:sT[0],Vend:sT[4],Pos:sT[1],Adm:sT[2]||0,Neg:sT[3]||0}):null;
   // Eff Rec: (1×# + 0.5×+ - 0.5×/ - 1×=) / total
-  const effR=rT[6]?Math.round((rT[0]*1+rT[1]*0.5-rT[4]*0.5-rT[5]*1)/rT[6]*100):null;
+  const effR=rT[6]?VB_EFF.recepcion({T:rT[6],Punto:rT[0],Pos:rT[1],Adm:rT[2]||0,Neg:rT[3]||0,Vend:rT[4]}):null;
   // Bloqueo #+%: (# + +) / total
   const effB=bT[6]?Math.round((bT[0]+bT[1])/bT[6]*100):null;
   // Eff Ataque Alta: (# - / - =) / total altas
-  const effA=aV[6]?Math.round((aV[0]-aV[4]-aV[5])/aV[6]*100):null;
+  const effA=aV[6]?VB_EFF.ataque({T:aV[6],Punto:aV[0],Vend:aV[4],Err:aV[5]}):null;
   // Toques
   const tcq=aTT[6]||0;
   // Manos y afuera: bloqueos = del equipo rival = bT[5]

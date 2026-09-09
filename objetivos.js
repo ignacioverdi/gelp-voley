@@ -8,7 +8,14 @@
 
 /* ── Metas del equipo (idénticas al dashboard de Gelp) ── */
 window.OBJETIVOS_CONFIG = window.OBJETIVOS_CONFIG || {};
-window.OBJETIVOS_CONFIG = {metas:{
+/* RESPALDO: la configuracion buena vive en objetivos_config.js.
+   Esta copia solo se usa si ese archivo no cargo, para que la pantalla no
+   quede sin colores. Antes se asignaba directo y PISABA a la buena, porque
+   se carga despues.
+   Ojo: la condicion mira si hay METAS, no si el objeto existe: hay archivos
+   que dejan un objeto vacio y con un || simple el respaldo nunca entraria. */
+window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+                          ? window.OBJETIVOS_CONFIG : {metas:{
   sq:   {label:'% Saque',   obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
   rec:  {label:'% Recep.',  obj:36, min:20, max:44, g2:36, g1:30, y:25},
   bqpos:{label:'Blq #+',    obj:43, min:25, max:52, g2:43, g1:37, y:30},

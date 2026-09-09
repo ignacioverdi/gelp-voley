@@ -5,13 +5,13 @@
 
 // ── Eficiencias ──────────────────────────────────────────────
 function effSaque(j){
-  return j.sT>0 ? Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100) : null;
+  return j.sT>0 ? VB_EFF.saque(j) : null;
 }
 function effRecepcion(j){
-  return j.rT>0 ? Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100) : null;
+  return j.rT>0 ? VB_EFF.recepcion(j) : null;
 }
 function effAtaque(j){
-  return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
+  return j.aT>0 ? VB_EFF.ataque(j) : null;
 }
 function effBloqueo(j){
   return j.bT>0 ? Math.round((j.bPt+j.bPtPos)/j.bT*100) : null;
@@ -63,7 +63,14 @@ var POS_COLOR={
 };
 
 // ── Objetivos config ─────────────────────────────────────────
-window.OBJETIVOS_CONFIG={metas:{
+/* RESPALDO: la configuracion buena vive en objetivos_config.js.
+   Esta copia solo se usa si ese archivo no cargo, para que la pantalla no
+   quede sin colores. Antes se asignaba directo y PISABA a la buena, porque
+   se carga despues.
+   Ojo: la condicion mira si hay METAS, no si el objeto existe: hay archivos
+   que dejan un objeto vacio y con un || simple el respaldo nunca entraria. */
+window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+                          ? window.OBJETIVOS_CONFIG : {metas:{
   sq:   {label:'% Saque',   obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
   rec:  {label:'% Recep.',  obj:36, min:20, max:44, g2:36, g1:30, y:25},
   bqpos:{label:'Blq #+',    obj:43, min:25, max:52, g2:43, g1:37, y:30},
@@ -116,8 +123,8 @@ function objCalcVals(nombreJugador){
     });
   });
   var v={};
-  v.sq   =a.sT>0?Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100):null;
-  v.rec  =a.rT>0?Math.round((a.rPunto+0.5*a.rPos-0.5*a.rVend-a.rErr)/a.rT*100):null;
+  v.sq   =a.sT>0?VB_EFF.saque(a):null;
+  v.rec  =a.rT>0?VB_EFF.recepcion(a):null;
   v.bqpos=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
   v.bqpt =a.bT>0?Math.round(a.bPt/a.bT*100):null;
   v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;

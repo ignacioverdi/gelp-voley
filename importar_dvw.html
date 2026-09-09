@@ -159,6 +159,7 @@ select,select option{color:#111!important;background:#fff!important;}
 
 <div class="toast" id="toast"></div>
 
+<script src="objetivos_config.js?v=20260908-1700"></script>
 <script>
 // ── Plantel GELP ─────────────────────────────────────────────
 var NOMBRES = {
@@ -231,11 +232,11 @@ function initJug(num, nombre){
 
 function calcEff(j){
   // SAQUE: (Pt×1 + Vend×0.5 + Pos×0.25 - Err×1) / Total × 100
-  if(j.sT > 0) j.sEff = Math.round((j.sPunto*1 + j.sVend*0.5 + j.sPos*0.25 - j.sErr*1) / j.sT * 100);
+  if(j.sT > 0) j.sEff = VB_EFF.saque(j);
   // RECEPCION: (Perf×1 + Pos×0.5 - Vend×0.5 - Err×1) / Total × 100
-  if(j.rT > 0) j.rEff = Math.round((j.rPunto*1 + j.rPos*0.5 - j.rVend*0.5 - j.rErr*1) / j.rT * 100);
+  if(j.rT > 0) j.rEff = VB_EFF.recepcion(j);
   // ATAQUE: (Pt - Vend - Err) / Total × 100
-  if(j.aT > 0) j.aEff = Math.round((j.aPunto - j.aVend - j.aErr) / j.aT * 100);
+  if(j.aT > 0) j.aEff = VB_EFF.ataque(j);
   // BLOQUEO: (Pt + Pos) / Total × 100
   if(j.bT > 0) j.bEff = Math.round((j.bPt + j.bPtPos) / j.bT * 100);
   if(Object.keys(j._sdir).length > 0){

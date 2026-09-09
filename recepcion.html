@@ -729,7 +729,7 @@ function calcEquipoDataRival(rival){
     ['desde_z1','desde_z6','desde_z5'].forEach(function(dz){
       ['p1','p6','p5'].forEach(function(pz){
         var c=agg[tp][dz][pz];
-        c.eff = c.tot? Math.round((c.perf+0.5*c.pos-0.5*c.neg-c.err)/c.tot*100):0;
+        c.eff = c.tot? VB_EFF.recepcion({T:c.tot,Punto:c.perf,Pos:c.pos,Adm:c.ntr||0,Neg:c.neg||0,Vend:c.over||0}):0;
       });
     });
   });

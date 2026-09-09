@@ -107,14 +107,14 @@ def norm_team(name):
 # ══════════ MOTOR DE BATERÍAS — PORT EXACTO DE objetivos.js ══════════
 def _bat_nuevo():
     na=lambda:{'#':0,'/':0,'=':0,'T':0}
-    return {'S':{'#':0,'+':0,'/':0,'=':0,'T':0},
-            'R':{'#':0,'+':0,'/':0,'=':0,'T':0},
+    return {'S':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
+            'R':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'B':{'#':0,'+':0,'T':0},
             # La DEFENSA. No estaba: el recuadro del dashboard la sacaba del
             # video, que un club nuevo no tiene, y quedaba siempre en cero
             # aunque los .dvw traigan las acciones —146 en un solo partido—.
             # Ahora sale de los .dvw como los otros cuatro fundamentos.
-            'D':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
+            'D':{'#':0,'+':0,'!':0,'-':0,'=':0,'T':0},
             'Aall':na(),'cent':na(),'alta':na(),'rap':na(),
             'rp':na(),'ri':na(),'rm':na(),'tr':na()}
 
@@ -189,8 +189,8 @@ def _bat_to_pcts(P):
     S,R,B=P['S'],P['R'],P['B']
     D=P.get('D') or {'#':0,'+':0,'-':0,'/':0,'=':0,'T':0}
     return {
-        'sq':    _roundpy((S['#']+0.5*S['/']+0.25*S['+']-S['='])/S['T']*100) if S['T'] else None,
-        'rec':   _roundpy((R['#']+0.5*R['+']-0.5*R['/']-R['='])/R['T']*100) if R['T'] else None,
+        'sq':    _roundpy((S['#'] + 0.875*S['/'] + 0.75*S['+'] + 0.5*S['!'] + 0.25*S['-'])/S['T']*100) if S['T'] else None,
+        'rec':   _roundpy((R['#'] + 0.75*R['+'] + 0.5*R['!'] + 0.25*R['-'] + 0.125*R['/'])/R['T']*100) if R['T'] else None,
         'bqpos': _roundpy((B['#']+B['+'])/B['T']*100) if B['T'] else None,
         'bqpt':  _roundpy(B['#']/B['T']*100) if B['T'] else None,
         'atqq':  atk(P['cent']),
@@ -204,7 +204,7 @@ def _bat_to_pcts(P):
         # Perfectas menos errores sobre el total, la misma forma que usan las
         # otras pills. 'defT' va aparte porque el recuadro muestra el total de
         # acciones al lado del porcentaje.
-        'def':      _roundpy((D['#']+0.5*D['+']-0.5*D['-']-D['='])/D['T']*100) if D['T'] else None,
+        'def':      _roundpy((D['#'] + 0.75*D['+'] + 0.5*D['!'] + 0.25*D['-'])/D['T']*100) if D['T'] else None,
         'defT':     D['T'],
         'defPerf':  D['#'],
         'defBuena': D['+'],
@@ -413,10 +413,15 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
                 for sec2 in P:
                     for k in P[sec2]: acc[nom][sec2][k]+=P[sec2][k]
         jug_a={nom:_bat_to_pcts(acc[nom]) for nom in acc}
+        # El total del equipo incluye a TODOS. Antes se sumaba solo a los
+        # jugadores con nombre reconocido, y por eso el acumulado no
+        # coincidia con la suma de las sesiones.
         eq_acc=_bat_nuevo()
-        for nom in acc:
-            for sec2 in acc[nom]:
-                for k in acc[nom][sec2]: eq_acc[sec2][k]+=acc[nom][sec2][k]
+        for m in lista:
+            E=m['_acum'].get('__EQUIPO__')
+            if not E: continue
+            for sec2 in E:
+                for k in E[sec2]: eq_acc[sec2][k]+=E[sec2][k]
         return jug_a, _bat_to_pcts(eq_acc)
 
     jug_acum, eq_acum = acumular(matches)

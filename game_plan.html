@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
+<script src="objetivos_config.js?v=20260908-1700"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>GAME PLAN — GELP</title>
@@ -720,7 +721,7 @@ function gpBuildRecepcion(){
   var REC=['#','+','!','-','/','='];
   function dz(o){ return (o===1||o===9)?'desde_z1':(o===6)?'desde_z6':(o===5||o===7)?'desde_z5':null; }
   function pz(d){ return (d===1||d===9)?'p1':(d===6||d===8)?'p6':(d===5||d===7)?'p5':null; }
-  function effC(c){ return c.tot?Math.round((c.perf+0.5*c.pos-0.5*c.over-c.err)/c.tot*100):0; }
+  function effC(c){ return c.tot?VB_EFF.recepcion({T:c.tot,Punto:c.perf,Pos:c.pos,Adm:c.ntr||0,Neg:c.neg||0,Vend:c.over||0}):0; }
   var out={};
   Object.keys(GP_TD.rec||{}).forEach(function(ns){
     var p=GP_TD.rec[ns];
@@ -812,7 +813,7 @@ function gpStatSrv(rows){
   var RES=['#','/','+','!','=','-'];
   var t=rows.length,k=0,pl=0,bl=0,e=0;
   rows.forEach(function(r){var x=RES[r[5]];if(x==='#')k++;else if(x==='+')pl++;else if(x==='/')bl++;else if(x==='=')e++;});
-  return {tot:t,pts:k,plus:pl,slash:bl,err:e,eff:t?Math.round((k+0.5*bl+0.25*pl-e)/t*100):0,pts_pct:t?Math.round(k/t*100):0};
+  return {tot:t,pts:k,plus:pl,slash:bl,err:e,eff:t?VB_EFF.saque({T:t,Punto:k,Vend:bl,Pos:pl,Adm:(typeof nt!=="undefined"?nt:0),Neg:(typeof ng!=="undefined"?ng:0)}):0,pts_pct:t?Math.round(k/t*100):0};
 }
 var GP_POS_COLOR={'OPPOSITE':'#818cf8','MIDDLE':'#f97316','OUTSIDE':'#22c55e','SETTER':'#fbbf24','LIBERO':'#06b6d4','OTRO':'#64748b',
   'OPUESTO':'#818cf8','CENTRAL':'#9094b7','PUNTA':'#22c55e','ARMADOR':'#fbbf24'};
@@ -1164,12 +1165,21 @@ function dibujarCanchaDefensa(canvasId, def, item){
 // ═══════════════════════════════════════════════════════
 // UTILIDADES
 // ═══════════════════════════════════════════════════════
-function effColor(e){
-  if(e===null||e===undefined) return 'var(--mut)';
-  if(e>=60) return '#22c55e';
-  if(e>=30) return '#fbbf24';
-  if(e>=0)  return '#9094b7';
-  return '#ef4444';
+function effColor(e, meta){
+  /* Usa los mismos cortes que los objetivos. Antes eran fijos (verde arriba
+     de 40) y servian para la escala vieja: en la de 0 a 100 quedaba TODO
+     verde y el color no informaba nada. Sin clave, o si ese fundamento no
+     tiene objetivo cargado, se comporta como antes. */
+  if(e===null||e===undefined||isNaN(e)) return 'var(--mut,#475569)';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(e >= _m.g2) return '#22c55e';
+    if(e >= _m.g1) return '#86efac';
+    if(e >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return e>=40?'#22c55e':e>=20?'#86efac':e>=0?'var(--txt,#e2e8f0)':e>=-20?'#f97316':'#ef4444';
 }
 
 function drawWood(ctx,x,y,w,h,c1,c2){

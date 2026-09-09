@@ -102,6 +102,7 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
 <script src="categorias_club.js" onerror="void 0"></script>
 <script src="selector_categoria.js" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20260908-1700"></script>
 <script>
 /* Esta pantalla necesita sus datos completos apenas abre: si se dibuja
    antes de que terminen de descifrarse, sale vacia.
@@ -299,7 +300,22 @@ window.__DESCIFRAR_SINCRONO = true;
          cuando en realidad es peor que una mala: la pelota se va al campo
          rival sin control. Ahora pesa igual que la negativa, como en el
          motor. */; }); return Math.round(s/acts.length*100); }
-  function effColor(e){ return e===null?'#475569':e>=40?'#22C55E':e>=15?'#84CC16':e>=0?'#9094b7':e>=-25?'#9094b7':'#EF4444'; }
+  function effColor(e, meta){
+  /* Usa los mismos cortes que los objetivos. Antes eran fijos (verde arriba
+     de 40) y servian para la escala vieja: en la de 0 a 100 quedaba TODO
+     verde y el color no informaba nada. Sin clave, o si ese fundamento no
+     tiene objetivo cargado, se comporta como antes. */
+  if(e===null||e===undefined||isNaN(e)) return 'var(--mut,#475569)';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(e >= _m.g2) return '#22c55e';
+    if(e >= _m.g1) return '#86efac';
+    if(e >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return e>=40?'#22c55e':e>=20?'#86efac':e>=0?'var(--txt,#e2e8f0)':e>=-20?'#f97316':'#ef4444';
+}
   function pct(n,t){ return t>0?Math.round(n/t*100):0; }
 
   function courtSVG(origZ,destZ,total){

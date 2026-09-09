@@ -1,19 +1,124 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   LAS FORMULAS, EN UN SOLO LUGAR
+
+   Antes cada pantalla tenia su propia copia de la cuenta, con nombres de
+   variable distintos en cada una. Cambiar un peso obligaba a acertarle a
+   todas, y siempre quedaba alguna afuera: una pantalla mostraba un numero
+   distinto al resto sin que nadie entendiera por que.
+
+   Ahora la cuenta vive aca y todas las pantallas la llaman.
+
+   ESCALA 0 a 100 para saque, recepcion y defensa: el error vale 0, la accion
+   perfecta 100 y la neutra queda en el medio, en 50. Asi el numero se lee
+   solo: 50 es "todo neutro", 25 "todo negativo", 75 "todo positivo".
+
+     SAQUE       #  100   /  87,5   +  75   !  50   -  25   =  0
+     RECEPCION   #  100   +  75     !  50   -  25   /  12,5 =  0
+     DEFENSA     #  100   +  75     !  50   -  25          =  0
+
+   EL ATAQUE es la excepcion y va aparte: usa la eficacia clasica del voley,
+   (punto - bloqueado - error) / total, que es el estandar mundial. Esa escala
+   puede dar negativo y esta bien que asi sea.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function n(v){ return (typeof v === 'number' && isFinite(v)) ? v : 0; }
+  /* Toma el primer nombre que exista: cada pantalla llama distinto al mismo dato. */
+  function g(o, nombres){
+    for(var i=0;i<nombres.length;i++){
+      var v=o[nombres[i]];
+      if(v!==undefined && v!==null) return n(v);
+    }
+    return 0;
+  }
+  function redondear(x){ return Math.round(x); }
+
+  window.VB_EFF = {
+    saque: function(o){
+      if(!o) return null;
+      var T = g(o,['sT','T','tot','total']);
+      if(!T) return null;
+      var ace  = g(o,['sPunto','Punto','pts','ace','perf','k']);
+      var free = g(o,['sVend','Vend','slash','over','sl','bl']);
+      var pos  = g(o,['sPos','Pos','plus','pos','pl','p']);
+      var ntr  = g(o,['sAdm','Adm','ntr','nt','exc','reg']);
+      var neg  = g(o,['sNeg','Neg','neg','ng']);
+      return redondear((ace + 0.875*free + 0.75*pos + 0.5*ntr + 0.25*neg)/T*100);
+    },
+    recepcion: function(o){
+      if(!o) return null;
+      var T = g(o,['rT','T','tot','total']);
+      if(!T) return null;
+      var perf = g(o,['rPunto','Punto','pts','perf','k']);
+      var pos  = g(o,['rPos','Pos','plus','pos','pl','p','mas']);
+      var ntr  = g(o,['rAdm','Adm','ntr','nt','exc','reg']);
+      var neg  = g(o,['rNeg','Neg','neg','ng']);
+      var sob  = g(o,['rVend','Vend','over','ovp','slash','sl','bl']);
+      return redondear((perf + 0.75*pos + 0.5*ntr + 0.25*neg + 0.125*sob)/T*100);
+    },
+    defensa: function(o){
+      if(!o) return null;
+      var T = g(o,['dT','defT','T','tot','total']);
+      if(!T) return null;
+      var perf = g(o,['dPerf','defPerf','Punto','perf','pt']);
+      var buena= g(o,['dBuena','defBuena','Pos','plus','buena','pos']);
+      var ntr  = g(o,['dAdm','defAdm','Adm','ntr','reg']);
+      var mala = g(o,['dMala','defMala','Neg','neg','mala']);
+      return redondear((perf + 0.75*buena + 0.5*ntr + 0.25*mala)/T*100);
+    },
+    /* La formula de siempre. NO se toca: es el estandar del voley y los
+       objetivos de ataque estan calibrados sobre ella. */
+    ataque: function(o){
+      if(!o) return null;
+      var T = g(o,['aT','T','tot','total']);
+      if(!T) return null;
+      var pt  = g(o,['aPunto','Punto','pts','k']);
+      var blq = g(o,['aVend','Vend','slash','bl']);
+      var err = g(o,['aErr','Err','err','e']);
+      return redondear((pt - blq - err)/T*100);
+    }
+  };
+})();
+
 // objetivos_config.js — NÄFELS Voley
 // Configuracion compartida de baterias y objetivos
 // Importar en: jugador.html, dashboard.html, historial_voley.html
 
-window.OBJETIVOS_CONFIG={metas:{
-  sq:   {label:'% Saque (3%)',   obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
-  rec:  {label:'% Recepción (36%)',  obj:36, min:20, max:44, g2:36, g1:30, y:25},
-  bqpos:{label:'% Blq #+ (43%)',    obj:43, min:25, max:52, g2:43, g1:37, y:30},
-  bqpt: {label:'% Blq # (23%)',   obj:23, min:12, max:28, g2:23, g1:20, y:17},
-  atqq: {label:'% Atq Central (48%)', obj:48, min:35, max:56, g2:48, g1:44, y:40},
-  atqhb:{label:'% Atq Alta (20%)',    obj:20, min:8,  max:26, g2:20, g1:16, y:12},
-  atqx: {label:'% Atq Rápida (42%)',     obj:42, min:28, max:50, g2:42, g1:38, y:34},
-  atqrp:{label:'% Atq R #+ (50%)',   obj:50, min:32, max:58, g2:50, g1:44, y:38},
-  atqri:{label:'% Atq R ! (36%)',    obj:36, min:22, max:44, g2:36, g1:32, y:28},
-  atqrm:{label:'% Atq R - (26%)',    obj:26, min:14, max:34, g2:26, g1:22, y:18},
-  atqtr:{label:'% Transición (34%)',    obj:34, min:22, max:42, g2:34, g1:30, y:26}
+window./* ── DE DONDE SALEN ESTOS OBJETIVOS ────────────────────────────────────────
+   El objetivo de cada fundamento es EL MEJOR DE LA LIGA en ese fundamento,
+   medido sobre los partidos cargados de la Liga Femenina (11 equipos).
+
+   No es siempre el mismo equipo, y por eso no alcanza con copiar al puntero:
+
+     Saque y bloqueo #+                   Banco Provincia
+     Recepcion                            Instituto
+     Defensa                              Club Social
+     Bloqueo #, y casi todo el ataque     Boca Juniors
+     Ataque tras recepcion neutra         Ferro
+     Ataque tras recepcion negativa       Velez
+     Ataque de rapida                     GELP  (ya eran las mejores)
+
+   En ataque de rapida el mejor era el propio equipo: el objetivo se subio un
+   escalon para que haya algo por delante, no para pedir lo que ya hacen.
+
+   Los otros dos cortes se reparten entre ese techo y el promedio de la liga:
+   el verde claro es "arriba del promedio" y el amarillo "abajo pero dentro
+   de lo normal".
+
+   Revisar al final de cada temporada con los partidos nuevos: con mas
+   partidos cargados, estos numeros se vuelven mas firmes.               */
+OBJETIVOS_CONFIG={metas:{
+  sq:   { label:'% Saque (51)', obj:51, min:30,max:62, g2:51, g1:49, y:44},
+  rec:  { label:'% Recepción (59)', obj:59, min:42,max:70, g2:59, g1:56, y:51},
+  bqpos:{ label:'% Blq #+ (51)', obj:51, min:32,max:62, g2:51, g1:49, y:44},
+  bqpt: { label:'% Blq # (22)', obj:22, min:5,max:32, g2:22, g1:19, y:13},
+  atqq: { label:'% Atq Central (39)', obj:39, min:12,max:52, g2:39, g1:34, y:25},
+  atqhb:{ label:'% Atq Alta (28)', obj:28, min:-5,max:40, g2:28, g1:21, y:10},
+  atqx: { label:'% Atq Rápida (34)', obj:34, min:5,max:46, g2:34, g1:29, y:19},
+  atqrp:{ label:'% Atq R#+ (51)', obj:51, min:12,max:64, g2:51, g1:42, y:27},
+  atqri:{ label:'% Atq R! (33)', obj:33, min:0,max:46, g2:33, g1:27, y:15},
+  atqrm:{ label:'% Atq R- (23)', obj:23, min:-10,max:36, g2:23, g1:16, y:5},
+  atqtr:{ label:'% Atq Transición (29)', obj:29, min:5,max:40, g2:29, g1:24, y:14},
+  def:  { label:'% Defensa (55)', obj:55, min:35,max:65, g2:55, g1:51, y:44}
 }};
 
 window.currentObjPartido = window.currentObjPartido || 'acumulado';
@@ -198,8 +303,8 @@ function objCalcVals(nombreJugador){
     });
   });
   var v={};
-  v.sq   =a.sT>0?Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100):null;
-  v.rec  =a.rT>0?Math.round((a.rPunto+0.5*a.rPos-0.5*a.rVend-a.rErr)/a.rT*100):null;
+  v.sq   =a.sT>0?VB_EFF.saque(a):null;
+  v.rec  =a.rT>0?VB_EFF.recepcion(a):null;
   v.bqpos=a.bT>0?Math.round((a.bPt+a.bPtPos)/a.bT*100):null;
   v.bqpt =a.bT>0?Math.round(a.bPt/a.bT*100):null;
   v.atqhb=a.mbT>0?Math.round((a.mbPt-a.mbVnd-a.mbErr)/a.mbT*100):null;

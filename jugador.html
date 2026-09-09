@@ -186,7 +186,14 @@ select, select option{color:#111 !important;background-color:#fff !important;}
 // ════════════════════════════════════════════════════════════════
 // CONFIG DE BATERÍAS (objetivos del equipo 2026)
 // ════════════════════════════════════════════════════════════════
-window.OBJETIVOS_CONFIG = {metas:{
+/* RESPALDO: la configuracion buena vive en objetivos_config.js.
+   Esta copia solo se usa si ese archivo no cargo, para que la pantalla no
+   quede sin colores. Antes se asignaba directo y PISABA a la buena, porque
+   se carga despues.
+   Ojo: la condicion mira si hay METAS, no si el objeto existe: hay archivos
+   que dejan un objeto vacio y con un || simple el respaldo nunca entraria. */
+window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+                          ? window.OBJETIVOS_CONFIG : {metas:{
   sq:   {label:'% Saque',     obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
   rec:  {label:'% Recep.',    obj:36, min:20, max:44, g2:36, g1:30, y:25},
   bqpos:{label:'Blq #+',      obj:43, min:25, max:52, g2:43, g1:37, y:30},
@@ -696,13 +703,13 @@ function renderQuickStats(j){
   // Defensa desde VIDEO_DATA (si está cargada), filtrando por número de jugador
   var dT=0,dPerf=0,dBuena=0,dMala=0,dErr=0,hasD=false;
   if(_videoTodo()){ var M=_videoTodo(); Object.keys(M).forEach(function(c){ (M[c].actions||[]).forEach(function(a){ if(a.sk!=='Defensa') return; if(a.tm!=='gelp') return; if(parseInt(a.num,10)!==parseInt(j.num,10)) return; hasD=true; dT++; if(a.ev==='#')dPerf++; else if(a.ev==='+')dBuena++; else if(a.ev==='-')dMala++; else if(a.ev==='=')dErr++; }); }); }
-  var sEff=t.sT>0?Math.round((t.sPunto+0.5*t.sVend+0.25*t.sPos-t.sErr)/t.sT*100):null;
-  var rEff=t.rT>0?Math.round((t.rPunto+0.5*t.rPos-0.5*t.rVend-t.rErr)/t.rT*100):null;
-  var aEff=t.aT>0?Math.round((t.aPunto-t.aVend-t.aErr)/t.aT*100):null;
+  var sEff=t.sT>0?VB_EFF.saque(t):null;
+  var rEff=t.rT>0?VB_EFF.recepcion(t):null;
+  var aEff=t.aT>0?VB_EFF.ataque(t):null;
   var bEff=t.bT>0?Math.round((t.bPt+t.bPtPos)/t.bT*100):null;
   var rPos=t.rT>0?Math.round((t.rPunto+t.rPos)/t.rT*100):null;
   var rNeg=t.rT>0?Math.round((t.rVend+t.rErr)/t.rT*100):null;
-  var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
+  var dEff=dT>0?VB_EFF.defensa({dT:dT,dPerf:dPerf,dBuena:dBuena,dMala:dMala}):null;
   var html='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">';
   html+=mkRect('#F59E0B','Saque',[{v:fmtE(sEff),l:'EFF',c:effC(sEff)},{v:t.sT,l:'Total'},{v:t.sPunto,l:'Puntos'},{v:t.sErr,l:'Errores'}]);
   html+=mkRect('#9094b7','Ataque',[{v:fmtE(aEff),l:'EFF',c:effC(aEff)},{v:t.aPunto,l:'Puntos'},{v:t.aVend,l:'Bloqueados'},{v:t.aErr,l:'Errores'}]);

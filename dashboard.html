@@ -164,20 +164,32 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgb
 
 // ── Eficiencias ──────────────────────────────────────────────
 function effSaque(j){
-  return j.sT>0 ? Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100) : null;
+  return j.sT>0 ? VB_EFF.saque(j) : null;
 }
 function effRecepcion(j){
-  return j.rT>0 ? Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100) : null;
+  return j.rT>0 ? VB_EFF.recepcion(j) : null;
 }
 function effAtaque(j){
-  return j.aT>0 ? Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100) : null;
+  return j.aT>0 ? VB_EFF.ataque(j) : null;
 }
 function effBloqueo(j){
   return j.bT>0 ? Math.round((j.bPt+j.bPtPos)/j.bT*100) : null;
 }
-function effColor(v){
+function effColor(v, meta){
+  /* Usa los mismos cortes que los objetivos. Antes eran fijos (verde arriba
+     de 40) y servian para la escala vieja: en la de 0 a 100 quedaba TODO
+     verde y el color no informaba nada. Sin clave, o si ese fundamento no
+     tiene objetivo cargado, se comporta como antes. */
   if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
-  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#9094b7':'#ef4444';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(v >= _m.g2) return '#22c55e';
+    if(v >= _m.g1) return '#86efac';
+    if(v >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
 
 
@@ -222,7 +234,14 @@ var POS_COLOR={
 };
 
 // ── Objetivos config ─────────────────────────────────────────
-window.OBJETIVOS_CONFIG={metas:{
+/* RESPALDO: la configuracion buena vive en objetivos_config.js.
+   Esta copia solo se usa si ese archivo no cargo, para que la pantalla no
+   quede sin colores. Antes se asignaba directo y PISABA a la buena, porque
+   se carga despues.
+   Ojo: la condicion mira si hay METAS, no si el objeto existe: hay archivos
+   que dejan un objeto vacio y con un || simple el respaldo nunca entraria. */
+window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+                          ? window.OBJETIVOS_CONFIG : {metas:{
   sq:   {label:'% Saque',   obj:3,  min:-12,max:8,  g2:3,  g1:-3, y:-8},
   rec:  {label:'% Recep.',  obj:36, min:20, max:44, g2:36, g1:30, y:25},
   bqpos:{label:'Blq #+',    obj:43, min:25, max:52, g2:43, g1:37, y:30},
@@ -678,9 +697,21 @@ var POS_COLOR = {
   'PUNTA':'#22c55e','OPUESTO':'#818cf8','LIBERO':'#06b6d4'
 };
 
-function effColor(v){
-  if(v===null||v===undefined) return 'var(--mut)';
-  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt)':v>=-20?'#9094b7':'#ef4444';
+function effColor(v, meta){
+  /* Usa los mismos cortes que los objetivos. Antes eran fijos (verde arriba
+     de 40) y servian para la escala vieja: en la de 0 a 100 quedaba TODO
+     verde y el color no informaba nada. Sin clave, o si ese fundamento no
+     tiene objetivo cargado, se comporta como antes. */
+  if(v===null||v===undefined||isNaN(v)) return 'var(--mut,#475569)';
+  var _m = (meta && window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.metas)
+            ? window.OBJETIVOS_CONFIG.metas[meta] : null;
+  if(_m){
+    if(v >= _m.g2) return '#22c55e';
+    if(v >= _m.g1) return '#86efac';
+    if(v >= _m.y)  return '#fbbf24';
+    return '#ef4444';
+  }
+  return v>=40?'#22c55e':v>=20?'#86efac':v>=0?'var(--txt,#e2e8f0)':v>=-20?'#f97316':'#ef4444';
 }
 function fmt(v){ return (v<0?'-':'')+Math.abs(v)+'%'; }
 
@@ -776,9 +807,9 @@ function getJugadoresAcum(sesiones){
     });
   });
   Object.values(acum).forEach(function(a){
-    if(a.sT>0) a.sEff=Math.round((a.sPunto+0.5*a.sVend+0.25*a.sPos-a.sErr)/a.sT*100);
-    if(a.rT>0) a.rEff=Math.round((a.rPunto+0.5*a.rPos-0.5*a.rVend-a.rErr)/a.rT*100);
-    if(a.aT>0) a.aEff=Math.round((a.aPunto-a.aVend-a.aErr)/a.aT*100);
+    if(a.sT>0) a.sEff=VB_EFF.saque(a);
+    if(a.rT>0) a.rEff=VB_EFF.recepcion(a);
+    if(a.aT>0) a.aEff=VB_EFF.ataque(a);
     if(a.bT>0) a.bEff=Math.round((a.bPt+a.bPtPos)/a.bT*100);
   });
   return Object.values(acum).sort(function(a,b){return a.c-b.c;});
@@ -863,9 +894,9 @@ function renderEqStats(){
     aPunto+=j.aPunto;aVend+=j.aVend;aErr+=j.aErr;
     bPt+=(j.bPt||0);bPtPos+=(j.bPtPos||0);
   });
-  var sEff=sT>0?Math.round((sPunto+0.5*sVend+0.25*sPos-sErr)/sT*100):null;
-  var rEff=rT>0?Math.round((rPunto+0.5*rPos-0.5*rVend-rErr)/rT*100):null;
-  var aEff=aT>0?Math.round((aPunto-aVend-aErr)/aT*100):null;
+  var sEff=sT>0?VB_EFF.saque({sT:sT,sPunto:sPunto,sVend:sVend,sPos:sPos,sAdm:(typeof sAdm!=="undefined"?sAdm:0),sNeg:(typeof sNeg!=="undefined"?sNeg:0),sErr:sErr}):null;
+  var rEff=rT>0?VB_EFF.recepcion({rT:rT,rPunto:rPunto,rPos:rPos,rAdm:(typeof rAdm!=="undefined"?rAdm:0),rNeg:(typeof rNeg!=="undefined"?rNeg:0),rVend:rVend,rErr:rErr}):null;
+  var aEff=aT>0?VB_EFF.ataque({aT:aT,aPunto:aPunto,aVend:aVend,aErr:aErr}):null;
   // Build 4 rectangles
   var sEff_str  = sEff!==null ? fmt(sEff) : '—';
   var aEff_str  = aEff!==null ? fmt(aEff) : '—';
@@ -959,7 +990,7 @@ function renderEqStats(){
         });
       });
     })();
-  var dEff=dT>0?Math.round((dPerf+0.5*dBuena-0.5*dMala-dErr)/dT*100):null;
+  var dEff=dT>0?VB_EFF.defensa({dT:dT,dPerf:dPerf,dBuena:dBuena,dMala:dMala}):null;
 
   /* ══ La Defensa, ahora de los .dvw como las otras cuatro ══════════════════
      Arriba se cuenta del VIDEO, y eso funciona solo si el club subio los
@@ -1035,14 +1066,14 @@ function renderEqContent(){
         else if(SAQUE_TIPO==='potencia'&&j.sPot) src={T:j.sPot.T,Punto:j.sPot.Punto,Vend:j.sPot.Vend,Pos:j.sPot.Pos,Adm:j.sPot.Adm,Neg:j.sPot.Neg,Err:j.sPot.Err};
         else src={T:j.sT,Punto:j.sPunto,Vend:j.sVend,Pos:j.sPos,Adm:j.sAdm||0,Neg:j.sNeg,Err:j.sErr};
         if(!src.T)return null;
-        var e=Math.round((src.Punto+0.5*src.Vend+0.25*src.Pos-src.Err)/src.T*100);
+        var e=VB_EFF.saque(src);
         return[{v:fmt(e),c:effColor(e),b:true},{v:src.T,c:'#f59e0b',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Vend,c:'#86efac'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#9094b7'},{v:src.Err,c:'#ef4444'}];},
       getTot:function(a){
         var src;
         if(SAQUE_TIPO==='flotado'&&a.sFlo) src={T:a.sFlo.T,Punto:a.sFlo.Punto,Vend:a.sFlo.Vend,Pos:a.sFlo.Pos,Adm:a.sFlo.Adm,Neg:a.sFlo.Neg,Err:a.sFlo.Err};
         else if(SAQUE_TIPO==='potencia'&&a.sPot) src={T:a.sPot.T,Punto:a.sPot.Punto,Vend:a.sPot.Vend,Pos:a.sPot.Pos,Adm:a.sPot.Adm,Neg:a.sPot.Neg,Err:a.sPot.Err};
         else src={T:a.sT,Punto:a.sPunto,Vend:a.sVend,Pos:a.sPos,Adm:a.sAdm||0,Neg:a.sNeg,Err:a.sErr};
-        var e=src.T>0?Math.round((src.Punto+0.5*src.Vend+0.25*src.Pos-src.Err)/src.T*100):null;
+        var e=src.T>0?VB_EFF.saque(src):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:src.T,c:'#f59e0b',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Vend,c:'#86efac'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#9094b7'},{v:src.Err,c:'#ef4444'}];}},
     recepcion:{color:'#22c55e',ths:['EFF%','TOT','# Perf','+ Pos','! Ntr','– Neg','/ Vnd','= Err'],
       getData:function(j){
@@ -1051,14 +1082,14 @@ function renderEqContent(){
         else if(RECEP_TIPO==='potencia'&&j.rPot) src={T:j.rPot.T,Punto:j.rPot.Punto,Pos:j.rPot.Pos,Adm:j.rPot.Adm,Neg:j.rPot.Neg,Vend:j.rPot.Vend,Err:j.rPot.Err};
         else src={T:j.rT,Punto:j.rPunto,Pos:j.rPos,Adm:j.rAdm||0,Neg:j.rNeg,Vend:j.rVend,Err:j.rErr};
         if(!src.T)return null;
-        var e=Math.round((src.Punto+0.5*src.Pos-0.5*src.Vend-src.Err)/src.T*100);
+        var e=VB_EFF.recepcion(src);
         return[{v:fmt(e),c:effColor(e),b:true},{v:src.T,c:'#22c55e',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#9094b7'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];},
       getTot:function(a){
         var src;
         if(RECEP_TIPO==='flotado'&&a.rFlo) src={T:a.rFlo.T,Punto:a.rFlo.Punto,Pos:a.rFlo.Pos,Adm:a.rFlo.Adm,Neg:a.rFlo.Neg,Vend:a.rFlo.Vend,Err:a.rFlo.Err};
         else if(RECEP_TIPO==='potencia'&&a.rPot) src={T:a.rPot.T,Punto:a.rPot.Punto,Pos:a.rPot.Pos,Adm:a.rPot.Adm,Neg:a.rPot.Neg,Vend:a.rPot.Vend,Err:a.rPot.Err};
         else src={T:a.rT,Punto:a.rPunto,Pos:a.rPos,Adm:a.rAdm||0,Neg:a.rNeg,Vend:a.rVend,Err:a.rErr};
-        var e=src.T>0?Math.round((src.Punto+0.5*src.Pos-0.5*src.Vend-src.Err)/src.T*100):null;
+        var e=src.T>0?VB_EFF.recepcion(src):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:src.T,c:'#22c55e',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#9094b7'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
     ataque:{color:'#818cf8',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Blq','= Err'],
       getData:function(j){
@@ -1067,14 +1098,14 @@ function renderEqContent(){
         else if(ATK_FASE==='tr'&&j.aTr) src={T:j.aTr.T,Punto:j.aTr.Punto,Pos:j.aTr.Pos,Adm:j.aTr.Adm,Neg:j.aTr.Neg,Vend:j.aTr.Vend,Err:j.aTr.Err};
         else src={T:j.aT,Punto:j.aPunto,Pos:j.aPos,Adm:j.aAdm||0,Neg:j.aNeg,Vend:j.aVend,Err:j.aErr};
         if(!src.T)return null;
-        var e=Math.round((src.Punto-src.Vend-src.Err)/src.T*100);
+        var e=VB_EFF.ataque(src);
         return[{v:fmt(e),c:effColor(e),b:true},{v:src.T,c:'#818cf8',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#9094b7'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];},
       getTot:function(a){
         var src;
         if(ATK_FASE==='so'&&a.aSo) src={T:a.aSo.T,Punto:a.aSo.Punto,Pos:a.aSo.Pos,Adm:a.aSo.Adm,Neg:a.aSo.Neg,Vend:a.aSo.Vend,Err:a.aSo.Err};
         else if(ATK_FASE==='tr'&&a.aTr) src={T:a.aTr.T,Punto:a.aTr.Punto,Pos:a.aTr.Pos,Adm:a.aTr.Adm,Neg:a.aTr.Neg,Vend:a.aTr.Vend,Err:a.aTr.Err};
         else src={T:a.aT,Punto:a.aPunto,Pos:a.aPos,Adm:a.aAdm||0,Neg:a.aNeg,Vend:a.aVend,Err:a.aErr};
-        var e=src.T>0?Math.round((src.Punto-src.Vend-src.Err)/src.T*100):null;
+        var e=src.T>0?VB_EFF.ataque(src):null;
         return[{v:e!==null?fmt(e):'—',c:effColor(e),b:true},{v:src.T,c:'#818cf8',b:true},{v:src.Punto,c:'#22c55e'},{v:src.Pos,c:'#86efac'},{v:src.Adm,c:'#94a3b8'},{v:src.Neg,c:'#9094b7'},{v:src.Vend,c:'#fbbf24'},{v:src.Err,c:'#ef4444'}];}},
     bloqueo:{color:'#06b6d4',ths:['EFF%','TOT','# Pto','+ Pos','! Ntr','– Neg','/ Toq','= Err'],
       getData:function(j){if(!j.bT)return null;
@@ -1100,9 +1131,9 @@ function renderEqContent(){
       +'</tr></thead><tbody>';
     jugs.forEach(function(j,ri){
       if(j.sT+j.rT+j.aT+j.bT===0)return;
-      var se=j.sT>0?Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100):null;
-      var re=j.rT>0?Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100):null;
-      var ae=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
+      var se=j.sT>0?VB_EFF.saque(j):null;
+      var re=j.rT>0?VB_EFF.recepcion(j):null;
+      var ae=j.aT>0?VB_EFF.ataque(j):null;
       var be=j.bT>0?Math.round((j.bPt+j.bPtPos)/j.bT*100):null;
       var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
       html+='<tr style="background:'+bg+'">'
@@ -1257,7 +1288,7 @@ function renderDefensaTabla(){
           var _t = {T:0,perf:0,buena:0,reg:0,mala:0,err:0};
           _filas.forEach(function(p){ _t.T+=p.T; _t.perf+=p.perf; _t.buena+=p.buena;
                                       _t.reg+=p.reg; _t.mala+=p.mala; _t.err+=p.err; });
-          var _ef = function(p){ return p.T ? Math.round((p.perf+0.5*p.buena-0.5*p.mala-p.err)/p.T*100) : 0; };
+          var _ef = function(p){ return p.T ? VB_EFF.defensa({dT:p.T,dPerf:p.perf,dBuena:p.buena,dMala:p.mala}) : 0; };
           /* Mismo formato que las otras tablas del dashboard: el contenedor
              tabla-wrap, las mismas columnas y los mismos colores por columna.
              Antes usaba una clase que no existe en esta pantalla y salia sin
@@ -1334,7 +1365,7 @@ function renderDefensaTabla(){
   }); });
   var rows=Object.keys(P).map(function(k){return P[k];}).filter(function(p){return p.T>0;}).sort(function(a,b){return b.T-a.T;});
   if(!rows.length) return '<div class="empty">Sin defensas registradas</div>';
-  function eff(p){ return Math.round((p.perf + 0.5*p.buena - 0.5*p.mala - p.err)/p.T*100); }
+  function eff(p){ return VB_EFF.defensa({dT:p.T,dPerf:p.perf,dBuena:p.buena,dMala:p.mala}); }
   var tot={T:0,perf:0,buena:0,reg:0,mala:0,err:0};
   rows.forEach(function(p){tot.T+=p.T;tot.perf+=p.perf;tot.buena+=p.buena;tot.reg+=p.reg;tot.mala+=p.mala;tot.err+=p.err;});
   var ths=['EFF%','TOT','# Perf','+ Buena','! Reg','– Mala','= Err'];
@@ -1353,7 +1384,7 @@ function renderDefensaTabla(){
       +'<td style="color:#9094b7">'+p.mala+'</td>'
       +'<td style="color:#ef4444">'+p.err+'</td></tr>';
   });
-  var te=Math.round((tot.perf+0.5*tot.buena-0.5*tot.mala-tot.err)/tot.T*100);
+  var te=VB_EFF.defensa({dT:tot.T,dPerf:tot.perf,dBuena:tot.buena,dMala:tot.mala});
   h+='<tr style="border-top:2px solid rgba(255,255,255,.1)"><td style="font-weight:800;color:var(--mut)">TOTALES EQUIPO</td>'
     +'<td style="font-weight:800;color:'+effColor(te)+'">'+fmt(te)+'</td>'
     +'<td style="font-weight:800;color:#06b6d4">'+tot.T+'</td>'
@@ -1472,9 +1503,9 @@ function renderJugContent(){
       +'</tr></thead><tbody>'
       +rows.map(function(r,ri){
         var j=r.j;
-        var se=j.sT>0?Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100):null;
-        var re=j.rT>0?Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100):null;
-        var ae=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
+        var se=j.sT>0?VB_EFF.saque(j):null;
+        var re=j.rT>0?VB_EFF.recepcion(j):null;
+        var ae=j.aT>0?VB_EFF.ataque(j):null;
         var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
         return'<tr style="background:'+bg+'">'
           +'<td><span style="font-size:11px;color:var(--mut);margin-right:6px">'+(r.esP?'🏆':'🏋️')+' '+r.fecha+'</span>'+(r.esP?'vs '+r.rival:'Entrenamiento')+'</td>'
@@ -1489,9 +1520,9 @@ function renderJugContent(){
 }
 
 function renderJugTabla(j,showPJ){
-  var se=j.sT>0?Math.round((j.sPunto+0.5*j.sVend+0.25*j.sPos-j.sErr)/j.sT*100):null;
-  var re=j.rT>0?Math.round((j.rPunto+0.5*j.rPos-0.5*j.rVend-j.rErr)/j.rT*100):null;
-  var ae=j.aT>0?Math.round((j.aPunto-j.aVend-j.aErr)/j.aT*100):null;
+  var se=j.sT>0?VB_EFF.saque(j):null;
+  var re=j.rT>0?VB_EFF.recepcion(j):null;
+  var ae=j.aT>0?VB_EFF.ataque(j):null;
   var be=j.bT>0?Math.round((j.bPt+j.bPtPos)/j.bT*100):null;
   return'<div class="stats-row">'
     +[{v:se!==null?fmt(se):'—',l:'Eff. Saque',c:effColor(se)},{v:re!==null?fmt(re):'—',l:'Eff. Recep.',c:effColor(re)},
@@ -1559,6 +1590,73 @@ function pintarEditorObjetivos(){
       }
     });
   });
+
+  /* ══ DE DONDE SALE CADA NUMERO ═════════════════════════════════════════════
+     Se muestra debajo del editor para que cualquier entrenador entienda que
+     esta mirando sin tener que preguntar. */
+  var doc = document.createElement('div');
+  doc.id = 'obj-doc';
+  doc.style.cssText = 'margin-top:14px;background:var(--card,#0f1020);'
+    + 'border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;'
+    + 'font-size:12.5px;line-height:1.75;color:#cbd5e1';
+  doc.innerHTML =
+      '<div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;'
+    + 'color:#94a3b8;margin-bottom:10px">Como se calcula cada valor</div>'
+    + '<div style="color:#94a3b8;margin-bottom:14px">'
+    + 'Saque, recepcion y defensa usan una escala de <b style="color:#e2e8f0">0 a 100</b>. '
+    + 'El error vale 0, la accion perfecta vale 100 y la neutra queda en el medio, en 50. '
+    + 'Asi el numero se lee solo: 50 es "todo neutro", 25 "todo negativo", 75 "todo positivo".'
+    + '</div>'
+    + '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+    + '<tr style="color:#8395ac;text-align:left"><th style="padding:4px 6px">Fundamento</th>'
+    + '<th style="padding:4px 6px">Cuanto vale cada valoracion</th></tr>'
+    + '<tr><td style="padding:5px 6px;color:#f59e0b;font-weight:700">Saque</td>'
+    + '<td style="padding:5px 6px"># ace <b>100</b> · / free ball <b>87,5</b> · + positivo <b>75</b> · '
+    + '! neutro <b>50</b> · &minus; negativo <b>25</b> · = error <b>0</b></td></tr>'
+    + '<tr><td style="padding:5px 6px;color:#22c55e;font-weight:700">Recepcion</td>'
+    + '<td style="padding:5px 6px"># perfecta <b>100</b> · + positiva <b>75</b> · ! neutra <b>50</b> · '
+    + '&minus; negativa <b>25</b> · / sobrepase <b>12,5</b> · = error <b>0</b></td></tr>'
+    + '<tr><td style="padding:5px 6px;color:#ef4444;font-weight:700">Defensa</td>'
+    + '<td style="padding:5px 6px"># perfecta <b>100</b> · + buena <b>75</b> · ! neutra <b>50</b> · '
+    + '&minus; mala <b>25</b> · = error <b>0</b></td></tr>'
+    + '<tr><td style="padding:5px 6px;color:#818cf8;font-weight:700">Ataque</td>'
+    + '<td style="padding:5px 6px">Eficacia clasica del voley: '
+    + '<b>(puntos &minus; bloqueados &minus; errores) / total</b>. Es el estandar mundial '
+    + 'y puede dar negativo.</td></tr>'
+    + '<tr><td style="padding:5px 6px;color:#06b6d4;font-weight:700">Bloqueo</td>'
+    + '<td style="padding:5px 6px">Blq #+ es <b>(punto + positivo) / total</b>. '
+    + 'Blq # es solo <b>punto / total</b>.</td></tr>'
+    + '</table>'
+    + '<div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;'
+    + 'color:#94a3b8;margin:16px 0 8px">De donde salen los objetivos</div>'
+    + '<div style="color:#94a3b8">'
+    + 'El objetivo de cada fundamento es <b style="color:#e2e8f0">el mejor de la liga '
+    + 'en ese fundamento</b>, medido sobre los partidos de la temporada anterior. '
+    + 'No es siempre el mismo equipo: el puntero lidera casi todo, pero algun fundamento '
+    + 'suele ganarlo otro club. Copiar a un solo equipo dejaria objetivos por debajo '
+    + 'del techo real.'
+    + '<div style="margin:10px 0 0 0">'
+    + '<div><span style="color:#22c55e;font-weight:800">Verde fuerte</span> '
+    + '&nbsp;estas al nivel del mejor de la liga en eso.</div>'
+    + '<div><span style="color:#86efac;font-weight:800">Verde claro</span> '
+    + '&nbsp;por encima del promedio, camino al objetivo.</div>'
+    + '<div><span style="color:#fbbf24;font-weight:800">Amarillo</span> '
+    + '&nbsp;por debajo del promedio, dentro de lo normal.</div>'
+    + '<div><span style="color:#ef4444;font-weight:800">Rojo</span> '
+    + '&nbsp;lejos, hay trabajo concreto para hacer.</div>'
+    + '</div></div>'
+    + '<div style="color:#8395ac;margin-top:14px;font-size:11.5px;'
+    + 'border-top:1px solid rgba(255,255,255,.07);padding-top:10px">'
+    + 'El ancho de cada banda no es igual para todos los fundamentos, y es a proposito: '
+    + 'depende de cuanto varia ese fundamento de un partido a otro. El saque se mueve '
+    + 'unos pocos puntos entre partidos y el ataque muchos mas, asi que el ataque '
+    + 'necesita bandas mas anchas. Con bandas mas angostas que esa variacion, el color '
+    + 'cambiaria por azar y no diria nada.'
+    + '<br><br>'
+    + 'Los numeros de arriba se pueden cambiar: son el objetivo de <b>este</b> equipo. '
+    + 'Conviene revisarlos al final de cada temporada, con los partidos nuevos.'
+    + '</div>';
+  if(!document.getElementById('obj-doc') && d && d.parentNode) d.parentNode.insertBefore(doc, d.nextSibling);
 }
 
 function renderObjetivosTab(){
@@ -1702,9 +1800,9 @@ function buildRankingData(){
     var pos = info ? info.pos : '';
     return {
       num:a.c, nm:nm, pos:pos, col:POS_COLOR[pos]||'#64748b',
-      aEff: a.aT>=5 ? Math.round((a.aPunto-a.aVend-a.aErr)/a.aT*100) : null,
-      sEff: a.sT>=5 ? Math.round((a.sPunto+.5*a.sVend+.25*a.sPos-a.sErr)/a.sT*100) : null,
-      rEff: a.rT>=5 ? Math.round((a.rPunto+.5*a.rPos-.5*a.rVend-a.rErr)/a.rT*100) : null,
+      aEff: a.aT>=5 ? VB_EFF.ataque(a) : null,
+      sEff: a.sT>=5 ? VB_EFF.saque(a) : null,
+      rEff: a.rT>=5 ? VB_EFF.recepcion(a) : null,
       bEff: a.bT>=3 ? Math.round((a.bPt+a.bPtPos)/a.bT*100) : null,
       aT:a.aT, sT:a.sT, rT:a.rT, bT:a.bT, sP:a.sPunto, bP:a.bPt
     };
