@@ -673,7 +673,7 @@ function tablaSaque(jugs){
     if(isAcum) h+=td(j.PJ,'val-mut');
     h+=effTd(e)+td(j.sT,'val-tot')+td(j.sPunto,'val-perf')+td(j.sPos,'val-pos')+td(j.sAdm,'val-adm')+td(j.sNeg,'val-neg')+td(j.sErr,'val-err')+'</tr>';
   });
-  var tE=tT>0?VB_EFF.saque({T:tT,Punto:tPt,Vend:tVend,Pos:tPos,Adm:(typeof tAdm!=="undefined"?tAdm:0),Neg:(typeof tNeg!=="undefined"?tNeg:0)}):null;
+  var tE=tT>0?VB_EFF.saque({T:tT,Punto:tPt,Vend:tVend,Pos:tPos,Adm:tAdm,Neg:tNeg}):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
   if(isAcum) h+='<td></td>';
   h+=effTd(tE)+td(tT,'val-tot')+td(tPt,'val-perf')+td(tPos,'val-pos')+td(tAdm,'val-adm')+td(tNeg,'val-neg')+td(tErr,'val-err')+'</tr>';
@@ -703,7 +703,7 @@ function tablaRecepcion(jugs){
     if(isAcum) h+=td(j.PJ,'val-mut');
     h+=effTd(e)+td(j.rT,'val-tot')+td(j.rPunto,'val-perf')+td(j.rPos,'val-pos')+td(j.rAdm,'val-adm')+td(j.rNeg,'val-neg')+td(j.rVend,'val-vend')+td(j.rErr,'val-err')+'</tr>';
   });
-  var tE=tT>0?VB_EFF.recepcion({T:tT,Punto:tPt,Pos:tPos,Adm:(typeof tAdm!=="undefined"?tAdm:0),Neg:(typeof tNeg!=="undefined"?tNeg:0),Vend:tVend}):null;
+  var tE=tT>0?VB_EFF.recepcion({T:tT,Punto:tPt,Pos:tPos,Adm:tAdm,Neg:tNeg,Vend:tVend}):null;
   h+='<tr class="total-row"><td class="left" style="padding:8px 12px">TOTALES EQUIPO</td>';
   if(isAcum) h+='<td></td>';
   h+=effTd(tE)+td(tT,'val-tot')+td(tPt,'val-perf')+td(tPos,'val-pos')+td(tAdm,'val-adm')+td(tNeg,'val-neg')+td(tVend,'val-vend')+td(tErr,'val-err')+'</tr>';

@@ -886,16 +886,19 @@ function renderEqStats(){
   var ses=getEqSesiones();
   var jugs=getJugadoresAcum(ses);
   var sT=0,rT=0,aT=0,bT=0,bPt=0,bPtPos=0,sPt=0,rPt=0,aPt=0;
-  var sPunto=0,sVend=0,sPos=0,sErr=0,rPunto=0,rPos=0,rVend=0,rErr=0,aPunto=0,aVend=0,aErr=0;
+  /* sAdm y rAdm son el NEUTRO, sNeg y rNeg el NEGATIVO. En la escala 0-100
+     el neutro vale 50: sin acumularlos, la tarjeta los cuenta como cero y
+     muestra un numero mucho mas bajo que el resto de la app. */
+  var sPunto=0,sVend=0,sPos=0,sAdm=0,sNeg=0,sErr=0,rPunto=0,rPos=0,rAdm=0,rNeg=0,rVend=0,rErr=0,aPunto=0,aVend=0,aErr=0;
   jugs.forEach(function(j){
     sT+=j.sT;rT+=j.rT;aT+=j.aT;bT+=j.bT;
-    sPunto+=j.sPunto;sVend+=j.sVend;sPos+=j.sPos;sErr+=j.sErr;
-    rPunto+=j.rPunto;rPos+=j.rPos;rVend+=j.rVend;rErr+=j.rErr;
+    sPunto+=j.sPunto;sVend+=j.sVend;sPos+=j.sPos;sAdm+=(j.sAdm||0);sNeg+=(j.sNeg||0);sErr+=j.sErr;
+    rPunto+=j.rPunto;rPos+=j.rPos;rAdm+=(j.rAdm||0);rNeg+=(j.rNeg||0);rVend+=j.rVend;rErr+=j.rErr;
     aPunto+=j.aPunto;aVend+=j.aVend;aErr+=j.aErr;
     bPt+=(j.bPt||0);bPtPos+=(j.bPtPos||0);
   });
-  var sEff=sT>0?VB_EFF.saque({sT:sT,sPunto:sPunto,sVend:sVend,sPos:sPos,sAdm:(typeof sAdm!=="undefined"?sAdm:0),sNeg:(typeof sNeg!=="undefined"?sNeg:0),sErr:sErr}):null;
-  var rEff=rT>0?VB_EFF.recepcion({rT:rT,rPunto:rPunto,rPos:rPos,rAdm:(typeof rAdm!=="undefined"?rAdm:0),rNeg:(typeof rNeg!=="undefined"?rNeg:0),rVend:rVend,rErr:rErr}):null;
+  var sEff=sT>0?VB_EFF.saque({sT:sT,sPunto:sPunto,sVend:sVend,sPos:sPos,sAdm:sAdm,sNeg:sNeg,sErr:sErr}):null;
+  var rEff=rT>0?VB_EFF.recepcion({rT:rT,rPunto:rPunto,rPos:rPos,rAdm:rAdm,rNeg:rNeg,rVend:rVend,rErr:rErr}):null;
   var aEff=aT>0?VB_EFF.ataque({aT:aT,aPunto:aPunto,aVend:aVend,aErr:aErr}):null;
   // Build 4 rectangles
   var sEff_str  = sEff!==null ? fmt(sEff) : '—';

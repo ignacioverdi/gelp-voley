@@ -809,9 +809,9 @@ function gpStatAtk(rows){
 }
 function gpStatSrv(rows){
   var RES=['#','/','+','!','=','-'];
-  var t=rows.length,k=0,pl=0,bl=0,e=0;
-  rows.forEach(function(r){var x=RES[r[5]];if(x==='#')k++;else if(x==='+')pl++;else if(x==='/')bl++;else if(x==='=')e++;});
-  return {tot:t,pts:k,plus:pl,slash:bl,err:e,eff:t?VB_EFF.saque({T:t,Punto:k,Vend:bl,Pos:pl,Adm:(typeof nt!=="undefined"?nt:0),Neg:(typeof ng!=="undefined"?ng:0)}):0,pts_pct:t?Math.round(k/t*100):0};
+  var t=rows.length,k=0,pl=0,bl=0,nt=0,ng=0,e=0;
+  rows.forEach(function(r){var x=RES[r[5]];if(x==='#')k++;else if(x==='+')pl++;else if(x==='/')bl++;else if(x==='!')nt++;else if(x==='-')ng++;else if(x==='=')e++;});
+  return {tot:t,pts:k,plus:pl,slash:bl,err:e,eff:t?VB_EFF.saque({T:t,Punto:k,Vend:bl,Pos:pl,Adm:nt,Neg:ng}):0,pts_pct:t?Math.round(k/t*100):0};
 }
 var GP_POS_COLOR={'OPPOSITE':'#818cf8','MIDDLE':'#f97316','OUTSIDE':'#22c55e','SETTER':'#fbbf24','LIBERO':'#06b6d4','OTRO':'#64748b',
   'OPUESTO':'#818cf8','CENTRAL':'#9094b7','PUNTA':'#22c55e','ARMADOR':'#fbbf24'};
