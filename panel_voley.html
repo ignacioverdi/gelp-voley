@@ -1298,6 +1298,8 @@ function calcFaseKPIs(codes, side){
     var combo=l.slice(6,8); if(combo.indexOf('~')>=0) combo='';
     if(skill==='S'){ last_rec=null; rec_valida=false; }
     else if(skill==='R' && pfx===side){ last_rec=ev; rec_valida=true; }
+    /* el free ball cierra la fase: lo que sigue es transicion */
+    else if(skill==='F' && pfx===side){ last_rec=null; rec_valida=false; }
     else if(pfx!==side && (skill==='A'||skill==='D'||skill==='E'||skill==='B')){ rec_valida=false; }
     else if(skill==='A' && pfx===side){
       var esSO=(last_rec!==null && rec_valida);

@@ -1224,6 +1224,19 @@ def calc_baterias(scout, side):
                     if res in T: T[res]+=1
         elif pfx!=side and skill in('A','D','E','B'):
             rec_valida=False
+                # ══ EL FREE BALL CIERRA LA FASE DE RECEPCION ═══════════════════
+        # Un ataque que sale de un free ball es TRANSICION: el side-out es
+        # lo que viene de recibir el SAQUE del rival, nada mas.
+        #
+        # El motor no conocia la letra F, asi que esa linea era invisible y
+        # ARRASTRABA la recepcion anterior del mismo punto. Caso real de
+        # Näfels:
+        #     *20RM=  recepcion MAL   *20FH#  free ball
+        #     *04EQ+  armado          *07AQ#  ataque
+        # Ese ataque se contaba como "tras recepcion mala" cuando en
+        # realidad sale del free ball: es transicion.
+        elif skill=='F' and pfx==side:
+            last_rec=None; rec_valida=False
         elif skill=='B' and pfx==side:
             P=get(num); P['B']['T']+=1
             if res in P['B']: P['B'][res]+=1

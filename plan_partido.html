@@ -655,13 +655,21 @@ function renderArmador(){
   document.getElementById("armrecnum").innerHTML='<option value="">Todos</option>'+recvNums.map(function(n){return '<option value="'+n+'"'+(armRecNum===n?" selected":"")+'>#'+n+" "+(NBYNUM[n]?apellidoJS(NBYNUM[n]):"")+" ("+recvCount[n]+")</option>";}).join("");
   document.getElementById("armrecgrp").style.opacity=(armPhase==="SO")?"1":".35";document.getElementById("armreczgrp").style.opacity=(armPhase==="SO")?"1":".35";
   var grid=document.getElementById("armgrid");grid.innerHTML="";
-  [4,3,2,5,6,1].forEach(function(pos){
+  /* Un entrenamiento de DataVolley no guarda rotacion: sus armados quedaban
+     afuera de las seis canchas y no se veian. Se agrega una mas con ellos. */
+  var _sinRot = armRallies(setter,0).length;
+  var _POSICIONES = [4,3,2,5,6,1];
+  if(_sinRot) _POSICIONES.push(0);
+  _POSICIONES.forEach(function(pos){
     var rows=armRallies(setter,pos),tot=rows.length,zc={};
     var zp={},zvc={},_mt=(armTeam.matches||[]);rows.forEach(function(r){var z=gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]);if(z>0){zc[z]=(zc[z]||0)+1;if(r[9]===0)zp[z]=(zp[z]||0)+1;var _mm=_mt[r[12]]||{},_yt=ppVid(_mm.code||midByDate(_mm.date)),_tt=r[14]||r[13];if(_yt&&_tt)zvc[z]=(zvc[z]||0)+1;}});
     var mx=1;ARMZ.forEach(function(z){if((zc[z]||0)>mx)mx=zc[z];});
     var cells=ARMZ.map(function(z){var v=zc[z]||0,has=v>0,hasVid=(zvc[z]||0)>0,pct=tot?Math.round(v/tot*100):0,kp=v?Math.round((zp[z]||0)/v*100):0,h=armHeat(z,v,pct);
       return '<div class="cell'+(hasVid?" has vid":"")+'" style="background:'+h[0]+';border:'+h[2]+'"'+(hasVid?' ondblclick="openArmZone('+pos+",'"+z+"')\"":"")+'>'+(has?'<div class="cn-n" style="color:'+h[1]+'">'+v+'</div><div class="cn-p" style="color:'+h[1]+'">'+pct+'% · '+kp+'%</div>':"")+'</div>';}).join("");
-    grid.insertAdjacentHTML("beforeend",'<div class="armrot"><div class="rt"><b>Rotación P'+pos+'</b><span>'+tot+' armados</span></div><div class="armcourt">'+cells+'</div></div>');
+    var _esSin=(pos===0);
+    var _tit=_esSin?'Sin rotación':('Rotación P'+pos);
+    var _sub=_esSin?(tot+' armados · el archivo no guarda rotación'):(tot+' armados');
+    grid.insertAdjacentHTML("beforeend",'<div class="armrot"><div class="rt"><b>'+_tit+'</b><span>'+_sub+'</span></div><div class="armcourt">'+cells+'</div></div>');
   });
 }
 function setArmSetter(i){armSetIdx=i;renderArmador();}
@@ -807,6 +815,8 @@ function render(p){var cfg=ROLECFG[p.role];
   var vals=cfg.filters.map(function(fl,i){return readFilt(p.id+'-f'+i,fl);});
   var f=p.data.filter(function(a){return MSEL.has(a[cfg.vIdx])&&passes(a,cfg,vals);}),n=f.length;
   var z={"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0},vz={};
+  /* cuantos quedan fuera de la cancha, para poder decirlo en el rotulo */
+  var _nBlq=0, _nSinZona=0;
   f.forEach(function(a){
     /* Los ataques bloqueados se salteaban siempre: la idea era que no contaran
        como direccion —la pelota no llego a la cancha rival—. Pero cuando se
@@ -814,14 +824,17 @@ function render(p){var cfg=ROLECFG[p.role];
 
        Ahora solo se saltean si NO se esta mirando puntualmente los bloqueados:
        asi el filtro sirve para ver desde donde te bloquean. */
+    /* ══ LOS BLOQUEADOS TAMBIEN SE MUESTRAN ══════════════════════════════
+       Antes se salteaban salvo que filtraras por "Bloqueado". Pero la
+       valoracion ESTA en el menu de filtros, asi que el usuario espera
+       verlos. Y los numeros no cerraban: el rotulo decia el total y los
+       cuadrantes sumaban menos, sin explicacion.
+
+       Ahora se muestran siempre, en su zona de ORIGEN —desde donde salio el
+       remate—, que es el mismo criterio que ya usaba al filtrar y al abrir
+       el video. */
     var _blk=(cfg.stats==='atk'&&a[cfg.evIdx]==='/');
-    /* El filtro puede venir como texto —"/"— o como lista —["/"]—, segun sea
-       de una opcion o de varias. Comparando solo el texto nunca daba verdadero
-       y los cuadrantes quedaban en cero. */
-    var _viendoBlq = vals.some(function(v){
-      return v === '/' || (Array.isArray(v) && v.indexOf('/') >= 0);
-    });
-    if(_blk && !_viendoBlq) return;
+    if(_blk) _nBlq++;
     /* El campo [4] es el DESTINO —a donde fue la pelota—. Un ataque bloqueado
        no tiene destino, asi que se lo cuenta en su zona de ORIGEN, que viene
        en [10].
@@ -831,7 +844,7 @@ function render(p){var cfg=ROLECFG[p.role];
        nunca estuvo: es peor mostrar un dato falso que no mostrar nada. */
     if(_blk && !a[10]) return;
     var _zona = _blk ? a[10] : a[cfg.court];
-    if(z[_zona]!==undefined)z[_zona]++;if(ppVid(a[cfg.vIdx])){vz[_zona]=(vz[_zona]||0)+1;}});
+    if(z[_zona]!==undefined)z[_zona]++; else _nSinZona++;if(ppVid(a[cfg.vIdx])){vz[_zona]=(vz[_zona]||0)+1;}});
   var P=function(x){return n?Math.round(x/n*100)+'%':'–';};
   var v;
   if(cfg.stats==='atk'){var k=0,e=0,b=0,hd=0,sf=0,tp=0,d0=0,d1=0,d2=0;
@@ -845,7 +858,14 @@ function render(p){var cfg=ROLECFG[p.role];
     v=[n?Math.round((pos-rerr-ov)/n*100)+'%':'–',P(pos),P(ov+rerr),P(rpot),P(rflo),String(n),P(perf),P(ok),P(ov+bad)];
   }
   for(var i=0;i<9;i++)document.getElementById(p.id+'-s'+i).textContent=v[i];
-  document.getElementById(p.id+'-n').textContent=n+U(p.role);
+  (function(){
+    /* El rotulo describe la cancha que se ve: los bloqueados estan en su zona
+       de origen y lo unico que puede quedar afuera es una accion sin zona. */
+    var _txt = n+U(p.role);
+    if(_nBlq)     _txt += ' · '+_nBlq+' bloq.';
+    if(_nSinZona) _txt += ' · '+_nSinZona+' sin zona';
+    document.getElementById(p.id+'-n').textContent=_txt;
+  })();
   var mx=Math.max(1,z["1"],z["2"],z["3"],z["4"],z["5"],z["6"],z["7"],z["8"],z["9"]);
   var _useMin=(cfg.stats==='atk'||cfg.stats==='srv'||cfg.stats==='dig');
   var _min=0; if(_useMin){var _me=document.getElementById(p.id+'-min'); _min=_me?(parseInt(_me.value,10)||0):0;}

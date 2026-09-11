@@ -1395,7 +1395,16 @@ const CMD_LABELS = {
   rotHup:'Rotar + Local',rotHdn:'Rotar − Local',rotAup:'Rotar + Visitante',rotAdn:'Rotar − Visitante'};
 
 function load(k,def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch(e){ return def; } }
-function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+/* ══ GUARDAR SIN MENTIR ═══════════════════════════════════════════════════
+   El catch vacio se tragaba el error: si el navegador no podia guardar, el
+   scout seguia tipeando, la pantalla mostraba todo bien y no se guardaba
+   nada. Al cerrar desaparecia todo lo posterior a la ultima escritura buena.
+   Ahora devuelve si pudo, y el que llama decide. */
+var _SAVE_FALLO = 0;
+function save(k,v){
+  try{ localStorage.setItem(k, JSON.stringify(v)); return true; }
+  catch(e){ _SAVE_FALLO++; try{ console.error('[GUARDAR] fallo en '+k, e); }catch(_){} return false; }
+}
 
 /* ============================================================
    ESTADO DEL PARTIDO
@@ -1415,7 +1424,88 @@ if(M.vert===undefined) M.vert = false;    /* comando ROT: canchas verticales u h
 if(!M.setFirstServer) M.setFirstServer = M.serving || 'home';   /* quién sacó primero en este set */
 if(!M.home.six) M.home.six = M.home.lineup.slice();   /* formación con la que arrancó el set */
 if(!M.away.six) M.away.six = M.away.lineup.slice();
+/* ══ LA RED ═══════════════════════════════════════════════════════════════
+   El panel guardaba todo en localStorage, el almacen chico del navegador
+   (5 MB). Cuando falla, tira un error que antes se tragaba y se perdia todo.
+   La copia de seguridad vivia AHI MISMO, atada al clavo que se soltaba.
+
+   Ahora se guarda ademas en IndexedDB, el almacen grande: cientos de megas,
+   independiente del que falla, sin pedir permiso ni abrir ventanas. Una foto
+   cada 15 codigos, las ultimas 30. */
+var _RED_DB = null, _RED_ULTIMO = 0;
+function _contarCodigos(m){
+  try{ return ((m && m.codes) || []).filter(function(c){ return c && c.c; }).length; }
+  catch(e){ return 0; }
+}
+function _redAbrir(){
+  return new Promise(function(res){
+    if(_RED_DB) return res(_RED_DB);
+    try{
+      var q = indexedDB.open('volley_red', 1);
+      q.onupgradeneeded=function(e){ var db=e.target.result;
+        if(!db.objectStoreNames.contains('fotos')) db.createObjectStore('fotos',{keyPath:'t'}); };
+      q.onsuccess=function(e){ _RED_DB=e.target.result; res(_RED_DB); };
+      q.onerror=function(){ res(null); };
+    }catch(e){ res(null); }
+  });
+}
+async function redGuardar(forzar){
+  try{
+    var n=_contarCodigos(M);
+    if(!n) return;
+    if(!forzar && n===_RED_ULTIMO) return;
+    if(!forzar && n-_RED_ULTIMO<15) return;
+    var db=await _redAbrir(); if(!db) return;
+    _RED_ULTIMO=n;
+    var st=db.transaction('fotos','readwrite').objectStore('fotos');
+    st.put({ t:Date.now(), n:n, id:(M&&M._id)||'',
+             equipos:((M.home||{}).name||'')+' vs '+((M.away||{}).name||''),
+             M:JSON.parse(JSON.stringify(M)) });
+    var todas=st.getAllKeys();
+    todas.onsuccess=function(){ var ks=todas.result||[];
+      if(ks.length>30){ ks.sort(); for(var i=0;i<ks.length-30;i++) st.delete(ks[i]); } };
+  }catch(e){}
+}
+var _ALARMA_PUESTA=false;
+function descargaEmergencia(){
+  try{
+    var b=new Blob([JSON.stringify({cuando:new Date().toISOString(),
+      motivo:'no se pudo guardar', codigos:_contarCodigos(M), M:M})],{type:'application/json'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(b);
+    a.download='EMERGENCIA_scout_'+new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')+'.json';
+    a.click();
+  }catch(e){}
+}
+function _alarmaGuardado(mem, disco){
+  if(_ALARMA_PUESTA) return;
+  _ALARMA_PUESTA=true;
+  try{
+    var d=document.createElement('div'); d.id='alarma-guardado';
+    d.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99999;background:#7f1d1d;'
+      +'color:#fff;padding:14px 18px;font-family:Barlow Condensed,sans-serif;font-size:15px;'
+      +'font-weight:800;letter-spacing:.5px;box-shadow:0 4px 24px rgba(0,0,0,.6);text-align:center';
+    d.innerHTML='⚠ NO SE ESTA GUARDANDO — en pantalla hay '+mem+' códigos y guardados sólo '+disco
+      +'. Se descargó una copia de emergencia. NO cierres esta ventana: exportá el .dvw ahora.'
+      +' <button onclick="descargaEmergencia()" style="margin-left:12px;padding:5px 12px;background:#fff;'
+      +'color:#7f1d1d;border:0;border-radius:6px;font:inherit;font-weight:800;cursor:pointer">Descargar de nuevo</button>';
+    document.body.appendChild(d);
+  }catch(e){}
+  try{ descargaEmergencia(); }catch(e){}
+}
 function persist(){
+  var enMemoria = _contarCodigos(M);
+  var ok = save('pv_match', M);
+  /* la red, en el almacen que no falla */
+  try{ redGuardar(); }catch(e){}
+  /* verificar de verdad: leer lo guardado y contar */
+  var enDisco = 0;
+  try{ enDisco = _contarCodigos(JSON.parse(localStorage.getItem('pv_match')||'null')); }catch(e){ enDisco=0; }
+  if(!ok || enDisco < enMemoria){ _alarmaGuardado(enMemoria, enDisco); }
+  else if(_ALARMA_PUESTA){
+    _ALARMA_PUESTA=false;
+    var el=document.getElementById('alarma-guardado'); if(el) el.remove();
+    try{ toast('Guardado normalizado: '+enDisco+' códigos a salvo'); }catch(e){}
+  }
   save('pv_match', M);
   /* el try es por el orden de declaración: persist() está escrita antes que
      RALLY_UNDO, así que si llegara a llamarse durante la carga inicial todavía
@@ -1474,11 +1564,23 @@ function nubeLeer(path, cb){
 }
 
 function _miId(){
+  /* ══ LA CLAVE DEL APARATO NO PUEDE CAMBIAR A MITAD DE SESION ═════════════
+     Antes devolvia uid, email o 'local' segun lo que hubiera en ese momento.
+     Al renovarse el token la clave cambiaba DURANTE la misma sesion y el
+     mismo aparato terminaba escribiendo en dos ranuras distintas: el scout
+     quedaba partido en dos archivos con los codigos mezclados.
+
+     Ahora se calcula una vez y se guarda. La clave de un aparato es la misma
+     de principio a fin. */
   try{
+    var g = localStorage.getItem('pv_clave_aparato');
+    if(g) return g;
     var u = (typeof fbUser === 'function') ? fbUser() : null;
-    var s = (u && (u.uid || u.email)) ? String(u.uid || u.email) : 'local';
-    return s.replace(/[.#$\/\[\]]/g,'_');
-  }catch(e){ return 'local'; }
+    if(!(u && (u.uid || u.email))) return '';   /* sin sesion no se sube nada */
+    var s = String(u.uid || u.email).replace(/[.#$\/\[\]]/g,'_');
+    try{ localStorage.setItem('pv_clave_aparato', s); }catch(e){}
+    return s;
+  }catch(e){ return ''; }
 }
 function _miNombre(){
   try{ var u = (typeof fbUser === 'function') ? fbUser() : null;
@@ -4234,12 +4336,11 @@ document.addEventListener('keydown', e=>{
   /* manual 4.5.2: sobre la lista de códigos */
   if(e.key==='Insert'){ e.preventDefault(); insertarEn(SEL_I); return; }
   if(e.key==='Delete'){ e.preventDefault(); borrarEn(SEL_I); return; }
-  if(e.key==='Backspace' && !document.getElementById('code').value.trim() && M.codes.length){
-    e.preventDefault();
-    if(SEL_I>=0) borrarEn(SEL_I, true);
-    else undoLast();
-    return;
-  }
+  /* ══ BACKSPACE YA NO BORRA CODIGOS ══════════════════════════════════════
+     Si la barra estaba vacia, Backspace borraba el ultimo codigo cargado. En
+     vivo es peligrosisimo: uno borra lo que escribio para corregir, se pasa
+     una tecla y se lleva puesta una accion guardada.
+     Borrar es Delete. Backspace borra letras, nada mas. */
   if(e.key==='Enter' && SEL_I>=0 && !document.getElementById('code').value.trim()){ e.preventDefault(); editCode(SEL_I); return; }
   if((e.ctrlKey||e.metaKey) && e.code==='Space'){ e.preventDefault(); abrirExtensiones(); return; }
   if(e.key==='Escape'){ cerrarExtensiones(); }
@@ -5512,11 +5613,24 @@ function _wizActual(){
   }catch(e){ return null; }
 }
 function _wizJugadores(team){
+  /* ══ TODOS, NO SOLO LOS SEIS EN CANCHA ════════════════════════════════
+     Si el plantel no se cargo —pasa seguido en un entrenamiento— salian solo
+     seis. Ahora se suman todos los numeros que ya aparecen en los codigos:
+     si alguien esta en el scout, es un jugador de verdad. */
   var lado = M[team] || {}, seis = (lado.six||lado.lineup||[]).slice();
   var lst = [];
   seis.forEach(function(n){ if(n) lst.push(Number(n)); });
   if(lado.libero && lst.indexOf(Number(lado.libero))<0) lst.push(Number(lado.libero));
   (lado.plantel||[]).forEach(function(j){ var n=Number(j.c||j.num); if(n && lst.indexOf(n)<0) lst.push(n); });
+  try{
+    var marca=(team==='home')?'*':'a';
+    (M.codes||[]).forEach(function(c){
+      var t=c&&c.c; if(!t||t.charAt(0)!==marca) return;
+      var n=parseInt(t.substr(1,2),10);
+      if(n && lst.indexOf(n)<0) lst.push(n);
+    });
+  }catch(e){}
+  lst.sort(function(a,b){ return a-b; });
   return lst;
 }
 function _wizOpt(cont, val, etiqueta, activo, alClic){
@@ -5998,6 +6112,17 @@ function _nombreDVW(){
   var limpio = function(t){
     return String(t).replace(/[\\/:*?"<>|]/g, '').trim().slice(0, 20);
   };
+  /* ══ EL MISMO NOMBRE QUE USA DATA VOLLEY ══════════════════════════════
+     DataVolley guarda sus practicas asi:  &Pra-GELP-2026-09-10.dvw
+     El panel usaba otro formato y en la misma carpeta no se ordenaban juntos.
+     Los PARTIDOS siguen con fecha + equipo-rival, que es lo que corresponde
+     cuando hay un rival de verdad. */
+  var esEnt = false;
+  try{ esEnt = (typeof unSoloEquipo === 'function') && unSoloEquipo(); }catch(_){}
+  if(esEnt){
+    var _nom = limpio((M.home && M.home.name) || loc);
+    return '&Pra-' + _nom + '-' + f + '.dvw';
+  }
   return '&' + f + ' ' + limpio(loc) + '-' + limpio(vis) + '.dvw';
 }
 
@@ -6021,6 +6146,16 @@ function _aCp1252(texto){
     out[n++] = (sin && sin.charCodeAt(0) < 256) ? sin.charCodeAt(0) : 63;
   }
   return out.subarray(0, n);
+}
+
+/* La hora en el formato de DataVolley: hh.mm.ss con puntos. */
+function _horaDVW(seg){
+  try{
+    var d=new Date();
+    if(seg && M.t0){ d=new Date(M.t0 + seg*1000); }
+    var p=function(n){ return (n<10?'0':'')+n; };
+    return p(d.getHours())+'.'+p(d.getMinutes())+'.'+p(d.getSeconds());
+  }catch(e){ return ''; }
 }
 
 function exportDVW(modo){
@@ -6125,7 +6260,17 @@ function exportDVW(modo){
   L.push('[3SCOUT]');
   const pad6 = arr => { const a=(arr||[]).slice(0,6); while(a.length<6) a.push(''); return a.map(x=>(x==null?'':x)); };
   M.codes.forEach(c=>{
-    if(c.k==='drill' || !c.c) return;
+    /* ══ EL DRILL SE ESCRIBE, COMO EN DATA VOLLEY ══════════════════════════
+       DataVolley SI guarda los drills en el .dvw:
+           **Drill;;;;;;;10.56.34;1;0;0;1;1610;;;;;;;;;;;;;;
+       Misma estructura de 27 columnas. Al saltearlo, el archivo perdia la
+       division entre ejercicios. */
+    if(c.k==='drill'){
+      L.push(['**Drill','','','','','','',_horaDVW(c.t), String(c.set||1),'0','0','1',
+              String(Math.round(c.t||0)),'','','','','','','','','','','','','',''].join(';'));
+      return;
+    }
+    if(!c.c) return;
     const hl = pad6((c.hl && c.hl.length===6) ? c.hl : M.home.lineup);
     const al = pad6((c.al && c.al.length===6) ? c.al : M.away.lineup);
     /* columnas: 0 código · 8 set · 9 zona armador local · 10 zona armador visitante

@@ -104,6 +104,11 @@ function calcBaterias(codes, side){
     } else if(skill==='R' && pfx===side){
       last_rec=res; rec_valida=true;
       var Pr=get(num); Pr.R.T++; if(res in Pr.R) Pr.R[res]++;
+    } else if(skill==='F' && pfx===side){
+      /* El free ball cierra la fase de recepcion: el ataque que viene despues
+         es TRANSICION, no side-out. Esta linea era invisible para el motor y
+         arrastraba la recepcion anterior del mismo punto. */
+      last_rec=null; rec_valida=false;
     } else if(pfx!==side && (skill==='A'||skill==='D'||skill==='E'||skill==='B')){
       rec_valida=false;
     } else if(skill==='B' && pfx===side){

@@ -1,56 +1,53 @@
-═══════════════════════════════════════════════════════════════════════════════
-   EL SCOUT EN VIVO — cuatro arreglos
-═══════════════════════════════════════════════════════════════════════════════
+GELP: EL FREE BALL
+==================
 
-   Correlo en cada carpeta:
+9 archivos. HACER_TODO y publicar.
 
-       CLIENTE VOLEY STATS\CLUBES\gelp\
-       CLIENTE VOLEY STATS\PLANTILLA\      ← para los clientes nuevos
+   baterias_engine.py · gen_baterias.py · gen_plan_partido.py
+   gen_scouting.py · objetivos.js · panel_voley.html
+   update_db_entrenamientos_gelp.py · update_db_gelp.py · update_db_gelp_FULL.py
 
-   NÄFELS ya los tiene.
-
-
-── QUÉ ARREGLA ───────────────────────────────────────────────────────────────
-
-   1) Ctrl+A reabre el punto
-
-      Había DOS manejadores para Ctrl+A: uno reabría el rally y otro
-      deshacía la última acción. El segundo ganaba, así que Ctrl+A
-      terminaba borrando una sola acción.
-
-      En el manual (1.1), Ctrl+A selecciona todo el rally.
-
-   2) Deshacer, en su propia tecla
-
-      Queda en F4 y se cambia desde Configuración.
-
-   3) El time-code de cada acción
-
-          *08SM/    21:33:42
-          a09RM/       —          ← sin alinear
-
-      Es lo que deja ver de un vistazo si el rally quedó bien alineado,
-      sin ir tocando uno por uno (manual 2.5.6).
-
-   4) La sección "Teclas del video"
-
-      En Configuración:
-
-          Alinear el código al video     [ F2 ]
-          Deshacer la última acción      [ F4 ]
-
-          ☑ Después de alinear, pasar al código siguiente
-          ☑ Al elegir un código, saltar ahí en el video
-
-      Las dos casillas existían en el código pero no tenían control
-      visible.
+(panel_vivo.html y plan_partido_vivo.js ya lo trataban bien, no van)
 
 
-── LOS PASOS ─────────────────────────────────────────────────────────────────
+EL ERROR, IGUAL QUE EN NAFELS
+-----------------------------
+Un ataque que sale de un free ball es TRANSICION. El side-out es lo que
+viene de recibir el SAQUE del rival, nada mas.
 
-       1. ARREGLAR_SCOUT_VIVO.py   →  S
-       2. PUBLICAR.bat             →  S
+Los motores no conocian la letra F, asi que esa linea era invisible y
+ARRASTRABA la recepcion anterior del mismo punto:
 
-   En la PLANTILLA no se publica: se usa al dar de alta el próximo cliente.
+     *20RM=   recepcion MAL
+     *20FH#   free ball
+     *04EQ+   armado
+     *07AQ#   ataque      <- se contaba "tras recepcion mala"
 
-═══════════════════════════════════════════════════════════════════════════════
+Ahora el free ball CIERRA la fase y el ataque cae en transicion.
+
+
+CUANTO AFECTABA A GELP
+----------------------
+   19 archivos .dvw
+   468 acciones de free ball scouteadas
+
+   FASE                  antes    ahora   mueven
+   Atq R#+                 550      550       +0
+   Atq R!                  289      289       +0
+   Atq R-                  266      264       -2
+   Atq Transición         1520     1522       +2
+
+   ataques mal clasificados: 2
+
+Son MENOS que en Näfels, que tenia 7. La razon es que GELP scoutea el free
+ball casi siempre al empezar un punto nuevo, donde no hay recepcion que
+arrastrar. Igual el error estaba y ahora no esta.
+
+
+LO QUE NO VA
+------------
+La maquina de saque: me dijiste que GELP no la menciono, asi que no la
+toque. Si algun dia entrenan con maquina, se agrega el numero en un
+config_club.json y listo, igual que en Näfels.
+
+Tampoco hay bateria de free ball. Las de siempre.

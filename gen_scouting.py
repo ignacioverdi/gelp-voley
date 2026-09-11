@@ -111,6 +111,11 @@ def walk_attacks(content, pfx):
         skill = code[2].upper() if len(code) > 2 else ''
         if skill == 'S':
             rec_valida = False; last_rq = ''; last_orig = ''; last_by = 0; last_call = ''; continue
+        if skill == 'F' and t == pfx:
+            # El free ball cierra la fase de recepcion: lo que sigue es
+            # TRANSICION, no side-out.
+            rec_valida = False; last_rq = ''; last_orig = ''; last_by = 0; last_call = ''
+            continue
         if t == pfx and skill == 'R':
             rec_valida = True
             last_rq = code[4] if len(code) > 4 else ''
