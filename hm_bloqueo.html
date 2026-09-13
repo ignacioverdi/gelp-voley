@@ -173,8 +173,20 @@ function equipoActual(){
     return sb-sa;
   })[0];
 }
+/* ══ EQ SE CALCULABA ANTES DE QUE HUBIERA DATOS ════════════════════════════
+   Este script corre antes de que window.PP_BLOCK este disponible: equipoActual()
+   devolvia null y JUGADORES quedaba VACIO. Consecuencias en pantalla:
+     · el desplegable de jugador solo ofrecia "equipo completo"
+     · hayTipos() daba falso y no aparecia el selector PARTIDO / ENTRENAMIENTO */
 var EQ=equipoActual();
 var JUGADORES=(window.PP_BLOCK&&EQ&&window.PP_BLOCK[EQ])||[];
+
+function _recargarJugadores(){
+  if(JUGADORES && JUGADORES.length) return true;
+  EQ = equipoActual();
+  JUGADORES = (window.PP_BLOCK && EQ && window.PP_BLOCK[EQ]) || [];
+  return !!(JUGADORES && JUGADORES.length);
+}
 
 /* ── El tipo: partido o entrenamiento ────────────────────────────────────
    Los bloqueos traen su tipo desde el generador. Si los datos son viejos y no
@@ -193,6 +205,7 @@ function hayTipos(){
 function pintarModo(){
   var w=document.getElementById('modo-wrap');
   if(!w) return;
+  _recargarJugadores();
   if(!hayTipos()){ w.innerHTML=''; return; }
   var t=(typeof vbTipo==='function')?vbTipo():'todos';
   w.innerHTML=[['todos','Todos'],['P','Partidos'],['E','Entrenamientos']].map(function(o){
@@ -201,7 +214,9 @@ function pintarModo(){
 }
 window.setModoBlq=function(t){
   try{ if(typeof vbSetTipo==='function') vbSetTipo(t); }catch(e){}
-  pintarModo(); rellenarCombos(); pintar();
+  /* Faltaba rehacer la lista de jugadores: al pasar de PARTIDO a
+     ENTRENAMIENTO el desplegable quedaba con los totales del modo anterior. */
+  pintarModo(); rellenarJugadores(); rellenarCombos(); pintar();
 };
 
 /* ── Las acciones que se estan mirando ──────────────────────────────────── */
@@ -339,5 +354,26 @@ pintarModo(); rellenarJugadores(); rellenarCombos(); pintar();
 </script>
 <script src="ayuda.js"></script>
 <script src="licencia.js"></script>
+
+<script>
+/* Los datos cifrados pueden llegar despues que el script de arriba. Cuando eso
+   pasa hay que rehacer la lista de jugadores y repintar. */
+(function(){
+  function _listo(){
+    try{
+      if(typeof _recargarJugadores==='function' && _recargarJugadores()){
+        if(typeof rellenarJugadores==='function') rellenarJugadores();
+        if(typeof rellenarCombos==='function') rellenarCombos();
+        if(typeof pintarModo==='function') pintarModo();
+        if(typeof pintar==='function') pintar();
+        return true;
+      }
+    }catch(e){}
+    return false;
+  }
+  var n=0, reloj=setInterval(function(){ if(_listo()||++n>40) clearInterval(reloj); },250);
+  document.addEventListener('DOMContentLoaded', _listo);
+})();
+</script>
 </body>
 </html>

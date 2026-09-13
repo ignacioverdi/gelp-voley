@@ -1,53 +1,68 @@
-GELP: EL FREE BALL
-==================
+GELP — PRIMERA TANDA: LOS 6 HEATMAPS
+====================================
 
-9 archivos. HACER_TODO y publicar.
-
-   baterias_engine.py · gen_baterias.py · gen_plan_partido.py
-   gen_scouting.py · objetivos.js · panel_voley.html
-   update_db_entrenamientos_gelp.py · update_db_gelp.py · update_db_gelp_FULL.py
-
-(panel_vivo.html y plan_partido_vivo.js ya lo trataban bien, no van)
+6 archivos. Publicar en el repo de GELP y Ctrl+Shift+R.
 
 
-EL ERROR, IGUAL QUE EN NAFELS
------------------------------
-Un ataque que sale de un free ball es TRANSICION. El side-out es lo que
-viene de recibir el SAQUE del rival, nada mas.
-
-Los motores no conocian la letra F, asi que esa linea era invisible y
-ARRASTRABA la recepcion anterior del mismo punto:
-
-     *20RM=   recepcion MAL
-     *20FH#   free ball
-     *04EQ+   armado
-     *07AQ#   ataque      <- se contaba "tras recepcion mala"
-
-Ahora el free ball CIERRA la fase y el ataque cae en transicion.
+COMPARE LOS DOS SISTEMAS ARCHIVO POR ARCHIVO
+--------------------------------------------
+GELP tiene la misma estructura base que Nafels, asi que lo de los heatmaps
+se porta tal cual. Verifique que cada punto de insercion existiera igual
+antes de tocar nada.
 
 
-CUANTO AFECTABA A GELP
-----------------------
-   19 archivos .dvw
-   468 acciones de free ball scouteadas
+LO QUE VA EN ESTA TANDA
+-----------------------
+1. EL HTML ROTO  —  armador · ataque · recepcion · saque
 
-   FASE                  antes    ahora   mueven
-   Atq R#+                 550      550       +0
-   Atq R!                  289      289       +0
-   Atq R-                  266      264       -2
-   Atq Transición         1520     1522       +2
+       <div class="content"<div class="content" id="content">
+                          ^ falta cerrar
 
-   ataques mal clasificados: 2
+   GELP lo tiene igual que lo tenia Nafels. El navegador se come lo que
+   sigue, y lo que sigue es el script que arma los datos. Esa era la causa
+   de que la solapa ENTRENAMIENTO no hiciera nada en armado.
 
-Son MENOS que en Näfels, que tenia 7. La razon es que GELP scoutea el free
-ball casi siempre al empezar un punto nuevo, donde no hay recepcion que
-arrastrar. Igual el error estaba y ahora no esta.
+2. DEFENSA  —  los botones PARTIDO / ENTRENAMIENTO
+   setModoDef() esta escrita en GELP igual que en Nafels, y tampoco la
+   llama nadie. Agregue los botones y el codigo que espera a que terminen
+   de descifrarse los datos.
+
+3. BLOQUEO  —  el desplegable de jugador
+   EQ se calcula antes de que exista PP_BLOCK, asi que JUGADORES queda
+   vacio: solo aparece "equipo completo". Agregue el recalculo y la
+   llamada a rellenarJugadores() al cambiar de modo.
+
+Verificado: ningun script quedo con mas errores que antes.
 
 
-LO QUE NO VA
-------------
-La maquina de saque: me dijiste que GELP no la menciono, asi que no la
-toque. Si algun dia entrenan con maquina, se agrega el numero en un
-config_club.json y listo, igual que en Näfels.
+LO QUE NO VA TODAVIA, Y POR QUE
+-------------------------------
+Tres archivos de GELP son de una version distinta a los de Nafels. Portarlos
+a ciegas los rompe, asi que los dejo para una segunda tanda:
 
-Tampoco hay bateria de free ball. Las de siempre.
+   gen_baterias.py       GELP exporta 'defReg' y no tiene 'n_atqq'.
+                         El desglose de la ventanita hay que escribirlo
+                         sobre SU version, no copiarlo.
+
+   gen_bloqueo.py        GELP no lee los .dvw directo: saca todo del
+                         video. El filtro de temporada y el relleno de
+                         nombres van en otro lugar del archivo.
+
+   objetivos_config.js   29 KB contra 80 KB. Comparte la base
+                         —objSingleBat, fmtEff, objClassify— pero le
+                         falta toda la ventanita del detalle, el enlace
+                         a cortes.html y las 100 traducciones.
+
+Esa segunda tanda es la mas grande de las dos. Decime si la arranco ahora o
+preferis probar esta primero.
+
+
+SOBRE LA PLANTILLA (CLIENTE-NUEVO)
+----------------------------------
+La mire: tiene 2 archivos html, no la estructura completa del sistema. No es
+una copia de la app lista para clonar.
+
+Si la idea es que un cliente nuevo arranque con todo esto ya adentro, me
+parece que conviene otra cosa: partir del repo de Nafels como base, que es
+el que quedo mas completo, y que la plantilla sea ese. Pero decime vos como
+la usas hoy, porque no quiero suponer.

@@ -76,7 +76,12 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 </div>
 <div class="layout">
   <div class="sidebar">
-    <div class="flabel" style="margin-top:0">Jugador</div>
+    <div class="flabel" data-t="Origen de datos">Origen de datos</div>
+  <div style="display:flex;gap:4px;margin-bottom:10px">
+    <button id="modo-partido" onclick="__setModo('partido')" data-t="PARTIDO" style="flex:1;background:var(--accent,#e8192c);border:none;color:#fff;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">PARTIDO</button>
+    <button id="modo-entrenamiento" onclick="__setModo('entrenamiento')" data-t="ENTRENAMIENTO" style="flex:1;background:transparent;border:1px solid var(--border2,rgba(255,255,255,.15));color:#94a3b8;padding:8px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:1px">ENTRENAMIENTO</button>
+  </div>
+  <div class="flabel" style="margin-top:0">Jugador</div>
     <select class="psel" id="psel" onchange="onPlayer(this.value)"><option value="">Seleccionar…</option></select>
     <button id="ver-video-btn" class="vbtn" onclick="abrirVideo()">🎬 VER VIDEO DE ESTAS DEFENSAS</button>
     <div class="acc-group"><div class="acc-header" id="acc-hdr-partido" onclick="accToggle('partido')"><span>Partido</span><div style="display:flex;align-items:center;gap:6px"><div class="acc-dot"></div><span class="acc-arrow">▶</span></div></div>
@@ -140,11 +145,28 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_2029.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <script>
-(function(){
+/* ══ ESPERAR A QUE LOS DATOS ESTEN ════════════════════════════════════════════
+   Este bloque corria apenas se leia, pero los archivos cifrados todavia no
+   habian terminado de descifrarse. Con VIDEO_DATA_ENT vacio, la lista de
+   acciones quedaba en cero: el desplegable salia sin jugadores y la pantalla
+   decia "0 defensas". */
+function __arrancarDefensa(){
+  if(__arrancarDefensa._hecho) return true;
+  var P = window.VIDEO_DATA && window.VIDEO_DATA.matches;
+  var E = window.VIDEO_DATA_ENT && window.VIDEO_DATA_ENT.matches;
+  if(!(P && Object.keys(P).length) && !(E && Object.keys(E).length)) return false;
+  __arrancarDefensa._hecho = true;
+  __defensaMain();
+  return true;
+}
+function __defensaMain(){
   /* El modo elegido: PARTIDO o ENTRENAMIENTO. Se guarda en la misma clave que
      usan las demas pantallas, asi el club queda igual en todas. */
   var MODO = 'todos';
-  try{ MODO = localStorage.getItem('vb_modo_def') || 'todos'; }catch(e){}
+  /* Se lee vb_modo, la clave COMUN del sistema, para que el modo elegido en
+     cualquier pantalla valga tambien aca. */
+  try{ MODO = localStorage.getItem('vb_modo')
+            || localStorage.getItem('vb_modo_def') || 'todos'; }catch(e){}
 
   /* Los cortes del modo elegido. Con "todos" van las dos fuentes juntas. */
   function _cortesDelModo(){
@@ -433,6 +455,13 @@ window.__DESCIFRAR_SINCRONO = true;
     }).join('');
   })();
 
+}
+/* Se intenta al leer el archivo; si los datos aun no llegaron, se reintenta. */
+(function(){
+  if(__arrancarDefensa()) return;
+  var n=0;
+  var reloj=setInterval(function(){ if(__arrancarDefensa() || ++n>40) clearInterval(reloj); }, 250);
+  document.addEventListener('DOMContentLoaded', __arrancarDefensa);
 })();
 </script>
 <script src="lang.js" onerror="void 0">
@@ -457,6 +486,27 @@ function _videoTodo(){
 </script>
 <script src="ayuda.js"></script>
 <script src="licencia.js"></script>
+
+<script>
+/* setModoDef() estaba escrita y NADIE la llamaba: no habia ni un boton. Por eso
+   solo se veian los partidos, con las defensas de entrenamiento cargadas. */
+function __setModo(m){
+  try{ localStorage.setItem('vb_modo', m); }catch(e){}
+  try{ localStorage.setItem('vb_modo_def', m); }catch(e){}
+  location.reload();
+}
+function __pintarModo(){
+  var m='partido';
+  try{ m = localStorage.getItem('vb_modo') || 'partido'; }catch(e){}
+  var bp=document.getElementById('modo-partido'), be=document.getElementById('modo-entrenamiento');
+  if(!bp||!be) return;
+  function on(b){ b.style.background='var(--accent,#e8192c)'; b.style.color='#fff'; b.style.border='none'; }
+  function off(b){ b.style.background='transparent'; b.style.color='#94a3b8';
+                   b.style.border='1px solid var(--border2,rgba(255,255,255,.15))'; }
+  if(m==='entrenamiento'){ on(be); off(bp); } else { on(bp); off(be); }
+}
+document.addEventListener('DOMContentLoaded', __pintarModo);
+</script>
 </body>
 </html>
 
