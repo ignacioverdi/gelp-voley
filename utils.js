@@ -159,44 +159,23 @@ function objCalcVals(nombreJugador){
   return v;
 }
 
-function objSingleBat(id,val,meta,cls,objLine){
-  /* Una sola version para todo el sistema: nombre del fundamento, valor,
-     bateria con la linea del objetivo, sobre cuantas acciones esta hecha la
-     cuenta, y el objetivo. */
-  var fh = (val!==null) ? objPct(val, meta.min, meta.max) : 0;
-  var oh = objPct(objLine, meta.min, meta.max);
-  var txt = (val!==null) ? fmtEff(val) : '\u2014';
-  var nombre = String(meta.label||'').replace(/\s*\(-?\d+\)\s*$/, '');
-  var n = (meta.n!=null) ? meta.n : null;
-  var tip = nombre;
-  try{
-    if(val!==null && meta.obj!=null && meta.min!=null && meta.obj>meta.min){
-      var reco = Math.round((val-meta.min)/(meta.obj-meta.min)*100);
-      tip = nombre+': '+val+'%'+(n!=null?' sobre '+n+' acciones':'')
-          + ' \u00b7 el peor de la liga '+meta.min+'%, el mejor '+meta.obj+'%'
-          + ' \u00b7 est\u00e1s al '+reco+'% del recorrido';
-    }
-  }catch(e){}
-  return '<div title="'+tip+'" style="flex:1;min-width:60px;max-width:110px;display:flex;'
-    + 'flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;'
-    + 'border:1px solid '+cls.border+';border-radius:9px;background:'+cls.bg+';'
-    + 'position:relative;overflow:hidden;font-family:Barlow Condensed,sans-serif">'
-    + '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+cls.color+'"></div>'
-    + '<div style="font-size:10px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;'
-    + 'color:#94a3b8;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;'
-    + 'text-overflow:ellipsis;max-width:100%">'+nombre+'</div>'
-    + '<div style="font-size:22px;font-weight:900;line-height:1;color:'+cls.color+'">'+txt+'</div>'
-    + '<div style="width:32px;height:72px;display:flex;flex-direction:column;align-items:center">'
-      + '<div style="width:14px;height:5px;border-radius:3px 3px 0 0;background:'+cls.color+';opacity:.7;flex-shrink:0"></div>'
-      + '<div style="position:relative;width:32px;flex:1;border-radius:4px;overflow:hidden;border:2px solid '+cls.color+'">'
-        + '<div style="position:absolute;inset:0;background:#07080f"></div>'
-        + (val!==null ? '<div style="position:absolute;bottom:0;left:0;right:0;height:'+fh+'%;background:'+cls.color+';opacity:.85"></div>' : '')
-        + '<div style="position:absolute;left:0;right:0;bottom:'+oh+'%;height:2px;background:#fff;opacity:.85"></div>'
-      + '</div>'
-    + '</div>'
-    + (n!=null ? '<div style="font-size:8px;font-weight:700;color:#8395ac">'+n+' acc.</div>' : '')
-    + '<div style="font-size:8px;font-weight:700;color:#64748b">obj '+objLine+'</div>'
-    + '</div>';
+function objSingleBat(id, val, meta, cls, objLine, vals){
+  /* ══ LA BATERIA VIVE EN objetivos_config.js ═══════════════════════════════
+     Esta funcion estaba escrita OCHO veces en el sistema: en objetivos.js, en
+     utils.js, y adentro de cinco pantallas. Las copias viejas son mas cortas
+     que la buena: les falta la ventanita del desglose, el enlace al video y
+     las traducciones.
+
+     Y cual ganaba dependia del ORDEN DE CARGA. Una pantalla que cargara
+     objetivos.js despues de objetivos_config.js terminaba usando la vieja, y
+     ahi la bateria no se podia tocar.
+
+     Ahora hay UNA sola definicion y esto solo reenvia. No importa el orden. */
+  if(typeof window.__objSingleBatReal === 'function'){
+    return window.__objSingleBatReal(id, val, meta, cls, objLine, vals);
+  }
+  try{ console.warn('[baterias] falta objetivos_config.js en esta pantalla'); }catch(e){}
+  return '';
 }
 
 /* ── Las baterias de objetivos NO se dibujan mas desde aca ──────────────────
