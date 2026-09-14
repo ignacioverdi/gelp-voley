@@ -1,3 +1,4 @@
+import re
 # -*- coding: utf-8 -*-
 """
 gen_baterias.py — Genera las baterías de los 13 partidos leyendo los DVW crudos,
@@ -15,6 +16,75 @@ import os, re, sys, json, glob, unicodedata
 TEAM_NORM = {}
 
 
+
+# ══════════════════════════════════════════════════════════════════════════
+#  LA MAQUINA DE SAQUE
+#  ------------------------------------------------------------------------
+#  En los entrenamientos se scoutea la maquina con un numero de camiseta que
+#  no existe en el plantel (en Näfels es el 8). Eso permite hacer el
+#  ejercicio, pero sus saques NO SON DE NADIE: no los tira una persona, no
+#  tienen intencion ni tecnica, y sumarlos a la estadistica de saque del
+#  equipo la deforma. Eran 276 de 1.424, el 19%.
+#
+#  Las RECEPCIONES de esos saques SI cuentan: el jugador esta entrenando
+#  justamente eso, recibir pelotas potentes.
+#
+#  Tampoco se toca la logica de fases: el saque de la maquina igual abre el
+#  punto, asi que la recepcion y el ataque posterior siguen clasificando
+#  bien como side-out.
+#
+#  El numero sale de la configuracion del club. Si algun dia se usa otro, o
+#  se agrega una segunda maquina, se cambia ahi y no en el codigo.
+# ══════════════════════════════════════════════════════════════════════════
+
+# ══ LOS TORNEOS DE ESTE CLUB ════════════════════════════════════════════════
+#  Esta funcion es propia de este club: resuelve a que temporada pertenece
+#  una fecha cuando el torneo cruza dos anios. El club de origen del resto
+#  del archivo no la necesita, pero aca si, y sin ella las baterias quedan
+#  en la temporada equivocada.
+def _temp_config(date, carpeta=''):
+    try:
+        import config_club as _cc
+        if _cc.torneos():
+            t = _cc.temporada_de(date, '', carpeta)
+            if t:
+                tor = _cc.resolver_torneo('', carpeta)
+                cfg = _cc.torneos().get(tor) or {}
+                if cfg.get('cruza'):
+                    return "%d/%02d" % (int(t), (int(t) + 1) % 100)
+                return str(t)
+    except Exception:
+        pass
+    return None
+
+def _es_maquina(num):
+    """Si este numero de camiseta es una maquina y no un jugador."""
+    try:
+        import os, json
+        global _MAQ_CACHE
+    except Exception:
+        pass
+    return str(num).lstrip('0') in _MAQUINAS
+
+
+def _cargar_maquinas():
+    """Los numeros de maquina salen de config_club.json si existe."""
+    import os, json
+    for p in ('config_club.json', 'club.json', 'CONFIG.json'):
+        try:
+            if os.path.exists(p):
+                c = json.load(open(p, encoding='utf-8'))
+                v = c.get('maquinas_saque') or c.get('maquina_saque')
+                if v:
+                    if not isinstance(v, (list, tuple)): v = [v]
+                    return {str(x).lstrip('0') for x in v}
+        except Exception:
+            pass
+    return {'8'}          # el valor de Näfels, por defecto
+
+_MAQUINAS = _cargar_maquinas()
+
+
 def _cargar_equipos(carpeta):
     """Arma la tabla de nombres leyendo los partidos de la carpeta."""
     import unicodedata
@@ -22,12 +92,7 @@ def _cargar_equipos(carpeta):
     vistos = {}
     for f in sorted(glob.glob(os.path.join(carpeta, '*.dvw'))):
         try:
-            # Antes decia read_dvw(f), una funcion que NO existe en este
-            # archivo. Como el error caia en el except de abajo, cada .dvw se
-            # descartaba en silencio y la tabla de equipos quedaba vacia: el
-            # generador terminaba con "Equipos: 0" y "0 sesiones" sin decir
-            # por que. El resto del archivo los lee asi.
-            txt = open(f, encoding='latin-1', errors='ignore').read()
+            txt = read_dvw(f)
         except Exception:
             continue
         lin = txt.split('\n')
@@ -50,16 +115,6 @@ def _cargar_equipos(carpeta):
             ut = [w for w in pal if w.lower() not in relleno and len(w) > 2]
             corto = (ut[0].capitalize() if ut else (pal[0] if pal else n[:10]))
             vistos[n] = corto
-    # La tabla del club manda sobre lo que se deduce del nombre. Sin esto,
-    # "Club Atletico San Lorenzo de Almagro" se acorta como "San" -la primera
-    # palabra que no es relleno- y despues no coincide con "Casla", que es como
-    # el motor guarda al equipo. En config_club.json se declara la equivalencia
-    # una vez y todos los generadores la usan igual.
-    try:
-        import config_club as _cc
-        vistos.update(_cc.tabla_de_equipos() or {})
-    except Exception:
-        pass
     TEAM_NORM = dict(vistos)
     return TEAM_NORM
 NUESTRO = ['']          # se completa al arrancar, con el nombre del club
@@ -68,32 +123,12 @@ NUESTRO = ['']          # se completa al arrancar, con el nombre del club
 def is_casla(n):
     """Si este equipo es el nuestro.
 
-       El nombre del club sale de la carpeta de partidos —"DVW GELP 2026" da
-       "gelp"— y se compara sin acentos. Antes estaba escrito adentro y el
+       El nombre del club sale de la carpeta de partidos —"DVW NAFELS 2026" da
+       "nafels"— y se compara sin acentos. Antes estaba escrito adentro y el
        motor sólo servía para un club."""
     import unicodedata
     if not n: return False
     t = unicodedata.normalize('NFKD', n).encode('ascii', 'ignore').decode().lower()
-
-    # El nombre largo del club, tal como figura en el .dvw. Hace falta porque
-    # el nombre corto casi nunca esta adentro del largo: "Casla" no aparece en
-    # "Club Atletico San Lorenzo de Almagro", asi que la comparacion de abajo
-    # daba siempre que no. Se declara una vez en config_club.json.
-    try:
-        import config_club as _cc
-        plano = re.sub(r'[^a-z]', '', t)
-        for largo, corto in (_cc.tabla_de_equipos() or {}).items():
-            if corto and corto.lower() == (_cc.equipo_propio() or '').lower():
-                lp = re.sub(r'[^a-z]', '',
-                            unicodedata.normalize('NFKD', largo).encode('ascii','ignore').decode().lower())
-                if lp and (lp in plano or plano in lp):
-                    return True
-        propio = (_cc.equipo_propio() or '').lower()
-        if propio and re.sub(r'[^a-z]', '', propio) in plano:
-            return True
-    except Exception:
-        pass
-
     clave = (NUESTRO[0] or '').lower()
     if not clave: return False
     return clave in re.sub(r'[^a-z]', '', t) or clave in t
@@ -107,13 +142,19 @@ def norm_team(name):
 # ══════════ MOTOR DE BATERÍAS — PORT EXACTO DE objetivos.js ══════════
 def _bat_nuevo():
     na=lambda:{'#':0,'/':0,'=':0,'T':0}
+    # 'D' = defensa. Se agrego porque el recuadro de Defensa del dashboard era
+    # el unico que quedaba en cero: se contaba desde el archivo de VIDEO, que
+    # el dashboard ni siquiera carga, asi que nunca se llenaba. Los .dvw traen
+    # la defensa como cualquier otro fundamento.
+    # El '-' (negativo) no se guardaba: hasta ahora ninguna formula lo usaba,
+    # valia cero igual que el neutro. La escala nueva SI lo usa, asi que hay
+    # que contarlo o restaria siempre cero y no cambiaria nada.
+    # El '!' (neutro) tampoco se guardaba: con la escala vieja valia cero y
+    # daba igual. En la escala de 0 a 100 el neutro vale 50, asi que si no se
+    # cuenta, cada saque neutro puntuaria 0 y el numero se hunde.
     return {'S':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'R':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'B':{'#':0,'+':0,'T':0},
-            # La DEFENSA. No estaba: el recuadro del dashboard la sacaba del
-            # video, que un club nuevo no tiene, y quedaba siempre en cero
-            # aunque los .dvw traigan las acciones —146 en un solo partido—.
-            # Ahora sale de los .dvw como los otros cuatro fundamentos.
             'D':{'#':0,'+':0,'!':0,'-':0,'=':0,'T':0},
             'Aall':na(),'cent':na(),'alta':na(),'rap':na(),
             'rp':na(),'ri':na(),'rm':na(),'tr':na()}
@@ -132,9 +173,13 @@ def _calc_baterias(codes, side):
         num=body[0:2]; skill=body[2]; res=body[4]
         if skill=='S':
             last_rec=None; rec_valida=False
-            if pfx==side:
+            # La maquina abre el punto pero su saque no es de nadie.
+            if pfx==side and not _es_maquina(num):
                 P=get(num); P['S']['T']+=1
                 if res in P['S']: P['S'][res]+=1
+        elif skill=='D' and pfx==side:
+            Pd=get(num); Pd['D']['T']+=1
+            if res in Pd['D']: Pd['D'][res]+=1
         elif skill=='R' and pfx==side:
             last_rec=res; rec_valida=True
             Pr=get(num); Pr['R']['T']+=1
@@ -142,14 +187,14 @@ def _calc_baterias(codes, side):
         elif pfx!=side and skill in ('A','D','E','B'):
             rec_valida=False
                 # ══ EL FREE BALL CIERRA LA FASE DE RECEPCION ═══════════════════
-        # Un ataque que sale de un free ball es TRANSICION: el side-out es
+        # Un ataque que sale de un free ball es TRANSICION. El side-out es
         # lo que viene de recibir el SAQUE del rival, nada mas.
         #
         # El motor no conocia la letra F, asi que esa linea era invisible y
-        # ARRASTRABA la recepcion anterior del mismo punto. Caso real de
-        # Näfels:
-        #     *20RM=  recepcion MAL   *20FH#  free ball
-        #     *04EQ+  armado          *07AQ#  ataque
+        # ARRASTRABA la recepcion anterior del mismo punto. Caso real del
+        # 08/09:
+        #     *20RM=   recepcion MAL      *20FH#   free ball
+        #     *04EQ+   armado         *07AQ#   ataque
         # Ese ataque se contaba como "tras recepcion mala" cuando en
         # realidad sale del free ball: es transicion.
         elif skill=='F' and pfx==side:
@@ -157,11 +202,6 @@ def _calc_baterias(codes, side):
         elif skill=='B' and pfx==side:
             Pb=get(num); Pb['B']['T']+=1
             if res in Pb['B']: Pb['B'][res]+=1
-        elif skill=='D' and pfx==side:
-            # Defensa: misma cuenta que el resto. Va DESPUES del corte de
-            # rec_valida de arriba, que solo mira las acciones del rival.
-            Pd=get(num); Pd['D']['T']+=1
-            if res in Pd['D']: Pd['D'][res]+=1
         elif skill=='A' and pfx==side:
             tipo=body[3]  # Q=central · H=alta · T=rápida
             if last_rec is not None and rec_valida:
@@ -200,8 +240,80 @@ def _roundpy(x):
 def _bat_to_pcts(P):
     def atk(d): return _roundpy((d['#']-d['/']-d['='])/d['T']*100) if d['T'] else None
     S,R,B=P['S'],P['R'],P['B']
-    D=P.get('D') or {'#':0,'+':0,'-':0,'/':0,'=':0,'T':0}
+    D=P.get('D') or {'#':0,'+':0,'-':0,'=':0,'T':0}
     return {
+        # El dashboard ya buscaba defT / defPerf / defErr / def: estaba escrito
+        # el lector pero nadie generaba el dato.
+        # ══ EL DESGLOSE, PARA QUE EL JUGADOR VEA DE DONDE SALE EL NUMERO ══════
+        #  Antes solo se exportaba el porcentaje y el total. El jugador veia
+        #  "39%" y no tenia como saber que hizo para llegar ahi.
+        #
+        #  Ahora va tambien cuantas acciones de cada valoracion, asi la
+        #  ventanita puede mostrar la cuenta completa:
+        #     12 perfectas x100 + 30 positivas x75 + ... / 80 = 57
+        'sqD':  {'p':S['#'], 'f':S.get('/',0), 'o':S['+'], 'n':S.get('!',0),
+                 'm':S.get('-',0), 'e':S['=']},
+        'recD': {'p':R['#'], 'o':R['+'], 'n':R.get('!',0), 'm':R.get('-',0),
+                 's':R.get('/',0), 'e':R['=']},
+        'defD': {'p':D['#'], 'o':D['+'], 'n':D.get('!',0), 'm':D.get('-',0),
+                 'e':D['=']},
+        'bqD':  {'p':B['#'], 'o':B['+'], 't':B['T']},
+        'defT':    D['T'],
+        'defPerf': D['#'],
+        'defErr':  D['='],
+        # Tambien las intermedias: sin ellas la pantalla no puede recalcular la
+        # efectividad de un subconjunto de sesiones, y promediar porcentajes de
+        # dias distintos da un numero que no significa nada.
+        'defBuena': D['+'],
+        'defMala':  D['-'],
+        # Misma escala 0-100 que el resto: perfecta 100, buena 75, neutra 50,
+        # mala 25, error 0. Estaba en la escala vieja y daba -44 mientras la
+        # pantalla mostraba 27 para lo mismo.
+        'def':     _roundpy((D['#']+0.75*D['+']+0.5*D['!']+0.25*D['-'])/D['T']*100) if D['T'] else None,
+        # ══ SAQUE Y RECEPCION: ESCALA SIMETRICA ══════════════════════════════
+        # Antes los pesos eran chicos y asimetricos, y sobre todo el saque
+        # negativo y el neutro valian LO MISMO (cero). Un saque que el rival
+        # recibe perfecto no puede puntuar igual que uno que lo incomoda.
+        #
+        # Ahora la escala es simetrica alrededor del neutro: lo que suma un
+        # positivo es exactamente lo que resta un negativo, y los extremos
+        # valen 1. Se mide QUE TAN BIEN SE EJECUTO la accion, no cuanto
+        # ayudo despues a ganar el punto: son dos preguntas distintas y esta
+        # es la que le sirve al entrenador para corregir.
+        #
+        #   SAQUE        #  +1     /  +0,75   +  +0,5   !  0   -  -0,5   =  -1
+        #   RECEPCION    #  +1     +  +0,5    !   0     -  -0,5   /  -0,75   =  -1
+        #
+        # El free ball del saque (/) entra entre el positivo y el ace: la
+        # pelota vuelve sin ataque y eso es casi tan bueno como un punto.
+        # El sobrepase de recepcion (/) entra entre el negativo y el error:
+        # la pelota cruza y el rival ataca de una, pero todavia se puede
+        # defender.
+        #
+        # OJO al leer los numeros: en esta escala el saque del equipo da
+        # negativo casi siempre, porque el 44% de los saques son negativos y
+        # antes valian cero. No es que se saque peor: cambio la vara. Los
+        # objetivos de la pantalla hay que reajustarlos a esta escala.
+        # ── DE 0 A 100, NO DE -100 A +100 ────────────────────────────────────
+        # Mismo criterio de antes, misma jerarquia, mismo orden. Lo unico que
+        # cambia es DONDE esta el cero.
+        #
+        # Con el cero en el medio, cualquier equipo con muchos negativos caia
+        # por debajo de cero, y en saque masculino el negativo es el 40-47% de
+        # las acciones: los OCHO equipos de la liga daban negativo, campeon
+        # incluido. Un numero donde todos son negativos no dice si estas bien
+        # o mal.
+        #
+        # Corriendo la escala con (valor + 1) / 2, cada valoracion queda:
+        #
+        #   SAQUE       #  100    /  87,5   +  75    !  50    -  25    =  0
+        #   RECEPCION   #  100    +  75     !  50    -  25    /  12,5  =  0
+        #
+        # Y el numero se lee solo: 50 es "todo neutro", 25 "todo negativo",
+        # 75 "todo positivo". Es el criterio del Serve Effectiveness Rating,
+        # que tampoco usa negativos.
+        #
+        # Equivalencia exacta con la escala anterior: nuevo = (viejo + 100) / 2
         'sq':    _roundpy((S['#'] + 0.875*S['/'] + 0.75*S['+'] + 0.5*S['!'] + 0.25*S['-'])/S['T']*100) if S['T'] else None,
         'rec':   _roundpy((R['#'] + 0.75*R['+'] + 0.5*R['!'] + 0.25*R['-'] + 0.125*R['/'])/R['T']*100) if R['T'] else None,
         'bqpos': _roundpy((B['#']+B['+'])/B['T']*100) if B['T'] else None,
@@ -213,17 +325,42 @@ def _bat_to_pcts(P):
         'atqri': atk(P['ri']),
         'atqrm': atk(P['rm']),
         'atqtr': atk(P['tr']),
-        # ── Defensa ──────────────────────────────────────────────────────────
-        # Perfectas menos errores sobre el total, la misma forma que usan las
-        # otras pills. 'defT' va aparte porque el recuadro muestra el total de
-        # acciones al lado del porcentaje.
-        'def':      _roundpy((D['#'] + 0.75*D['+'] + 0.5*D['!'] + 0.25*D['-'])/D['T']*100) if D['T'] else None,
-        'defT':     D['T'],
-        'defPerf':  D['#'],
-        'defBuena': D['+'],
-        'defReg':   D.get('!', 0),
-        'defMala':  D['-'],
-        'defErr':   D['='],
+        # ══ SOBRE CUANTAS ACCIONES ESTA HECHA CADA CUENTA ═══════════════════
+        # Un 40% de 5 acciones y un 20% de 238 no valen lo mismo. Mostrar los
+        # dos iguales engana. No se filtra ni se esconde nada —el numero es
+        # real y se va a acomodar solo a medida que se carguen entrenamientos—
+        # pero al lado va sobre cuanto esta calculado, que es lo que permite
+        # leerlo bien.
+        'n_sq':    S['T'],
+        'n_rec':   R['T'],
+        'n_bqpos': B['T'],
+        'n_bqpt':  B['T'],
+        'n_def':   D['T'],
+        # ══ EL DESGLOSE DE CADA ATAQUE ═══════════════════════════════════════
+        #  El ataque no se cuenta como los demas fundamentos. No es un
+        #  promedio ponderado sino una RESTA:
+        #      (puntos - bloqueados - errores) / total
+        #  Por eso puede dar negativo, y por eso la ventanita necesita
+        #  mostrarlo distinto.
+        #
+        #  Se exporta: punto, bloqueado, error y total. Lo que queda —los
+        #  ataques que siguieron en juego— sale de restar.
+        'atqD': {
+            'q':  {'p':P['cent']['#'], 'b':P['cent']['/'], 'e':P['cent']['='], 't':P['cent']['T']},
+            'hb': {'p':P['alta']['#'], 'b':P['alta']['/'], 'e':P['alta']['='], 't':P['alta']['T']},
+            'x':  {'p':P['rap']['#'],  'b':P['rap']['/'],  'e':P['rap']['='],  't':P['rap']['T']},
+            'rp': {'p':P['rp']['#'],   'b':P['rp']['/'],   'e':P['rp']['='],   't':P['rp']['T']},
+            'ri': {'p':P['ri']['#'],   'b':P['ri']['/'],   'e':P['ri']['='],   't':P['ri']['T']},
+            'rm': {'p':P['rm']['#'],   'b':P['rm']['/'],   'e':P['rm']['='],   't':P['rm']['T']},
+            'tr': {'p':P['tr']['#'],   'b':P['tr']['/'],   'e':P['tr']['='],   't':P['tr']['T']},
+        },
+        'n_atqq':  P['cent']['T'],
+        'n_atqhb': P['alta']['T'],
+        'n_atqx':  P['rap']['T'],
+        'n_atqrp': P['rp']['T'],
+        'n_atqri': P['ri']['T'],
+        'n_atqrm': P['rm']['T'],
+        'n_atqtr': P['tr']['T'],
     }
 
 # ══════════ LECTURA DVW ══════════
@@ -261,62 +398,21 @@ def parse_dvw(path):
             names[nn]=re.sub(r'\s+',' ',nom).strip()
 
     scout=txt.split('[3SCOUT]')[-1].strip().splitlines()
-
-    # ── El resultado ────────────────────────────────────────────────────────
-    # Antes esto no se calculaba: habia un comentario que decia "contar de la
-    # meta si esta" y nada mas. La meta salia sin resultado, y las tarjetas de
-    # sesion mostraban 0 sets para el club y pintaban todos los partidos como
-    # derrota.
-    #
-    # El ultimo parcial de cada linea de [3SET] es el resultado del set. Se
-    # cuenta desde el lado del club: si juega de visitante, se dan vuelta.
-    sets_club = sets_riv = 0
-    parciales = []
-    bloque = txt.split('[3SET]')
-    if len(bloque) > 1:
-        for linea in bloque[1].split('[3')[0].strip().splitlines():
-            campos = linea.split(';')
-            if len(campos) < 5: continue
-            m2 = re.match(r'\s*(\d+)\s*-\s*(\d+)', campos[4])
-            if not m2: continue
-            h, a = int(m2.group(1)), int(m2.group(2))
-            nos, ellos = (h, a) if casla_home else (a, h)
-            parciales.append('%d-%d' % (nos, ellos))
-            if nos > ellos: sets_club += 1
-            elif ellos > nos: sets_riv += 1
-
+    # resultado (sets) — simple: contar de la meta si está
     return {'code':code,'rival':rival,'date':date,'side':side,'names':names,'scout':scout,
-            'sets_club':sets_club,'sets_rival':sets_riv,'parciales':parciales}
-
-# ── La temporada, segun el torneo del club ───────────────────────────────────
-# Antes cada generador la calculaba por su cuenta con la regla europea:
-# "arranca en agosto". Eso deja mal etiquetado cualquier torneo con otro
-# calendario —el Metropolitano argentino va de mayo a agosto— y los partidos
-# desaparecen de las pantallas sin ningun aviso: el motor los guarda con una
-# etiqueta y el generador busca otra.
-#
-# Ahora se le pregunta a config_club.json, que es el unico lugar donde vive el
-# calendario de cada torneo. Si el club no lo configuro, se usa la cuenta de
-# siempre y nada cambia.
-def _temp_config(date, carpeta=''):
-    try:
-        import config_club as _cc
-        if _cc.torneos():
-            t = _cc.temporada_de(date, '', carpeta)
-            if t:
-                tor = _cc.resolver_torneo('', carpeta)
-                cfg = _cc.torneos().get(tor) or {}
-                if cfg.get('cruza'):
-                    return "%d/%02d" % (int(t), (int(t) + 1) % 100)
-                return str(t)
-    except Exception:
-        pass
-    return None
-
+            'turno':_turno(base),
+            # cual de los dos equipos es el nuestro: en un entrenamiento el
+            # rival pasa a ser este mismo, sin mirar lo que diga el archivo
+            'nuestro': home_name if casla_home else away_name}
 
 def season_from_date(date):
     """Temporada 'YYYY/YY' desde la fecha. Arranca en agosto, igual que en
-    gen_plan_partido.py: una practica del 30 de julio cae en la anterior."""
+    gen_plan_partido.py: una practica del 30 de julio cae en la anterior.
+
+    Antes de eso se le pregunta a config_club: si el club tiene torneos
+    configurados, la temporada sale de ahi. Es lo que permite que un torneo
+    que NO cruza de anio quede bien etiquetado, en vez de forzarle el
+    '2026/27' que sirve solo cuando todos cruzan."""
     try:
         _t = _temp_config(date)
         if _t: return _t
@@ -325,25 +421,9 @@ def season_from_date(date):
     except Exception: return None
 
 def _norm_temp(t):
-    """Deja la etiqueta de temporada tal como viene.
-
-    Antes convertia '2026' en '2026/27' siempre. Eso servia mientras todos los
-    torneos cruzaban de ano, pero rompe los que empiezan y terminan en el
-    mismo: el motor los guarda como '2026' y esta funcion los buscaba como
-    '2026/27', asi que no encontraba ninguna sesion.
-
-    Si el club configuro torneos, la etiqueta ya viene con la forma correcta
-    desde config_club y no hay que tocarla. Sin configuracion se mantiene la
-    conversion de antes, para no cambiarle nada a los clubes que ya andan.
-    """
+    """Acepta '2026/27' o '2026' y devuelve siempre 'YYYY/YY'."""
     if not t: return None
     t=str(t).strip()
-    try:
-        import config_club as _cc
-        if _cc.torneos():
-            return t
-    except Exception:
-        pass
     if re.fullmatch(r'\d{4}', t):
         y=int(t); return "%d/%02d"%(y,(y+1)%100)
     return t
@@ -358,16 +438,207 @@ def _slug(t):
     t=unicodedata.normalize('NFKD', t or '').encode('ascii','ignore').decode()
     return re.sub(r'[^A-Za-z0-9]+','', t).upper()[:12] or 'SIN'
 
-def _mk_id(code, tipo, date, rival, usados):
+
+def _turno(nombre_archivo):
+    """Doble turno: manana y tarde el mismo dia.
+
+    El DVW NO trae la hora (el campo de [3MATCH] viene vacio), asi que el
+    turno se saca del nombre del archivo. Se aceptan las formas que se usan
+    en la practica, en castellano, ingles y aleman.
+
+    Sin marca devuelve '' y la sesion se trata como unica del dia. Si hay dos
+    sin marca, el _mk_id les pone -2 y no se pisan igual.
+    """
+    # Sufijo corto al final del nombre: "...-M.dvw" o "...-T.dvw". Es lo que
+    # pone el panel al exportar. Se mira SOLO al final, para no confundirlo
+    # con una M o una T que aparezca en el nombre del equipo.
+    import os as _os
+    _base = _os.path.splitext(_os.path.basename(nombre_archivo or ''))[0].upper()
+    if _base.endswith('-M'): return 'M'
+    if _base.endswith('-T'): return 'T'
+    n = (nombre_archivo or '').upper()
+    # Palabras largas: alcanza con que aparezcan.
+    for pal, t in [('MORNING','M'), ('MANANA','M'), ('MAÑANA','M'), ('MORGEN','M'),
+                   ('VORMITTAG','M'), ('TURNO1','M'),
+                   ('AFTERNOON','T'), ('TARDE','T'), ('NACHMITTAG','T'), ('ABEND','T'),
+                   ('EVENING','T'), ('NOCHE','T'), ('TURNO2','T')]:
+        if pal in n: return t
+    # Siglas cortas: tienen que ser palabra suelta. Sin esto, "AMRISWIL"
+    # se leia como "AM" y el partido contra Amriswil quedaba marcado
+    # como entrenamiento de manana.
+    for pal, t in [('AM','M'), ('T1','M'), ('PM','T'), ('T2','T')]:
+        if re.search(r'(?<![A-Z0-9])' + pal + r'(?![A-Z0-9])', n): return t
+    return ''
+
+
+def _plantel_club():
+    """Los numeros del plantel del club, de plantel_<club>.js."""
+    global _PC
+    try:
+        return _PC
+    except NameError:
+        pass
+    import glob as _g, re as _r, os as _o
+    out = {}
+    for f in _g.glob(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)), 'plantel_*.js')):
+        try: t = open(f, encoding='utf-8', errors='replace').read()
+        except Exception: continue
+        for m in _r.finditer(r'\{\s*num:\s*(\d+)[^}]*?ap:\s*"([^"]*)"', t):
+            out[int(m.group(1))] = m.group(2).strip()
+    _PC = out
+    return out
+
+
+def _es_nuestro_equipo(nombre):
+    """Si este nombre de equipo es el club del sistema."""
+    if not nombre:
+        return False
+    import unicodedata as _u, re as _r
+    def _p(x):
+        x = _u.normalize('NFKD', x or '').encode('ascii', 'ignore').decode()
+        return _r.sub(r'[^a-z0-9]', '', x.lower())
+    clave = ''
+    try:
+        if 'NUESTRO' in globals() and NUESTRO and NUESTRO[0]:
+            clave = _p(NUESTRO[0])
+    except Exception:
+        pass
+    if not clave:
+        # el nombre del plantel: plantel_nafels.js -> nafels
+        import glob as _g, os as _o
+        for f in _g.glob(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)), 'plantel_*.js')):
+            clave = _p(_o.path.basename(f)[8:-3])
+            if clave: break
+    if not clave:
+        try:
+            import config_club as _cc
+            clave = _p(_cc.club())
+        except Exception:
+            pass
+    if not clave:
+        return False
+    n = _p(nombre)
+    return clave in n or n in clave
+
+
+def _mk_id(code, tipo, date, rival, usados, turno=''):
     """Un id estable y unico por sesion. Con codigo oficial se usa ese; si no
     —el caso de los entrenamientos— se arma con el tipo, la fecha y el rival."""
-    base = code if code else ('%s%s-%s' % ('E' if tipo=='entrenamiento' else 'P',
-                                           date or 'sinfecha', _slug(rival)))
+    base = code if code else ('%s%s-%s%s' % ('E' if tipo=='entrenamiento' else 'P',
+                                             date or 'sinfecha', _slug(rival),
+                                             ('-'+turno) if turno else ''))
     i, k = base, 2
     while i in usados:
         i = '%s-%d' % (base, k); k += 1
     usados.add(i)
     return i
+
+
+def elegir_mejor_copia(archivos, parse):
+    """Cuando el mismo entrenamiento aparece dos veces, se queda el mas completo.
+
+    POR QUE HACE FALTA
+    El panel arma el nombre del .dvw con la fecha, los equipos y el turno:
+
+        &2026-09-15 AXP-ENTRENAMIENTO-T.dvw
+
+    Ese nombre es SIEMPRE EL MISMO para una sesion. Si se exporta dos veces
+    —a mitad del entrenamiento y otra vez al final, que es lo razonable—
+    Windows no pisa el primero: guarda el segundo como
+
+        &2026-09-15 AXP-ENTRENAMIENTO-T (1).dvw
+
+    Y si los dos van a la carpeta, el sistema ve DOS entrenamientos donde hay
+    uno solo. Peor: el que exportaste a mitad tiene MENOS acciones, y si se
+    procesara ese se estarian perdiendo datos sin que nadie lo note.
+
+    Aca se agrupan por (fecha, turno, rival) y se elige el que MAS acciones
+    tiene, que es siempre el mas completo. Los otros se descartan y se avisa
+    por pantalla, con nombre y cantidad, para que se vea que paso.
+    """
+    import collections, os
+    grupos = collections.OrderedDict()
+    for f in archivos:
+        r = parse(f)
+        if not r: continue
+        clave = (r.get('date',''), r.get('turno',''), _slug(r.get('rival','')))
+        grupos.setdefault(clave, []).append((f, r, len(r.get('scout') or [])))
+
+    elegidos = []
+    for clave, lista in grupos.items():
+        if len(lista) == 1:
+            elegidos.append(lista[0][:2]); continue
+        lista.sort(key=lambda x: -x[2])          # el de mas acciones primero
+        mejor = lista[0]
+        print('[baterias] MISMA SESION EN %d ARCHIVOS (%s turno %s):'
+              % (len(lista), clave[0], clave[1] or '-'))
+        for f, r, n in lista:
+            marca = '  <-- ME QUEDO CON ESTE' if f == mejor[0] else '      descartado'
+            print('           %-52s %4d acciones%s' % (os.path.basename(f)[:52], n, marca))
+        elegidos.append(mejor[:2])
+    return elegidos
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  EL MISMO JUGADOR, ESCRITO DISTINTO EN CADA ARCHIVO
+#  ------------------------------------------------------------------------
+#  Los jugadores se identificaban por el NOMBRE que trae cada .dvw. Pero el
+#  nombre lo escribe el scout a mano, y no siempre igual. En los archivos de
+#  Näfels aparecen estas tres:
+#
+#      #2   BRUDERER  /  GIAN        (apellido en uno, nombre en el otro)
+#      #7   SCHMID    /  SCHIMD      (una letra cambiada)
+#      #20  SCHMID    /  SCHIMD
+#
+#  Resultado: el mismo jugador quedaba partido en DOS fichas con la mitad de
+#  las acciones cada una, y en el listado del dashboard directamente no
+#  aparecia —el #2 Bruderer faltaba—.
+#
+#  El numero de camiseta SI es confiable: es el que se tipea en cada codigo y
+#  el que usa DataVolley. Asi que el jugador se identifica por numero, y el
+#  nombre se toma del archivo mas reciente que lo tenga.
+# ══════════════════════════════════════════════════════════════════════════
+def _unificar_por_numero(matches):
+    """Un nombre por numero de camiseta, para todos los archivos."""
+    #  CUAL DE LAS VERSIONES GANA
+    #  Antes ganaba la mas larga, y con "SCHMID ROY" / "SCHIMD ROY" —que miden
+    #  igual— quedaba la primera que apareciera: podia quedar el error de
+    #  tipeo como nombre oficial del jugador.
+    #
+    #  Ahora gana la que MAS VECES aparece en los archivos: si el scout la
+    #  escribio bien cuatro veces y mal una, queda la buena. Si empatan, se
+    #  prefiere la que esta toda en mayusculas —el formato del resto del
+    #  plantel— y recien despues la mas larga.
+    import collections as _c
+    cuenta = _c.defaultdict(_c.Counter)
+    for m in matches:
+        for num, nom in (m.get('names') or {}).items():
+            if not nom: continue
+            n = str(num).lstrip('0') or str(num)
+            cuenta[n][nom] += 1
+
+    canon = {}
+    for n, opciones in cuenta.items():
+        canon[n] = sorted(
+            opciones.items(),
+            key=lambda x: (-x[1], 0 if x[0].isupper() else 1, -len(x[0]), x[0])
+        )[0][0]
+    for m in matches:
+        nombres = m.get('names') or {}
+        nuevo = {}
+        for num, P in (m.get('jug') or {}).items():
+            pass
+        # reescribir jug con el nombre canonico
+        rev = {}
+        for num, nom in nombres.items():
+            n = str(num).lstrip('0') or str(num)
+            rev[nom] = canon.get(n, nom)
+        jug2 = {}
+        for nom, P in (m.get('jug') or {}).items():
+            jug2[rev.get(nom, nom)] = P
+        m['jug'] = jug2
+        m['names'] = {k: canon.get(str(k).lstrip('0') or str(k), v) for k, v in nombres.items()}
+    return canon
 
 def build(fuentes, out='datos_baterias.js', filtro_temp=None):
     """fuentes: lista de (carpeta, tipo) con tipo 'partido' o 'entrenamiento'.
@@ -392,24 +663,51 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
         if filtro_temp and temp_carpeta and temp_carpeta != filtro_temp:
             print('[baterias] "%s" es de la %s, no de la %s: la salteo' % (folder, temp_carpeta, filtro_temp))
             continue
-        for f in sorted(glob.glob(os.path.join(folder,'*.dvw'))):
-            r=parse_dvw(f)
-            if not r: continue
+        _todos = sorted(glob.glob(os.path.join(folder,'*.dvw')))
+        for f, r in elegir_mejor_copia(_todos, parse_dvw):
             if filtro_temp and not temp_carpeta and season_from_date(r['date']) != filtro_temp: continue
-            sid=_mk_id(r['code'], tipo, r['date'], r['rival'], usados)
+            # ══ EN UN ENTRENAMIENTO NO HAY RIVAL ═══════════════════════════
+            # El scout escribe cualquier cosa en el casillero del visitante
+            # —PRUEBA, CAMPANA, lo que sea— y eso terminaba inventando equipos
+            # en el sistema. En una practica los dos lados son el club, punto.
+            # Asi lo escribe DataVolley y asi se toma aca, sin depender de lo
+            # que diga el archivo.
+            if tipo == 'entrenamiento':
+                r['rival'] = r.get('nuestro') or r['rival']
+            sid=_mk_id(r['code'], tipo, r['date'], r['rival'], usados, r.get('turno',''))
             pl=_calc_baterias(r['scout'], r['side'])
             jug={}
             for num,P in pl.items():
                 if num=='__EQUIPO__': continue
+                # ══ SOLO LOS DEL PLANTEL ══════════════════════════════════
+                #  En los entrenamientos aparecen numeros que no son
+                #  jugadores del equipo:
+                #     #8  la MAQUINA DE SAQUE, que se scoutea con un numero
+                #         para poder hacer el ejercicio
+                #     #6  un invitado que entreno un dia suelto
+                #
+                #  Ya los habiamos sacado del plan de partido, pero el
+                #  dashboard lee de ESTE motor y seguian apareciendo. Sus
+                #  acciones quedan en la base —existieron— pero no ensucian
+                #  las baterias del equipo.
+                #
+                #  El filtro usa plantel_<club>.js, la fuente unica. Si
+                #  manana el invitado se suma, se lo agrega ahi y aparece
+                #  solo. De los RIVALES no se filtra: no tenemos su plantel.
+                if _es_nuestro_equipo(r.get('nuestro') or r.get('rival')):
+                    if _plantel_club() and int(num) not in _plantel_club():
+                        continue
                 nom=r['names'].get(num)
                 if not nom: continue
                 jug[nom]=_bat_to_pcts(P)
             eq=_bat_to_pcts(pl['__EQUIPO__']) if '__EQUIPO__' in pl else {}
-            matches.append({'id':sid,'tipo':tipo,'rival':r['rival'],'fecha':r['date'],
-                            'sets_club':r.get('sets_club',0),'sets_rival':r.get('sets_rival',0),
-                            'parciales':r.get('parciales',[]),
+            matches.append({'id':sid,'tipo':tipo,'rival':r['rival'],'fecha':r['date'],'turno':r.get('turno',''),
                             'jug':jug,'eq':eq,'_acum':pl,'names':r['names']})
 
+    # un solo nombre por numero de camiseta, antes de acumular nada
+    _canon = _unificar_por_numero(matches)
+    for _n, _nom in sorted(_canon.items(), key=lambda x: int(x[0]) if x[0].isdigit() else 99):
+        pass
     matches.sort(key=lambda m:(m['fecha'], m['id']))
 
     def acumular(lista):
@@ -426,9 +724,16 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
                 for sec2 in P:
                     for k in P[sec2]: acc[nom][sec2][k]+=P[sec2][k]
         jug_a={nom:_bat_to_pcts(acc[nom]) for nom in acc}
-        # El total del equipo incluye a TODOS. Antes se sumaba solo a los
-        # jugadores con nombre reconocido, y por eso el acumulado no
-        # coincidia con la suma de las sesiones.
+        # ── EL TOTAL DEL EQUIPO INCLUYE A TODOS ──────────────────────────────
+        # Antes el acumulado se armaba sumando solo a los jugadores con nombre
+        # reconocido, porque arriba se saltean los que no lo tienen ("if not
+        # nom: continue"). Pero el total POR SESION si los cuenta, asi que el
+        # numero del acumulado no coincidia con el de las sesiones: 37 contra
+        # 39 con las mismas cuatro practicas.
+        #
+        # Cada sesion ya trae su __EQUIPO__, que es la suma de TODOS los
+        # jugadores. Sumando esos, el acumulado y las sesiones dicen lo mismo.
+        # Los promedios por jugador siguen igual: ahi si hace falta el nombre.
         eq_acc=_bat_nuevo()
         for m in lista:
             E=m['_acum'].get('__EQUIPO__')
@@ -446,9 +751,7 @@ def build(fuentes, out='datos_baterias.js', filtro_temp=None):
                        'ids':[m['id'] for m in sub]}
 
     meta=[{'id':m['id'],'tipo':m['tipo'],'rival':m['rival'],'nombre':m['rival'],'fecha':m['fecha'],
-           'sets_club':str(m.get('sets_club',0)),'sets_rival':str(m.get('sets_rival',0)),
-           'resultado':[m.get('sets_club',0), m.get('sets_rival',0)],
-           'parciales':m.get('parciales',[])} for m in matches]
+           'turno':m.get('turno','')} for m in matches]
     ind=[{'id':m['id'],'tipo':m['tipo'],'jug':m['jug'],'eq':m['eq']} for m in matches]
     OUT={'total':len(matches),'meta':meta,'jug':jug_acum,'ind':ind,'eq':eq_acum,
          'porTipo':porTipo,'temporada':filtro_temp or ''}
@@ -500,7 +803,7 @@ if __name__=='__main__':
     if not fuentes:
         print('[baterias] ERROR: no hay ninguna carpeta de DVW para procesar.'); sys.exit(1)
 
-    # El club sale del nombre de la carpeta: "DVW NAFELS 2026" -> "gelp".
+    # El club sale del nombre de la carpeta: "DVW NAFELS 2026" -> "nafels".
     # Es lo mismo que hace el resto de los motores. Se deduce UNA vez, con la
     # primera carpeta que exista: las dos son del mismo club, y la palabra
     # ENTRENAMIENTOS se descarta para que las dos den el mismo nombre.

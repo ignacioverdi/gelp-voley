@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 gen_bloqueo.py — Genera datos_bloqueo.js (acciones de bloqueo por zona de origen
-del ataque rival) leyendo el video de partidos. Sirve para CASLA y NAFELS.
+del ataque rival) leyendo el video de partidos.
 
 - Auto-detecta el archivo de video (datos_video*.js, ignora los de entrenamiento).
 - Auto-detecta los equipos desde plan_partido_data.js (mapea slugs).
@@ -35,7 +35,16 @@ def zone_of(combo):
     if p in ("XP","VP","XB","XR","VB","VR"): return "8"
     return "3"   # central por defecto
 
-RENAME_TEAM = {"gelp":"sanlorenzo"}  # slug de video -> slug de PP_DATA (casos especiales)
+# ══ EQUIVALENCIAS DE NOMBRE ═════════════════════════════════════════════════
+#  Vacia a proposito. Aca iba una correccion de otro club, de cuando migro de
+#  una app a otra y el equipo se llamaba distinto en el video que en el plan.
+#
+#  Solo hace falta llenarla si TU equipo aparece con un slug en los videos y
+#  con otro en el plan de partido:
+#      RENAME_TEAM = {"comoFiguraEnElVideo": "comoFiguraEnElPlan"}
+#
+#  Si queda vacia no pasa nada: el nombre se usa tal cual viene.
+RENAME_TEAM = {}
 
 def _balance(txt, start):
     """Devuelve el objeto {...} balanceado desde 'start' (saltea strings)."""
@@ -124,8 +133,21 @@ def _sumar_tiempos_del_video(vp, out='datos_bloqueo.js'):
 
         # (partido, dorsal, cuantos van) -> segundo
         tiempos = {}
+        # ══ EL MISMO ENTRENAMIENTO SE LLAMA DISTINTO EN CADA ARCHIVO ═════════
+        # El de video lo nombra por fecha:      ENT20260907
+        # El de bloqueo como gen_plan_partido:  E2026-09-07-PRAAXPONAFEL
+        # Emparejando por codigo no coinciden nunca, y los bloqueos de
+        # entrenamiento quedaban sin segundo: el clip abria en el momento
+        # equivocado, desincronizado con el video del ataque.
+        #
+        # Lo que SI comparten es la fecha. Se arma un segundo indice por fecha
+        # y se usa cuando el codigo no alcanza. Los partidos siguen igual: ahi
+        # el codigo numerico coincide y se resuelve en el primer intento.
+        por_fecha = {}
         for cod, m in ms.items():
             visto = {}
+            fecha = re.sub(r'\D', '', str(m.get('date') or ''))
+            vistof = {}
             for a in (m.get('actions') or []):
                 if a.get('skill') != 'B':
                     continue
@@ -133,8 +155,12 @@ def _sumar_tiempos_del_video(vp, out='datos_bloqueo.js'):
                 k = (cod, num)
                 visto[k] = visto.get(k, 0) + 1
                 tiempos[(cod, num, visto[k])] = a.get('t')
+                if fecha:
+                    kf = (fecha, num)
+                    vistof[kf] = vistof.get(kf, 0) + 1
+                    por_fecha[(fecha, num, vistof[kf])] = a.get('t')
 
-        if not tiempos:
+        if not tiempos and not por_fecha:
             return
 
         txt = io.open(out, encoding='utf-8', errors='replace').read()
@@ -152,6 +178,10 @@ def _sumar_tiempos_del_video(vp, out='datos_bloqueo.js'):
                     cod = a[4] if len(a) > 4 else ''
                     cuenta[cod] = cuenta.get(cod, 0) + 1
                     t = tiempos.get((cod, num, cuenta[cod]))
+                    if t is None:
+                        _f = re.search(r'(20\d\d)-?(\d\d)-?(\d\d)', str(cod))
+                        if _f:
+                            t = por_fecha.get((''.join(_f.groups()), num, cuenta[cod]))
                     if t is not None and len(a) > 3:
                         a[3] = t
                         puestos += 1
@@ -165,6 +195,149 @@ def _sumar_tiempos_del_video(vp, out='datos_bloqueo.js'):
         pass      # sin tiempos igual funciona: solo no se abre el clip
 
 
+
+def _inicio_temporada():
+    """El 1 de julio del anio en que arranca la temporada en curso.
+
+    Se deduce de temporadas.js, que lista las temporadas ARCHIVADAS: la que
+    sigue a la ultima archivada es la que se esta jugando. Si el archivo no
+    esta, se usa el anio actual (julio a junio).
+    """
+    import datetime
+    ult = 0
+    try:
+        t = open('temporadas.js', encoding='utf-8', errors='replace').read()
+        for m in re.finditer(r"id\s*:\s*[\'\"]((?:19|20)?\d{2})-(\d{2})[\'\"]", t):
+            a = m.group(1)
+            a = int(a) if len(a) == 4 else 2000 + int(a)
+            if a > ult: ult = a
+    except Exception:
+        pass
+    if ult:
+        return (ult + 1) * 10000 + 701
+    hoy = datetime.date.today()
+    a = hoy.year if hoy.month >= 7 else hoy.year - 1
+    return a * 10000 + 701
+
+
+_INI_TEMP = [None]
+_fuera_temp_dvw = [0]
+
+
+def _de_la_temporada(fecha):
+    """True si esa fecha cae dentro de la temporada en curso."""
+    if _INI_TEMP[0] is None:
+        _INI_TEMP[0] = _inicio_temporada()
+    d = re.sub(r'\D', '', str(fecha or ''))
+    if len(d) != 8:
+        return True            # sin fecha no se descarta: mejor de mas
+    return int(d) >= _INI_TEMP[0]
+
+
+def _fecha_dvw(ruta, txt):
+    """La fecha del partido, en aaaammdd.
+
+    Se usa el NOMBRE DEL ARCHIVO, que en este club siempre arranca con la
+    fecha ISO:  &2025-10-11 636587 AMRI-LUC(VM).dvw
+
+    No se usa el [3MATCH] del .dvw porque viene en formato de Estados Unidos
+    —mes/dia/anio— y sin saber cual es cual se confunden, por ejemplo, el 7 de
+    enero con el 1 de julio. El nombre no tiene esa ambiguedad.
+    """
+    m = re.search(r'(20\d\d)-(\d\d)-(\d\d)', os.path.basename(ruta))
+    if m:
+        return m.group(1) + m.group(2) + m.group(3)
+    # Sin fecha en el nombre, se prueba el [3MATCH] asumiendo mm/dd/aaaa,
+    # que es como lo escribe DataVolley.
+    try:
+        mm = re.search(r'\[3MATCH\]\s*\n([^\n]*)', txt)
+        if mm:
+            c = mm.group(1).split(';')
+            d = re.sub(r'\D', '', c[0]) if c else ''
+            if len(d) == 8:
+                aa, m1, m2 = d[4:], int(d[:2]), int(d[2:4])
+                # DataVolley escribe mm/dd/aaaa. Si el primer numero pasa de
+                # 12 no puede ser un mes, asi que ahi viene dd/mm/aaaa.
+                if m1 > 12: m1, m2 = m2, m1
+                if 1 <= m1 <= 12 and 1 <= m2 <= 31:
+                    return '%s%02d%02d' % (aa, m1, m2)
+    except Exception:
+        pass
+    return None
+
+
+
+def _plantel_maestro():
+    """{numero: apellido} del plantel del club, de plantel_<club>.js.
+
+    ══ POR QUE HACE FALTA ═══════════════════════════════════════════════════
+    El nombre de cada jugador sale del .dvw, del bloque [3PLAYERS]. Pero en
+    varios archivos ese bloque viene incompleto y el jugador quedaba como
+    "#7" o "#9", sin apellido, aunque en el plantel del club esta cargado
+    desde siempre.
+
+    En pantalla se veia asi:
+        #7 (65)  ·  #9 (21)  ·  #4 (13)  ·  #3 (6)
+
+    Ahora, cuando el .dvw no trae el nombre, se completa con el plantel. Si
+    tampoco esta ahi —un invitado que vino a entrenar un dia— queda el numero
+    solo, que es lo correcto: no se inventa nada.
+    """
+    global _PLANTEL_CACHE
+    try:
+        return _PLANTEL_CACHE
+    except NameError:
+        pass
+    out = {}
+    for f in glob.glob('plantel_*.js'):
+        try:
+            t = open(f, encoding='utf-8', errors='replace').read()
+        except Exception:
+            continue
+        for m in re.finditer(r'\{[^}]*?num:\s*(\d+)[^}]*?\}', t):
+            b = m.group(0)
+            ap = re.search(r'ap:\s*"([^"]*)"', b)
+            if ap and ap.group(1).strip():
+                out[str(int(m.group(1)))] = ap.group(1).strip()
+    _PLANTEL_CACHE = out
+    if out:
+        print('[bloqueo] plantel: %d jugadores para completar nombres (%s)'
+              % (len(out), ', '.join('#%s %s' % (k, v)
+                 for k, v in sorted(out.items(), key=lambda x: int(x[0]))[:4]) + '...'))
+    else:
+        print('[bloqueo] AVISO: no encontre plantel_*.js en esta carpeta.')
+        print('[bloqueo] Los jugadores sin nombre en el .dvw van a quedar con')
+        print('[bloqueo] el numero solo (#7, #9...). Revisa que plantel_<club>.js')
+        print('[bloqueo] este junto a gen_bloqueo.py.')
+    return out
+
+
+_COMPLETADOS = set()
+
+
+def _nombre_de(num, nombre):
+    """El nombre que va en pantalla: el del .dvw, y si no el del plantel.
+
+    Se acepta cualquier cosa que parezca un nombre. Si lo que trae el .dvw es
+    el numero, una letra suelta o esta vacio, se busca en el plantel.
+    """
+    n = (nombre or '').strip()
+    k = str(num).lstrip('0') or str(num)
+    # Un nombre de verdad tiene al menos dos letras. '7', '#7' o '' no lo son.
+    import re as _re
+    if len(_re.sub(r'[^A-Za-zÁÉÍÓÚÑáéíóúñ]', '', n)) >= 2:
+        return n
+    delplantel = _plantel_maestro().get(k)
+    if delplantel:
+        if k not in _COMPLETADOS:
+            _COMPLETADOS.add(k)
+        return delplantel
+    # Si no esta en el plantel —un invitado que vino un dia— se devuelve
+    # VACIO, no '#6'. La pantalla ya escribe el numero adelante, asi que
+    # devolver '#6' hacia que se leyera "#6 #6 (5)".
+    return ''
+
+
 def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     """Arma datos_bloqueo.js leyendo los .dvw, sin depender del video.
 
@@ -174,12 +347,24 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
     """
     import glob as _g
 
+    # Antes se excluian las carpetas con 'ENTREN' en el nombre: el bloqueo era
+    # solo de partidos. Pero los entrenamientos tambien se scoutean con B, y
+    # esos bloqueos no aparecian en ningun lado. Ahora entran las dos, y de
+    # cada archivo se recuerda SI viene de una carpeta de entrenamiento,
+    # porque de eso dependen el codigo de la sesion y su tipo.
+    #
+    # La carpeta de HIGH SET queda afuera: es de un ejercicio puntual y su
+    # .dvw suele ser el MISMO de una practica que ya esta en la carpeta de
+    # entrenamientos. Sin excluirla, los mismos bloqueos entraban dos veces.
     carpetas = [d for d in os.listdir('.')
                 if os.path.isdir(d) and d.upper().startswith('DVW')
-                and 'ENTREN' not in d.upper()]
+                and 'HIGH SET' not in d.upper()]
     archivos = []
+    ES_ENT = {}
     for c in carpetas:
-        archivos += _g.glob(os.path.join(c, '*.dvw'))
+        _ent = ('ENTREN' in c.upper())
+        for _f in _g.glob(os.path.join(c, '*.dvw')):
+            archivos.append(_f); ES_ENT[_f] = _ent
     if not archivos:
         return 0
 
@@ -204,13 +389,35 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
             kk = re.sub(r'[^a-z0-9]', '', _sinacento(str(k)).lower())
             if kk and (kk == pl or kk in pl):
                 return re.sub(r'[^a-z0-9]', '', _sinacento(str(v)).lower())
+        # ── Y al reves: el nombre que viene, adentro del configurado ────
+        # La tabla suele tener el nombre CON el sufijo de la liga —"Chenois
+        # Geneve Volleyball (NLA Men)"— y hay .dvw que lo traen sin el. Sin
+        # esta vuelta el equipo entra dos veces: una con su nombre corto y
+        # otra con el largo.
+        if len(pl) >= 8:
+            for k, v in TABLA.items():
+                kk = re.sub(r'[^a-z0-9]', '', _sinacento(str(k)).lower())
+                if kk and pl in kk:
+                    return re.sub(r'[^a-z0-9]', '', _sinacento(str(v)).lower())
         return re.sub(r'[^a-z0-9]', '', _sinacento(largo.split('(')[0]).lower())
 
     BLOCK = {}
     for ruta in sorted(archivos):
         try:
             with open(ruta, 'rb') as f:
-                txt = f.read().decode('latin-1', 'replace').replace('\r\n', '\n')
+                # ══ La codificacion se decide por CONTENIDO ═════════════
+                # DataVolley escribe en Windows-1252 y VolleyMetrics en UTF-8.
+                # Leerlos siempre igual duplica los acentos de la mitad, y
+                # entonces el mismo club entra dos veces en el mapa con
+                # nombres distintos.
+                _b = f.read()
+                _A = 'áéíóúàèìòùäëïöüâêîôûñçÁÉÍÓÚÄÖÜÑÇ'
+                _B = ('Ã¤','Ã¶','Ã¼','Ã©','Ã¨','Ãª','Ã¡','Ã³','Ã­','Ã±','Ã§')
+                _p = lambda x: (sum(x.count(c) for c in _A)
+                                - sum(x.count(z) for z in _B) * 3)
+                _u = _b.decode('utf-8', 'ignore')
+                _l = _b.decode('latin-1', 'replace')
+                txt = (_u if _p(_u) >= _p(_l) else _l).replace('\r\n', '\n')
         except Exception:
             continue
 
@@ -236,6 +443,20 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
         ms = re.search(r'\[3SCOUT\](.*)', txt, re.S)
         if not ms:
             continue
+
+        # ══ SOLO LA TEMPORADA EN CURSO ═══════════════════════════════════════
+        #  La carpeta DVW NAFELS 2026 tiene 97 partidos de la 25-26 mezclados
+        #  con los de la temporada nueva. gen_plan_partido ya los descarta
+        #  ("97 fuera"), pero aca entraban todos: de ahi salian los 1356
+        #  bloqueos viejos, con jugadores que ya no estan en el plantel.
+        #
+        #  Los entrenamientos no se filtran: su carpeta ya es de una sola
+        #  temporada.
+        if not ES_ENT.get(ruta):
+            _f = _fecha_dvw(ruta, txt)
+            if _f and not _de_la_temporada(_f):
+                _fuera_temp_dvw[0] += 1
+                continue
         # ── El identificador del partido ────────────────────────────────
         # Tiene que ser EL MISMO que arma gen_plan_partido.py, o la pantalla
         # descarta todo: filtra los bloqueos contra la lista de partidos
@@ -252,7 +473,11 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
             import unicodedata as _u
             _t = _u.normalize('NFKD', os.path.splitext(_fn)[0]).encode('ascii', 'ignore').decode()
             _t = re.sub(r'[^A-Za-z0-9]+', '', _t).upper()[:12] or 'SIN'
-            mid = 'P' + _b + '-' + _t
+            # gen_plan_partido pone 'E' cuando es entrenamiento y 'P' cuando es
+            # partido. Aca iba 'P' siempre, asi que un entrenamiento quedaba
+            # como P2026-09-07-... contra el E2026-09-07-... de la pantalla:
+            # no coincidian nunca y los bloqueos se descartaban en silencio.
+            mid = ('E' if ES_ENT.get(ruta) else 'P') + _b + '-' + _t
 
         combo = ''
         zona = ''
@@ -284,8 +509,9 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
                 if not eq:
                     continue
                 BLOCK.setdefault(eq, {}).setdefault(
-                    num, {'name': nombres.get((lado, num), '#' + num), 'data': []}
-                )['data'].append([combo, zona, ev, '', mid, fase, 'partido'])
+                    num, {'name': _nombre_de(num, nombres.get((lado, num))), 'data': []}
+                )['data'].append([combo, zona, ev, '', mid, fase,
+                                  'entrenamiento' if ES_ENT.get(ruta) else 'partido'])
 
     if not BLOCK:
         return 0
@@ -321,8 +547,22 @@ def autodetect_video():
 
 def pp_team_info():
     # {team: set(mids)} desde plan_partido_data.js (ya viene filtrado por temporada).
-    # None si no existe el archivo -> no se filtra (se incluye todo).
-    if not os.path.isfile('plan_partido_data.js'): return None
+    #
+    # ══ SI ESTE ARCHIVO NO ESTA, NO SE FILTRA NADA ═══════════════════════════
+    #  Y eso es grave: entran TODOS los bloqueos de todas las temporadas. Fue
+    #  lo que paso: en la 26-27, sin partidos jugados todavia, el mapa mostraba
+    #  los 1356 bloqueos de la 25-26.
+    #
+    #  La causa era el ORDEN: gen_bloqueo corria ANTES que gen_plan_partido, asi
+    #  que leia un plan viejo o ninguno. Ya se corrigio en HACER_TODO.
+    #
+    #  Igual, si el archivo falta se avisa fuerte en vez de seguir callado.
+    if not os.path.isfile('plan_partido_data.js'):
+        print('[bloqueo] AVISO: no encuentro plan_partido_data.js.')
+        print('[bloqueo] Sin ese archivo NO se puede filtrar por temporada y')
+        print('[bloqueo] entrarian bloqueos de temporadas viejas.')
+        print('[bloqueo] Corre gen_plan_partido.py ANTES que este.')
+        return None
     txt=open('plan_partido_data.js',encoding='utf-8',errors='replace').read()
     m=re.search(r'PP_DATA\s*=\s*(\{)', txt)
     if not m: return None
@@ -427,7 +667,7 @@ def build(fuentes, out='datos_bloqueo.js'):
                 _al=info_map.get(key)
                 if _al is None or mid not in _al: fuera_temp+=1; continue  # fuera de la temporada actual / equipo no seguido
             num=str(a.get('num') or '').lstrip('0') or str(a.get('num'))
-            BLOCK.setdefault(key,{}).setdefault(num,{'name':a.get('name'),'data':[]})['data'].append(
+            BLOCK.setdefault(key,{}).setdefault(num,{'name':_nombre_de(num, a.get('name')),'data':[]})['data'].append(
                 [combo, rz, a.get('ev'), t, mid, ph, TIPO_DE.get(mid,'partido')])
 
     _PUE = _puestos_del_club()
@@ -482,7 +722,16 @@ if __name__=='__main__':
     n = bloqueo_desde_dvw('datos_bloqueo.js')
     if n:
         print('[bloqueo] %d bloqueos leidos de los .dvw' % n)
+        if _fuera_temp_dvw[0]:
+            print('[bloqueo] %d partidos de temporadas anteriores, descartados.'
+                  % _fuera_temp_dvw[0])
         _sumar_tiempos_del_video(vp, 'datos_bloqueo.js')
+        # El video de ENTRENAMIENTOS es otro archivo. Se detecta mas arriba
+        # pero nunca se abria: solo se aplicaban los tiempos del video de
+        # partidos. Por eso los bloqueos de entrenamiento quedaban sin segundo
+        # y el clip arrancaba en cualquier lado, desincronizado del ataque.
+        for _f in _ent:
+            _sumar_tiempos_del_video(_f, 'datos_bloqueo.js')
         sys.exit(0)
 
     if not vp or not os.path.isfile(vp):
