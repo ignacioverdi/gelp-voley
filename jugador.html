@@ -386,7 +386,9 @@ function renderObjetivosJugador(cid, jugVals, eqVals){
           cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
         }
-        return objSingleBat(id,val,m,cls,objLine);
+                /* Faltaba el sexto parametro: el desglose de la fila. Sin el la
+           bateria se dibuja pero al tocarla no abre nada. */
+return objSingleBat(id, val, m, cls, objLine, row.vals);
       }).join('')+'</div>';
   });
   html+='</div>';

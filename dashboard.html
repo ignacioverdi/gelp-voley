@@ -410,7 +410,13 @@ function dbatRender(cid, jugVals, eqVals){
           cls=val!==null?objClassify(id,val):{color:'#64748b',bg:'rgba(51,65,85,.08)',border:'rgba(51,65,85,.2)',label:'—'};
           objLine=m.obj;
         }
-        return objSingleBat(id,val,m,cls,objLine);
+        /* ══ FALTABA PASARLE LOS DATOS ════════════════════════════════════
+           objSingleBat recibe un sexto parametro con el desglose de la fila
+           —cuantas perfectas, cuantas positivas, cuantos errores—. Sin el, la
+           bateria se dibuja igual pero queda MUERTA: al tocarla no abre nada,
+           porque no tiene que mostrar.
+           row.vals ya estaba ahi arriba; solo habia que pasarlo. */
+        return objSingleBat(id,val,m,cls,objLine,row.vals);
       }).join('')+'</div>';
   });
   html+='</div>';
