@@ -129,9 +129,32 @@ def is_casla(n):
     import unicodedata
     if not n: return False
     t = unicodedata.normalize('NFKD', n).encode('ascii', 'ignore').decode().lower()
+    plano = re.sub(r'[^a-z0-9]', '', t)
+
+    # ══ TAMBIEN POR EL NOMBRE LARGO ══════════════════════════════════════════
+    #  La clave sale del nombre de la carpeta: "DVW GELP 2026" da "gelp". Pero
+    #  en el .dvw el club figura con su nombre completo:
+    #      "Club Gimnasia y Esgrima de La Plata"
+    #  y "gelp" no aparece ahi. Resultado: parse_dvw devolvia None para TODOS
+    #  los partidos, el generador decia "0 sesiones" y datos_baterias.js salia
+    #  vacio (3 KB). Las baterias se dibujaban sin datos.
+    #
+    #  Ahora se prueba tambien con lo que declara config_club: el nombre
+    #  completo y el equipo propio.
+    try:
+        import config_club as _cc
+        for _cand in (_cc.nombre_completo(), _cc.equipo_propio()):
+            if not _cand: continue
+            _c = unicodedata.normalize('NFKD', _cand).encode('ascii','ignore').decode().lower()
+            _c = re.sub(r'[^a-z0-9]', '', _c)
+            if _c and (_c in plano or plano in _c):
+                return True
+    except Exception:
+        pass
+
     clave = (NUESTRO[0] or '').lower()
     if not clave: return False
-    return clave in re.sub(r'[^a-z]', '', t) or clave in t
+    return clave in plano or clave in t
 def norm_team(name):
     n=(name or '').strip()
     if n in TEAM_NORM: return TEAM_NORM[n]
@@ -509,6 +532,26 @@ def _es_nuestro_equipo(nombre):
         for f in _g.glob(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)), 'plantel_*.js')):
             clave = _p(_o.path.basename(f)[8:-3])
             if clave: break
+    # ══ TAMBIEN POR EL NOMBRE LARGO ══════════════════════════════════════════
+    #  En los .dvw el club figura con su nombre completo:
+    #      "Club Gimnasia y Esgrima de La Plata"
+    #  y el sistema lo buscaba solo por la sigla del plantel ("gelp"). No
+    #  coincidian, asi que NINGUN partido se reconocia como propio: el
+    #  generador decia "Equipos: 0" y datos_baterias.js salia vacio.
+    #
+    #  Ahora tambien se prueba con el nombre completo de config_club.
+    try:
+        import config_club as _cc
+        _largo = _p(_cc.nombre_completo() or '')
+        _propio = _p(_cc.equipo_propio() or '')
+        _n = _p(nombre)
+        if _largo and (_largo in _n or _n in _largo):
+            return True
+        if _propio and (_propio in _n or _n in _propio):
+            return True
+    except Exception:
+        pass
+
     if not clave:
         try:
             import config_club as _cc
