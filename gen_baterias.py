@@ -444,12 +444,43 @@ def season_from_date(date):
     except Exception: return None
 
 def _norm_temp(t):
-    """Acepta '2026/27' o '2026' y devuelve siempre 'YYYY/YY'."""
+    """Deja la temporada en el formato que usa ESTE club.
+
+    ══ POR QUE NO SIEMPRE ES 'YYYY/YY' ═══════════════════════════════════════
+    Antes esto convertia siempre '2026' en '2026/27'. Sirve para las ligas que
+    cruzan de anio —agosto a mayo—, pero no para las que empiezan y terminan
+    en el mismo:
+
+        HACER_TODO pasa      '2026'
+        _norm_temp lo hacia  '2026/27'
+        season_from_date da  '2026'
+        -> no coincidian y SE DESCARTABAN TODOS LOS PARTIDOS
+
+    El sintoma era mudo: "0 sesiones", datos_baterias.js de 2 KB y las
+    baterias dibujadas pero sin datos. Ningun error, nada en rojo.
+
+    Ahora se le pregunta a config_club si el torneo cruza de anio. Si cruza,
+    se convierte como antes; si no, se deja tal cual.
+    """
     if not t: return None
     t=str(t).strip()
-    if re.fullmatch(r'\d{4}', t):
-        y=int(t); return "%d/%02d"%(y,(y+1)%100)
-    return t
+    if not re.fullmatch(r'\d{4}', t):
+        return t
+
+    cruza = None
+    try:
+        import config_club as _cc
+        _tor = _cc.torneos() or {}
+        for _cfg in _tor.values():
+            if isinstance(_cfg, dict) and 'cruza' in _cfg:
+                cruza = bool(_cfg.get('cruza')); break
+    except Exception:
+        pass
+
+    # Sin config_club que opine, se mantiene lo de antes.
+    if cruza is None: cruza = True
+    if not cruza: return t
+    y=int(t); return "%d/%02d"%(y,(y+1)%100)
 
 def _temp_de_carpeta(folder):
     """El ano que lleva el nombre de la carpeta -> temporada que arranca ese ano."""
