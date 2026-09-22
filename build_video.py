@@ -20,7 +20,8 @@ import os,re,sys,json,glob,unicodedata
 # 7: se guarda la zona del bloqueo. Los archivos hechos con la version
 #    anterior no la tienen, y sin ella el mapa de bloqueo pone todas las
 #    acciones en el medio de la red. Al subir el numero se regeneran solos.
-DATA_VERSION = 7
+# sube para que los partidos ya guardados se rehagan con el campo 'rq'
+DATA_VERSION = 8
 
 def fix_enc(x):
     # Los DVW pueden venir en UTF-8 leido como latin-1 (mojibake "NÃ¤fels"). Lo corrige.
@@ -199,6 +200,25 @@ def parse_dvw(path, ent=False):
         players.setdefault(tslug,[])
         for n in plist:
             if n[0] not in seen: players[tslug].append(n); seen.add(n[0])
+        # Con que recepcion se llega a cada ataque: se guarda la valoracion
+        # tal cual (#, +, !, -). Se recorre ANTES, sobre todas las lineas,
+        # porque una accion del rival tambien corta la fase de recepcion.
+        _recDe = {}
+        _ult = None
+        for _j, _l in enumerate(scout_lines):
+            _c0 = _l.split(';')[0]
+            _mm = re.match(r'^([*a])(\d{2})([SRABDEF])', _c0)
+            if not _mm: continue
+            _pfx, _sk2 = _mm.group(1), _mm.group(3)
+            _ev2 = _c0[5] if len(_c0) > 5 else ''
+            if _sk2 == 'S': _ult = None
+            elif _sk2 == 'R' and _pfx == sidech: _ult = _ev2
+            elif _sk2 == 'F': _ult = None
+            elif _pfx != sidech and _sk2 in 'ADEB': _ult = None
+            elif _sk2 == 'A' and _pfx == sidech:
+                if _ult: _recDe[_j] = _ult
+                _ult = None
+
         for _li,l in enumerate(scout_lines):
             c=l.split(';'); code0=c[0]
             m=re.match(r'^%s(\d{2})([SRABDEF])'%re.escape(sidech),code0)
@@ -233,6 +253,7 @@ def parse_dvw(path, ent=False):
                 # fase: SO si saco el rival, TR si sacamos nosotros
                 _ss=_srv_side[_li] if _li<len(_srv_side) else ''
                 if _ss: a['ph']='SO' if _ss!=sidech else 'TR'
+                if _li in _recDe: a['rq']=_recDe[_li]
             elif sk in ('S','R'):
                 tp=code0[4] if len(code0)>4 else ''
                 if tp and tp.isalpha(): a['x']=tp

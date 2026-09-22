@@ -496,11 +496,14 @@ function importFixture(){ if(window.VB_esEditor&&!VB_esEditor())return;
       var ka=(a.fecha||'')+(a.hora||''), kb=(b.fecha||'')+(b.hora||'');
       return ka<kb?-1:(ka>kb?1:0);
     });
+    var _nPas = arr.filter(calEsPasado).length;
+    if(!CAL_VER_PASADOS) arr = arr.filter(function(e){ return !calEsPasado(e); });
+    var _tg = calBotonPasados(_nPas);
     if(arr.length===0){
-      list.innerHTML='<div class="empty">'+(tab==='partidos'?'No hay partidos cargados':'No hay entrenamientos cargados')+'</div>';
+      list.innerHTML=_tg+'<div class="empty">'+(tab==='partidos'?'No hay partidos cargados':'No hay entrenamientos cargados')+'</div>';
       retranslate(); return;
     }
-    var h='';
+    var h=_tg;
     arr.forEach(function(e){
       if(tab==='partidos'){
         var rival=e.rival||'—';
@@ -566,6 +569,30 @@ function importFixture(){ if(window.VB_esEditor&&!VB_esEditor())return;
 
   function pad2(n){ return (n<10?'0':'')+n; }
   function ymd(dt){ return dt.getFullYear()+'-'+pad2(dt.getMonth()+1)+'-'+pad2(dt.getDate()); }
+
+  /* Lo que ya paso no se muestra. No se borra: sigue guardado y un boton lo
+     vuelve a mostrar. Un evento de varios dias se va cuando termina el ultimo. */
+  var CAL_VER_PASADOS = false;
+  try{ CAL_VER_PASADOS = localStorage.getItem('cal_pasados') === '1'; }catch(e){}
+  function calEsPasado(e){
+    if(!e) return false;
+    var fin = (e.fechaFin && e.fechaFin > (e.fecha||'')) ? e.fechaFin : (e.fecha||'');
+    return !!fin && fin < ymd(new Date());
+  }
+  function calTogglePasados(){
+    CAL_VER_PASADOS = !CAL_VER_PASADOS;
+    try{ localStorage.setItem('cal_pasados', CAL_VER_PASADOS ? '1' : '0'); }catch(e){}
+    render();
+  }
+  function calBotonPasados(n){
+    if(!n && !CAL_VER_PASADOS) return '';
+    return '<div style="display:flex;justify-content:flex-end;margin:0 0 10px">'
+         + '<button onclick="calTogglePasados()" style="padding:5px 12px;border-radius:8px;'
+         + 'border:1px solid rgba(148,163,184,.3);background:transparent;color:var(--muted,#94a3b8);'
+         + 'font:inherit;font-size:12px;cursor:pointer">'
+         + (CAL_VER_PASADOS ? 'Ocultar pasados' : 'Ver pasados (' + n + ')')
+         + '</button></div>';
+  }
   function addDays(dt,n){ var d=new Date(dt); d.setHours(0,0,0,0); d.setDate(d.getDate()+n); return d; }
   function startOfWeek(dt){ var d=new Date(dt); d.setHours(0,0,0,0); var wd=(d.getDay()+6)%7; d.setDate(d.getDate()-wd); return d; }
 
@@ -579,6 +606,10 @@ function importFixture(){ if(window.VB_esEditor&&!VB_esEditor())return;
       } else { (map[e.fecha]=map[e.fecha]||[]).push({type:'e',e:e}); }
     });
     Object.keys(map).forEach(function(k){ map[k].sort(function(a,b){ return (a.e.hora||'')<(b.e.hora||'')?-1:1; }); });
+    if(!CAL_VER_PASADOS){
+      var _hoy = ymd(new Date());
+      Object.keys(map).forEach(function(k){ if(k < _hoy) delete map[k]; });
+    }
     return map;
   }
   function planCells(){

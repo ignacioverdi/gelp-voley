@@ -2289,6 +2289,17 @@
     if(lang==='es'||!text) return text;
     var exact=trPhrase(text.trim(),lang);
     if(exact!==null) return text.replace(text.trim(), exact);
+
+    /* El icono de adelante rompia la coincidencia: "👥 Equipo" no es "Equipo".
+       Se separa lo que no es texto, se traduce el nucleo si es una frase
+       entera del diccionario, y se vuelve a pegar. */
+    try{
+      var _m = text.trim().match(/^([^A-Za-z\u00C0-\u024F\u00BF\u00A1]*)(.*?)([\s\d()\[\]▾▸▶►▼·:,.+%#\/-]*)$/);
+      if(_m && _m[2] && (_m[1] || _m[3])){
+        var _core = trPhrase(_m[2].trim(), lang);
+        if(_core !== null) return text.replace(text.trim(), _m[1] + _core + _m[3]);
+      }
+    }catch(e){}
     if(!PHRASE_MAP) buildPhraseIndex();
     if(!BIG_RE) return text;
     return text.replace(BIG_RE, function(m,pre,ph){
@@ -2327,11 +2338,39 @@
       if(_pend) return;
       _pend=setTimeout(function(){ _pend=null;
         var lang=getLang(); if(lang==='es') return;
-        _obs.disconnect(); translateTextNodes(lang); _obs.observe(document.body,{childList:true,subtree:true});
+        _obs.disconnect(); try{ applyDataT(lang); }catch(e){} translateTextNodes(lang); _obs.observe(document.body,{childList:true,subtree:true});
       },200);
     });
     _obs.observe(document.body,{childList:true,subtree:true});
   }
+
+  /* Dos diccionarios: el de claves data-t y el de frases. Muchos data-t solo
+     estan en el de frases ("Todos", "Sesión", "👥 Equipo"): tr() devolvia null
+     y translateTextNodes los salta por tener data-t, asi que quedaban en
+     castellano aunque la traduccion existia. */
+  function _trDataT(k, lang){
+    var v = tr(k, lang);
+    if (v !== null || lang === 'es' || !k) return v;
+    try{ var v2 = translateString(k, lang); if (v2 && v2 !== k) return v2; }catch(e){}
+    return null;
+  }
+
+  function applyDataT(lang){
+    var els = document.querySelectorAll('[data-t]');
+    for (var i=0; i<els.length; i++){
+      var k = els[i].getAttribute('data-t'); var v = _trDataT(k, lang);
+      if (v !== null) {
+        if (/<[a-z][\s\S]*>/i.test(v)) { if (els[i].innerHTML !== v) els[i].innerHTML = v; }
+        else if (els[i].textContent !== v) els[i].textContent = v;
+      }
+    }
+    var ph = document.querySelectorAll('[data-t-ph]');
+    for (var j=0; j<ph.length; j++){
+      var kp = ph[j].getAttribute('data-t-ph'); var vp = tr(kp, lang);
+      if (vp !== null && ph[j].getAttribute('placeholder') !== vp) ph[j].setAttribute('placeholder', vp);
+    }
+  }
+  window.applyDataT = applyDataT;
 
   function applyLang(lang){
     document.documentElement.setAttribute('lang', lang);
@@ -2339,7 +2378,7 @@
     var els = document.querySelectorAll('[data-t]');
     for (var i=0; i<els.length; i++){
       var k = els[i].getAttribute('data-t');
-      var v = tr(k, lang);
+      var v = _trDataT(k, lang);
       if (v !== null) els[i].textContent = v;   // si no está en el diccionario, no toca nada
     }
     // placeholders

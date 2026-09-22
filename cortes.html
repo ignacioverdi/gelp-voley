@@ -484,6 +484,10 @@ window.__DESCIFRAR_SINCRONO = true;
   // estado
   var selMatch={}, selPlayers={}, selAct={}, selEval={}, selSet={}, selected={};
   var fDz=[], fOz=[], fPh="", fCall=[], fApos=[], fRival="", fDate="", fSk="";
+/* rq: con que recepcion se llego al ataque (#, +, !, -). Vacio = transicion.
+   ty: el tipo de pelota (Q central, H alta, T rapida). 'combo' NO sirve para
+   esto: ahi va la combinacion de armado y el filtro se ignoraba en silencio. */
+var fRq=[], fTy=[];
   function _rnorm(s){return (''+(s||'')).toLowerCase().split(' ').pop();}
   var filtered=[], current=-1, playing=false, looping=false, timer=null, player=null, ready=false, loadedVid='';
 
@@ -620,6 +624,8 @@ window.__DESCIFRAR_SINCRONO = true;
       if(fDz.length&&(a.sk!==(fSk||"Ataque")||fDz.indexOf(a.dz)<0)) return false;
       if(fOz.length&&(a.sk!==(fSk||"Ataque")||fOz.indexOf(a.oz)<0)) return false;
       if(fPh&&(a.sk!=="Ataque"||a.ph!==fPh)) return false;
+  if(fRq.length && (a.sk!=="Ataque" || fRq.indexOf(a.rq||'') < 0)) return false;
+  if(fTy.length && (a.sk!=="Ataque" || fTy.indexOf(a.ty||'') < 0)) return false;
       /* El filtro de valoracion. Los botones estaban en pantalla pero nunca se
          aplicaban: al pedir los ataques bloqueados venian todos mezclados. */
       if(evK.length && !selEval[a.ev]) return false;
@@ -696,7 +702,7 @@ window.__DESCIFRAR_SINCRONO = true;
   function quickReel(sk,evs){
     Object.keys(selAct).forEach(function(k){selAct[k]=(k.split('|')[0]===sk);});
     selEval={}; (evs||[]).forEach(function(e){if(e)selEval[e]=1;});
-    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();
+    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fRq=[];fTy=[];fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();
     buildActionTree();
     document.querySelectorAll('#fEval [data-ev]').forEach(function(c){c.classList.toggle('on',!!selEval[c.dataset.ev]);});
     apply();
@@ -773,7 +779,7 @@ window.__DESCIFRAR_SINCRONO = true;
     $('sitPanel').addEventListener('change',function(e){if(e.target.classList&&e.target.classList.contains('sitsk'))apply();});
     $('sBtn').addEventListener('click',function(){$('sPanel').classList.toggle('open');});
     $('sPanel').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;var bx=c.querySelector('.box');if(bx)bx.textContent=selSet[v]?'✓':'';c.classList.toggle('on',!!selSet[v]);updateSN();apply();});
-    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();rebuildAll();});
+    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fRq=[];fTy=[];fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
@@ -851,12 +857,15 @@ window.__DESCIFRAR_SINCRONO = true;
     // preset desde URL (?num=6&sk=Ataque&combo=X5) — usado por el botón "Ver video" de los heatmaps
     var pNum=Q.get('num'), pSk=Q.get('sk'), pCombo=Q.get('combo'), pEv=Q.get('ev');
     var pDz=Q.get('dz'), pOz=Q.get('oz'), pPh=Q.get('ph'), pCall=Q.get('call'), pApos=Q.get('apos');
+  var pRq=Q.get('rq'), pTy=Q.get('ty');
     var pRival=Q.get('rival'), pDate=Q.get('date');
     if(pRival) fRival=pRival;
     if(pDate) fDate=pDate;
     if(pDz) fDz=pDz.split(',').map(Number);
     if(pOz) fOz=pOz.split(',').map(Number);
     if(pPh) fPh=pPh;
+  if(pRq) fRq=pRq.split(',').map(function(x){return x.trim();}).filter(Boolean);
+  if(pTy) fTy=pTy.split(',').map(function(x){return x.trim();}).filter(Boolean);
     if(pApos) fApos=pApos.split(',').map(Number);
     // la llamada se filtra por el árbol de acciones (selAct), no por fCall
     if((pDz||pOz||pPh)&&!pSk) pSk='Ataque';

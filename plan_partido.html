@@ -557,6 +557,26 @@ function apellidoJS(n){n=(n||"").trim();return n?n.split(" ").pop():"";}
 function apeArm(n){n=(n||"").trim();return n?n.split(/\s+/)[0]:"";}
 function armDates(){var d={};MATCHES.forEach(function(m){if(MSEL.has(m.mid))d[m.date]=1;});return d;}
 function midByDate(d){if(typeof MATCHES==="undefined")return"";var m=MATCHES.find(function(x){return x.date===d;});return m?m.mid:"";}
+
+/* A que partido pertenece un armado: los datos del armador vienen con fecha y
+   rival pero sin codigo, y buscar solo por fecha falla cuando hay dos partidos
+   el mismo dia —todos caian en el primero de la lista—. */
+function _armNorm(x){return String(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");}
+function armMidDe(mm){
+  if(!mm) return "";
+  if(mm.code) return mm.code;
+  if(typeof MATCHES==="undefined") return "";
+  var riv=_armNorm(mm.rival||mm.opp);
+  if(riv){
+    var hit=MATCHES.find(function(x){
+      if(x.date!==mm.date) return false;
+      var o=_armNorm(x.opp);
+      return o && (o===riv || o.indexOf(riv)>=0 || riv.indexOf(o)>=0);
+    });
+    if(hit) return hit.mid;
+  }
+  return midByDate(mm.date);
+}
 function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
   return setter.s.filter(function(r){
     if(r[6]!==pos)return false;
@@ -576,7 +596,7 @@ function armRallies(setter,pos){var dates=armDates(),mt=(armTeam.matches||[]);
     }
     if(armRecZone){var _b=ARM_RECBANDS[armRecZone];if(!_b||_b.indexOf(r[15])<0)return false;}
     if(armRecNum!=null&&r[16]!==armRecNum)return false;
-    var mm=mt[r[12]];if(mm&&mm.date&&!dates[mm.date])return false;
+    var mm=mt[r[12]];if(mm&&typeof MSEL!=="undefined"&&MSEL.size){var _mid=armMidDe(mm);if(_mid&&!MSEL.has(_mid))return false;}
     return true;});
 }
 function renderArmador(){
@@ -641,7 +661,7 @@ function renderArmador(){
   if(armSetIdx>=armTeam.setters.length)armSetIdx=0;
   document.getElementById("armsetsel").innerHTML='<label>Armador</label>'+armTeam.setters.map(function(s,i){return '<button class="'+(i===armSetIdx?"on":"")+'" onclick="setArmSetter('+i+')">#'+s.num+" "+apeArm(s.name)+'</button>';}).join("");
   var setter=armTeam.setters[armSetIdx]||armTeam.setters[0];
-  if(typeof MSEL!=="undefined"&&typeof MATCHES!=="undefined"&&MSEL.size<MATCHES.length){var _ad=armDates();setter=Object.assign({},setter,{s:(setter.s||[]).filter(function(r){var _m=(armTeam.matches||[])[r[12]];return _m&&_ad[_m.date];})});}
+  if(typeof MSEL!=="undefined"&&typeof MATCHES!=="undefined"&&MSEL.size<MATCHES.length){setter=Object.assign({},setter,{s:(setter.s||[]).filter(function(r){var _m=(armTeam.matches||[])[r[12]];return _m&&MSEL.has(armMidDe(_m));})});}
   document.getElementById("armname").textContent=apeArm(setter.name)+" · "+setter.s.length+" armados";
   var callCount={};setter.s.forEach(function(r){if(r[5]>=0)callCount[r[5]]=(callCount[r[5]]||0)+1;});
   var callIdxs=Object.keys(callCount).map(Number).sort(function(a,b){return callCount[b]-callCount[a];});
@@ -698,10 +718,10 @@ function setArmRecNum(v){armRecNum=v?parseInt(v,10):null;renderArmador();}
 function setArmCall(v){armCall=(v==="all")?"all":parseInt(v,10);renderArmador();}
 function openArmZone(pos,zn){
   var setter=armTeam.setters[armSetIdx]||armTeam.setters[0];
-  if(typeof MSEL!=="undefined"&&typeof MATCHES!=="undefined"&&MSEL.size<MATCHES.length){var _ad=armDates();setter=Object.assign({},setter,{s:(setter.s||[]).filter(function(r){var _m=(armTeam.matches||[])[r[12]];return _m&&_ad[_m.date];})});}
+  if(typeof MSEL!=="undefined"&&typeof MATCHES!=="undefined"&&MSEL.size<MATCHES.length){setter=Object.assign({},setter,{s:(setter.s||[]).filter(function(r){var _m=(armTeam.matches||[])[r[12]];return _m&&MSEL.has(armMidDe(_m));})});}
   var rows=armRallies(setter,pos).filter(function(r){return String(gpGetZone(GP_COMBOS[r[8]]||"",r[11],r[6]))===zn;});
   var mt=(armTeam.matches||[]);
-  clips=rows.map(function(r){var mm=mt[r[12]]||{},mid=mm.code||midByDate(mm.date),yt=ppVid(mid);return {tag:GP_COMBOS[r[8]]||"",ev:RESARM[r[9]]||"",t:r[14]||r[13],vid:yt,sel:true};}).filter(function(c){return c.vid&&c.t;});
+  clips=rows.map(function(r){var mm=mt[r[12]]||{},mid=armMidDe(mm),yt=ppVid(mid);return {tag:GP_COMBOS[r[8]]||"",ev:RESARM[r[9]]||"",t:r[14]||r[13],vid:yt,sel:true};}).filter(function(c){return c.vid&&c.t;});
   curP=null;curZn=zn;curKey=TEAM+"|arm"+armSetIdx+"|P"+pos+"|"+zn;onlyShow=false;var _vo=document.getElementById("vonly");if(_vo)_vo.checked=false;applySavedSel();cur=firstSel();
   document.getElementById("vfilters").innerHTML="";
   document.getElementById("vtitle").textContent=setter.name+" · P"+pos+" · zona "+zn+" · "+rows.length+" armados"+(clips.length<rows.length?" ("+clips.length+" c/video)":"");

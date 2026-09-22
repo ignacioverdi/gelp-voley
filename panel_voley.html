@@ -1062,6 +1062,35 @@ function fmtEff(v){
   return `<span class=t-eff style="color:${c}">${v>0?'+':''}${v}%</span>`;
 }
 
+/* TOTAL / FLOTADO / POTENCIA, igual que el dashboard. El scout ya publica cada
+   jugador separado por tipo (sM, sQ, sF y rM, rQ, rF) y sT es la suma. */
+window.PV_TIPO_SR = window.PV_TIPO_SR || (function(){ try{ return localStorage.getItem('pv_tipo_sr')||'total'; }catch(e){ return 'total'; } })();
+function pvSetTipoSR(t){
+  window.PV_TIPO_SR = t;
+  try{ localStorage.setItem('pv_tipo_sr', t); }catch(e){}
+  try{ renderTabla(); }catch(e){}
+}
+function _pvArrTipo(p, pre){
+  var t = window.PV_TIPO_SR || 'total';
+  if(t === 'total' || !p) return p[pre+'T'] || [0,0,0,0,0,0,0];
+  var out = [0,0,0,0,0,0,0];
+  var ks = (t === 'flotado') ? ['M','F','H'] : ['Q'];
+  ks.forEach(function(x){ var a = p[pre+x]; if(a) for(var i=0;i<7;i++) out[i] += (a[i]||0); });
+  return out;
+}
+function _pvBotonesTipo(){
+  var t = window.PV_TIPO_SR || 'total';
+  var op = [['total','TOTAL'],['flotado','FLOTADO'],['potencia','POTENCIA']];
+  return '<div style="display:flex;gap:8px;margin:0 0 14px">' + op.map(function(x){
+    var on = (t === x[0]);
+    return '<button onclick="pvSetTipoSR(\''+x[0]+'\')" style="padding:7px 18px;border-radius:8px;'
+      + 'font-family:\'Barlow Condensed\',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;cursor:pointer;'
+      + 'border:1px solid ' + (on ? '#f59e0b' : 'rgba(245,158,11,.35)') + ';'
+      + 'background:' + (on ? 'rgba(245,158,11,.18)' : 'transparent') + ';'
+      + 'color:' + (on ? '#f59e0b' : 'var(--txt,#cbd5e1)') + '">' + x[1] + '</button>';
+  }).join('') + '</div>';
+}
+
 function renderTabla(){
   const D=window.VOLEY_DATA;
   if(!D){document.getElementById('tabla-content').innerHTML='<p style="color:var(--mut);padding:2rem">Sin datos</p>';return;}
@@ -1074,7 +1103,7 @@ function renderTabla(){
       `<td class=t-name><span class=t-cam>${p.c}</span>${p.n}</td>`;
 
     // SAQUE
-    const s=p.sT; const sT=s[6]||0;
+    const s=_pvArrTipo(p,'s'); const sT=s[6]||0;
     const sEff=sT?VB_EFF.saque({T:sT,Punto:s[0],Vend:s[4],Pos:s[1],Adm:s[2]||0,Neg:s[3]||0}):null;
     const sPt=sT?Math.round(s[0]/sT*100):null;
     const sVend=sT?Math.round(s[4]/sT*100):null;
@@ -1082,7 +1111,7 @@ function renderTabla(){
     const sErr=sT?Math.round(s[5]/sT*100):null;
 
     // RECEPCION
-    const r=p.rT; const rT=r[6]||0;
+    const r=_pvArrTipo(p,'r'); const rT=r[6]||0;
     const rEff=rT?VB_EFF.recepcion({T:rT,Punto:r[0],Pos:r[1],Adm:r[2]||0,Neg:r[3]||0,Vend:r[4]}):null;
     const rPt=rT?Math.round(r[0]/rT*100):null;
     const rPos=rT?Math.round(r[1]/rT*100):null;
@@ -1138,14 +1167,16 @@ function renderTabla(){
 
   // Build team player
   const team={c:'T',n:'EQUIPO',sT:[0,0,0,0,0,0,0],rT:[0,0,0,0,0,0,0],aT:[0,0,0,0,0,0,0],aTT:[0,0,0,0,0,0,0],bT:[0,0,0,0,0,0,0]};
+  ['sM','sQ','sF','sH','rM','rQ','rF','rH'].forEach(k=>{ team[k]=[0,0,0,0,0,0,0]; });
   act.forEach(p=>{
     for(let i=0;i<7;i++){team.sT[i]+=p.sT[i];team.rT[i]+=p.rT[i];team.aT[i]+=p.aT[i];team.aTT[i]+=p.aTT[i];team.bT[i]+=p.bT[i];}
+    ['sM','sQ','sF','sH','rM','rQ','rF','rH'].forEach(k=>{ if(p[k]) for(let i=0;i<7;i++) team[k][i]+=(p[k][i]||0); });
   });
 
   // Sort by total actions
   const sorted=[...act].sort((a,b)=>(b.rT[6]+b.sT[6]+b.aT[6]+b.bT[6])-(a.rT[6]+a.sT[6]+a.aT[6]+a.bT[6]));
 
-  const html=`<div class=tabla-wrap>
+  const html=_pvBotonesTipo()+`<div class=tabla-wrap>
   <table class=tabla>
     <thead>
       <tr>

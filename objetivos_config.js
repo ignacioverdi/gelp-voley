@@ -773,7 +773,9 @@ function objAtaqueDetalle(cfg, D, vals, id, meta, quien){
      scout. "Sigue en juego" no tiene, porque no es una valoracion. */
   var FIL = [
     ['#', 'Punto',          P,     '#22c55e', 'p'],
-    ['\u25b8','Sigue en juego', sigue, '#64748b', null],
+    /* «Sigue en juego» no es una valoracion: es lo que queda despues del
+       punto, la bloqueada y el error. En video son los + , ! y - . */
+    ['\u25b8','Sigue en juego', sigue, '#64748b', '+,!,-'],
     ['/', 'Bloqueado',      B,     '#fb923c', 'b'],
     ['=', 'Error',          E,     '#ef4444', 'e']
   ];
@@ -1088,6 +1090,32 @@ function objVerVideo(id, clave, nombreFila, cuantas, jugNombre){
     if(jug) q.push('num=' + jug);
     q.push('sk=' + encodeURIComponent(OBJ_SKILL_NOMBRE[id] || ''));
     q.push('ev=' + encodeURIComponent(sig));
+
+    /* ══ EL EQUIPO, LA RECEPCION Y EL TIPO ════════════════════════════════
+       Antes el link llevaba jugador, fundamento y valoracion nada mas, y
+       cortes abria con TODAS las acciones de ese numero: las del rival con
+       el mismo dorsal incluidas, y sin distinguir de donde venia el ataque.
+          team  de que equipo
+          rq    con que recepcion se llego (#, + , ! , -)
+          ty    el tipo de pelota (Q central, H alta, T rapida) */
+    try{
+      var _eq = '';
+      if(window.CLUB_SLUG) _eq = window.CLUB_SLUG;
+      else if(window.TEAM) _eq = window.TEAM;
+      else if(window.LIGA_DATA){
+        var _ks = Object.keys(window.LIGA_DATA);
+        if(_ks.length === 1) _eq = _ks[0];
+      }
+      if(_eq) q.push('team=' + encodeURIComponent(_eq));
+
+      var _rq = ({atqrp:'#,+', atqri:'!', atqrm:'-'})[id];
+      if(_rq) q.push('rq=' + encodeURIComponent(_rq));
+      else if(id === 'atqtr') q.push('ph=TR');
+
+      var _ty = ({atqq:'Q', atqhb:'H', atqx:'T'})[id];
+      if(_ty) q.push('ty=' + _ty);
+    }catch(e){}
+
     window.open('cortes.html?' + q.join('&'), '_blank');
   }catch(e){}
 }

@@ -1796,6 +1796,16 @@ function parseOne(raw){
   if(skill==='D' && d.sz && !d.ez){ d.ez = d.sz; d.sz = ''; }
   /* La cola cruda viaja con la accion: si mas abajo la tabla de codigos
      compuestos corrige el fundamento, hay que poder volver a leerla. */
+  /* Manual 4.1.3: el extendido del ataque lleva el tipo de golpe (H hard,
+     P soft, T tip) y los bloqueadores (0-3). Casi todo es golpe fuerte contra
+     bloqueo doble, asi que se completa solo si el scout no escribio nada. */
+  try{
+    if(skill === 'A' && d){
+      if(!d.hit) d.hit = 'H';
+      if(!d.blk) d.blk = '2';
+    }
+  }catch(e){}
+
   return {team,num,skill,type,ev,evx,d,_tail:rest,_skillChar:skillChar};
 }
 
@@ -3048,7 +3058,11 @@ function hayVideo(){ const v=videoEl(); return !!(v && v.src); }
 function tiempoVideo(){
   const v = videoEl();
   if(v && v.src && !isNaN(v.currentTime)) return Math.round(v.currentTime);
-  if(M.t0) return Math.round((Date.now()-M.t0)/1000);   /* sin video: reloj del partido */
+  if(M.t0){
+    /* al cerrar el partido se anota la hora: el reloj no corre mas */
+    var _hasta = M.tFin || Date.now();
+    return Math.round((_hasta - M.t0)/1000);
+  }   /* sin video: reloj del partido */
   return 0;
 }
 function hhmmss(s){
@@ -3795,15 +3809,39 @@ function undoRally(){
 /* Verificado en los DVW oficiales (193/193): el bloque va DESPUÉS de los cambios
    y tiempos que siguen al punto, y arranca por el equipo que ganó el punto
    (o, al empezar un set, por el que va a sacar). */
+/* P se escribe al empezar el set o cuando cambia el armador; z solo cuando el
+   equipo ROTA —gana recibiendo—. Antes se reescribian los dos despues de cada
+   punto y la lista en Data Volley quedaba llena de lineas repetidas.
+   Lo ultimo escrito se busca en los codigos, no en una variable: asi un
+   deshacer nunca deja el registro desfasado. */
+function _ultimoEstado(pre){
+  var P = null, z = null;
+  for(var i = M.codes.length - 1; i >= 0; i--){
+    var c = M.codes[i];
+    if(!c || !c.c) continue;
+    if(c.set !== M.set) break;
+    var t = String(c.c);
+    if(t.charAt(0) !== pre) continue;
+    if(P === null){ var mp = t.match(/^.P(\d{2})/); if(mp) P = parseInt(mp[1],10); }
+    if(z === null){ var mz = t.match(/^.z(\d)/);    if(mz) z = parseInt(mz[1],10); }
+    if(P !== null && z !== null) break;
+  }
+  return {P:P, z:z};
+}
+
 function escribirEstado(sufijo, primero){
   const orden = (primero==='away') ? ['away','home'] : ['home','away'];
+  const esInicio = (sufijo === '>LUp');
   orden.forEach(side=>{
     const pre = side==='home'?'*':'a';
     const st = M[side].setter;
     if(!st) return;
-    pushCode(pre+'P'+String(st).padStart(2,'0')+(sufijo||''),'auto');
     const z = M[side].lineup.indexOf(st);
-    if(z>=0) pushCode(pre+'z'+(z+1)+(sufijo||''),'auto');
+    const ult = esInicio ? {P:null, z:null} : _ultimoEstado(pre);
+    if(esInicio || ult.P !== Number(st))
+      pushCode(pre+'P'+String(st).padStart(2,'0')+(sufijo||''),'auto');
+    if(z>=0 && (esInicio || ult.z !== z+1))
+      pushCode(pre+'z'+(z+1)+(sufijo||''),'auto');
   });
 }
 /* Un cambio o un tiempo se anotan ANTES del bloque: lo levantamos y lo volvemos a escribir. */
@@ -4720,6 +4758,7 @@ function cerrarPartidoActual(){
   const acc = (M.codes||[]).filter(c=>c.k!=='auto').length;
   if(acc>0){ guardarPartidoEnLista(M); toast('Partido guardado en «Partidos» y cerrado'); }
   else { toast('Partido cerrado'); }
+  if(M.t0 && !M.tFin) M.tFin = Date.now();
   M.codes = [];
   M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
   M.set=1; SEL_I=-1; CALL_PEND=null;
